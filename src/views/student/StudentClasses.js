@@ -43,8 +43,8 @@ const Studentclasss = (props) => {
             'itemid':par.clasz,
             'grp':3
           }),
-          cat:'selected',
-          table:'access',
+          cat:'studentclass',
+          table:'accessstudentclassfull',
           narration:'get all studentclasss'
       }
         props.getStudentclasss(params)
@@ -142,7 +142,7 @@ let tabl = data.map((row, ind)=>{
             src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ row.photo1} 
             className="c-avatar-img" 
             alt={row.admission_no} 
-            onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.jpg'} }
+            onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
             />
             <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
           </div>
@@ -150,7 +150,7 @@ let tabl = data.map((row, ind)=>{
         <td>
    <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
                 <div className="small text-muted">
-                <span>{row.admission_no}</span>
+                <span>{row.schoolabbrv}{row.admission_no}</span>
             </div>
         </td>
         

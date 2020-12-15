@@ -9,6 +9,7 @@ export const MAIN_TOKEN ='';
 export const PICS = process.env.REACT_APP_PHOTO;
 export const imgx = process.env.REACT_APP_PHOTO;
 export const imgb = process.env.REACT_APP_BG;
+export const gradesjson = 'json/grades.json'
 export const axiosConfig = {
     headers: {
         "Content-Type": "application/json;charset=UTF-8",
@@ -52,7 +53,7 @@ export const timeConvert = date =>{
     return '';
 }
 export const setElement=(id, valueToSet)=>{
-  document.getElementById(id).val = valueToSet;
+  document.getElementById(id).value = valueToSet;
 }
 export const allgender = {
    'male':'male',

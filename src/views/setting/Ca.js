@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { useParams } from "react-router-dom"
-import  moment from 'moment';
 import {getCas, getCa, registerCa, updateCa, deleteCa} from './../../actions/setting/ca';
-import { useHistory, useLocation } from 'react-router-dom'
+import {getClaszs} from './../../actions/setting/clasz';
+import {getStaffs} from './../../actions/staff/staff';
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -22,70 +21,92 @@ import {
   CDropdown,
   CDropdownItem,
   CDropdownDivider,
+  CSelect,
   CDropdownToggle,
-  CDropdownMenu
+  CDropdownMenu,
+  CInputGroup,
+  CInputGroupAppend,
+  CInputGroupPrepend
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { setElement } from '../../actions/common';
 
 
 const Ca = (props) => {
-  const ca = useParams()
+  const termid = useParams().term
+  const caid = useParams().ca
+  const groupid = 1;
   const history = useHistory()
   const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
   const [collapse, setCollapse] = useState(false)
-  const [id, setId] = useState('')
-  const [name, setNamez] = useState('')
-  const [starts, setStarts] = useState()
-  const [ends, setEnds] = useState()
-  const [cat, setcat] = useState()
-
+  const [id, setId] = useState(null)
+  const [dts, setDts] = useState('')
+  const [namez, setNamez] = useState()
+  const [abbrv, setAbbrv] = useState()
+  const [maxscore, setMaxscore] = useState()
+ 
   const toggle = (e) => {
     setCollapse(!collapse)
     e.preventDefault()
   }
-
+//GET CAS PER SCHOOL
   useEffect(() => {
-    let params = {
+    let params1 = {
       data:JSON.stringify(
       {
-          'termid':ca.ca
+          'termid': caid,
+          'typeid': groupid,
       }),
-      cat:'select',
+      cat:'selected',
       table:'cas',
-      narration:'get cas'
+      narration:'get staff term ca'
+    }
+    props.getCas(params1);
+    
+  }, [termid, groupid, props.school.id])
 
-  }
-    props.getCas(params)
-  }, [])
-
-  const onEdit = (rw, dt) =>{
-      setId(rw);
+  //CHANGE STATE AS EDIT OR ADD
+  useEffect(() => {
+    if(id && parseInt(id) > 0)
+    {
+      let dt = dts;
       setNamez(dt.name);
-      setStarts(dt.started);
-      setEnds(dt.ended);
+      setAbbrv(dt.abbrv);
+      setMaxscore(dt.maxscore);
+    }else{
+      setNamez('');
+      setAbbrv('');
+      setMaxscore('');
+    }
+    
+  }, [id])
+
+  const onEdit = (dt) =>{
+      setId(dt.id);
+      setDts(dt);
       setCollapse(true);
   }
   const onDelete = (rw, dt) =>{
     
   }
-  const onReset = (rw, dt) =>{
-      setId(null);
-      setNamez('');
-      setStarts('');
-      setEnds('');
+  const onActivate = (rw, num) =>{
+    let nu = parseInt(num) === 0 ? 1 : 0;
+    let fd = new FormData();
+    fd.append('id', rw);
+    fd.append('is_active', nu);
+    props.updateCa(fd);
   }
-  const onClose = (rw, dt) =>{
-    setCollapse(false)
-  }
+  const onReset = () =>setId(null);
+  const onClose = () =>setCollapse(false);
 
   const handleSubmit = () =>{
-    if(name.length > 0){
+    if(parseInt(termid) > 0){
       let fd = new FormData();
-      fd.append('name', name);
-      fd.append('started', starts);
-      fd.append('ended', ends);
+      fd.append('name', namez);
+      fd.append('abbrv', abbrv);
+      fd.append('maxscore', maxscore);
       fd.append('table', 'cas');
-
+      
       if(id && parseInt(id) > 0)
       {
         //UPDATE 
@@ -93,36 +114,41 @@ const Ca = (props) => {
         fd.append('cat', 'update');
         props.updateCa(fd)
         
-      }else
+      }else if(termid && parseInt(termid) > 0)
       {
         //INSERT
-        fd.append('termid', ca.ca);
+        fd.append('typeid', groupid);
+        fd.append('termid', caid);
         fd.append('cat', 'insert');
         props.registerCa(fd)
       }
-      onReset()
-      onClose()
+      onReset();
     }
   }
- 
-  let data = props.cas.cas && Array.isArray(props.cas.cas) ? props.cas.cas.filter(rw =>rw != 'null' || rw !== null || rw !== undefined) : []
-  let tabl = data.filter(rw =>rw != null).map((row, ind)=>{
+  
+  
+  let deparr = props.dropdowns[0].filter(rw =>parseInt(rw.id) === parseInt(termid) && parseInt(rw.id) > 0);
+  let termname = deparr.length > 0 ? deparr[0].name : 'None';
+  
+  let data = props.cas.cas && Array.isArray(props.cas.cas) ? props.cas.cas.filter(rw =>rw !== null || rw !== undefined) : []
+  
+  let tabl = data.filter(rw=>rw !== null).map((row, ind)=>{
       return <tr key={ind}>
                 <td className='text-center'>{ind + 1}</td>
-                <td>{row.name}</td>
-                <td className='text-center'>{moment(row.started).format('MMM D, YYYY')}</td>
-                <td className='text-center'>{moment(row.ended).format('MMM D, YYYY')}</td>
+                <td className='text-left'>{row.name}</td>
+                <td className='text-center'>{row.abbrv}</td>
+                <td className='text-center'>{row.maxscore}</td>
                 <td className='text-center'>
-                <CDropdown className="m-0 btn-group ">
+                <CDropdown className="m-0 btn-group">
                   <CDropdownToggle color="success" size="sm">
                   <i className='fa fa-gear'></i> Action
                   </CDropdownToggle>
                   <CDropdownMenu>
-                    <CDropdownItem
-                      onClick={(item) => history.push(`/cas/${row.id}`)}
-                     >Show cas</CDropdownItem>
-                    <CDropdownItem onClick={()=>onEdit(row.id, row)} >Edit</CDropdownItem>
-                    <CDropdownItem onClick={()=>onDelete(row.id, row)}>Delete</CDropdownItem>
+                  <CDropdownItem
+                      onClick={(item) => history.push(`/sessions/${termid}/a/${caid}/${row.id}`)}
+                     > <i className='fa fa-list'></i>  {" -"} Sub-items</CDropdownItem>
+                    <CDropdownItem onClick={()=>onEdit(row)} >Edit</CDropdownItem>
+                    <CDropdownItem onClick={()=>onDelete(row.cid, row)}>Delete</CDropdownItem>
                     <CDropdownDivider />
                     <CDropdownItem>Another Action</CDropdownItem>
                   </CDropdownMenu>
@@ -137,8 +163,8 @@ const Ca = (props) => {
           <CCardHeader>
           <CRow>
             <CCol sm="5">
-              <h4 id="traffic" className="card-title mb-0">Cas</h4>
-              <div className="small text-muted">Academic Calendar</div>
+            <h4 id="traffic" className="card-title mb-0">{termname} : <small>Academic Assessment</small></h4>
+              <div className="small text-muted" style={{textTransform:'capitalize'}}>{props.school.name}</div>
             </CCol>
             <CCol sm="7" className="d-md-block">
               <CButton 
@@ -156,18 +182,17 @@ const Ca = (props) => {
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light">
                   <tr>
-                    <th className="text-center">SN.</th>
-                    <th><i className='fa fa-list'></i> Ca</th>
-                    <th className="text-center"> <i className='fa fa-calendar'></i> Start</th>
-                    <th className="text-center"><i className='fa fa-calendar'></i> End</th>
-                    <th className="text-center"><i className='fa fa-gear'></i> Action</th>
+                    <th className="text-center"> SN.</th>
+                    <th><i className='fa fa-list text-center'></i> ASSESSMENT NAME</th>
+                    <th><i className='fa fa-bullseye text-center'></i> ABBRV</th>
+                    <th><i className='fa fa-list'></i> MAX SCORE</th>
+                    <th><i className='fa fa-gear'></i> ACTION</th>
                   </tr>
                 </thead>
                 <tbody>
                   {tabl}
                  </tbody>
               </table>
-
           </CCardBody>
         </CCard>
         </CCol>
@@ -177,7 +202,7 @@ const Ca = (props) => {
             <CCardHeader id='traffic' className="card-title mb-0">
               <CRow>
                 <CCol sm="6">
-                <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Ca</small></h4>
+                <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> CA</small></h4>
                 </CCol>
                 <CCol sm="6" className="d-md-block">
                   <CButton  
@@ -193,44 +218,43 @@ const Ca = (props) => {
             <CCardBody>
               <CForm action="" method="post">
                 <CFormGroup>
-                  <CLabel htmlFor="nf-name">Ca</CLabel>
+                  <CLabel htmlFor="nf-namez">Name </CLabel>
                   <CInput 
                       type="text" 
-                      id="nf-name" 
-                      name="name"
-                      defaultValue={name}
+                      id="nf-namez" 
+                      name="namez"
+                      defaultValue={namez}
                       onChange={(e)=>setNamez(e.target.value)}
-                      placeholder="First, Second or Third" 
+                      placeholder="First Continious Assessment" 
                     />
-                  <CFormText className="help-block">Please enter ca</CFormText>
+                  <CFormText className="help-block">set assessment name</CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-starts">Ca Starts </CLabel>
+                  <CLabel htmlFor="nf-abbrv">Abbreviation </CLabel>
                   <CInput 
-                      type="date" 
-                      id="nf-starts" 
-                      name="starts"
-                      defaultValue={starts}
-                      onChange={(e)=>setStarts(e.target.value)}
-                      placeholder="date" 
+                      type="text" 
+                      id="nf-abbrv" 
+                      name="abbrv"
+                      defaultValue={abbrv}
+                      onChange={(e)=>setAbbrv(e.target.value)}
+                      placeholder="CA1" 
                     />
-                  <CFormText className="help-block">Please enter date ca starts</CFormText>
+                  <CFormText className="help-block">abbreviate name</CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-ends">Ca ends </CLabel>
+                  <CLabel htmlFor="nf-maxscore">Maximum Score </CLabel>
                   <CInput 
-                      type="date" 
-                      id="nf-ends" 
-                      name="ends"
-                      defaultValue={ends}
-                      onChange={(e)=>setEnds(e.target.value)}
-                      placeholder="date" 
+                      type="text" 
+                      id="nf-maxscore" 
+                      name="maxscore"
+                      defaultValue={maxscore}
+                      onChange={(e)=>setMaxscore(e.target.value)}
+                      placeholder="20" 
                     />
-                  <CFormText className="help-block">Please enter date ca ends</CFormText>
+                  <CFormText className="help-block">set the maximum score students can attain on this assessment</CFormText>
                 </CFormGroup>
-              </CForm>
+                </CForm>
             </CCardBody>
-            
             <CCardFooter>
               <CButton type="submit" onClick={handleSubmit} size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>{' '}
               <CButton type="reset" onClick={onReset} size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
@@ -243,12 +267,18 @@ const Ca = (props) => {
 }
 const mapStateToProps = (state) =>({
   cas : state.caReducer,
-  terms : state.termReducer
+  terms : state.termReducer.terms,
+  claszs : state.claszReducer.claszs,
+  staffs : state.staffReducer.staffs,
+  school : state.schoolReducer.school,
+  dropdowns : state.schoolReducer.dropdowns
 })
 export default connect(mapStateToProps, {
+  getStaffs,
   getCas,
   getCa,
   registerCa,
   updateCa,
-  deleteCa
+  deleteCa,
+  getClaszs
 })(Ca)

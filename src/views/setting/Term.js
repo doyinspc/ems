@@ -29,7 +29,7 @@ import CIcon from '@coreui/icons-react'
 
 
 const Term = (props) => {
-  const term = useParams()
+  const term = useParams().term
   const history = useHistory()
   const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
   const [collapse, setCollapse] = useState(false)
@@ -48,7 +48,7 @@ const Term = (props) => {
     let params = {
       data:JSON.stringify(
       {
-          'sessionid':term.term
+          'sessionid':term
       }),
       cat:'select',
       table:'terms',
@@ -120,13 +120,13 @@ const Term = (props) => {
                   <CDropdownMenu>
                   <CDropdownItem><b>Assessment</b></CDropdownItem>
                     <CDropdownItem
-                      onClick={(item) => history.push(`/termac/${row.id}`)}
+                      onClick={(item) => history.push(`/sessions/${term}/a/${row.id}`)}
                      >Academic</CDropdownItem>
                      <CDropdownItem
-                      onClick={(item) => history.push(`/termbe/${row.id}`)}
+                      onClick={(item) => history.push(`/sessions/${term}/b/${row.id}`)}
                      >Behavioral</CDropdownItem>
                      <CDropdownItem
-                      onClick={(item) => history.push(`/termsk/${row.id}`)}
+                      onClick={(item) => history.push(`/sessions/${term}/s/${row.id}`)}
                      >Skills</CDropdownItem>
                      <CDropdownDivider />
                      <CDropdownItem><b>Allocation</b></CDropdownItem>

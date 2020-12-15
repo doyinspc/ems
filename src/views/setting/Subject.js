@@ -113,7 +113,7 @@ const Subject = (props) => {
   }
   
   let deparr = props.departments.filter(rw =>parseInt(rw.id) === parseInt(departmentid) && parseInt(rw.id) > 0);
-  console.log(deparr,departmentid, props.departments)
+  
   let departmentname = deparr.length > 0 ? deparr[0].name : 'None';
   let data = props.subjects.subjects && Array.isArray(props.subjects.subjects) ? props.subjects.subjects.filter(rw =>rw !== null || rw !== undefined) : []
   

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { useParams } from "react-router-dom"
-import  moment from 'moment';
+import moment from 'moment';
 import {getCaunits, getCaunit, registerCaunit, updateCaunit, deleteCaunit} from './../../actions/setting/caunit';
-import { useHistory, useLocation } from 'react-router-dom'
+import {getClaszs} from './../../actions/setting/clasz';
+import {getStaffs} from './../../actions/staff/staff';
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -22,91 +22,97 @@ import {
   CDropdown,
   CDropdownItem,
   CDropdownDivider,
+  CSelect,
   CDropdownToggle,
-  CDropdownMenu
+  CDropdownMenu,
+  CInputGroup,
+  CInputGroupAppend,
+  CInputGroupPrepend
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
 
 const Caunit = (props) => {
-  const caunit = useParams().caunit
+  const termid = useParams().term
+  const caid = useParams().ca
   const history = useHistory()
   const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
   const [collapse, setCollapse] = useState(false)
-  const [id, setId] = useState('')
-  const [dts, setDts] = useState({})
-  const [name, setNamez] = useState('')
-  const [clasz, setClasz] = useState('')
-  const [maxscore, setMaxscore] = useState('')
+  const [id, setId] = useState(null)
+  const [dts, setDts] = useState('')
+  const [namez, setNamez] = useState()
+  const [abbrv, setAbbrv] = useState()
+  const [claszid, setClaszid] = useState()
   const [starts, setStarts] = useState()
   const [ends, setEnds] = useState()
-  
-
+  const [maxscore, setMaxscore] = useState()
+ 
   const toggle = (e) => {
     setCollapse(!collapse)
     e.preventDefault()
   }
-
+//GET CAUNITS PER SCHOOL
   useEffect(() => {
-    let params = {
+    let params1 = {
       data:JSON.stringify(
       {
-          'caid':caunit
+          'caid': caid
       }),
-      cat:'select',
+      caunitt:'selected',
       table:'caunits',
-      narration:'get caunits'
-
-  }
-    props.getCaunits(params)
-  }, [])
-
-  useEffect(() => {
-    if(parseInt(id) > 0){
-        let dt = dts;
-        setNamez(dt.name);
-        setMaxscore(dt.maxscore);
-        setClasz(dt.claszid);
-        setStarts(dt.started);
-        setEnds(dt.ended);
-       
-    }else
-    {
-        setNamez('');
-        setMaxscore(0);
-        setClasz('');
-        setStarts('');
-        setEnds('');
+      narration:'get staff term caunit unit'
     }
-      
+    props.getCaunits(params1);
+  }, [caid, props.school.id])
+
+  //CHANGE STATE AS EDIT OR ADD
+  useEffect(() => {
+    if(id && parseInt(id) > 0)
+    {
+      let dt = dts;
+      setNamez(dt.name);
+      setAbbrv(dt.abbrv);
+      setMaxscore(dt.maxscore);
+      setStarts(dt.started);
+      setEnds(dt.ended);
+    }else{
+      setNamez('');
+      setAbbrv('');
+      setMaxscore('');
+      setStarts('');
+      setEnds('');
+    }
+    
   }, [id])
 
-const onEdit = (rw, dt) =>{
-    setId(dt.id);
-    setDts(dt);
-    setCollapse(true)
-}
-const onDelete = (rw, dt) =>{
-  
-}
-const onReset = () =>{
-  setId(null);
-  setDts({});
-}
-const onClose = (rw, dt) =>{
-  setCollapse(false)
-}
+  const onEdit = (dt) =>{
+      setId(dt.id);
+      setDts(dt);
+      setCollapse(true);
+  }
+  const onDelete = (rw, dt) =>{
+    
+  }
+  const onActivate = (rw, num) =>{
+    let nu = parseInt(num) === 0 ? 1 : 0;
+    let fd = new FormData();
+    fd.append('id', rw);
+    fd.append('is_active', nu);
+    props.updateCaunit(fd);
+  }
+  const onReset = () =>setId(null);
+  const onClose = () =>setCollapse(false);
 
-const handleSubmit = () =>{
-    if(name.length > 0){
+  const handleSubmit = () =>{
+    if(parseInt(termid) > 0){
       let fd = new FormData();
-      fd.append('name', name);
-      fd.append('maxscore', maxscore);
-      fd.append('claszid', clasz);
+      fd.append('name', namez);
+      fd.append('abbrv', abbrv);
       fd.append('started', starts);
       fd.append('ended', ends);
+      fd.append('maxscore', maxscore);
       fd.append('table', 'caunits');
-
+      
       if(id && parseInt(id) > 0)
       {
         //UPDATE 
@@ -114,36 +120,43 @@ const handleSubmit = () =>{
         fd.append('cat', 'update');
         props.updateCaunit(fd)
         
-      }else
+      }else if(termid && parseInt(termid) > 0)
       {
-        //INSERT
-        fd.append('caid', caunit.caunit);
+        //INSERT;
+        fd.append('caid', termid);
         fd.append('cat', 'insert');
         props.registerCaunit(fd)
       }
       onReset()
-      onClose()
     }
   }
- 
-  let data = props.caunits.caunits && Array.isArray(props.caunits.caunits) ? props.caunits.caunits.filter(rw =>rw != 'null' || rw !== null || rw !== undefined) : []
-  let tabl = data.filter(rw =>rw != null).map((row, ind)=>{
+  
+  let claszarray = props.dropdowns && Array.isArray(props.dropdowns) ? props.dropdowns[1] : [];
+  let clarray = claszarray.filter(rw=>rw !== null).map((rw, ind) =>{
+      return <option key={ind} value={rw.id}>{rw.name}</option>
+  })
+  
+  let deparr = props.dropdowns[0].filter(rw =>parseInt(rw.id) === parseInt(termid) && parseInt(rw.id) > 0);
+  let termname = deparr.length > 0 ? deparr[0].name : 'None';
+  
+  let data = props.caunits.caunits && Array.isArray(props.caunits.caunits) ? props.caunits.caunits.filter(rw =>rw !== null || rw !== undefined) : []
+  
+  let tabl = data.filter(rw=>rw !== null).map((row, ind)=>{
       return <tr key={ind}>
                 <td className='text-center'>{ind + 1}</td>
-                <td>{row.name}</td>
+                <td className='text-left'>{row.name}</td>
+                <td className='text-center'>{row.abbrv}</td>
+                <td className='text-center'>{row.maxscore}</td>
                 <td className='text-center'>{moment(row.started).format('MMM D, YYYY')}</td>
                 <td className='text-center'>{moment(row.ended).format('MMM D, YYYY')}</td>
                 <td className='text-center'>
-                <CDropdown className="m-0 btn-group ">
+                <CDropdown className="m-0 btn-group">
                   <CDropdownToggle color="success" size="sm">
                   <i className='fa fa-gear'></i> Action
                   </CDropdownToggle>
                   <CDropdownMenu>
-                    <CDropdownItem
-                      onClick={(item) => history.push(`/caunits/${row.id}`)}
-                     >Show caunits</CDropdownItem>
-                    <CDropdownItem onClick={()=>onEdit(row.id, row)} >Edit</CDropdownItem>
-                    <CDropdownItem onClick={()=>onDelete(row.id, row)}>Delete</CDropdownItem>
+                    <CDropdownItem onClick={()=>onEdit(row)} >Edit</CDropdownItem>
+                    <CDropdownItem onClick={()=>onDelete(row.cid, row)}>Delete</CDropdownItem>
                     <CDropdownDivider />
                     <CDropdownItem>Another Action</CDropdownItem>
                   </CDropdownMenu>
@@ -158,8 +171,8 @@ const handleSubmit = () =>{
           <CCardHeader>
           <CRow>
             <CCol sm="5">
-              <h4 id="traffic" className="card-title mb-0">Caunits</h4>
-              <div className="small text-muted">Academic Calendar</div>
+            <h4 id="traffic" className="caunitrd-title mb-0">{termname} : <small> Assessment</small></h4>
+              <div className="small text-muted" style={{textTransform:'caunitpitalize'}}>{props.school.name}</div>
             </CCol>
             <CCol sm="7" className="d-md-block">
               <CButton 
@@ -177,28 +190,27 @@ const handleSubmit = () =>{
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light">
                   <tr>
-                    <th className="text-center">SN.</th>
-                    <th><i className='fa fa-list'></i> Caunit</th>
-                    <th className="text-center"> <i className='fa fa-calendar'></i> Start</th>
-                    <th className="text-center"><i className='fa fa-calendar'></i> End</th>
-                    <th className="text-center"><i className='fa fa-gear'></i> Action</th>
+                    <th className="text-center"> SN.</th>
+                    <th><i className='fa fa-list text-center'></i> ASSESSMENT NAME</th>
+                    <th><i className='fa fa-bullseye text-center'></i> ABBRV</th>
+                    <th><i className='fa fa-list'></i> MAX SCORE</th>
+                    <th><i className='fa fa-gear'></i> ACTION</th>
                   </tr>
                 </thead>
                 <tbody>
                   {tabl}
                  </tbody>
               </table>
-
           </CCardBody>
         </CCard>
         </CCol>
         <CCollapse show={collapse}>
         <CCol xl={12}  id="#formz">
         <CCard>
-            <CCardHeader id='traffic' className="card-title mb-0">
+            <CCardHeader id='traffic' className="caunitrd-title mb-0">
               <CRow>
                 <CCol sm="6">
-                <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Caunit</small></h4>
+                <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> CAUNIT</small></h4>
                 </CCol>
                 <CCol sm="6" className="d-md-block">
                   <CButton  
@@ -214,19 +226,56 @@ const handleSubmit = () =>{
             <CCardBody>
               <CForm action="" method="post">
                 <CFormGroup>
-                  <CLabel htmlFor="nf-name">Caunit</CLabel>
+                  <CLabel htmlFor="nf-namez">Name </CLabel>
                   <CInput 
                       type="text" 
-                      id="nf-name" 
-                      name="name"
-                      defaultValue={name}
+                      id="nf-namez" 
+                      name="namez"
+                      defaultValue={namez}
                       onChange={(e)=>setNamez(e.target.value)}
-                      placeholder="First, Second or Third" 
+                      placeholder="First Continious Assessment" 
                     />
-                  <CFormText className="help-block">Please enter caunit</CFormText>
+                  <CFormText className="help-block">set assessment name</CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-starts">Caunit Starts </CLabel>
+                  <CLabel htmlFor="nf-abbrv">Abbreviation </CLabel>
+                  <CInput 
+                      type="text" 
+                      id="nf-abbrv" 
+                      name="abbrv"
+                      defaultValue={abbrv}
+                      onChange={(e)=>setAbbrv(e.target.value)}
+                      placeholder="CAUNIT1" 
+                    />
+                  <CFormText className="help-block">abbreviate name</CFormText>
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-claszid">Class </CLabel>
+                  <CSelect
+                      type="text" 
+                      id="nf-claszid" 
+                      name="claszid"
+                      onChange={(e)=>setClaszid(e.target.value)}
+                      placeholder="" 
+                    >
+                      {clarray}
+                  </CSelect>
+                  <CFormText className="help-block">Select the class</CFormText>
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-maxscore">Maximum Score </CLabel>
+                  <CInput 
+                      type="text" 
+                      id="nf-maxscore" 
+                      name="maxscore"
+                      defaultValue={maxscore}
+                      onChange={(e)=>setMaxscore(e.target.value)}
+                      placeholder="20" 
+                    />
+                  <CFormText className="help-block">set the maximum score students caunitn attain on this assessment</CFormText>
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-starts">Starts </CLabel>
                   <CInput 
                       type="date" 
                       id="nf-starts" 
@@ -235,10 +284,10 @@ const handleSubmit = () =>{
                       onChange={(e)=>setStarts(e.target.value)}
                       placeholder="date" 
                     />
-                  <CFormText className="help-block">Please enter date caunit starts</CFormText>
+                  <CFormText className="help-block">When will record entry start</CFormText>
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-ends">Caunit ends </CLabel>
+                  <CLabel htmlFor="nf-ends">Ends </CLabel>
                   <CInput 
                       type="date" 
                       id="nf-ends" 
@@ -247,11 +296,10 @@ const handleSubmit = () =>{
                       onChange={(e)=>setEnds(e.target.value)}
                       placeholder="date" 
                     />
-                  <CFormText className="help-block">Please enter date caunit ends</CFormText>
+                  <CFormText className="help-block">When will record entry end</CFormText>
                 </CFormGroup>
-              </CForm>
+                </CForm>
             </CCardBody>
-            
             <CCardFooter>
               <CButton type="submit" onClick={handleSubmit} size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>{' '}
               <CButton type="reset" onClick={onReset} size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
@@ -264,12 +312,18 @@ const handleSubmit = () =>{
 }
 const mapStateToProps = (state) =>({
   caunits : state.caunitReducer,
-  cas : state.caReducer
+  terms : state.termReducer.terms,
+  claszs : state.claszReducer.claszs,
+  staffs : state.staffReducer.staffs,
+  school : state.schoolReducer.school,
+  dropdowns : state.schoolReducer.dropdowns
 })
 export default connect(mapStateToProps, {
+  getStaffs,
   getCaunits,
   getCaunit,
   registerCaunit,
   updateCaunit,
-  deleteCaunit
+  deleteCaunit,
+  getClaszs
 })(Caunit)

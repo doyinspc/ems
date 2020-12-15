@@ -45,7 +45,11 @@ const School = React.lazy(() => import('./views/setting/School'));
 const Session = React.lazy(() => import('./views/setting/Session'));
 const Term = React.lazy(() => import('./views/setting/Term'));
 const Ca = React.lazy(() => import('./views/setting/Ca'));
+const Behavior = React.lazy(() => import('./views/setting/Behavior'));
+const Skill = React.lazy(() => import('./views/setting/Skill'));
 const Caunit = React.lazy(() => import('./views/setting/Caunit'));
+const Behaviorunit = React.lazy(() => import('./views/setting/Behaviorunit'));
+const Skillunit = React.lazy(() => import('./views/setting/Skillunit'));
 const Catype = React.lazy(() => import('./views/setting/Catype'));
 const Department = React.lazy(() => import('./views/setting/Department'));
 const Subject = React.lazy(() => import('./views/setting/Subject'));
@@ -58,6 +62,7 @@ const Staff = React.lazy(() => import('./views/staff/StaffProfile'));
 const StaffAdd = React.lazy(() => import('./views/staff/StaffAdd'));
 const StaffClass = React.lazy(() => import('./views/staff/StaffClass'));
 const StaffSubject = React.lazy(() => import('./views/staff/StaffSubject'));
+const AdmissionList = React.lazy(() => import('./views/student/AdmissionList'));
 const Students = React.lazy(() => import('./views/student/Students'));
 const Student = React.lazy(() => import('./views/student/StudentProfile'));
 const StudentAdd = React.lazy(() => import('./views/student/StudentAdd'));
@@ -80,6 +85,7 @@ const routes = [
   { path: '/staffa/:edit', name: 'Add/ Edit Staff Data', component: StaffAdd, exact: true },
   { path: '/termclass/:term', name: 'Class Teachers', component: StaffClass, exact: true },
   { path: '/termsubject/:term', name: 'Subject Teachers', component: StaffSubject, exact: true },
+  { path: '/admission', name: 'Admission', component: AdmissionList, exact: true },
   { path: '/students', name: 'Students', component: Students, exact: true },
   { path: '/students/:student', name: 'Student Profile', component: Student, exact: true },
   { path: '/studenta/:edit', name: 'Edit Student Data', component: StudentAdd, exact: true },
@@ -90,9 +96,13 @@ const routes = [
   { path: '/clasz', name: 'Classes', component: Clasz, exact: true },
   { path: '/clasz/:claszunit', name: 'Class Units', component: Claszunit, exact: true },
   { path: '/sessions', name: 'Session', component: Session, exact: true },
-  { path: '/sessions/:term', name: 'Term', component: Term },
-  { path: '/sessions/:term/:ca', name: 'CA', component: Ca },
-  { path: '/sessions/:term/:ca/:caunit', name: 'CA Unit', component: Caunit },
+  { path: '/sessions/:term', name: 'Term', component: Term, exact: true  },
+  { path: '/sessions/:term/a/:ca', name: 'CA', component: Ca , exact: true},
+  { path: '/sessions/:term/a/:ca/:caunit', name: 'CA Unit', component: Caunit , exact: true},
+  { path: '/sessions/:term/b/:behavior', name: 'Behaviors', component: Behavior , exact: true},
+  { path: '/sessions/:term/s/:skill', name: 'Skills', component: Skill , exact: true},
+  { path: '/sessions/:term/b/:behavior/:caunit', name: 'Behabior sub-unit', component: Behaviorunit, exact: true },
+  { path: '/sessions/:term/s/:skill/:caunit', name: 'Skill sub-unit', component: Skillunit, exact: true },
   { path: '/mainpage/calendar', name: 'Calendar', component: Calendar, exact: true },
   { path: '/mainpage/maindashboard', name: 'ClassDashboard', component: MainDashboard , exact: true},
   { path: '/theme', name: 'Theme', component: Colors, exact: true },

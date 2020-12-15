@@ -18,25 +18,25 @@ import {
     USER_DELETE_FAIL,
     USER_EDIT
 } from "../types/user";
-import Swal from 'sweetalert2';
+//import Swal from 'sweetalert2';
 
  const callError = ($err) =>{
-    Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Check your internet connection or confirm you are using the right loging information',
-        showConfirmButton: false,
-        timer: 1500
-      })
+    // Swal.fire({
+    //     position: 'top-end',
+    //     icon: 'error',
+    //     title: 'Check your internet connection or confirm you are using the right loging information',
+    //     showConfirmButton: false,
+    //     timer: 1500
+    //   })
  }
  const callLoading = () =>{
-    Swal.fire({
-        position: 'top-end',
-        icon: 'info',
-        title: 'Please wait... processing',
-        showConfirmButton: false,
-        timer: 1500
-      })
+    // Swal.fire({
+    //     position: 'top-end',
+    //     icon: 'info',
+    //     title: 'Please wait... processing',
+    //     showConfirmButton: false,
+    //     timer: 1500
+    //   })
  }
 let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : {};
 let auth = localStorage.getItem('auth') !== 'undefined' ? JSON.parse(localStorage.getItem('auth')) : false;
@@ -55,7 +55,9 @@ const initialState = {
     isLoading: false,
     isAdmin: user && parseInt(user.is_admin) === 1 ? true : false,
     isRegistered: user && user.id > 1 ? true: false,
-    user: user ? user : {},
+    user: user ? user : {'id':8},
+    mid: 2,
+    username: 'femi',
     location: loct,
     locationname: loctname,
     isAdmin: user !== null && 'is_admin' in user && parseInt(user.is_admin) === 1 ? true : false,

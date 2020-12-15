@@ -39,7 +39,7 @@ const Staffs = (props) => {
           {
               'schoolid':1
           }),
-          cat:'select',
+          cat:'selected',
           table:'staffs',
           narration:'get all staffs'
       }
@@ -141,10 +141,10 @@ let acct = data.map((row, ind)=>{
   let departmentTable = {};
   for(var i = 0; i < data.length; i++)
   {
-    if(data[i].departmentid in departmentTable)
-        departmentTable[data[i].departmentid]++;
+    if(data[i].departmentname in departmentTable)
+        departmentTable[data[i].departmentname]++;
     else
-        departmentTable[data[i].departmentid] = 1;
+        departmentTable[data[i].departmentname] = 1;
   }
  
  let religionTable = {};

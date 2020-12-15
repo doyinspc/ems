@@ -68,7 +68,7 @@ const Staffclass = (props) => {
           'grp': groupid,
       }),
       cat:'staffclass',
-      table:'access',
+      table:'accessstaffclass',
       narration:'get staff classes'
     }
     props.getStaffclasss(params1);
@@ -80,10 +80,10 @@ const Staffclass = (props) => {
     if(id && parseInt(id) > 0)
     {
       let dt = dts;
-      setStaff(dt.staffid);
-      setClaszid(dt.claszid);
-      setElement('nf-claszid', dt.claszid )
-      setElement('nf-staff', dt.staffid )
+      setStaff(dt.clientid);
+      setClaszid(dt.itemid);
+      setElement('nf-claszid', dt.itemid )
+      setElement('nf-staff', dt.clientid )
     }else{
       setStaff('');
       setClaszid('');
@@ -110,18 +110,19 @@ const Staffclass = (props) => {
   const onClose = () =>setCollapse(false);
 
   const handleSubmit = () =>{
-    if(parseInt(staff) > 0){
+    if(parseInt(staff) > 0)
+    {
       let fd = new FormData();
       fd.append('itemid', claszid);
       fd.append('clientid', staff);
       fd.append('checker', groupid+'_'+termid+'_'+staff+'_'+claszid);
-      fd.append('table', 'staffclasss');
+      fd.append('table', 'access');
       
       if(id && parseInt(id) > 0)
       {
         //UPDATE 
         fd.append('id', id);
-        fd.append('cat', 'update');
+        fd.append('cat', 'updates');
         props.updateStaffclass(fd)
         
       }else if(termid && parseInt(termid) > 0)
@@ -129,7 +130,7 @@ const Staffclass = (props) => {
         //INSERT
         fd.append('grp', groupid);
         fd.append('termid', termid);
-        fd.append('cat', 'insert');
+        fd.append('cat', 'inserts');
         props.registerStaffclass(fd)
       }
       onReset()
@@ -154,8 +155,22 @@ const Staffclass = (props) => {
   
   let tabl = data.filter(rw=>rw !== null).map((row, ind)=>{
       return <tr key={ind}>
-                <td className='text-center'>{row.claszname}</td>
-                <td>{row.staffname}</td>
+                <td className='text-center'>{ind + 1}</td>
+                <td className='text-center'>{row.itemname}</td>
+                <td>{row.clientname}</td>
+                <td className='text-center'>
+                <CDropdown className="m-0 btn-group">
+                  <CDropdownToggle color="success" size="sm">
+                  <i className='fa fa-gear'></i> Action
+                  </CDropdownToggle>
+                  <CDropdownMenu>
+                    <CDropdownItem onClick={()=>onEdit(row)} >Edit</CDropdownItem>
+                    <CDropdownItem onClick={()=>onDelete(row.cid, row)}>Delete</CDropdownItem>
+                    <CDropdownDivider />
+                    <CDropdownItem>Another Action</CDropdownItem>
+                  </CDropdownMenu>
+                </CDropdown>
+                </td>
               </tr>
   })
   return (
@@ -184,16 +199,16 @@ const Staffclass = (props) => {
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light">
                   <tr>
-                    <th className="text-center">SN.</th>
-                    <th><i className='fa fa-list'></i>CLASS</th>
-                    <th><i className='fa fa-list'></i>STAFF NAME</th>
+                    <th className="text-center"> SN.</th>
+                    <th><i className='fa fa-list text-center'></i> CLASS</th>
+                    <th><i className='fa fa-list'></i> STAFF NAME</th>
+                    <th><i className='fa fa-gear'></i> ACTION</th>
                   </tr>
                 </thead>
                 <tbody>
                   {tabl}
                  </tbody>
               </table>
-
           </CCardBody>
         </CCard>
         </CCol>

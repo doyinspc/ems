@@ -58,7 +58,7 @@ export default function(state = initialState, action){
             };
         case STAFFCLASS_GET_ONE:
             let all = [...state.staffclasss];
-            let ses = all.filter(row=>row.cid == action.payload)[0];
+            let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
                 staffclass : ses,

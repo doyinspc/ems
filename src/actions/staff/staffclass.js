@@ -20,7 +20,6 @@ const path = API_PATH_STAFF;
 export const getStaffclasss = params => (dispatch, getState) => {
     //SET PAGE LOADING
     params.token = MAIN_TOKEN;
-    params.table = TABLE_NAME;
 
     dispatch({type : STAFFCLASS_LOADING});
         axios.get(path, {params}, axiosConfig)

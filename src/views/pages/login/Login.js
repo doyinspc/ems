@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState} from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { userLogin } from './../../../actions/user'
 import {
   CButton,
   CCard,
@@ -16,7 +18,21 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
-const Login = () => {
+const Login = (props) => {
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleSubmit = () =>{
+      let fd = new FormData()
+      fd.append('employment_no', username)
+      fd.append('password', password)
+      fd.append('cat', 'loginstaff')
+      fd.append('tables', 'tables')
+      props.userLogin(fd)
+  }
+
+
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -26,7 +42,7 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
-                    <h1>Login</h1>
+                    <h1><img src='/avatars/logo.png' height='50px'/>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
@@ -34,7 +50,7 @@ const Login = () => {
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="text" placeholder="Username" autoComplete="username" />
+                      <CInput type="text" defaultValue={username} onClick={(e)=>setUsername(e.target.value)} placeholder="Staff ID" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -42,14 +58,14 @@ const Login = () => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" placeholder="Password" autoComplete="current-password" />
+                      <CInput type="password" defaultValue={password} onClick={(e)=>setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" />
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" className="px-4">Login</CButton>
+                        <CButton color="primary" onClick={handleSubmit} className="px-4">Login</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Forgot password?</CButton>
+                        
                       </CCol>
                     </CRow>
                   </CForm>
@@ -58,12 +74,11 @@ const Login = () => {
               <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Sign up</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                      labore et dolore magna aliqua.</p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>Register Now!</CButton>
-                    </Link>
+                    <img
+                      src='avatars/logo1.png'
+                      height='170px'
+                    />
+                    <h4>Education</h4>
                   </div>
                 </CCardBody>
               </CCard>
@@ -74,5 +89,7 @@ const Login = () => {
     </div>
   )
 }
-
-export default Login
+const mapStateToProps = (state) =>({
+  
+})
+export default connect( mapStateToProps,{userLogin})(Login)

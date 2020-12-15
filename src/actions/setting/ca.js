@@ -20,7 +20,6 @@ const path = API_PATH_SETTING;
 export const getCas = params => (dispatch, getState) => {
     //SET PAGE LOADING
     params.token = MAIN_TOKEN;
-    params.table = TABLE_NAME;
 
     dispatch({type : CA_LOADING});
         axios.get(path, {params}, axiosConfig)

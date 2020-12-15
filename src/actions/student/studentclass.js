@@ -13,14 +13,12 @@ import {
 } from "./../../types/student/studentclass";
 import { MAIN_TOKEN, API_PATH_SETTING, axiosConfig1, axiosConfig } from './../common';
 
-let TABLE_NAME = 'access';
 const path = API_PATH_SETTING;
 
 //GET ALL STUDENTCLASS 
 export const getStudentclasss = params => (dispatch, getState) => {
     //SET PAGE LOADING
     params.token = MAIN_TOKEN;
-    params.table = TABLE_NAME;
 
     dispatch({type : STUDENTCLASS_LOADING});
         axios.get(path, {params}, axiosConfig)

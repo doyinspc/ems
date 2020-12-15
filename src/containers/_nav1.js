@@ -11,7 +11,7 @@ export default [
     },
     {
         _tag: 'CSidebarNavItem',
-        name: 'Academic Calendar',
+        name: 'Calendar',
         to: '/sessions',
         icon: 'cil-calendar',
         badge: {
@@ -19,6 +19,16 @@ export default [
           text: '',
         }
     },
+    {
+      _tag: 'CSidebarNavItem',
+      name: 'Department',
+      to: '/department',
+      icon: 'cil-calendar',
+      badge: {
+        color: 'info',
+        text: '',
+      }
+   },
     {
       _tag: 'CSidebarNavTitle',
       _children: ['Staff']

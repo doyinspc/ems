@@ -11,16 +11,15 @@ import {
     STAFFSUBJECT_DELETE_SUCCESS,
     STAFFSUBJECT_DELETE_FAIL
 } from "./../../types/staff/staffsubject";
-import { MAIN_TOKEN, API_PATH_STAFFSUBJECT, axiosConfig1, axiosConfig } from './../common';
+import { MAIN_TOKEN, API_PATH_STAFF, axiosConfig1, axiosConfig } from './../common';
 
 let TABLE_NAME = 'staffsubjects';
-const path = API_PATH_STAFFSUBJECT;
+const path = API_PATH_STAFF;
 
 //GET ALL STAFFSUBJECT 
 export const getStaffsubjects = params => (dispatch, getState) => {
     //SET PAGE LOADING
     params.token = MAIN_TOKEN;
-    params.table = TABLE_NAME;
 
     dispatch({type : STAFFSUBJECT_LOADING});
         axios.get(path, {params}, axiosConfig)

@@ -125,7 +125,7 @@ const Catype = (props) => {
                   </CDropdownToggle>
                   <CDropdownMenu>
                     <CDropdownItem
-                      onClick={(item) => history.push(`/catypes/${row.id}`)}
+                      onClick={(item) => history.push(`/catype/${row.id}`)}
                      ><i className='fa fa-list'></i>{' '} Subjects</CDropdownItem>
                      <CDropdownItem 
                           onClick={()=>onActivate(row.id, row.is_active)} >

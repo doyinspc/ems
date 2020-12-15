@@ -43,6 +43,7 @@ const Theme = (props) => {
   const [dts, setDts] = useState('')
   const [moduleid, setModuleid ]= useState('')
   const [namez, setNamez] = useState('')
+  const [topic, setTopic] = useState('')
   const [claszid, setClaszid] = useState()
   const [objective, setObjective] = useState([])
   const [content, setContent] = useState([])
@@ -84,6 +85,7 @@ const Theme = (props) => {
     {
       let dt = dts;
       setNamez(dt.name);
+      setNamez(dt.topic);
       setClaszid(dt.claszid);
       setObjective(JSON.parse(dt.objective));
       setContent(JSON.parse(dt.content));
@@ -119,6 +121,7 @@ const Theme = (props) => {
     if(namez.length > 0){
       let fd = new FormData();
       fd.append('name', namez);
+      fd.append('topic', topic);
       fd.append('claszid', claszid);
       fd.append('moduleid', moduleid);
       fd.append('objective', JSON.stringify(objective));
@@ -202,28 +205,8 @@ const Theme = (props) => {
   })
   
   let data = props.themes.themes && Array.isArray(props.themes.themes) ? props.themes.themes.filter(rw =>rw !== null || rw !== undefined) : []
-  
   let tabl = data.filter(rw=>rw !== null).map((row, ind)=>{
       return <tr key={ind}>
-                <td className='text-center'>
-                <CDropdown className="m-0 btn-group ">
-                  <CDropdownToggle color={parseInt(row.is_active) === 0 ? 'success' : 'danger'} size="sm">
-                  <i className='fa fa-gear'></i> {row.claszid}
-                  </CDropdownToggle>
-                  <CDropdownMenu>
-                    <CDropdownItem
-                      onClick={(item) => history.push(`/department/${departmentid}/${subjectid}/${row.id}`)}
-                     ><i className='fa fa-list'></i>{' '} Question Bank</CDropdownItem>
-                     <CDropdownItem 
-                          onClick={()=>onActivate(row.id, row.is_active)} >
-                          <i className={parseInt(row.is_active) === 0 ? 'fa fa-thumbs-up' : 'fa fa-thumb-down'}></i>
-                          {' '}  {parseInt(row.is_active) === 0 ? 'Deactivate' : 'Activate'}</CDropdownItem>
-                    <CDropdownItem onClick={()=>onEdit(row)} ><i className='fa fa-edit'></i>{' '}  Edit</CDropdownItem>
-                    <CDropdownItem onClick={()=>onDelete(row.id, row)}><i className='fa fa-remove'></i>{' '}  Delete</CDropdownItem>
-                  </CDropdownMenu>
-                </CDropdown>
-               
-                </td>
                 <td><strong>MODULE {row.moduleid}</strong>{" : "}<span style={{textTransform:'uppercase'}}> {row.name}</span>
                   <CRow>
                     <CCol sm={6}>
@@ -246,6 +229,25 @@ const Theme = (props) => {
                             }
                         </ul>
                     </CCol>
+                    <CDropdown className="m-0 btn-group ">
+                  <CDropdownToggle color={parseInt(row.is_active) === 0 ? 'success' : 'danger'} size="sm">
+                  <i className='fa fa-gear'></i>
+                  </CDropdownToggle>
+                  <CDropdownMenu>
+                    <CDropdownItem
+                      onClick={(item) => history.push(`/department/${departmentid}/${subjectid}/${row.id}`)}
+                     ><i className='fa fa-list'></i>{' '} Question Bank</CDropdownItem>
+                     <CDropdownItem
+                      onClick={(item) => history.push(`/department/${departmentid}/${subjectid}/${row.id}`)}
+                     ><i className='fa fa-list'></i>{' '} Add reference material</CDropdownItem>
+                     <CDropdownItem 
+                          onClick={()=>onActivate(row.id, row.is_active)} >
+                          <i className={parseInt(row.is_active) === 0 ? 'fa fa-thumbs-up' : 'fa fa-thumb-down'}></i>
+                          {' '}  {parseInt(row.is_active) === 0 ? 'Deactivate' : 'Activate'}</CDropdownItem>
+                    <CDropdownItem onClick={()=>onEdit(row)} ><i className='fa fa-edit'></i>{' '}  Edit</CDropdownItem>
+                    <CDropdownItem onClick={()=>onDelete(row.id, row)}><i className='fa fa-remove'></i>{' '}  Delete</CDropdownItem>
+                  </CDropdownMenu>
+                </CDropdown>
                   </CRow>
                 </td>
                
@@ -257,11 +259,11 @@ const Theme = (props) => {
         <CCard>
           <CCardHeader>
           <CRow>
-            <CCol sm="5">
-            <h4 id="traffic" className="card-title mb-0">Scheme of Work : {subjectname}</h4>
+            <CCol sm="8">
+               <h4 id="traffic" className="card-title mb-0">Scheme of Work : {subjectname}</h4>
               <div className="small text-muted" style={{textTransform:'capitalize'}}>{props.school.name}</div>
             </CCol>
-            <CCol sm="7" className="d-md-block">
+            <CCol sm="4" className="d-md-block">
               <CButton 
                   data-target='#formz' 
                   data-toggle="collapse" 
@@ -277,7 +279,6 @@ const Theme = (props) => {
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light">
                   <tr>
-                    <th className="text-center">MODULE</th>
                     <th><i className='fa fa-list'></i>THEME/TOPIC</th>
                   </tr>
                 </thead>
