@@ -31,7 +31,9 @@ const TheSidebar = () => {
           name="sygnet"
           height={35}
         />
-        <h4>SILEMS</h4>
+        <img
+        src='avatars/logo1.png'
+        height='60px'/>
       </CSidebarBrand>
       <CSidebarNav>
         <CCreateElement

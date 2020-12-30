@@ -83,6 +83,326 @@ export const statussobj = [
     {'value':3, 'label':'High'},
     {'value':4, 'label':'Emergency'}
   ];
+
+export const controls = {
+    0: {
+      name:'Staff',
+      data:{
+        0:'Bio Data & Employment',
+        1:'Education History',
+        2:'Professional Certificate',
+        3:'Work Experience',
+        4:'Leave Request History',
+        5:'Job Role',
+        6:'Performance',
+        7:'Report Commendations/Sanctions',
+        8:'Audit trail',
+        9:'Access',
+      }
+    },
+    1: {
+      name:'Student',
+      data:{
+        0:'Biodata',
+        1:'Academic',
+        2:'Financial',
+      }
+    },
+    2: {
+      name:'Setting',
+      data:[
+        {
+          id:1,
+          name:'STAFF',
+          icon:'/icons/staff.png',
+          links:'/calendar',
+          submenu:[
+            {
+              id:1,
+              name:'ADD STAFF',
+              icon:'/icons/adduser.png',
+              links:'/addstaff',
+              description:'Add a new staff to the database'
+            },{
+              id:2,
+              name:'CURRENT STAFF',
+              icon:'/icons/usergood.png',
+              links:'/staffs/1',
+              description:'All staff currently in employment'
+            },{
+              id:3,
+              name:'EX STAFF',
+              icon:'/icons/userbad.png',
+              links:'/staffs/2',
+              description:'All staff no longer in company service'
+            }
+          ]
+        },
+        {
+          id:2,
+          name:'STUDENT',
+          icon:'/icons/student.png',
+          links:'/calendar',
+          submenu:[
+              {
+                id:1,
+                name:'ADD STUDENT',
+                icon:'/icons/adduser.png',
+                links:'/addstudent',
+                description:'Add a new student to the database'
+              },{
+                id:2,
+                name:'CURRENT STUDENT',
+                icon:'/icons/usergood.png',
+                links:'/students/1',
+                description:'All students in school base on active term'
+              },{
+                id:3,
+                name:'EX STUDENT',
+                icon:'/icons/userbad.png',
+                links:'/students/2',
+                description:'All students no longer in the school'
+              }
+            ]
+        },
+        {
+          id:3,
+          name:'CALENDAR',
+          icon:'/icons/calendar.png',
+          links:'/setting/3/',
+          submenu:[
+            {
+            id:1,
+            name:'TERMS',
+            icon:'/icons/calendar.png',
+            links:'/setting/3/',
+            submenu:[
+              {
+                id:1,
+                name:'TERMLY ASSESSMENTS',
+                icon:'/icons/term_assessment.png',
+                links:'/setting/3/',
+                description:'Prepare academic assessment parameters for the term'
+              },
+              {
+                id:2,
+                name:'BEHAVIOR',
+                icon:'/icons/term_behavior.png',
+                links:'/setting/3/',
+                description:'Prepare behavioral assessment parameters for the term'
+              },
+              {
+                id:3,
+                name:'SKILLS',
+                icon:'/icons/term_skill.png',
+                links:'/setting/3/',
+                description:'Prepare psychomoto assessment parameters for the term'
+              },{
+                id:4,
+                name:'CLASS ALLOCATION',
+                icon:'/icons/term_class_allocation.png',
+                links:'/setting/3/',
+                description:'Allocate classes to teachers for management and supervision'
+              },{
+                id:5,
+                name:'SUBJECT ALLOCATION',
+                icon:'/icons/term_subject_allocation.png',
+                links:'/setting/3/',
+                description:'Allocate subjects to teachers to teach and evaluate'
+              },{
+                id:6,
+                name:'TIMETABLE',
+                icon:'/icons/term_timetable.png',
+                links:'/setting/3/',
+                description:'Prepare class timetable for the term'
+              },
+              {
+                id:6,
+                name:'CLASS FEES',
+                icon:'/icons/term_fee.png',
+                links:'/setting/3/',
+                description:'Prepare school fees to be paid by students for the term'
+              },
+            ]
+
+          },
+          {
+            id:3,
+            name:'MAINTENANCE',
+            icon:'/icons/calendar.png',
+            links:'/calendar',
+          },
+          {
+            id:3,
+            name:'ANALYSIS',
+            icon:'/icons/calendar.png',
+            links:'/calendar',
+          }
+        ]
+        },
+        {
+          id:4,
+          name:'SCHOOL',
+          icon:'/icons/school.png',
+          links:'/school'
+        },
+        {
+          id:5,
+          name:'DEPARTMENT',
+          icon:'/icons/department.png',
+          links:'/department',
+          submenu:[]
+        },
+        {
+          id:6,
+          name:'SUBJECTS',
+          icon:'/icons/subject.png',
+          links:'/subject',
+          submenu:[]
+        },{
+          id:7,
+          name:'ADMISSION',
+          icon:'/icons/admission.png',
+          links:'/admission',
+          submenu:[{
+            id:3,
+            name:'ADMISSIONS',
+            icon:'/icons/calendar.png',
+            links:'/calendar',
+            submenu:[]
+          }]
+        },
+        {id:8,
+          name:'TIMETABLE',
+          icon:'/icons/timetable.png',
+          links:'/timetable',
+          submenu:[]
+        },
+        
+        {
+          id:9,
+          name:'CLASS',
+          icon:'/icons/class.png',
+          links:'/clasz',
+          submenu:[{
+            id:3,
+            name:'CLASS UNIT',
+            icon:'/icons/class.png',
+            links:'/calendar',
+            submenu:[]
+          }]
+        },
+        {
+          id:10,
+          name:'ASSESSMENT',
+          icon:'/icons/assessment.png',
+          links:'/assessment',
+          submenu:[]
+          
+        },
+        {
+          id:11,
+          name:'SKILLS',
+          icon:'/icons/skill.png',
+          links:'/skill',
+          submenu:{
+            id:3,
+            name:'TERMS',
+            icon:'/icons/skill.png',
+            links:'/skill',
+            submenu:[]
+          }
+        },
+        {
+          id:12,
+          name:'BEHAVIORS',
+          icon:'/icons/behavior.png',
+          links:'/behavior',
+          submenu:[]
+        },
+        {
+          id:13,
+          name:'GRADES',
+          icon:'/icons/grade.png',
+          links:'/grade',
+          submenu:{
+            id:3,
+            name:'GRADING',
+            icon:'/icons/grade.png',
+            links:'/calendar',
+            submenu:[]
+          }
+        },
+        {
+          id:14,
+          name:'REPORT CARD',
+          icon:'/icons/report.png',
+          links:'/report',
+          submenu:[]
+        },
+        {
+          id:15,
+          name:'FEES',
+          icon:'/icons/fee.png',
+          links:'/fee',
+          submenu:[]
+        },
+        {
+          id:16,
+          name:'INVENTORY',
+          icon:'/icons/inventory.png',
+          links:'/inventory',
+          submenu:[{
+            id:3,
+            name:'TERMS',
+            icon:'/icons/calendar.png',
+            links:'/calendar',
+          }]
+        },
+        {
+          id:17,
+          name:'MAINTENANCE',
+          icon:'/icons/maintenance.png',
+          links:'/maintenance',
+          submenu:[{
+            id:3,
+            name:'TERMS',
+            icon:'/icons/calendar.png',
+            links:'/calendar',
+          }]
+        },{
+          id:18,
+          name:'OFFICE',
+          icon:'/icons/office.png',
+          links:'/office',
+          submenu:[{
+            id:3,
+            name:'JOB ROLES',
+            icon:'/icons/calendar.png',
+            links:'/calendar',
+          }]
+        },{
+          id:19,
+          name:'RANK/LEVEL',
+          icon:'/icons/rank.png',
+          links:'/rank',
+          submenu:[]
+        },{
+          id:20,
+          name:'NOTIFICATION',
+          icon:'/icons/notification.png',
+          links:'/notification',
+          submenu:[{
+            id:3,
+            name:'MESSAGE',
+            icon:'/icons/notification.png',
+            links:'/calendar',
+          }]
+        },
+        
+      ]
+    }
+}
 export const access = {
   0: {
         name:'Location/Dashboard',
@@ -149,81 +469,7 @@ export const access = {
       }
   },
 }
-export const tablereport = {
-    'user_categorys':{
-        'update':' updated department with id',
-        'insert':' created department with id ',
-        'confirm':' created department with id ',
-        'delete':' deleted department with id ',
-        'login':' logged in ',
-    },
-    'user_transactions':{
-        'update':' made a change with id',
-        'insert':' created department with id ',
-        'confirm':' created department with id ',
-        'delete':' deleted department with id '
-    },
-    'user_types':{
-        'update':' changed staff data with id ',
-        'insert':' created staff record with id ',
-        'confirm':' created staff record with id ',
-        'delete':' deleted staff record with id '
-    },
-    'inventory_categorys':{
-        'update':' updated inventory category with id',
-        'insert':' created inventory category with id ',
-        'confirm':' created inventory categorywith id ',
-        'delete':' deleted inventory category with id '
-    },
-    'inventory_transactions':{
-        'update':' Changed inventory record with id',
-        'insert':' created inventory record with id ',
-        'confirm':' created inventory record with id ',
-        'delete':' deleted inventory record with id '
-    },
-    'inventory_types':{
-        'update':' updated inventory category with id',
-        'insert':' created inventory category with id ',
-        'confirm':' created inventory categorywith id ',
-        'delete':' deleted inventory category with id '
-    },
-    'maintenance_categorys':{
-        'update':' updated maintenance category with id',
-        'insert':' created maintenance category with id ',
-        'confirm':' created maintenance category with id ',
-        'delete':' deleted maintenance category with id '
-    },
-    'maintenance_transactions':{
-        'update':' Changed maintenance record with id',
-        'insert':' created maintenance record with id ',
-        'confirm':' created maintenance record with id ',
-        'delete':' deleted maintenance record with id '
-    },
-    'maintenance_types':{
-        'update':' updated maintenance type with id',
-        'insert':' created maintenance type with id ',
-        'confirm':' created maintenance type ywith id ',
-        'delete':' deleted maintenance type with id '
-    },
-    'room_categorys':{
-        'update':' updated a house with id',
-        'insert':' created a house with id ',
-        'confirm':' created a house with id ',
-        'delete':' deleted a house with id '
-    },
-    'room_transactions':{
-        'update':' updated room record with id',
-        'insert':' booked room record with id ',
-        'confirm':' booked room record with id ',
-        'delete':' deleted booking record with id '
-    },
-    'room_types':{
-        'update':' updated room with id',
-        'insert':' created room with id ',
-        'confirm':' created room with id ',
-        'delete':' deleted room with id '
-    },
-}
+
 
 export const states = [
   {

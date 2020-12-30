@@ -4,7 +4,16 @@ import catype from "./setting/catype";
 import caunit from "./setting/caunit";
 import clasz from "./setting/clasz";
 import claszunit from "./setting/claszunit";
+import inventory from "./setting/inventory";
+import inventoryunit from "./setting/inventoryunit";
+import inventorytransaction from "./setting/inventorytransaction";
+import maintenance from "./setting/maintenance";
+import maintenanceunit from "./setting/maintenanceunit";
+import maintenancetransaction from "./setting/maintenancetransaction";
 import department from "./setting/department";
+import fee from "./setting/fee";
+import level from "./setting/level";
+import timetable from "./setting/timetable";
 import session from "./setting/session";
 import staff from "./staff/staff";
 import staffclass from "./staff/staffclass";
@@ -40,7 +49,16 @@ export default combineReducers({
     caunitReducer: caunit,
     claszReducer: clasz,
     claszunitReducer: claszunit,
+    inventoryReducer: inventory,
+    inventoryunitReducer: inventoryunit,
+    inventorytransactionReducer: inventorytransaction,
+    maintenanceReducer: maintenance,
+    maintenanceunitReducer: maintenanceunit,
+    maintenancetransactionReducer: maintenancetransaction,
     departmentReducer: department,
+    feeReducer: fee,
+    timetableReducer: timetable,
+    levelReducer: level,
     sessionReducer: session,
     termReducer: term,
     staffReducer: staff,

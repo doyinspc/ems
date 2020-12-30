@@ -58,12 +58,6 @@ export default function(state = initialState, action){
                 schools : action.payload,
                 msg:'DONE!!!'
             };
-         case SCHOOL_GET_DROPDOWNS:
-            localStorage.setItem('dropdowns', JSON.stringify(action.payload));
-            return {
-                ...state,
-                dropdowns : action.payload
-            };
         case SCHOOL_GET_ONE:
             let all = [...state.schools];
             let ses = all.filter(row=>row.cid == action.payload)[0];

@@ -6,6 +6,16 @@ import {
     USER_LOGOUT_FAIL,
     USER_GET_ONE,
     USER_CHANGE_ONE,
+    USER_GET_DROPDOWNS,
+    USER_GET_DATA,
+    USER_GET_SCHOOL,
+    USER_GET_TERM,
+    USER_GET_DROPDOWNS_ERROR,
+    USER_GET_DATA_ERROR,
+    USER_GET_SCHOOL_ERROR,
+    USER_GET_TERM_ERROR,
+    USER_SET_TERM,
+    USER_SET_SCHOOL,
     USER_GET_MULTIPLE,
     USER_REGISTER_SUCCESS,
     USER_REGISTER_FAIL,
@@ -20,7 +30,7 @@ import {
 import { MAIN_TOKEN, SERVER_PATHS, axiosConfig, axiosConfig1 } from './common';
 
 let TABLE_NAME = 'user_types';
-const path = SERVER_PATHS + '/staff.php';
+const path = SERVER_PATHS + '/setting.php';
 
 let params = {
     data:{},
@@ -30,8 +40,6 @@ let params = {
   }
 //GET ALL USER 
 export const getUsers = params => (dispatch, getState) => {
-    
-    
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
@@ -46,8 +54,72 @@ export const getUsers = params => (dispatch, getState) => {
                 })
             })
 };
+//GET ALL DROPDOWNS
+export const getUserdropdowns = params => (dispatch, getState) => {
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: USER_GET_DROPDOWNS,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : USER_GET_DROPDOWNS_ERROR,
+                    payload:err
+                })
+            })
+};
+//GET ALL TERMS
+export const getUserTerms = params => (dispatch, getState) => { 
+    axios.get(path, {params}, axiosConfig)
+        .then(res => {                                                                                                                                                                                                                                        
+            dispatch({
+                type: USER_GET_TERM,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : USER_GET_TERM_ERROR,
+                payload:err
+            })
+        })
+};
+//GET ALL SCHOOLS
+export const getUserSchools = params => (dispatch, getState) => { 
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: USER_GET_SCHOOL,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : USER_GET_SCHOOL_ERROR,
+                    payload:err
+                })
+            })
+};
+//GET ALL DATA
+export const getUserDatas = params => (dispatch, getState) => {
+   
+    axios.get(path, {params}, axiosConfig)
+        .then(res => {                                                                                                                                                                                                                                        
+            dispatch({
+                type: USER_GET_DATA,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : USER_GET_DATA_ERROR,
+                payload:err
+            })
+        })
+};
 export const userLogin = data => (dispatch, getState) => {
-
     dispatch({type : USER_LOADING});
         axios.post(path, data, axiosConfig1)
             .then(res => {                                                                                                                                                                                                                                      
@@ -81,13 +153,21 @@ export const getUser = id => (dispatch, getState) => {
         payload: id
     });  
 };
-//GET SINGLE USER 
-export const changeLocation = id => (dispatch, getState) => {
-    //SET PAGE LOADING
+
+//SET SESSION
+export const settTerm = data => (dispatch, getState) => {
     dispatch(
         {
-        type : USER_CHANGE_ONE,
-        payload: id
+        type : USER_SET_TERM,
+        payload: data
+        });  
+};
+//SET SCHOOL
+export const settSchool = data => (dispatch, getState) => {
+    dispatch(
+        {
+        type : USER_SET_SCHOOL,
+        payload: data
     });  
 };
 //USER DELETE

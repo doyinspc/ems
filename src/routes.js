@@ -41,6 +41,8 @@ const User = React.lazy(() => import('./views/users/User'));
 
 const Main = React.lazy(() => import('./views/dashboard/Main'));
 const MainDashboard = React.lazy(() => import('./views/setting/Dashboard'));
+const Settings = React.lazy(() => import('./views/setting/Dashboard'));
+const Setting = React.lazy(() => import('./views/setting/Setting'));
 const School = React.lazy(() => import('./views/setting/School'));
 const Session = React.lazy(() => import('./views/setting/Session'));
 const Term = React.lazy(() => import('./views/setting/Term'));
@@ -59,6 +61,7 @@ const Clasz = React.lazy(() => import('./views/setting/Clasz'));
 const Claszunit = React.lazy(() => import('./views/setting/Claszunit'));
 const Staffs = React.lazy(() => import('./views/staff/Staffs'));
 const Staff = React.lazy(() => import('./views/staff/StaffProfile'));
+const StaffDashboard = React.lazy(() => import('./views/staff/StaffDashboard'));
 const StaffAdd = React.lazy(() => import('./views/staff/StaffAdd'));
 const StaffClass = React.lazy(() => import('./views/staff/StaffClass'));
 const StaffSubject = React.lazy(() => import('./views/staff/StaffSubject'));
@@ -73,7 +76,7 @@ const StudentSubjects = React.lazy(() => import('./views/student/StudentSubjects
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/main', name: 'Dashboard', component: Main },
+  { path: '/main', name: 'Dashboard', component: StaffDashboard },
   { path: '/school', name: 'School', component: School, exact: true },
   { path: '/department', name: 'Department', component: Department, exact: true },
   { path: '/department/:subject', name: 'Subject', component: Subject, exact: true },
@@ -104,7 +107,9 @@ const routes = [
   { path: '/sessions/:term/b/:behavior/:caunit', name: 'Behabior sub-unit', component: Behaviorunit, exact: true },
   { path: '/sessions/:term/s/:skill/:caunit', name: 'Skill sub-unit', component: Skillunit, exact: true },
   { path: '/mainpage/calendar', name: 'Calendar', component: Calendar, exact: true },
-  { path: '/mainpage/maindashboard', name: 'ClassDashboard', component: MainDashboard , exact: true},
+  { path: '/maindashboard', name: 'ClassDashboard', component: MainDashboard , exact: true},
+  { path: '/settings', name: 'Settings Dashboard', component: Settings },
+  { path: '/setting/:sid/:pid/:qid', name: 'Setting', component: Setting, exact: true },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },
   { path: '/theme/typography', name: 'Typography', component: Typography },

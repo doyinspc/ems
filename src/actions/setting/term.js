@@ -4,6 +4,8 @@ import {
     TERM_GET_MULTIPLE,
     TERM_REGISTER_SUCCESS,
     TERM_REGISTER_FAIL,
+    TERM_ACTIVE_SUCCESS,
+    TERM_ACTIVE_FAIL,
     TERM_LOADING,
     TERM_LOADING_ERROR,
     TERM_UPDATE_SUCCESS,
@@ -75,6 +77,31 @@ export const registerTerm = data => dispatch => {
         .catch(err => {
             dispatch({
                 type : TERM_REGISTER_FAIL,
+                payload: err
+            })
+        })
+};
+
+//TERM REGISTER
+export const setActiveTerm = (schoolid, termid) => dispatch => {
+    let fd = new FormData();
+    fd.append('schoolid', schoolid);
+    fd.append('termid', termid);
+    fd.append('cat', 'term');
+    fd.append('table', 'terms');
+    fd.append('narration', `Change term ${termid}`);
+
+
+    axios.post(path, fd, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: TERM_ACTIVE_SUCCESS,
+                payload: res.data.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : TERM_ACTIVE_FAIL,
                 payload: err
             })
         })

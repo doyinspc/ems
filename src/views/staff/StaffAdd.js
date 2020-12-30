@@ -86,9 +86,7 @@ const Staffs = (props) => {
     const [reason, setReason] = useState('')
     const [is_active, setIs_active] = useState(0)
     //EDUCATION
-    const [dol, setDol] = useState('')
-    const [reason, setReason] = useState('')
-    const [is_active, setIs_active] = useState(0)
+      
 
     useEffect(() => {
         

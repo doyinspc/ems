@@ -88,7 +88,8 @@ export default function(state = initialState, action){
                 subjects: rem
             }
         case SUBJECT_UPDATE_SUCCESS:
-            const findInd = state.subjects.findIndex(cat => cat.id == action.payload.id);
+            
+            const findInd = state.subjects.filter(rw=>rw !== null).findIndex(cat =>parseInt(cat.id) === parseInt(action.payload.id));
             let newState = [...state.subjects];
             newState[findInd] = action.payload;
             localStorage.setItem('subject', JSON.stringify(newState));

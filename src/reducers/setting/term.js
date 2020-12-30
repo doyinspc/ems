@@ -3,6 +3,8 @@ import {
     TERM_GET_ONE,
     TERM_REGISTER_SUCCESS,
     TERM_REGISTER_FAIL,
+    TERM_ACTIVE_SUCCESS,
+    TERM_ACTIVE_FAIL,
     TERM_LOADING,
     TERM_LOADING_ERROR,
     TERM_ACTIVATE_FAIL,
@@ -23,6 +25,11 @@ const initialState = {
     msg: null,
     isEdit:-1,
     ref:null,
+    currentTerm:{
+        'termname':'2019 First term',
+        'sessionid':1,
+        'termid':1,
+    }
 }
 
 const changeState = (aluu, actid) =>
@@ -71,6 +78,13 @@ export default function(state = initialState, action){
                 terms: [...state.terms, action.payload],
                 msg:action.msg
             }; 
+        case TERM_ACTIVE_SUCCESS:
+            localStorage.setItem('activeterm', JSON.stringify(action.payload));
+            return {
+                ...state,
+                termactive: action.payload,
+                msg:action.msg
+            }; 
         case TERM_ACTIVATE_SUCCESS:
             let ac = changeState(state.terms, action.payload);
             localStorage.setItem('term', JSON.stringify(ac));
@@ -102,6 +116,7 @@ export default function(state = initialState, action){
         case TERM_LOADING_ERROR:
         case TERM_ACTIVATE_FAIL:
         case TERM_REGISTER_FAIL:
+        case TERM_ACTIVE_FAIL:
         case TERM_DELETE_FAIL:
         case TERM_UPDATE_FAIL:
 

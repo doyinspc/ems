@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { registerStaffleave, updateStaffleave, deleteStaffleave } from './../../actions/staff/staffleave';
 import { useHistory, useLocation } from 'react-router-dom'
@@ -15,7 +15,8 @@ import {
   CSelect,
   CLabel,
   CCardFooter,
-  CTextarea
+  CTextarea,
+  CAlert
 
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -28,6 +29,7 @@ const Staffleaves = (props) => {
     const [id, setId] = useState(null)
     
     //LEAVE
+    const [refid, setRefid] = useState('')
     const [reason, setReason] = useState('')
     const [started, setStarted] = useState('')
     const [ended, setEnded] = useState('')
@@ -38,6 +40,7 @@ const Staffleaves = (props) => {
         let data = props.data; 
         setId(data.id)
         setReason(data.reason)
+        setRefid(data.notes)
         setStarted(data.started)
         setEnded(data.ended)
       }
@@ -47,6 +50,7 @@ const Staffleaves = (props) => {
 
         let fd = new FormData();
         fd.append('reason', reason);
+        fd.append('notes', refid);
         fd.append('started', started);
         fd.append('ended', ended);
         fd.append('table', 'staffleaves');
@@ -62,10 +66,9 @@ const Staffleaves = (props) => {
             fd.append('cat', 'insert');
             fd.append('narration', 'inserting leave record');
             fd.append('staffid', sid);
-            props.registerStaffleave(fd)
-            
+            fd.append('approval', JSON.stringify([]));
+            props.registerStaffleave(fd)  
         }
-
     }
     
    
@@ -118,13 +121,30 @@ const Staffleaves = (props) => {
                                     />
                             </CFormGroup>
                             </CCol>
-                            
+                            <CCol xs="12">
+                            <CFormGroup>
+                                <CLabel htmlFor="refid">Forward this request to</CLabel>
+                                <CInput
+                                    id="refid" 
+                                    name='refid'
+                                    defaultValue={refid}
+                                    placeholder="Type or paste here...."
+                                    onChange={(e)=>setRefid(e.target.value)} 
+                                    />
+                         
+                            </CFormGroup>
+                            </CCol>
                         </CRow>
-                        
+                        <CRow>
+                          <CAlert>
+                            Note : You can not make any changes or delete 
+                            this application once it has been approved or denied
+                          </CAlert>
+                        </CRow>
                         </CCardBody>
                         <CCardFooter>
-                            <CButton type="submit" size="sm" color="primary" onClick={handleSubmit}><CIcon name="cil-scrubber" /> Submit</CButton>
-                            <CButton type="submit" size="sm" color="danger" onClick={()=>props.handleClose()}><CIcon name="cil-ban" /> Close</CButton>
+                            <CButton type="button" size="sm" color="primary" onClick={handleSubmit}><CIcon name="cil-scrubber" /> Submit</CButton>
+                            <CButton type="button" size="sm" color="danger" onClick={()=>props.handleClose()}><CIcon name="cil-ban" /> Close</CButton>
                         </CCardFooter>
                     </CCard>
                     </CCol>

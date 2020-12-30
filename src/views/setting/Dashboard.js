@@ -1,71 +1,55 @@
-import React , {useState} from 'react'
+import React from 'react'
 import {
   CRow,
   CCol,
-  CCardHeader,
-  CNav,
-  CNavLink,
-  CNavItem,
-  CTabContent,
-  CTabPane,
   CCard,
   CCardBody,
-  CTabs
+  CContainer,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import { Link } from 'react-router-dom'
+import { controls } from '../../actions/common'
 
-const Navs = () => {
-    const [active, setActive] = useState(1)
-    const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.'
-
+const WidgetsDropdown = () => {
+  // render
+  let cats = controls[2].data;
   return (
-    <>
     <CRow>
-    <CCol xs="12" md="12" className="mb-4">
-        <CCard>
-          <CCardHeader>
-            Controlled tabs
-          </CCardHeader>
-          <CCardBody>
-            <CTabs activeTab={active} onActiveTabChange={idx => setActive(idx)}>
-              <CNav variant="tabs">
-                <CNavItem>
-                  <CNavLink>
-                    <CIcon name="cil-calculator" />
-                    { active === 0 && ' Home'}
-                  </CNavLink>
-                </CNavItem>
-                <CNavItem>
-                  <CNavLink>
-                    <CIcon name="cil-basket" />
-                    { active === 1 && ' Profile'}
-                  </CNavLink>
-                </CNavItem>
-                <CNavItem>
-                  <CNavLink>
-                    <CIcon name="cil-chart-pie"/>
-                    { active === 2 && ' Messages'}
-                  </CNavLink>
-                </CNavItem>
-              </CNav>
-              <CTabContent>
-                <CTabPane>
-                  {`1. ${lorem}`}
-                </CTabPane>
-                <CTabPane>
-                  {`2. ${lorem}`}
-                </CTabPane>
-                <CTabPane>
-                  {`3. ${lorem}`}
-                </CTabPane>
-              </CTabContent>
-            </CTabs>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
-    </>
+      {
+          cats.map((prop, index)=>{
+            return <CCol sm="6" md="3"><Link key={index} to={`setting/${prop.id}/0/0`} style={{color:'teal'}}>
+              <CCard className='text-center'>
+                <CCardBody className='text-center flex align-self-center justify-contents-center'>
+                  <CContainer>
+                  <CRow className='text-center' lg={12} style={{marginTop:'10px', marginBottom:'10px'}}>
+                  <CCol>
+                     <h5 style={{fontFamily:'Boogaloo'}}>{prop.name}</h5>
+                  </CCol>
+                  </CRow>
+                  <CRow className='text-center flex align-self-center justify-contents-center' lg={12} style={{marginTop:'10px', marginBottom:'20px', textAlign:'center'}}>
+                    <CCol>
+                      <img
+                        src={prop.icon}
+                        height="100px"
+                        style={{borderRadius:'50%'}}
+                        />
+                    </CCol>
+                  </CRow>
+                  <CCol>
+                     <small style={{fontFamily:'Quicksand'}}>{prop.description}</small>
+                  </CCol>
+                 
+                  </CContainer>
+                </CCardBody>
+              </CCard>
+              </Link> </CCol>
+
+          })
+      }
+    
+    
+  </CRow>
+  
   )
 }
 
-export default Navs
+export default WidgetsDropdown
