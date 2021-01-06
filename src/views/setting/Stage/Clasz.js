@@ -80,7 +80,7 @@ const Clasz = (props) => {
               title={props.para.name} 
               school={props.school} 
               toggle={toggle}
-              />
+          />
          <CCardBody className='table-responsive'>
             <ClaszTable  
                 sid={props.sid}

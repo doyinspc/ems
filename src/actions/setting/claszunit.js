@@ -11,7 +11,7 @@ import {
     CLASZUNIT_UPDATE_FAIL,
     CLASZUNIT_DELETE_SUCCESS,
     CLASZUNIT_DELETE_FAIL
-} from "./../../types/setting/clazunit";
+} from "./../../types/setting/claszunit";
 import { MAIN_TOKEN, API_PATH_SETTING, axiosConfig1, axiosConfig } from './../common';
 
 let TABLE_NAME = 'claszunits';

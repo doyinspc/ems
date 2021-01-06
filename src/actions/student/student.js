@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     STUDENT_GET_ONE,
     STUDENT_GET_MULTIPLE,
+    STUDENT_GET_SEARCH,
     STUDENT_REGISTER_SUCCESS,
     STUDENT_REGISTER_FAIL,
     STUDENT_LOADING,
@@ -27,6 +28,25 @@ export const getStudents = params => (dispatch, getState) => {
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
                     type: STUDENT_GET_MULTIPLE,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STUDENT_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+
+//GET ALL STUDENT 
+export const searchStudent = params => (dispatch, getState) => {
+   
+    dispatch({type : STUDENT_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STUDENT_GET_SEARCH,
                     payload: res.data
                 })
             })

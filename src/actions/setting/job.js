@@ -2,7 +2,6 @@ import axios from 'axios';
 import {
     JOB_GET_ONE,
     JOB_GET_MULTIPLE,
-    JOB_GET_DROPDOWNS,
     JOB_REGISTER_SUCCESS,
     JOB_REGISTER_FAIL,
     JOB_LOADING,
@@ -28,27 +27,6 @@ export const getJobs = params => (dispatch, getState) => {
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
                     type: JOB_GET_MULTIPLE,
-                    payload: res.data
-                })
-            })
-            .catch(err => {
-                dispatch({
-                    type : JOB_LOADING_ERROR,
-                    payload:err
-                })
-            })
-};
-//GET ALL JOB 
-export const getJobdropdowns = params => (dispatch, getState) => {
-    //SET PAGE LOADING
-    params.token = MAIN_TOKEN;
-    params.table = TABLE_NAME;
-
-    dispatch({type : JOB_LOADING});
-        axios.get(path, {params}, axiosConfig)
-            .then(res => {                                                                                                                                                                                                                                        
-                dispatch({
-                    type: JOB_GET_DROPDOWNS,
                     payload: res.data
                 })
             })

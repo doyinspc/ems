@@ -32,8 +32,8 @@ const Session = (props) => {
                   <CDropdownMenu>
                     {
                       props.submenu.map((prp, ind)=>{
-                        let addr = prp.links+row.id+'/0';
-                       return <CDropdownItem key={ind} onClick={(item) => history.push(addr)}>{addr}</CDropdownItem>
+                        let addr = prp.links+row.id+'/0/0/0/0';
+                       return <CDropdownItem key={ind} onClick={(item) => history.push(addr)}>{prp.name}</CDropdownItem>
                       })
                     }
                      {props.editer === true ?

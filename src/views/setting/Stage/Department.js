@@ -24,21 +24,21 @@ const Department = (props) => {
  
   //GET DEPARTMENTS PER SCHOOL
   useEffect(() => {
-    if(props.activeschool !== undefined && props.activeschool.hasOwnProperty('id') && parseInt(props.activeschool))
+    if(props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0)
     {
      let params = {
       data:JSON.stringify(
       {
-          'schoolid':props.activeschool.id
+          'schoolid':props.user.activeschool.id
       }),
       cat:'select',
       table:'departments',
       narration:'get departments'
-        }
+      }
       props.getDepartments(params)
     }
     
-  }, [props.activeschool])
+  }, [props.user.activeschool])
 
   
   const onEdit = (dt) =>{
@@ -77,6 +77,11 @@ const Department = (props) => {
         <CCard>
           <Header 
               icon={props.para.icon}
+              sid={props.sid}
+              pid={props.pid}
+              qid={props.qid}
+              did={props.did}
+              kid={props.kid}
               title={props.para.name} 
               school={props.school} 
               toggle={toggle}
@@ -84,6 +89,11 @@ const Department = (props) => {
          <CCardBody className='table-responsive'>
             <DepartmentTable  
                 data={data}
+                sid={props.sid}
+                pid={props.pid}
+                qid={props.qid}
+                did={props.did}
+                kid={props.kid}
                 title={props.para.name} 
                 submenu={props.para.submenu}
                 editer={true}
@@ -96,6 +106,11 @@ const Department = (props) => {
         </CCol>
         <CCollapse show={collapse}>
             <DepartmentForm 
+              sid={props.sid}
+              pid={props.pid}
+              qid={props.qid}
+              did={props.did}
+              kid={props.kid}
                 id={id}
                 data={dts}
                 onReset={onReset}

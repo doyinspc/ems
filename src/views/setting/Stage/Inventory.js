@@ -85,6 +85,7 @@ const Inventory = (props) => {
               />
          <CCardBody className='table-responsive'>
             <InventoryTable  
+                sid={props.sid}
                 data={data}
                 title={props.para.name} 
                 submenu={props.para.submenu}
@@ -99,6 +100,7 @@ const Inventory = (props) => {
         <CCollapse show={collapse}>
             <InventoryForm 
                 id={id}
+                sid={props.sid}
                 data={dts}
                 onReset={onReset}
                 onClose={onClose}

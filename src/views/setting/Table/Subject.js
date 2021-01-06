@@ -19,7 +19,7 @@ const Subject = (props) => {
                 <td className='text-center'>
                     {
                         props.submenu.map((prp, ind)=>{
-                            return <a  key={ind} title={prp.tag} onClick={(item) => history.push(`/setting/${props.sid}/${props.pid}/${row.id}`)}><i className='fa fa-list ml-2 px-2'></i></a>
+                            return <a  key={ind} title='Scheme of Work' onClick={(item) => history.push(`/setting/${props.sid}/${row.id}/0/0/0/0`)}><i className='fa fa-list ml-2 px-2'></i></a>
                         })
                      }
                         

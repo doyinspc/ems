@@ -10,6 +10,7 @@ import StaffDashboardSubject from './StaffDashboardSubject';
 import Birthdays from "./Birthdays"
 import Notice from "./Notice"
 import SchoolData from "./../setting/SchoolData"
+import Search from './Search';
 
 const Dashboard = (props) => {
   const [schools, setSchools] = useState({})
@@ -84,7 +85,26 @@ const changeTerm = (data) =>{
 const changeMenu = () =>{
       setShowmenu(prev=>!prev);
 }
+//IF NO SCHOOL IS SET SET ACTIVE SCHOOL AUTOMATICALY
+if(!props.user.activeschool.hasOwnProperty('id') ||  props.user.activeschool === undefined || parseInt(props.user.activeschool.id) >! 0 )
+{
+  //GET STAFF SCHOOl
+  let myCurrentSchool = props.user.user !== undefined && props.user.user.hasOwnProperty('schoolid') && parseInt(props.user.user.schoolid) > 0 ? props.user.user.schoolid :'null'
+  if(parseInt(myCurrentSchool) > 0)
+  {
+      let sd = props.user.mySchoolData !== undefined && Array.isArray(props.user.mySchoolData) ? props.user.mySchoolData.filter(rw =>rw !== null).filter(rw=>parseInt(rw.id) === parseInt(myCurrentSchool)):[]
+      if(sd.length > 0)
+      {
+        changeSchool(sd[0])
+      }
+  }else{
+    //changeSchool(props.user.mySchoolData[0])
+  }
+  //ELSE PICK ONE
 
+  
+}
+let schdata = props.user.mySchoolData !== undefined && Array.isArray(props.user.mySchoolData) ? props.user.mySchoolData :[]
 return (
     <>
     <CRow>
@@ -92,7 +112,7 @@ return (
     <StaffDashboardSession 
         activeterm={props.user.activeterm}
         activeschool={props.user.activeschool}
-        schools={props.user.mySchoolData}
+        schools={schdata}
         changeSchool={(data)=>changeSchool(data)}
         toggleMenu={changeMenu}
       />
@@ -100,12 +120,12 @@ return (
       show={showmenu}
       >
       <StaffDashboardSchool 
-          schools={props.user.mySchoolData}
+          schools={schdata}
           changeSchool={(data)=>changeSchool(data)}
       />
       <StaffDashboardMenu 
         dropdowns={dt}
-        schools={props.user.mySchoolData}
+        schools={schdata}
         changeSchool={(data)=>changeSchool(data)}
         changeTerm={(data)=>changeTerm(data)}
       />
@@ -114,6 +134,7 @@ return (
       <SchoolData school={props.user.activeschool} />
       </CCol>
       <CCol>
+        <Search />
         <Birthdays />
         <Notice />
       </CCol>

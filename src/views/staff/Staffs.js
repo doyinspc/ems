@@ -47,7 +47,7 @@ const Staffs = (props) => {
         
       }, [])
 
-   let data = props.staffs.staffs && Array.isArray(props.staffs.staffs) ? props.staffs.staffs.filter(rw =>rw !== null || rw !== undefined) : []
+   let data = props.staffs.staffs && Array.isArray(props.staffs.staffs) ? props.staffs.staffs.filter(rw=>rw!==null).filter(rw =>rw !== null || rw !== undefined) : []
    
    let cont = data.map((row, ind)=>{
     return <tr key={ind}

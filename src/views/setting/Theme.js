@@ -78,7 +78,6 @@ const Theme = (props) => {
     props.getClaszs(params1);
     
   }, [subjectid, props.school.id])
-
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
     if(id && parseInt(id) > 0)

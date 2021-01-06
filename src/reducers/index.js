@@ -4,6 +4,8 @@ import catype from "./setting/catype";
 import caunit from "./setting/caunit";
 import clasz from "./setting/clasz";
 import claszunit from "./setting/claszunit";
+import grade from "./setting/grade";
+import gradeunit from "./setting/gradeunit";
 import inventory from "./setting/inventory";
 import inventoryunit from "./setting/inventoryunit";
 import inventorytransaction from "./setting/inventorytransaction";
@@ -11,6 +13,8 @@ import maintenance from "./setting/maintenance";
 import maintenanceunit from "./setting/maintenanceunit";
 import maintenancetransaction from "./setting/maintenancetransaction";
 import department from "./setting/department";
+import unit from "./setting/unit";
+import notice from "./setting/notice";
 import fee from "./setting/fee";
 import level from "./setting/level";
 import timetable from "./setting/timetable";
@@ -49,6 +53,8 @@ export default combineReducers({
     caunitReducer: caunit,
     claszReducer: clasz,
     claszunitReducer: claszunit,
+    gradeReducer: grade,
+    gradeunitReducer: gradeunit,
     inventoryReducer: inventory,
     inventoryunitReducer: inventoryunit,
     inventorytransactionReducer: inventorytransaction,
@@ -56,6 +62,8 @@ export default combineReducers({
     maintenanceunitReducer: maintenanceunit,
     maintenancetransactionReducer: maintenancetransaction,
     departmentReducer: department,
+    unitReducer: unit,
+    noticeReducer: notice,
     feeReducer: fee,
     timetableReducer: timetable,
     levelReducer: level,

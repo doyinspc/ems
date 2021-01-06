@@ -18,9 +18,9 @@ const Term = (props) => {
               { props.editer === true  || props.submenu.length > 0 ? 
               <td className='text-center'>
                 
-                <a onClick={(item) => history.push(`/setting/3/${props.pid}/${row.id}`)}><i className='fa fa-list ml-2 px-2'></i></a>
-                <a onClick={()=>props.onEdit(row)}><i className='fa fa-edit ml-2 px-2'></i></a>
-                <a onClick={()=>props.onDelete(row)}><i className='fa fa-remove ml-2 px-2 text-danger'></i></a>
+                <a style={{cursor:'pointer'}} title='Menu' onClick={(item) => history.push(`/setting/3/${props.pid}/${row.id}/0/0/0`)}><i className='fa fa-list ml-2 px-2'></i></a>
+                <a style={{cursor:'pointer'}} title='Edit' onClick={()=>props.onEdit(row)}><i className='fa fa-edit ml-2 px-2'></i></a>
+                <a style={{cursor:'pointer'}} title='Delete' onClick={()=>props.onDelete(row)}><i className='fa fa-remove ml-2 px-2 text-danger'></i></a>
               </td>:''}
               </tr>
   })

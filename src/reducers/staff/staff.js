@@ -1,5 +1,7 @@
 import {
     STAFF_GET_MULTIPLE,
+    STAFF_GET_SEARCH,
+    STAFF_GET_BIRTHDAY,
     STAFF_GET_ONE,
     STAFF_REGISTER_SUCCESS,
     STAFF_REGISTER_FAIL,
@@ -23,6 +25,8 @@ const initialState = {
     msg: null,
     isEdit:-1,
     ref:null,
+    result:[],
+    birthday:[]
 }
 
 const changeState = (aluu, actid) =>
@@ -56,19 +60,35 @@ export default function(state = initialState, action){
                 staffs : action.payload,
                 msg:'DONE!!!'
             };
+        case STAFF_GET_SEARCH:
+            return {
+                ...state,
+                result: action.payload
+            };
+        case STAFF_GET_BIRTHDAY:
+            return {
+                ...state,
+                birthday: action.payload
+            };
         case STAFF_GET_ONE:
             let all = [...state.staffs];
-            let ses = all.filter(row=>row.id == action.payload)[0];
+            
+            let ses = all.filter(rw=>rw !== null).filter(row=>parseInt(row.id) === parseInt(action.payload))[0];
             return {
                 ...state,
                 staff : ses,
+                ref:null,
                 MSG:"DONE!!!"
             };
         case STAFF_REGISTER_SUCCESS:
-            localStorage.setItem('staff', JSON.stringify([...state.staffs, action.payload]));
+            let alls = [...state.staffs];
+            alls.push(action.payload)
+            localStorage.setItem('staff', JSON.stringify(alls));
             return {
                 ...state,
-                staffs: [...state.staffs, action.payload],
+                staffs: alls,
+                staff:action.payload,
+                ref:action.payload.id,
                 msg:action.msg
             }; 
         case STAFF_ACTIVATE_SUCCESS:
@@ -88,7 +108,7 @@ export default function(state = initialState, action){
                 staffs: rem
             }
         case STAFF_UPDATE_SUCCESS:
-            const findInd = state.staffs.findIndex(cat => cat.id == action.payload.id);
+            const findInd = state.staffs.findIndex(cat =>parseInt(cat.id) === parseInt(action.payload.id));
             let newState = [...state.staffs];
             newState[findInd] = action.payload;
             localStorage.setItem('staff', JSON.stringify(newState));

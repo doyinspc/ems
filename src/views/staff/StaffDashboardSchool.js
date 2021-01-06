@@ -33,7 +33,7 @@ const Dashboard = (props) => {
 return (
     <>
     <CRow>
-      { props.schools.length > 1 ? props.schools.map((prop, index)=>{
+      { props.schools !== undefined && Array.isArray(props.schools) && props.schools.length > 1 ? props.schools.map((prop, index)=>{
          return  <CCol 
          fade
             key={index} 

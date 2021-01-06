@@ -124,6 +124,9 @@ import {
   cilTags,
   cilTask,
   cilTrash,
+  cilTerrain,
+  cilTv,
+  cilWc,
   cilUnderline,
   cilUser,
   cilUserFemale,
@@ -131,7 +134,13 @@ import {
   cilUserUnfollow,
   cilX,
   cilXCircle,
-  cilWarning
+  cilWarning,
+  cilBadge,
+  cilMugTea,
+  cilWeightlifitng,
+  cilFlightTakeoff,
+  cilSignLanguage,
+  cilMoodVeryBad
 } from '@coreui/icons'
 
 export const icons = Object.assign({}, {
@@ -226,6 +235,9 @@ export const icons = Object.assign({}, {
   cilTags,
   cilTask,
   cilTrash,
+  cilTerrain,
+  cilTv,
+  cilWc,
   cilUnderline,
   cilUser,
   cilUserFemale,
@@ -233,7 +245,14 @@ export const icons = Object.assign({}, {
   cilUserUnfollow,
   cilX,
   cilXCircle,
-  cilWarning
+  cilWarning,
+  cilBadge,
+  cilMugTea,
+  cilWeightlifitng,
+  cilFlightTakeoff,
+  cilSignLanguage,
+  cilMoodVeryBad
+  
 }, {
   cifUs,
   cifBr,

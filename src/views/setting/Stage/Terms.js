@@ -38,7 +38,7 @@ const Term = (props) => {
        <CRow>
            {
                data.map((prop, index)=>{
-                return <CCol sm="6" md="4"><Link key={index} to={`${prop.links}`} style={{color:'teal'}}>
+                return <CCol sm="6" md="4"><Link key={index} to={`/setting/${props.sid}/${props.pid}/${props.qid}/${prop.id}/0/0/0`} style={{color:'teal'}}>
                 <CCard className='text-center' style={{backgroundColor:'purple', color:'white'}} >
                   <CCardBody className='text-center flex align-self-center justify-contents-center'>
                     <CContainer>

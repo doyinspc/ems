@@ -10,6 +10,16 @@ export default [
       }
     },
     {
+      _tag: 'CSidebarNavItem',
+      name: 'Profile',
+      to: '/user',
+      icon: 'cil-user',
+      badge: {
+        color: 'info',
+        text: '',
+      }
+  },
+    {
         _tag: 'CSidebarNavItem',
         name: 'Settings',
         to: '/settings',
@@ -33,7 +43,7 @@ export default [
     _tag: 'CSidebarNavItem',
     name: 'Staff',
     to: '/staffs',
-    icon: 'cil-user',
+    icon: 'cil-people',
     badge: {
       color: 'info',
       text: '',
@@ -43,7 +53,7 @@ export default [
     _tag: 'CSidebarNavItem',
     name: 'Student',
     to: '/students',
-    icon: 'cil-people',
+    icon: 'cil-wc',
     badge: {
       color: 'info',
       text: '',
@@ -79,7 +89,16 @@ export default [
       color: 'info',
       text: '',
     }
-  }
+  }, {
+    _tag: 'CSidebarNavItem',
+    name: 'Tutorials',
+    to: '/tutorial',
+    icon: 'cil-tv',
+    badge: {
+      color: 'info',
+      text: '',
+    }
+},
    
   ]
   

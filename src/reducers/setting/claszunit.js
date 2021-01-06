@@ -12,7 +12,7 @@ import {
     CLASZUNIT_DELETE_SUCCESS,
     CLASZUNIT_DELETE_FAIL,
     CLASZUNIT_EDIT
-} from "./../../types/setting/clazunit";
+} from "./../../types/setting/claszunit";
 
 let claszunitStore = JSON.parse(localStorage.getItem('claszunit'))
 

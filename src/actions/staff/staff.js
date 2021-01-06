@@ -2,6 +2,8 @@ import axios from 'axios';
 import {
     STAFF_GET_ONE,
     STAFF_GET_MULTIPLE,
+    STAFF_GET_BIRTHDAY,
+    STAFF_GET_SEARCH,
     STAFF_REGISTER_SUCCESS,
     STAFF_REGISTER_FAIL,
     STAFF_LOADING,
@@ -37,6 +39,43 @@ export const getStaffs = params => (dispatch, getState) => {
                 })
             })
 };
+
+export const searchStaff = params => (dispatch, getState) => {
+
+    dispatch({type : STAFF_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STAFF_GET_SEARCH,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STAFF_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+
+export const birthday = params => (dispatch, getState) => {
+
+    dispatch({type : STAFF_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STAFF_GET_BIRTHDAY,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STAFF_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+
 //GET SINGLE STAFF 
 export const getStaff = id => (dispatch, getState) => {
     //SET PAGE LOADING

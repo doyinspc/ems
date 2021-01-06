@@ -98,19 +98,19 @@ const Grade = (props) => {
                   name="namez"
                   value={namez}
                   onChange={(e)=>setNamez(e.target.value)}
-                  placeholder="Science" 
+                  placeholder="West Africa Examination Council" 
                 />
               <CFormText className="help-block">Please enter grade name</CFormText>
             </CFormGroup>
             <CFormGroup>
-              <CLabel htmlFor="nf-abbrv">Dept. Abbrv </CLabel>
+              <CLabel htmlFor="nf-abbrv">Grade Abbrv </CLabel>
               <CInput 
                   type="text" 
                   id="nf-abbrv" 
                   name="abbrv"
                   value={abbrv}
                   onChange={(e)=>setAbbrv(e.target.value)}
-                  placeholder="SCI" 
+                  placeholder="WAEC" 
                 />
               <CFormText className="help-block">Please enter grade abbrv (max 6 characters)</CFormText>
             </CFormGroup>

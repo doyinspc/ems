@@ -16,7 +16,7 @@ const WidgetsDropdown = () => {
     <CRow>
       {
           cats.map((prop, index)=>{
-            return <CCol sm="6" md="3"><Link key={index} to={`setting/${prop.id}/0/0`} style={{color:'teal'}}>
+            return <CCol sm="6" md="3"><Link key={index} to={`setting/${prop.id}/0/0/0/0/0/0`} style={{color:'teal'}}>
               <CCard className='text-center'>
                 <CCardBody className='text-center flex align-self-center justify-contents-center'>
                   <CContainer>

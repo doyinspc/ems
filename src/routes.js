@@ -45,6 +45,7 @@ const Settings = React.lazy(() => import('./views/setting/Dashboard'));
 const Setting = React.lazy(() => import('./views/setting/Setting'));
 const School = React.lazy(() => import('./views/setting/School'));
 const Session = React.lazy(() => import('./views/setting/Session'));
+const Userx = React.lazy(() => import('./views/staff/UserProfile'));
 const Term = React.lazy(() => import('./views/setting/Term'));
 const Ca = React.lazy(() => import('./views/setting/Ca'));
 const Behavior = React.lazy(() => import('./views/setting/Behavior'));
@@ -64,7 +65,7 @@ const Staff = React.lazy(() => import('./views/staff/StaffProfile'));
 const StaffDashboard = React.lazy(() => import('./views/staff/StaffDashboard'));
 const StaffAdd = React.lazy(() => import('./views/staff/StaffAdd'));
 const StaffClass = React.lazy(() => import('./views/staff/StaffClass'));
-const StaffSubject = React.lazy(() => import('./views/staff/StaffSubject'));
+const StaffSubject = React.lazy(() => import('./views/staff/StaffDashboardSubject'));
 const AdmissionList = React.lazy(() => import('./views/student/AdmissionList'));
 const Students = React.lazy(() => import('./views/student/Students'));
 const Student = React.lazy(() => import('./views/student/StudentProfile'));
@@ -85,13 +86,14 @@ const routes = [
   { path: '/catype', name: 'CA Type', component: Catype, exact: true },
   { path: '/staffs', name: 'Staffs', component: Staffs, exact: true },
   { path: '/staffs/:staff', name: 'Staff Profile', component: Staff, exact: true },
-  { path: '/staffa/:edit', name: 'Add/ Edit Staff Data', component: StaffAdd, exact: true },
+  { path: '/myclass', name: 'My Classes', component: StaffSubject, exact: true },
+  { path: '/staffa', name: 'Add Staff Data', component: StaffAdd, exact: true },
   { path: '/termclass/:term', name: 'Class Teachers', component: StaffClass, exact: true },
   { path: '/termsubject/:term', name: 'Subject Teachers', component: StaffSubject, exact: true },
   { path: '/admission', name: 'Admission', component: AdmissionList, exact: true },
   { path: '/students', name: 'Students', component: Students, exact: true },
   { path: '/students/:student', name: 'Student Profile', component: Student, exact: true },
-  { path: '/studenta/:edit', name: 'Edit Student Data', component: StudentAdd, exact: true },
+  { path: '/studenta', name: 'Add Student Data', component: StudentAdd, exact: true },
   { path: '/studentclass/:term/:clasz', name: 'Student Class', component: StudentClass, exact: true },
   { path: '/studentclasses/:term/:clasz', name: 'Student Classes', component: StudentClasses, exact: true },
   { path: '/studentclass/:term/:clasz/:subject', name: 'Student Subject', component: StudentSubject, exact: true },
@@ -109,7 +111,7 @@ const routes = [
   { path: '/mainpage/calendar', name: 'Calendar', component: Calendar, exact: true },
   { path: '/maindashboard', name: 'ClassDashboard', component: MainDashboard , exact: true},
   { path: '/settings', name: 'Settings Dashboard', component: Settings },
-  { path: '/setting/:sid/:pid/:qid', name: 'Setting', component: Setting, exact: true },
+  { path: '/setting/:sid/:pid/:qid/:did/:kid/:rid', name: 'Setting', component: Setting },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },
   { path: '/theme/typography', name: 'Typography', component: Typography },
@@ -146,6 +148,7 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/notifications/toaster', name: 'Toaster', component: Toaster },
   { path: '/widgets', name: 'Widgets', component: Widgets },
+  { path: '/user', exact: true,  name: 'User', component: Userx },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User }
 ];

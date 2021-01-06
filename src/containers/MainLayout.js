@@ -1,4 +1,5 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import {
   MainContent,
   MainSidebar,
@@ -6,13 +7,13 @@ import {
   MainHeader
 } from './index'
 
-const MainLayout = () => {
+const MainLayout = (props) => {
 
   return (
     <div className="c-app c-default-layout">
-      <MainSidebar/>
+      <MainSidebar  />
       <div className="c-wrapper">
-        <MainHeader/>
+        <MainHeader  />
         <div className="c-body">
           <MainContent/>
         </div>
@@ -21,5 +22,7 @@ const MainLayout = () => {
     </div>
   )
 }
-
-export default MainLayout
+const mapStateToProps = (state)=>({
+ user:state.userReducer.user
+})
+export default connect(mapStateToProps,{})(MainLayout)

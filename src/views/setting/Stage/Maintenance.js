@@ -85,6 +85,7 @@ const Maintenance = (props) => {
               />
          <CCardBody className='table-responsive'>
             <MaintenanceTable  
+                sid={props.sid}
                 data={data}
                 title={props.para.name} 
                 submenu={props.para.submenu}
@@ -99,6 +100,7 @@ const Maintenance = (props) => {
         <CCollapse show={collapse}>
             <MaintenanceForm 
                 id={id}
+                sid={props.sid}
                 data={dts}
                 onReset={onReset}
                 onClose={onClose}

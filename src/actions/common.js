@@ -121,7 +121,7 @@ export const controls = {
               id:1,
               name:'ADD STAFF',
               icon:'/icons/adduser.png',
-              links:'/addstaff',
+              links:'/staffa',
               description:'Add a new staff to the database'
             },{
               id:2,
@@ -148,7 +148,7 @@ export const controls = {
                 id:1,
                 name:'ADD STUDENT',
                 icon:'/icons/adduser.png',
-                links:'/addstudent',
+                links:'/studenta',
                 description:'Add a new student to the database'
               },{
                 id:2,
@@ -251,14 +251,26 @@ export const controls = {
           name:'DEPARTMENT',
           icon:'/icons/department.png',
           links:'/department',
-          submenu:[]
+          submenu:[{
+            id:1,
+            name:'Unit',
+            icon:'/icons/department.png',
+            links:'/theme',
+            submenu:[]
+          },]
         },
         {
           id:6,
           name:'SUBJECTS',
           icon:'/icons/subject.png',
           links:'/subject',
-          submenu:[]
+          submenu:[{
+            id:1,
+            name:'SHEME OF WORK',
+            icon:'/icons/department.png',
+            links:'/theme',
+            submenu:[]
+          },]
         },{
           id:7,
           name:'ADMISSION',
@@ -376,10 +388,10 @@ export const controls = {
           icon:'/icons/office.png',
           links:'/office',
           submenu:[{
-            id:3,
+            id:1,
             name:'JOB ROLES',
-            icon:'/icons/calendar.png',
-            links:'/calendar',
+            icon:'/icons/office.png',
+            links:'/setting',
           }]
         },{
           id:19,

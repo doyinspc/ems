@@ -1,5 +1,6 @@
 import {
     STUDENT_GET_MULTIPLE,
+    STUDENT_GET_SEARCH,
     STUDENT_GET_ONE,
     STUDENT_REGISTER_SUCCESS,
     STUDENT_REGISTER_FAIL,
@@ -23,6 +24,7 @@ const initialState = {
     msg: null,
     isEdit:-1,
     ref:null,
+    result:[]
 }
 
 const changeState = (aluu, actid) =>
@@ -55,6 +57,11 @@ export default function(state = initialState, action){
                 ...state,
                 students : action.payload,
                 msg:'DONE!!!'
+            };
+        case STUDENT_GET_SEARCH:
+            return {
+                ...state,
+                result : action.payload
             };
         case STUDENT_GET_ONE:
             let all = [...state.students];

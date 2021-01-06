@@ -48,33 +48,39 @@ import {
     //     timer: 1500
     //   })
  }
-let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : {};
+let userx = localStorage.getItem('userx12345') !== 'undefined' ? JSON.parse(localStorage.getItem('userx12345')) : null;
 let auth = localStorage.getItem('auth') !== 'undefined' ? JSON.parse(localStorage.getItem('auth')) : false;
 let dropdownsStore = JSON.parse(localStorage.getItem('dropdowns'))
-let activetermStore = {}//JSON.parse(localStorage.getItem('activeterm'))
+let activetermStore = JSON.parse(localStorage.getItem('activeterm'))
 let activeschoolStore = JSON.parse(localStorage.getItem('activeschool'))
 let mySchoolStore = JSON.parse(localStorage.getItem('myschool'))
 let myDataStore = JSON.parse(localStorage.getItem('mydata'))
 let myTermStore = JSON.parse(localStorage.getItem('myterm'))
+let user = null
+let myregschx = null
+if(userx !== null){
+user = userx;
+let accx = user.access !=='' ? JSON.parse(user.access):[[1],[],[],[],[]];
+let schsx = Object.keys(accx);
+myregschx = user.schoolid && parseInt(user.schoolid) > 0 ? [...schsx, user.schoolid] : schsx;
+}        
 
 const initialState = {
     token: localStorage.getItem('token'),
-    user: user ? user : {'id':8},
-    mid: 2,
-    username: 'Femi Otedola',
-    myschools:[1, 2, 3, 4],
+    user: user  && user !== undefined && parseInt(user.id) > 0 ? userx: null,
+    mid: user  && user !== undefined && parseInt(user.id) > 0 ? user.id: null,
+    username: user  && user !== undefined && parseInt(user.id) > 0 ? user.surname+" "+user.firstname+" "+user.middlename: null,
+    myschools:myregschx && Array.isArray(myregschx)? myregschx : [],
     myTermData:myTermStore ? myTermStore : [],
     mySchoolData:mySchoolStore ? mySchoolStore : [],
     myData:myDataStore ? myDataStore : [],
     dropdowns:dropdownsStore ? dropdownsStore : [],
-    activeschool:activeschoolStore ? activeschoolStore : [],
+    activeschool:activeschoolStore ? activeschoolStore : {},
     activeterm:activetermStore ? activetermStore : [],
-
-
     isAuthenticated: auth  && parseInt(auth) === 1 ? true : false,
     isLoading: false,
-    isRegistered: user && user.id > 1 ? true: false,
-    isAdmin: user !== null && 'is_admin' in user && parseInt(user.is_admin) === 1 ? true : false,
+    isRegistered: userx && parseInt(userx.id) > 0 ? true: false,
+    isAdmin: user && 'is_admin' in user && parseInt(user.is_admin) === 1 ? true : false,
     dates: user !== null && 'dates' in user && user.dates ? user.dates : new Date('10-10-2020'),
     msg: null,
     isEdit:-1,
@@ -102,26 +108,29 @@ export default function(state = initialState, action){
                 isLoading : true
             };
         case USER_LOGIN:
+            
             localStorage.setItem('token', action.token)
             localStorage.setItem('auth', JSON.stringify(1));
-            localStorage.setItem('user', JSON.stringify(action.payload));
+            if(localStorage.getItem('userx12345') === null)
+            {
+            localStorage.setItem('userx12345', JSON.stringify(action.payload));
+            }
             let acc = action.payload.access !=='' ? JSON.parse(action.payload.access):[[1],[],[],[],[]];
-            let acc1 = acc[0];
-            let acc2 = acc1.length > 0 ? acc1[0] : null;
+            let schs = Object.keys(acc);
+            let myregsch = action.payload.schoolid && parseInt(action.payload.schoolid) > 0 ? [...schs, action.payload.schoolid] : schs;
             let fname = action.payload.surname+" "+action.payload.firstname+" "+action.payload.middlename
             return {
                 ...state,
-                ...action.payload,
                 isLoading: false,
                 isAuthenticated: true,
                 mid:action.payload.id,
-                user: action.payload,
+                user: JSON.parse(localStorage.getItem('userx12345')) ,
                 username: fname,
+                myschools: myregsch,
+                ref:23,
                 isAdmin: parseInt(action.payload.is_admin) === 1 ? true : false,
                 dates: action.payload.dates
             }; 
-       
-       
         case USER_LOADING_ERROR:
         case USER_ACTIVATE_FAIL:
         case USER_REGISTER_FAIL:
@@ -133,21 +142,7 @@ export default function(state = initialState, action){
                 isLoading: false,
                 msg: action.msg
             };
-        case USER_LOGOUT_SUCCESS:
-        case USER_LOGOUT_FAIL:
-            localStorage.removeItem('token')
-            localStorage.removeItem('auth')
-            localStorage.removeItem('user')
-
-            return{
-                ...state,
-                token: null,
-                isRegistered: true,
-                isAuthenticated: false,
-                isLoading: false,
-                user: {},
-                isAdmin : null
-            } 
+       
          case USER_UPDATE_SUCCESS:
             localStorage.setItem('user', JSON.stringify(action.payload));
             return {
@@ -231,17 +226,19 @@ export default function(state = initialState, action){
             localStorage.removeItem('myterm')
             localStorage.removeItem('myschool')
             localStorage.removeItem('mydata')
+            localStorage.clear()
             
             //callError(action.payload);
             return{
                 ...state,
                 token: null,
-                isRegistered: true,
+                isRegistered: false,
                 isAuthenticated: false,
                 isLoading: false,
                 user: {},
                 user: {},
-                isAdmin : null
+                isAdmin : null,
+                mid:null
             } 
         default:
             return state;

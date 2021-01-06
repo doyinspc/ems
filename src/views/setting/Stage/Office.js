@@ -85,6 +85,7 @@ const Office = (props) => {
               />
          <CCardBody className='table-responsive'>
             <OfficeTable  
+                sid={props.sid}
                 data={data}
                 title={props.para.name} 
                 submenu={props.para.submenu}

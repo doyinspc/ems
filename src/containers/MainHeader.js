@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux'
-import { getSchooldropdowns} from './../actions/setting/school'
 import {
-  CFormGroup,
-  CForm,
-  CButton,
-  CSelect,
+ 
   CHeader,
   CToggler,
   CHeaderBrand,
@@ -31,23 +27,15 @@ import { Link, Redirect } from 'react-router-dom';
 const TheHeader = (props) => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector(state => state.sidebarShow)
-  const [term, setTerm] = useState(0)
-  const [clasz, setClasz] = useState(0)
-
-  useEffect(() => {
-    let params = {
-      data:JSON.stringify(
-      {
-          'schoolid':1
-      }),
-      cat:'dropdowns',
-      table:'access',
-      narration:'get all student from class'
+  let user = JSON.parse(localStorage.getItem('userx12345'))
+  let username = ''
+  if(user !== null){
+  username = user.surname+" "+user.firstname+" "+user.middlename
   }
-    props.getSchooldropdowns(params)
-  }, [])
-
-  
+  if(props.user.isAuthenticated !== true)
+  {
+    return <Redirect to='/login' />
+  }
   const toggleSidebar = () => {
     const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
     dispatch({type: 'set', sidebarShow: val})
@@ -58,17 +46,7 @@ const TheHeader = (props) => {
     dispatch({type: 'set', sidebarShow: val})
   }
   
-  let dt = props.dropdowns && Array.isArray(props.dropdowns) ? props.dropdowns : [[], []];
-  let dt0 ='';
-  let dt1 ='';
-  if(dt.length > 0){
-     dt0 = dt[0].map((prop, ind)=>{
-    return <option value={prop.id}>{prop.name}</option>;
-  });
-    dt1 = dt[1].map((prop, ind)=>{
-    return <option value={prop.id}>{prop.name}</option>;
-  });
-}
+  
 
   return (
     <CHeader withSubheader>
@@ -86,49 +64,17 @@ const TheHeader = (props) => {
         <h2>SIL EDUCATION</h2>
       </CHeaderBrand>
       <CHeaderNav className="d-md-down-none mr-auto">
-      <CForm action="" method="post" inline>
-                <CFormGroup className="pr-1">
-                  <CSelect 
-                    custom 
-                    size="md" 
-                    name="term" 
-                    id="term"
-                    onChange={(e)=>setTerm(e.target.value)}
-                    >
-                      <option value="0">Select Term</option>
-                      {dt0}
-                    </CSelect>
-                </CFormGroup>
-                <CFormGroup className="pr-1">
-                <CSelect 
-                    custom 
-                    size="md" 
-                    name="clasz" 
-                    id="clasz"
-                    onChange={(e)=>setClasz(e.target.value)}
-                    >
-                      <option value="0">Select Class</option>
-                      {dt1}
-                    </CSelect>
-                </CFormGroup>
-                <CFormGroup className="pr-1">
-                <Link 
-                    type="submit" 
-                    size="sm" 
-                    color="primary"
-                    to={`/studentclasses/${term}/${clasz}`}
-                    >
-                      <CIcon name="cil-scrubber" /> Load</Link>
-                </CFormGroup>
-              </CForm>
-      
+      <h3>{username}</h3>
       </CHeaderNav>
-
+       
       <CHeaderNav className="px-3">
         <TheHeaderDropdownNotif/>
         <TheHeaderDropdownTasks/>
         <TheHeaderDropdownMssg/>
-        <TheHeaderDropdown/>
+        <TheHeaderDropdown
+          username={username}
+          user={user !== undefined ? user : null}
+        />
       </CHeaderNav>
 
       <CSubheader className="px-3 justify-content-between">
@@ -157,9 +103,9 @@ const TheHeader = (props) => {
 }
 
 const mapStateToProps = (state) =>({
-  dropdowns : state.schoolReducer.dropdowns
+  user : state.userReducer
 })
 export default connect(mapStateToProps, {
-  getSchooldropdowns
+  
 })(TheHeader)
 

@@ -76,6 +76,9 @@ const Subject = (props) => {
       <CCol >
         <CCard>
           <Header 
+           sid={props.sid}
+           pid={props.pid}
+           qid={props.qid}
               icon={props.para.icon}
               title={props.para.name} 
               school={props.school} 
@@ -84,6 +87,9 @@ const Subject = (props) => {
          <CCardBody className='table-responsive'>
             <SubjectTable  
                 data={data}
+                sid={props.sid}
+                pid={props.pid}
+                qid={props.qid}
                 title={props.para.name} 
                 submenu={props.para.submenu}
                 editer={true}
@@ -97,6 +103,9 @@ const Subject = (props) => {
         <CCollapse show={collapse}>
             <SubjectForm 
                 id={id}
+                sid={props.sid}
+                pid={props.pid}
+                qid={props.qid}
                 data={dts}
                 onReset={onReset}
                 onClose={onClose}

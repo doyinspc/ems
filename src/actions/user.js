@@ -130,14 +130,13 @@ export const userLogin = data => (dispatch, getState) => {
                 })
             })
             .catch(err => {
-                
                 dispatch({
                     type : USER_LOGIN_ERROR,
                     payload:err
                 })
             })
 };
-export const getUserLogout = () => (dispatch, getState) => {
+export const userLogout = () => (dispatch, getState) => {
     dispatch({
         type: USER_LOGOUT_SUCCESS
     })

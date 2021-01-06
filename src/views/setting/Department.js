@@ -126,7 +126,7 @@ const Department = (props) => {
                   <CDropdownMenu>
                     <CDropdownItem
                       onClick={(item) => history.push(`/department/${row.id}`)}
-                     ><i className='fa fa-list'></i>{' '} Subjects</CDropdownItem>
+                     ><i className='fa fa-list'></i>{' '} </CDropdownItem>
                      <CDropdownItem 
                           onClick={()=>onActivate(row.id, row.is_active)} >
                           <i className={parseInt(row.is_active) === 0 ? 'fa fa-thumbs-up' : 'fa fa-thumb-down'}></i>

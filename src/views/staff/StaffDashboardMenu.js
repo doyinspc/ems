@@ -28,15 +28,15 @@ import {
 
 import CIcon from '@coreui/icons-react'
 import { Link } from 'react-router-dom';
-
-
+import SearchDashboard from './SearchDashboard'
+import SearchDashboard1 from './SearchDashboard1'
 const Dashboard = (props) => {
   
   const [school, setSchool] = useState({})
   const [term, setTerm ] = useState({})
   //const [term, setTerm] = useState(0)
   const [clasz, setClasz] = useState(0)
-  let dt = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length == 4 ? props.dropdowns : [[], [], [], []];
+  let dt = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length > 4 ? props.dropdowns : [[], [], [], []];
   let dt0 ='';
   let dt1 ='';
   let dt2 ='';
@@ -44,17 +44,17 @@ const Dashboard = (props) => {
   if(dt.length > 0)
   {
      dt0 = dt[0].map((prop, ind)=>{
-    return <option key={ind}  value={prop.id}>{prop.name}</option>;
-  });
+    return <option key={ind}  value={prop.termid}>{prop.name}</option>;
+    });
     dt1 = dt[1].map((prop, ind)=>{
     return <option key={ind}  value={prop.id}>{prop.name}</option>;
-  });
-  dt2 = dt[2].map((prop, ind)=>{
+    });
+    dt2 = dt[2].map((prop, ind)=>{
     return <option key={ind}  value={prop.id}>{prop.name}</option>;
-  });
-  dt3 = dt[0].map((prop, ind)=>{
+    });
+    dt3 = dt[0].map((prop, ind)=>{
     return <option key={ind} value={JSON.stringify(prop)}>{prop.name}</option>;
-  });
+    });
 }
 
 let sch  = props.schools.map((prop, ind)=>{
@@ -69,6 +69,7 @@ const changeTerm =() =>{
 }
 return (
     <>
+    
     <CRow>
       <CCol lg={12}>
         <CCard>
@@ -128,6 +129,7 @@ return (
               </CCol>
             </CRow>
             <CRow>
+              
             <CCol>
                <CRow className='d-block'>
                 <strong>Navigate</strong>
@@ -193,61 +195,19 @@ return (
             </CCol>
               </CRow>
               <CRow>
-            <CCol>
-               <CRow className='d-block'>
-                <strong>Search</strong>
-              </CRow>
-              <CForm action="" method="post" >
-              <CRow xs={12} >
-              <CCol xs='12' sm='12' md='12'  >
-              <CRow>
-              <CCol xs='12' sm='4' md='4' lg='4'  className="ml-1">
-                <CFormGroup row>
-                <CInputGroup>
-                    <CInputGroupPrepend>
-                    <CInputGroupText>Select Term</CInputGroupText>
-                    </CInputGroupPrepend>
-                  <CSelect 
-                    custom 
-                    size="md" 
-                    name="term" 
-                    id="term"
-                    onChange={(e)=>setTerm(e.target.value)}
-                    >
-                      <option value="0">Select Term</option>
-                      {dt0}
-                    </CSelect>
-                  </CInputGroup>
-                </CFormGroup>
-              </CCol>
-              <CCol  xs='12' sm='6' md='5' lg='5' className="ml-1" >
-                <CFormGroup row>
-                <CInputGroup>
-                    <CInputGroupPrepend>
-                    <CInputGroupText>Select for Staff</CInputGroupText>
-                    </CInputGroupPrepend>
-                <CSelect 
-                    custom 
-                    size="md" 
-                    name="clasz" 
-                    id="clasz"
-                    onChange={(e)=>setClasz(e.target.value)}
-                    >
-                      <option value="0">Select Class</option>
-                      {dt1}
-                    </CSelect>
-                    <CInputGroupAppend>
-                        <CButton  onClick={changeSchool} type="button" color="secondary"><i className='fa fa-thumbs-up'></i></CButton>
-                    </CInputGroupAppend>
-                 </CInputGroup>
-                </CFormGroup>
+                <CCol>
+                    <CRow className='d-block'>
+                      <strong>Search</strong>
+                    </CRow>
+                    <CRow className='pr-2'xs={12} >
+                      <CCol md='6'  >
+                        <SearchDashboard />
+                      </CCol>
+                      <CCol className='pr-2' md='6'  >
+                        <SearchDashboard1 />
+                      </CCol>
+                    </CRow>
                 </CCol>
-              
-              </CRow>
-              </CCol>
-              </CRow>
-              </CForm>
-            </CCol>
               </CRow>
             </CContainer>
           </CCardBody>

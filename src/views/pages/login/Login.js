@@ -1,6 +1,6 @@
 import React, { useState} from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { userLogin } from './../../../actions/user'
 import {
   CButton,
@@ -25,11 +25,16 @@ const Login = (props) => {
 
   const handleSubmit = () =>{
       let fd = new FormData()
-      fd.append('employment_no', username)
+      fd.append('username', username)
       fd.append('password', password)
-      fd.append('cat', 'loginstaff')
-      fd.append('tables', 'tables')
+      fd.append('cat', 'login')
+      fd.append('table', 'staffs')
       props.userLogin(fd)
+  }
+ 
+  if(props.isAuthenticated === true)
+  {
+    return <Redirect to='/main' />
   }
 
 
@@ -50,7 +55,10 @@ const Login = (props) => {
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="text" defaultValue={username} onClick={(e)=>setUsername(e.target.value)} placeholder="Staff ID" autoComplete="username" />
+                      <CInput 
+                      type="text" 
+                      value={username} 
+                      onChange={(e)=>setUsername(e.target.value)} placeholder="Staff ID" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -58,7 +66,10 @@ const Login = (props) => {
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput type="password" defaultValue={password} onClick={(e)=>setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" />
+                      <CInput 
+                      type="password" 
+                      value={password} 
+                      onChange={(e)=>setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" />
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
@@ -90,6 +101,6 @@ const Login = (props) => {
   )
 }
 const mapStateToProps = (state) =>({
-  
+  isAuthenticated:state.userReducer.isAuthenticated
 })
 export default connect( mapStateToProps,{userLogin})(Login)

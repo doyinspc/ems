@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
+import moment from 'moment'
 import { 
     CCard, 
     CCardBody, 
@@ -10,10 +10,42 @@ import {
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { array } from 'prop-types';
+import { getNotices } from './../../actions/setting/notice'
+import { connect } from 'react-redux';
 
 
-export default class SimpleSlider extends Component {
+class Notice extends Component {
+
+  componentDidMount(){
+    if(this.props.user.activeschool !== undefined && parseInt(this.props.user.activeschool.id) > 0){
+    let params = {
+      data:JSON.stringify(
+      {
+          'schoolid': this.props.user.activeschool.id
+      }),
+      cat:'selected',
+      table:'notices',
+      narration:'get notices'
+    }
+    this.props.getNotices(params)
+   }
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.user.activeschool !== prevProps.user.activeschool)
+    {
+      let params = {
+        data:JSON.stringify(
+        {
+            'schoolid': this.props.user.activeschool.id
+        }),
+        cat:'selected',
+        table:'notices',
+        narration:'get notices'
+      }
+      this.props.getNotices(params)
+     }
+  }
 render() {
       const settings = {
         dots: false,
@@ -27,7 +59,8 @@ render() {
         vertical:true,
 
       };
-let arrayd = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  let data = this.props.notices.notices && Array.isArray(this.props.notices.notices) ? this.props.notices.notices.filter(rw =>rw !== null || rw !== undefined) : []
+  
 return (
     <>
     <CRow>
@@ -36,19 +69,21 @@ return (
           <CCardBody>
           <Slider {...settings}>
             { 
-                arrayd.map((prp, ini)=>{
+                data.map((prp, ini)=>{
                 return <div className="media border p-3">
                 <img 
-                src="img_avatar3.png" 
+                src={process.env.REACT_APP_SERVER_URL + prp.photo} 
                 alt="John Doe" 
                 className="mr-3 mt-3 rounded-circle" 
                 onError={(e)=>{e.target.onerror=null; e.target.src='/icons/profile_3.png'} }
                 style={{width:'60px'}}
             />
             <div className="media-body">
-              <h4 style={{fontFamily:'Quicksand'}}>John Doe</h4> 
-              <small><i>Posted on February 19, 2016</i></small>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>      
+                <h4 style={{fontFamily:'Quicksand'}}>{prp.title}</h4> 
+                <small><i>Posted on { moment(prp.date_created).format('m DD, YYYY')}February 19, 2016</i></small>
+                <strong>{prp.source}</strong>
+              <p>{prp.message}</p>
+                <small>{prp.staffname}</small>  
             </div>
           </div>
             })
@@ -64,3 +99,10 @@ return (
   )
 }
 }
+
+const mapStatetoProps = (state) =>({
+  notices:state.noticeReducer,
+  user:state.userReducer
+})
+
+export default connect(mapStatetoProps, {getNotices})(Notice)

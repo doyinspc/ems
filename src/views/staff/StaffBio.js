@@ -24,6 +24,7 @@ const User = (props, {match}) => {
     dol,
     lga,
     soo,
+    photo,
     nationality,
     officename,
     designation,
@@ -59,23 +60,25 @@ const User = (props, {match}) => {
               <CRow>
                 <CCol className='text-center' xs={12} sm={6} md={3}>
                   <img
-                    src='avatars/1.png'
                     height='250px'
+                    src={process.env.REACT_APP_SERVER_URL+ photo} 
+                    alt={surname}
+                    onError={(e)=>{e.target.onerror=null; e.target.src='icons/profile_2.png'} }
                   />
                 </CCol >
                 <CCol className='text-center' xs={12} sm={6} md={9}>
                   <CRow xs={12}>
                   <CCol xs={12}>
-                    <table className="table  table-hover text-left">
-                      <tbody>
-                        <tr><td><i className='fa fa-user-circle'></i> Fullname</td><td><strong style={{textTransform:'capitalize'}}>{`${title} ${surname} ${firstname} ${middlename}`}</strong></td></tr>
-                        <tr><td><i className='fa fa-calendar-o'></i> Date of Birth</td><td><strong>{`${moment(dob).format('MMM DD, YYYY')}`}</strong></td></tr>
-                        <tr><td><i className='fa fa-gender'></i> Gender</td><td><strong style={{textTransform:'capitalize'}}>{`${gender}`}</strong></td></tr>
-                        <tr><td><i className='fa fa-map'></i> Origin</td><td><strong style={{textTransform:'capitalize'}}>{`${lga} ${soo} ${nationality}`}</strong></td></tr>
-                        <tr><td><i className='fa fa-phone'></i> Contact</td><td><strong >{`${phone1} ${phone2} ${email}`}</strong></td></tr>
-                        <tr><td><i className='fa fa-map-marker'></i> Address</td><td><strong style={{textTransform:'capitalize'}}>{`${address}`}</strong></td></tr> 
-                      </tbody>
-                    </table>
+                    <CContainer className="table  table-hover text-left">
+                      <CRow><CCol>
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-user-circle'></i> Fullname</CCol><CCol><strong style={{textTransform:'capitalize'}}>{`${title} ${surname} ${firstname} ${middlename}`}</strong></CCol></CRow>
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-calendar-o'></i> Date of Birth</CCol><CCol><strong>{`${moment(dob).format('MMM DD, YYYY')}`}</strong></CCol></CRow>
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-street-view'></i> Gender</CCol><CCol><strong style={{textTransform:'capitalize'}}>{`${gender}`}</strong></CCol></CRow>
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-map'></i> Origin</CCol><CCol><strong style={{textTransform:'capitalize'}}>{`${lga} ${soo} ${nationality}`}</strong></CCol></CRow>
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-phone'></i> Contact</CCol><CCol><strong >{`${phone1} ${phone2} ${email}`}</strong></CCol></CRow>
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-map-marker'></i> Address</CCol><CCol><strong style={{textTransform:'capitalize'}}>{`${address}`}</strong></CCol></CRow> 
+                        </CCol></CRow>
+                    </CContainer>
                 </CCol>
                 </CRow>
                </CCol>
@@ -86,21 +89,13 @@ const User = (props, {match}) => {
                     <tbody>
                       <tr><td><i className='fa fa-university'></i> School</td><td><strong>{schoolname}</strong></td></tr>
                       <tr><td><i className='fa fa-id-badge'></i> Department</td><td><strong>{departmentname}</strong></td></tr>
-                      <tr><td><i className='fa fa-fax'></i> Office</td><td><strong>{officename}</strong></td></tr>
-                      <tr><td><i className='fa fa-fax'></i> Designation</td><td><strong>{designation}</strong></td></tr>
+                      <tr><td><i className='fa fa-fax'></i> Level</td><td><strong>{officename}</strong></td></tr>
                       <tr><td><i className='fa fa-calendar-o'></i> Date of Employment</td><td><strong>{`${moment(doe).format('MMM DD, YYYY')}`}</strong></td></tr>
                       <tr><td><i className='fa fa-pied-piper-alt'></i> Status</td><td>{parseInt(is_active) === 0 ? <strong className='text-success'>IN ACTIVE SERVICE</strong> : <strong className='text-danger'>{`${reason} ${moment(dol).format('MMM DD, YYYY')}`}</strong>}</td></tr>
-                    </tbody>
-                  </table>
-                </CCol>
-              </CRow>
-              <CRow>
-                <CCol>
-                  <table className="table  table-hover">
-                    <tbody>
-                      <tr><td><i className='fa fa-university'></i> National Identity Mumber</td><td><strong>{nin}</strong></td></tr>
-                      <tr><td><i className='fa fa-id-badge'></i> Tax Identification Number</td><td><strong>{tin}</strong></td></tr>
+                      <tr><td><i className='fa fa-address-card'></i> National Ident. Number</td><td><strong>{nin}</strong></td></tr>
+                      <tr><td><i className='fa fa-address-card-o'></i> Tax Identifi. Number</td><td><strong>{tin}</strong></td></tr>
                       <tr><td><i className='fa fa-fax'></i> Pension Manager</td><td><strong>{penmanager}{" ("}{pen})</strong></td></tr>
+                   
                     </tbody>
                   </table>
                 </CCol>
@@ -120,7 +115,7 @@ const User = (props, {match}) => {
                 <CRow>
                   <CCol>
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-user'></i> </CCol><CCol>{kin1_name}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{kin1_rel}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-cubes'></i> </CCol><CCol>{kin1_rel}</CCol></CRow>
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-phone'></i> </CCol><CCol>{kin1_phone1} {kin1_phone2}</CCol></CRow>
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{kin1_email}</CCol></CRow>    
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-map-marker'></i> </CCol><CCol>{kin1_address}</CCol></CRow>  
@@ -141,7 +136,7 @@ const User = (props, {match}) => {
               <CContainer>
                   <CCol md={6} sm={12}>
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-user'></i> </CCol><CCol>{kin2_name}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{kin2_rel}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-cubes'></i> </CCol><CCol>{kin2_rel}</CCol></CRow>
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-phone'></i> </CCol><CCol>{kin2_phone1} {kin2_phone2}</CCol></CRow>
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{kin2_email}</CCol></CRow>    
                     <CRow xs={12}><CCol xs={2}><i className='fa fa-map-marker'></i> </CCol><CCol>{kin2_address}</CCol></CRow>  

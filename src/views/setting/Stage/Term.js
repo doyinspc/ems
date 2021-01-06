@@ -58,7 +58,7 @@ const Term = (props) => {
   //GET SESSION NAME
   let ses = props.sessions.filter(rw=>parseInt(rw.id) === parseInt(props.pid));
   let sess = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].name : 'None'
- 
+
   let data = props.terms.terms && Array.isArray(props.terms.terms) ? props.terms.terms.filter(rw =>rw !== null || rw !== undefined) : []
   
    return (

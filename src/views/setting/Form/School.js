@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerSchool, updateSchool, deleteSchool} from './../../../actions/setting/school';
+import {getStaffs} from './../../../actions/staff/staff';
 import { useHistory, useLocation } from 'react-router-dom'
 import {
   CBadge,
@@ -16,6 +17,8 @@ import {
   CInput,
   CCardFooter,
   CFormText,
+  CInputFile,
+  CSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
@@ -34,22 +37,42 @@ const School = (props) => {
   const [address, setAddress] = useState('')
   const [country, setCountry] = useState('')
   const [states, setStates] = useState('')
+  const [links, setLinks] = useState('')
+  const [color, setColor] = useState('')
+  const [signatory, setSignatory] = useState(0)
 
- 
- 
   useEffect(() => {
-    if(parseInt(id) > 0){
-        let dt = dts;
+    let params = {
+      data:JSON.stringify(
+      {
+        'schoolid': props.user.activeschool.id
+      }),
+      cat:'select',
+      table:'staffs',
+      narration:'get staffs'
+    }
+    props.getStaffs(params)
+    
+    
+  }, [props.user.activeschool])
+  useEffect(() => {
+    if(parseInt(props.data.id) > 0){
+        let dt = props.data;
+        setId(dt.id);
         setName(dt.name);
         setAbbrv(dt.abbrv);
         setPhone1(dt.phone1);
         setPhone2(dt.phone2);
         setEmail(dt.email);
+        setLinks(dt.links);
+        setSignatory(dt.signatory);
+        setColor(dt.color);
         setAddress(dt.address);
         setCountry(dt.country);
         setStates(dt.states);
     }else
     {
+      setId(null);
         setName('');
         setAbbrv('');
         setPhone1('');
@@ -61,12 +84,13 @@ const School = (props) => {
 
     }
       
-  }, [id])
+  }, [props.data])
 
   
 
   const handleSubmit = () =>{
-    if(name.length > 0){
+    if(name.length > 0)
+    {
       let fd = new FormData();
       fd.append('name', name);
       fd.append('abbrv', abbrv);
@@ -76,6 +100,9 @@ const School = (props) => {
       fd.append('country', country);
       fd.append('states', states);
       fd.append('address', address);
+      fd.append('files', links);
+      fd.append('signatory', signatory);
+      fd.append('color', color);
       fd.append('table', 'schools');
       
       if(id && parseInt(id) > 0)
@@ -94,6 +121,14 @@ const School = (props) => {
       props.onReset()
     }
   }
+
+  const changeImg = (e) =>{
+    setLinks(e.target.files[0]);
+}
+let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
+  let starray = stafarray.filter(rw=>rw !== null).map((rw, ind) =>{
+      return <option key={ind} value={rw.id}>{rw.surname} {rw.firstname}</option>
+  })
  
    return (
         <CCol xl={12}  id="#formz">
@@ -173,6 +208,16 @@ const School = (props) => {
                     />
                 </CFormGroup>
                 <CFormGroup>
+                  <CLabel htmlFor="nf-color">Theme Color </CLabel>
+                  <CInput 
+                      type="color" 
+                      id="nf-color" 
+                      name="color"
+                      defaultValue={color}
+                      onChange={(e)=>setColor(e.target.value)}
+                    />
+                </CFormGroup>
+                <CFormGroup>
                   <CLabel htmlFor="nf-address">Address </CLabel>
                   <CInput 
                       type="textarea" 
@@ -182,7 +227,68 @@ const School = (props) => {
                       onChange={(e)=>setAddress(e.target.value)}
                       placeholder="12 Bakonle way...." 
                     />
-                  
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-states">State </CLabel>
+                  <CInput 
+                      type="states" 
+                      id="nf-states" 
+                      name="states"
+                      defaultValue={states}
+                      onChange={(e)=>setStates(e.target.value)}
+                      placeholder="Lagos State" 
+                    />
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-country">State </CLabel>
+                  <CInput 
+                      type="country" 
+                      id="nf-country" 
+                      name="country"
+                      defaultValue={country}
+                      onChange={(e)=>setCountry(e.target.value)}
+                      placeholder="Nigeria" 
+                    />
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-sig1">Signatory</CLabel>
+                  <CSelect
+                      type="text" 
+                      id="nf-sig1" 
+                      name="sig1"
+                      onChange={(e)=>setSignatory(e.target.value)}
+                      placeholder="" 
+                    >
+                      {starray}
+                  </CSelect>
+                  <CFormText className="help-block">Select Signatory</CFormText>
+                </CFormGroup>
+                
+                  <CLabel htmlFor="nf-address">School Logo </CLabel>
+                  <CFormGroup className='text-center'>
+                  <CRow xs={12}>
+                    <CCol xs={12}>
+                            <img 
+                                src={process.env.REACT_APP_SERVER_URL+ links} 
+                                className="m-0 p-0" 
+                                width='100px'
+                                height='100px'
+                                alt={links} 
+                                onError={(e)=>{e.target.onerror=null; e.target.src='icons/slack.png'} }
+                             />
+                        </CCol>
+                        <CCol xs={12}>
+                      <CInputFile 
+                      custom
+                      id="custom-file-input"
+                      name='picture1'
+                      onChange={changeImg}
+                      />
+                      <CLabel htmlFor="custom-file-input" variant="custom-file">
+                      Choose file...
+                      </CLabel>
+                      </CCol>
+                      </CRow>
                 </CFormGroup>
               </CForm>
             </CCardBody>
@@ -196,10 +302,13 @@ const School = (props) => {
   )
 }
 const mapStateToProps = (state) =>({
-  schools : state.schoolReducer
+  schools : state.schoolReducer,
+  staffs : state.staffReducer.staffs,
+  user:state.userReducer
 })
 export default connect(mapStateToProps, {
   registerSchool,
   updateSchool,
-  deleteSchool
+  deleteSchool,
+  getStaffs,
 })(School)
