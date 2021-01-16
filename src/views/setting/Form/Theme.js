@@ -27,6 +27,12 @@ import {
 import CIcon from '@coreui/icons-react'
 import { setElement } from './../../../actions/common'
 
+const termarray =[
+  {id:1, name:'First'},
+  {id:2, name:'Second'},
+  {id:3, name:'Third'},
+  {id:4, name:'Alternative/Obsolete'}
+];
 const Theme = (props) => {
   const subjectid = props.pid
   const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
@@ -35,6 +41,8 @@ const Theme = (props) => {
   const [namez, setNamez] = useState('')
   const [topic, setTopic] = useState('')
   const [claszid, setClaszid] = useState()
+  const [termid, setTermid] = useState()
+  const [termname, setTermname] = useState('')
   const [objective, setObjective] = useState([])
   const [content, setContent] = useState([])
   const [material, setMaterial] = useState([])
@@ -67,11 +75,15 @@ const Theme = (props) => {
       setNamez(dt.name);
       setTopic(dt.topic);
       setClaszid(dt.claszid);
+      setTermid(dt.termid);
       setObjective(JSON.parse(dt.objective));
       setMaterial(JSON.parse(dt.material));
       setContent(JSON.parse(dt.content));
       setElement('nf-claszid', dt.claszid )
-      
+      let termnamex = '';
+      let termnames = termarray.filter(rw=>rw.id === dt.termid);
+       termnamex = Array.isArray(termnames) && termnames.length > 0 ? termnames[0].name : '';
+       setTermname(termnamex);
     }else{
       setId(null);
       setModuleid(null);
@@ -86,12 +98,14 @@ const Theme = (props) => {
 
  
  
+ 
   const handleSubmit = () =>{
     if(namez.length > 0){
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('topic', topic);
       fd.append('claszid', claszid);
+      fd.append('termid', termid);
       fd.append('moduleid', moduleid);
       fd.append('objective', JSON.stringify(objective));
       fd.append('material', JSON.stringify(material));
@@ -119,7 +133,8 @@ const Theme = (props) => {
   }
   const loadContent = (num, inde, dt) =>{
     let con = [...content];
-
+     if(contentind.length > 0)
+     {
       if(num === 0)
       {
         let d =  con.push(contentind);
@@ -140,11 +155,13 @@ const Theme = (props) => {
         setContent(c)
         setContentind('');
       }
-
+    }
       
   }
   const loadObjective = (num, inde, dt) =>{
     let con = [...objective];
+    if(objectiveind.length > 0)
+     {
       if(num === 0)
       {
         let d =  con.push(objectiveind);
@@ -165,10 +182,13 @@ const Theme = (props) => {
         setObjective(c)
         setObjectiveind('');
       }   
+    }
   }
 
   const loadMaterial = (num, inde, dt) =>{
     let con = [...material];
+    if(materialind.length > 0)
+     {
       if(num === 0)
       {
        if(materialind.length > 0){
@@ -190,7 +210,8 @@ const Theme = (props) => {
         let c = cons.filter(rw=>rw !== dt);
         setMaterial(c)
         setMaterialind('');
-      }   
+      } 
+    }  
   }
   
   
@@ -198,6 +219,9 @@ const Theme = (props) => {
   let clarray = claszarray.filter(rw=>rw !== null).map((rw, ind) =>{
       return <option key={ind} value={rw.id}>{rw.name}</option>
   })
+  let termz= termarray.filter(rw=>rw !== null).map((rw, ind) =>{
+    return <option key={ind} value={rw.id}>{rw.name}</option>
+})
  
    return (
     <CCol xl={12}  style={{width:'500px'}} id="#formz">
@@ -216,14 +240,13 @@ const Theme = (props) => {
               </CButton>
             </CCol>
           </CRow>
-          
         </CCardHeader>
         <CCardBody>
           <CForm action="" method="post">
             <CAlert 
             color='danger'
             value={Number(400) * 10}
-            size="xs"
+            size="sm"
             className="mb-3"
             >
             <h4 className="alert-heading">Warning</h4>
@@ -261,10 +284,26 @@ const Theme = (props) => {
                   onChange={(e)=>setClaszid(e.target.value)}
                   placeholder="" 
                 >
-                  {id && parseInt(id) > 0 ? <option value={claszid}>{claszid}</option>:''}
+                  {id && parseInt(id) > 0 ? <option value={claszid}>{props.data !== null && props.data !== undefined? props.data.claszname : ''}</option>:<option></option>}
+                  
                   {clarray}
               </CSelect>
               <CFormText className="help-block">Select the class</CFormText>
+            </CFormGroup>
+            <CFormGroup>
+              <CLabel htmlFor="nf-termid">Term</CLabel>
+              <CSelect
+                  type="text" 
+                  id="nf-termid" 
+                  name="termid"
+                  onChange={(e)=>setTermid(e.target.value)}
+                  placeholder="" 
+                >
+                  {id && parseInt(id) > 0 ? <option value={termid}>{termname}</option>:<option></option>}
+                  
+                  {termz}
+              </CSelect>
+              <CFormText className="help-block">Select the term</CFormText>
             </CFormGroup>
             <CFormGroup>
               <CLabel htmlFor="nf-content">Lesson Content</CLabel>

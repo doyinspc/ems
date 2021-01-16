@@ -47,7 +47,7 @@ const Theme = (props) => {
   }
   const onReset = () =>{
     setId(null);
-    setDts({});
+    setDts({});  
   }
   const onClose = (rw, dt) =>{
     setCollapse(false)

@@ -14,11 +14,13 @@ import { getStaffsubjects } from './../../actions/staff/staffsubject'
 import CIcon from '@coreui/icons-react'
 import ChartLineSimple from '../charts/ChartLineSimple'
 import ChartBarSimple from '../charts/ChartBarSimple'
+import Students from './Subjects/Students'
 
 const Dashboard = (props) => {
     
+  const [subject, setSubject]  = useState([])
   useEffect(() => {
-    console.log(props.user.activeterm)
+    
     if(props.user.activeterm !== undefined)
     {
        let params = {
@@ -39,7 +41,9 @@ const Dashboard = (props) => {
     
   }, [props.user.activeterm])
 
-
+  const loadStudents = (sub) =>{
+      setSubject(sub)
+  }
 return (
     <>
     <CRow>
@@ -47,11 +51,13 @@ return (
       </CRow>
       <CRow>
         {
-          props.staffsubject.staffsubjects.map((prp, ind)=>{
+          Array.isArray(props.staffsubject.staffsubjects) ? props.staffsubject.staffsubjects.filter(rw=>rw !== null & rw !== undefined).map((prp, ind)=>{
+            let numz = prp.num.split(":");
+            let numz1 = numz.filter(rw=>parseInt(rw.split(":")[0][1]) == parseInt(prp.itemid1)).lenght
             return <CCol sm="6" lg="3"  key={ind}>
               <CWidgetDropdown
                 color="gradient-info"
-                header={prp.num}
+                header={numz}
                 text={`${prp.itemname1} ${prp.itemname} `}
                 footerSlot={
                   <ChartLineSimple
@@ -70,25 +76,30 @@ return (
                     <CIcon name="cil-settings"/>
                   </CDropdownToggle>
                   <CDropdownMenu className="pt-0" placement="bottom-end">
-                    <CDropdownItem>Action</CDropdownItem>
-                    <CDropdownItem>Another action</CDropdownItem>
-                    <CDropdownItem>Something else here...</CDropdownItem>
-                    <CDropdownItem disabled>Disabled action</CDropdownItem>
+                    <CDropdownItem onClick={()=>loadStudents(prp)}>Students</CDropdownItem>
+                    <CDropdownItem>Lesson Plan</CDropdownItem>
+                    <CDropdownItem>Analysis</CDropdownItem>
                   </CDropdownMenu>
                 </CDropdown>
               </CWidgetDropdown>
             </CCol>
+            
 
-          })
+          }):''
         }
      
 
       
-
+      
      
       </CRow>
  
-    
+      <Students
+        termid={props.user.activeterm.termid}
+        sessionid={props.user.activeterm.sessionid}
+        clientid={props.user.user.id}
+        subject={subject}
+      />
     </>
   )
 }

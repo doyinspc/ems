@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment';
-
+import { checkImage } from './../../actions/common'
 import {  
     CCard,
     CCardBody,
@@ -60,7 +60,11 @@ const StaffProfessional = (props, {match}) => {
     setActive((prev)=>!prev)
  }
  const onDelete = (data) =>{
-    props.deleteStaffprofessional(data)
+    let fd = new FormData();
+    fd.append('id', data)
+    fd.append('table', 'staffeducations')
+    fd.append('cat', 'delete')
+    props.deleteStaffprofessional(fd, data)
  }
  const onClose = () =>{
     setEditerid(null)
@@ -99,7 +103,8 @@ const StaffProfessional = (props, {match}) => {
              <CCardBody>
                 <table width='100%'>
                     {
-                        data && Array.isArray(data) && data.length > 0 ? data.map((prop, index)=>{
+                        data && Array.isArray(data) && data.length > 0 ? data.filter(rw=>rw !==null).map((prop, index)=>{
+                            let imgx = process.env.REACT_APP_SERVER_URL + prop.links;
                             return (
                                 <tr
                                     onMouseLeave={()=>showCont(1, prop.id)}
@@ -108,6 +113,7 @@ const StaffProfessional = (props, {match}) => {
                                     <td>
                                         {prop.level}{" "} <strong style={{textTransform:'uppercase'}}>{prop.instituition}</strong><br/>
                                         {moment(prop.issued).format('MMM DD, YYYY')} 
+                                        {checkImage(imgx) ? <a target='_blank' className='btn btn-link' href={imgx}>DOWNLOAD</a>:<strong>No File Uploaded</strong>}
                                     </td>
                                     <td width='20%'>
                                         <span className={edit !== prop.id ? 'collapse' : ''}>

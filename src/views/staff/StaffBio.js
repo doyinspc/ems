@@ -48,7 +48,7 @@ const User = (props, {match}) => {
     nin,
     tin,
     pen,
-    penmanager
+    penmanagerid
     } = props.staff || {};
 
   return (
@@ -61,6 +61,7 @@ const User = (props, {match}) => {
                 <CCol className='text-center' xs={12} sm={6} md={3}>
                   <img
                     height='250px'
+                    width='200px'
                     src={process.env.REACT_APP_SERVER_URL+ photo} 
                     alt={surname}
                     onError={(e)=>{e.target.onerror=null; e.target.src='icons/profile_2.png'} }
@@ -72,7 +73,7 @@ const User = (props, {match}) => {
                     <CContainer className="table  table-hover text-left">
                       <CRow><CCol>
                         <CRow className='p-2'><CCol xs={4}><i className='fa fa-user-circle'></i> Fullname</CCol><CCol><strong style={{textTransform:'capitalize'}}>{`${title} ${surname} ${firstname} ${middlename}`}</strong></CCol></CRow>
-                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-calendar-o'></i> Date of Birth</CCol><CCol><strong>{`${moment(dob).format('MMM DD, YYYY')}`}</strong></CCol></CRow>
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-calendar-o'></i> Date of Birth</CCol><CCol><strong>{`${moment(dob).format('MMM DD, YYYY') !== 'Invalid date'? moment(dob).format('MMM DD, YYYY'):'--.--.--' }`}</strong></CCol></CRow>
                         <CRow className='p-2'><CCol xs={4}><i className='fa fa-street-view'></i> Gender</CCol><CCol><strong style={{textTransform:'capitalize'}}>{`${gender}`}</strong></CCol></CRow>
                         <CRow className='p-2'><CCol xs={4}><i className='fa fa-map'></i> Origin</CCol><CCol><strong style={{textTransform:'capitalize'}}>{`${lga} ${soo} ${nationality}`}</strong></CCol></CRow>
                         <CRow className='p-2'><CCol xs={4}><i className='fa fa-phone'></i> Contact</CCol><CCol><strong >{`${phone1} ${phone2} ${email}`}</strong></CCol></CRow>
@@ -94,7 +95,7 @@ const User = (props, {match}) => {
                       <tr><td><i className='fa fa-pied-piper-alt'></i> Status</td><td>{parseInt(is_active) === 0 ? <strong className='text-success'>IN ACTIVE SERVICE</strong> : <strong className='text-danger'>{`${reason} ${moment(dol).format('MMM DD, YYYY')}`}</strong>}</td></tr>
                       <tr><td><i className='fa fa-address-card'></i> National Ident. Number</td><td><strong>{nin}</strong></td></tr>
                       <tr><td><i className='fa fa-address-card-o'></i> Tax Identifi. Number</td><td><strong>{tin}</strong></td></tr>
-                      <tr><td><i className='fa fa-fax'></i> Pension Manager</td><td><strong>{penmanager}{" ("}{pen})</strong></td></tr>
+                      <tr><td><i className='fa fa-fax'></i> Pension Manager</td><td><strong>{penmanagerid}{" ("}{pen})</strong></td></tr>
                    
                     </tbody>
                   </table>

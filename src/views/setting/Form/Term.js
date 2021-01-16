@@ -65,7 +65,7 @@ const Term = (props) => {
         fd.append('started', starts);
         fd.append('ended', ends);
         fd.append('table', 'terms');
-        fd.append('schoolid', 1);
+        
   
         if(id && parseInt(id) > 0)
         {
@@ -77,7 +77,7 @@ const Term = (props) => {
         }else
         {
           //INSERT
-          
+          fd.append('sessionid', props.pid);
           fd.append('cat', 'insert');
           props.registerTerm(fd)
         }
@@ -114,7 +114,7 @@ const Term = (props) => {
                   name="name"
                   defaultValue={namez}
                   onChange={(e)=>setNamez(e.target.value)}
-                  placeholder="2020_2021" 
+                  placeholder="First term" 
                 />
               <CFormText className="help-block">Please enter term</CFormText>
             </CFormGroup>

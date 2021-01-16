@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux'
 import {
- 
   CHeader,
   CToggler,
   CHeaderBrand,
@@ -42,7 +41,7 @@ const TheHeader = (props) => {
   }
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
+    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
     dispatch({type: 'set', sidebarShow: val})
   }
   

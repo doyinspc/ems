@@ -23,7 +23,8 @@ import CIcon from '@coreui/icons-react'
 
 
 const User = (props, {match}) => {
-  const staffid = useParams().staff;
+  const staffid = props.user.id;
+  
   const [showed, setShowed] = useState(0)
   const [edited, setEdited] = useState(0)
   const [gradetype, setGradeTypes] = useState([])
@@ -196,11 +197,12 @@ const User = (props, {match}) => {
                   <i className='fa fa-edit'></i> <span className='d-n0ne'> Edit</span>
                 </CDropdownToggle>
                 <CDropdownMenu>
-      <CDropdownItem onClick={()=>setEditedx(1)}><i className='text-secondary fa fa-edit'></i>{"  ."} Employment</CDropdownItem>
+    {/* <CDropdownItem onClick={()=>setEditedx(1)}><i className='text-secondary fa fa-edit'></i>{"  ."} Employment</CDropdownItem> */}
       <CDropdownItem onClick={()=>setEditedx(2)}><i className='text-secondary fa fa-edit'></i>{"  ."} Biodata</CDropdownItem>
       <CDropdownItem onClick={()=>setEditedx(3)}><i className='text-secondary fa fa-edit'></i>{"  ."} Next of Kin</CDropdownItem>
       <CDropdownItem onClick={()=>setEditedx(4)}><i className='text-secondary fa fa-edit'></i>{"  ."} Photo</CDropdownItem>
       <CDropdownItem onClick={()=>setEditedx(5)}><i className='text-secondary fa fa-edit'></i>{"  ."} Password</CDropdownItem>
+    {/*<CDropdownItem onClick={()=>setEditedx(6)}><i className='text-secondary fa fa-edit'></i>{"  ."} Exit</CDropdownItem>   */} 
               </CDropdownMenu>
               </CDropdown>
             </CButtonGroup>  
@@ -210,7 +212,7 @@ const User = (props, {match}) => {
          </CCard>
       </CCol>
     </CRow>
-    {edited > 0 ? <StaffAdd editid={edited} data={props.user} />:''}
+    {edited > 0 ? <StaffAdd editid={edited} data={props.user} personal={true} />:''}
     {showed === 0 && edited === 0 ? <StaffBio  staff={props.user} />:''}
     {showed === 1 && edited === 0 ? <StaffEducation  sid={staffid}  />:''}
     {showed === 2 && edited === 0 ? <StaffProfessional  sid={staffid}  />:''}

@@ -34,14 +34,8 @@ const Staffeducations = (props) => {
     const [started, setStarted] = useState('')
     const [linked, setLinked] = useState('')
     const [ended, setEnded] = useState('')
-    const [gradetype, setGradeTypes] = useState([])
   
-    useEffect(() => {
-      fetch(process.env.PUBLIC_URL+ gradesjson)
-      .then(response=>response.json())
-      .then(data=>setGradeTypes(data))
-      .catch(error=>setGradeTypes({'grades':'', 'types':''}));
-    }, [])
+    
 
     useEffect(() => {
       if(parseInt(props.rowid) > 0)
@@ -86,7 +80,7 @@ const Staffeducations = (props) => {
             fd.append('narration', 'inserting education record');
             fd.append('staffid', sid);
             props.registerStaffeducation(fd)
-            
+     
         }
 
     }
@@ -98,14 +92,42 @@ const Staffeducations = (props) => {
         setLinked(evt.target.files[0]);
     }
   
+let gradetype = [
+  "ND",
+  "OND",
+  "HND",
+  "NCE",
+  "B.Sc.",
+  "BA.",
+  "B.Eng.",
+  "B.Tech.",
+  "B.Tech. (Ed)",
+  "B.Ed.",
+  "M.Sc.",
+  "MA.",
+  "M.Eng.",
+  "M.Tech.",
+  "M.Ed.",
+  "Phd"
+]
 
-let starray = gradetype && gradetype.types !== undefined ? gradetype.types.filter(rw=>rw !== null && rw !== undefined).map((rw, ind) =>{
+let gradetypes = [
+  "First Class",
+  "Second Class Upper",
+  "Second Class Lower",
+  "Third Class",
+  "Upper Credit",
+  "Lower Credit",
+  "Passed",
+  "Certificate of Attencdance"
+]
+let starray = gradetype.map((rw, ind) =>{
     return <option key={ind} value={rw}>{rw}</option>
-}): ''
+})
 
-let lgarray = gradetype && gradetype.grades !== undefined  ?gradetype.grades.filter(rw=>rw !== null && rw !== undefined).map((rw, ind) =>{
+let lgarray = gradetypes.map((rw, ind) =>{
   return <option key={ind} value={rw}>{rw}</option>
-}): ''
+})
 
 
 
@@ -151,6 +173,7 @@ let lgarray = gradetype && gradetype.grades !== undefined  ?gradetype.grades.fil
                                       id="result" 
                                       onChange={changeresult} 
                                   >
+                                    <option >Select</option>
                                       {starray}
                                   </CSelect>
                               </CFormGroup>
@@ -165,6 +188,7 @@ let lgarray = gradetype && gradetype.grades !== undefined  ?gradetype.grades.fil
                                       onChange={(e)=>setGrade(e.target.value)} 
                                      
                                   >
+                                    <option >Select</option>
                                       {lgarray}
                                   </CSelect>
                               </CFormGroup>

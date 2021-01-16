@@ -27,10 +27,10 @@ import {
     USER_DELETE_FAIL,
     USER_EDIT,
 } from "../types/user";
-import { MAIN_TOKEN, SERVER_PATHS, axiosConfig, axiosConfig1 } from './common';
+import { MAIN_TOKEN, API_PATH_SETTING, axiosConfig, axiosConfig1 } from './common';
 
 let TABLE_NAME = 'user_types';
-const path = SERVER_PATHS + '/setting.php';
+const path = API_PATH_SETTING;
 
 let params = {
     data:{},
@@ -121,6 +121,7 @@ export const getUserDatas = params => (dispatch, getState) => {
 };
 export const userLogin = data => (dispatch, getState) => {
     dispatch({type : USER_LOADING});
+    console.log(path, data)
         axios.post(path, data, axiosConfig1)
             .then(res => {                                                                                                                                                                                                                                      
                 dispatch({

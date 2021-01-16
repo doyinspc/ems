@@ -10,7 +10,7 @@ import {
 import CIcon from '@coreui/icons-react'
 
 const TheHeaderDropdownTasks = () => {
-  const itemsCount = 5
+  const itemsCount = 0
   return (
     <CDropdown
       inNav
@@ -29,7 +29,7 @@ const TheHeaderDropdownTasks = () => {
         >
           <strong>You have {itemsCount} pending tasks</strong>
         </CDropdownItem>
-        <CDropdownItem className="d-block">
+        {/*<CDropdownItem className="d-block">
           <div className="small mb-1">Upgrade NPM &amp; Bower <span
             className="float-right"><strong>0%</strong></span></div>
           <CProgress size="xs" color="info" value={0} />
@@ -51,7 +51,7 @@ const TheHeaderDropdownTasks = () => {
           <CProgress size="xs" color="success" value={100} />
         </CDropdownItem>
         <CDropdownItem className="text-center border-top"><strong>View all tasks</strong></CDropdownItem>
-      </CDropdownMenu>
+      */}</CDropdownMenu>
     </CDropdown>
   )
 }

@@ -15,6 +15,10 @@ import {
     STAFF_DELETE_FAIL,
     STAFF_EDIT
 } from "./../../types/staff/staff";
+import Swal from 'sweetalert'
+const callSucces = ($err) =>{
+    Swal("Saved!", "UPdate saved!", "success");
+ }
 
 let staffStore = JSON.parse(localStorage.getItem('staff'))
 
@@ -112,6 +116,7 @@ export default function(state = initialState, action){
             let newState = [...state.staffs];
             newState[findInd] = action.payload;
             localStorage.setItem('staff', JSON.stringify(newState));
+             callSucces();
             return {
                 ...state,
                 ...action.payload,

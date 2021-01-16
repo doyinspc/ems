@@ -140,7 +140,9 @@ import {
   cilWeightlifitng,
   cilFlightTakeoff,
   cilSignLanguage,
-  cilMoodVeryBad
+  cilMoodVeryBad,
+  cilImage,
+  cilContact
 } from '@coreui/icons'
 
 export const icons = Object.assign({}, {
@@ -251,7 +253,9 @@ export const icons = Object.assign({}, {
   cilWeightlifitng,
   cilFlightTakeoff,
   cilSignLanguage,
-  cilMoodVeryBad
+  cilMoodVeryBad,
+  cilImage,
+  cilContact
   
 }, {
   cifUs,

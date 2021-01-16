@@ -51,7 +51,7 @@ render() {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 2,
+        slidesToShow: 1,
         slidesToScroll: 1,
         autoplay:true,
         autoplaySpeed: 6000,
@@ -75,7 +75,7 @@ return (
                 src={process.env.REACT_APP_SERVER_URL + prp.photo} 
                 alt="John Doe" 
                 className="mr-3 mt-3 rounded-circle" 
-                onError={(e)=>{e.target.onerror=null; e.target.src='/icons/profile_3.png'} }
+                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/icons/profile_3.png'} }
                 style={{width:'60px'}}
             />
             <div className="media-body">

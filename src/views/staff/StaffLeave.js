@@ -153,7 +153,7 @@ const handleSubmit= (data)=>{
              <CCardBody>
                 <table width='100%'>
                     {
-                        data && Array.isArray(data) && data.length > 0 ? data.map((prop, index)=>{
+                        data && Array.isArray(data) && data.length > 0 ? data.filter(rw=>rw !==null).map((prop, index)=>{
                             return (
                                 <tr
                                     onMouseLeave={()=>showCont(1, prop.id)}

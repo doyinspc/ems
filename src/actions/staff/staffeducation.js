@@ -46,12 +46,12 @@ export const getStaffeducation = id => (dispatch, getState) => {
     });  
 };
 //STAFFEDUCATION DELETE
-export const deleteStaffeducation = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteStaffeducation = (params, id )=> (dispatch, getState) =>{
+    axios.post(path, params, axiosConfig1)
         .then(res => {
             dispatch({
                 type: STAFFEDUCATION_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {

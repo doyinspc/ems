@@ -30,7 +30,7 @@ const Staffprofessionals = (props) => {
     const [instituition, setInstituition] = useState('')
     const [level, setLevel] = useState('')
     const [issued, setIssued] = useState('')
-    const [linked, setLinked] = useState('')
+    const [links, setLinks] = useState('')
 
     useEffect(() => {
       if(parseInt(props.rowid) > 0)
@@ -39,7 +39,7 @@ const Staffprofessionals = (props) => {
         setId(data.id)
         setInstituition(data.instituition)
         setLevel(data.level)
-        setLinked(data.files)
+        setLinks(data.links)
         setIssued(data.issued)
       }
     }, [props.data, props.rowid, sid])
@@ -51,7 +51,7 @@ const Staffprofessionals = (props) => {
         let fd = new FormData();
         fd.append('instituition', instituition);
         fd.append('level', level);
-        fd.append('files', linked);
+        fd.append('files', links);
         fd.append('issued', issued);
         fd.append('table', 'staffprofessionals');
 
@@ -73,7 +73,7 @@ const Staffprofessionals = (props) => {
     }
     
     const handleInputChange = (evt) => {
-        setLinked(evt.target.files[0]);
+        setLinks(evt.target.files[0]);
     }
   
 
@@ -93,7 +93,7 @@ const Staffprofessionals = (props) => {
                                 <CInput 
                                     id="Instituition" 
                                     name='text'
-                                    defaultValue={instituition}
+                                    value={instituition}
                                     placeholder="Teachers Registration Council of Nigeria"
                                     onChange={(e)=>setInstituition(e.target.value)} 
                                     />
@@ -101,12 +101,12 @@ const Staffprofessionals = (props) => {
                             </CCol>
                             <CCol xs="12">
                             <CFormGroup>
-                                <CLabel htmlFor="Level">Level</CLabel>
+                                <CLabel htmlFor="Level">Level &  Certificate Number</CLabel>
                                 <CInput 
                                     id="Level" 
                                     name='text'
-                                    defaultValue={level}
-                                    placeholder="Graduate Member "
+                                    value={level}
+                                    placeholder="Graduate Member  - KB1234567"
                                     onChange={(e)=>setLevel(e.target.value)} 
                                     />
                             </CFormGroup>
@@ -117,7 +117,7 @@ const Staffprofessionals = (props) => {
                                 <CInput 
                                     id="issued" 
                                     type='date'
-                                    defaultValue={issued}
+                                    value={issued}
                                     placeholder="Federal University of Technology Minna, Niger State, Nigeria "
                                     onChange={(e)=>setIssued(e.target.value)} 
                                     />
@@ -125,12 +125,12 @@ const Staffprofessionals = (props) => {
                             </CCol>
                            <CCol xs="12" >
                             <CFormGroup>
-                                <CLabel htmlFor="ended">Upload Document (100kb)</CLabel>
+                                <CLabel htmlFor="files">Upload Document (100kb)</CLabel>
                                 <CInput 
                                     type="file" 
                                     name="files" 
                                     id="files"
-                                    defaultValue={linked}
+                                    defaultValue={links}
                                     onChange={handleInputChange} 
                                     />
                             </CFormGroup>

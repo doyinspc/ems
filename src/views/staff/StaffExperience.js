@@ -58,8 +58,13 @@ const StaffExperience = (props, {match}) => {
     setActive((prev)=>!prev)
  }
  const onDelete = (data) =>{
-    props.deleteStaffexperience(data)
+ let fd = new FormData();
+    fd.append('id', data)
+    fd.append('table', 'staffexperiences')
+    fd.append('cat', 'delete')
+    props.deleteStaffexperience(fd,data)
  }
+ 
  const onClose = () =>{
     setEditerid(null)
     setEditerdata({})
@@ -97,7 +102,7 @@ const StaffExperience = (props, {match}) => {
              <CCardBody>
                 <table width='100%'>
                     {
-                        data && Array.isArray(data) && data.length > 0 ? data.map((prop, index)=>{
+                        data && Array.isArray(data) && data.length > 0 ? data.filter(rw=>rw !==null).map((prop, index)=>{
                             
                             return (
                                 <tr

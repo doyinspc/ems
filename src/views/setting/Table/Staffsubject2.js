@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 
 const Staffsubject = (props) => {
   
-  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
+  let data =[]// props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
   let allStaff = {};
   let allStaffName = {};
   let allSubject = {};
   let allClass = {};
   
-  data.forEach(prp => {
+  data.filter(rw =>rw !== 'null' || rw !== undefined).forEach(prp => {
     if(prp.clientid in allStaff)
     {
         if(prp.itemid1 in allStaff[prp.clientid])

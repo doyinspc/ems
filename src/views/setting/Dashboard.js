@@ -17,7 +17,7 @@ const WidgetsDropdown = () => {
       {
           cats.map((prop, index)=>{
             return <CCol sm="6" md="3"><Link key={index} to={`setting/${prop.id}/0/0/0/0/0/0`} style={{color:'teal'}}>
-              <CCard className='text-center'>
+              <CCard className='text-center' style={{height:"280px"}}>
                 <CCardBody className='text-center flex align-self-center justify-contents-center'>
                   <CContainer>
                   <CRow className='text-center' lg={12} style={{marginTop:'10px', marginBottom:'10px'}}>
@@ -28,7 +28,7 @@ const WidgetsDropdown = () => {
                   <CRow className='text-center flex align-self-center justify-contents-center' lg={12} style={{marginTop:'10px', marginBottom:'20px', textAlign:'center'}}>
                     <CCol>
                       <img
-                        src={prop.icon}
+                        src={process.env.PUBLIC_URL + prop.icon}
                         height="100px"
                         style={{borderRadius:'50%'}}
                         />

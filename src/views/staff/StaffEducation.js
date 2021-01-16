@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment';
-
+import { checkImage } from './../../actions/common'
 import {  
     CCard,
     CCardBody,
@@ -60,7 +60,11 @@ const StaffEducation = (props, {match}) => {
     setActive((prev)=>!prev)
  }
  const onDelete = (data) =>{
-    props.deleteStaffeducation(data)
+    let fd = new FormData();
+    fd.append('id', data)
+    fd.append('table', 'staffeducations')
+    fd.append('cat', 'delete')
+    props.deleteStaffeducation(fd,data)
  }
  const onClose = () =>{
     setEditerid(null)
@@ -98,10 +102,13 @@ const StaffEducation = (props, {match}) => {
             </CCardHeader>
              <CCardBody>
                 <table width='100%'>
-                    {
-                        data && Array.isArray(data) && data.length > 0 ? data.map((prop, index)=>{
+                    { 
+                        data && Array.isArray(data) && data.length > 0 ? data.filter(rw=>rw !==null && rw !== undefined).map((prop, index)=>{
+                            let imgx = process.env.REACT_APP_SERVER_URL + prop.links;
+                            
                             return (
                                 <tr
+                                key={index}
                                     onMouseLeave={()=>showCont(1, prop.id)}
                                     onMouseEnter={()=>showCont(0, prop.id)}onMouseOver
                                 > 
@@ -110,7 +117,7 @@ const StaffEducation = (props, {match}) => {
                                         {prop.result}{" "}<i style={{textTransform:'capitalize'}}>{prop.course}</i><br/>
                                         {prop.grade}<br/>
                                         {moment(prop.started).format('MMM DD, YYYY')}{" - "}{moment(prop.ended).format('MMM DD, YYYY')}
-                                       
+                                     {checkImage(imgx) ? <a target='_blank' className='btn btn-link' href={imgx}>DOWNLOAD</a>:<strong>No File Uploaded</strong>}
                                     </td>
                                     <td width='20%'>
                                         <span className={edit !== prop.id ? 'collapse' : ''}>

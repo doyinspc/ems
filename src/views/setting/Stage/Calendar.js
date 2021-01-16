@@ -23,15 +23,21 @@ const Session = (props) => {
   }
 
   useEffect(() => {
-    let params = {
-      data:JSON.stringify({}),
-      cat:'all',
-      table:'sessions',
-      narration:'get sessions'
-  }
-    props.getSessions(params)
+    if(props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0)
+    {
+      
+        let params = {
+          data:JSON.stringify({
+            'schoolid':props.user.activeschool.id
+          }),
+          cat:'select',
+          table:'sessions',
+          narration:'get sessions'
+      }
+        props.getSessions(params)
+    }
     
-  }, [])
+  }, [props.user.activeschool])
 
   
   const onEdit = (dt) =>{
@@ -87,7 +93,8 @@ const Session = (props) => {
   )
 }
 const mapStateToProps = (state) =>({
-  sessions : state.sessionReducer
+  sessions : state.sessionReducer,
+  user:state.userReducer
 })
 export default connect(mapStateToProps, {
   getSessions,

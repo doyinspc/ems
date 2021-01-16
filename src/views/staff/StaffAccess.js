@@ -53,7 +53,7 @@ useEffect(() => {
 }, [activeSchool])
 
 useEffect(() => {
-    if(props.data !== undefined && 'id' in props.data && parseInt(props.data.id) > 0 )
+    if(props.data !== undefined  && props.data !== null && 'id' in props.data && parseInt(props.data.id) > 0 )
     {
         setId(props.data.id)
         if(props.data.access !== undefined && props.data.access.length > 0 ){ setAccs(JSON.parse(props.data.access))}else{setAccs({})}

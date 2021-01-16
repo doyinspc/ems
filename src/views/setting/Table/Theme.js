@@ -13,7 +13,12 @@ import {
 } from '@coreui/react';
 
 
-
+const termarray ={
+  1:'First term',
+  2:'Second term',
+  3:'Third term',
+  4:'Alternative/Obsolete'
+}
 const Theme = (props) => {
   const history = useHistory()
   let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
@@ -21,7 +26,7 @@ const Theme = (props) => {
       return <tr key={ind}>
       <td>
         <strong>MODULE {row.moduleid}</strong>{" : "}<span style={{textTransform:'uppercase'}}> {row.name}</span><br/>
-        <strong>CLASS</strong>{" : "}<span style={{textTransform:'uppercase'}}> {row.claszname}</span>
+  <strong>CLASS</strong>{" : "}<span style={{textTransform:'uppercase'}}> {row.claszname}{termarray[row.termid]}</span>
         <CRow>
           <CCol xs={12} sm={4}>
               <strong >The lesson would be presented as follows</strong>

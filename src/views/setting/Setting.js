@@ -16,6 +16,7 @@ import Admission from './Stage/Admission';
 import Timetable from './Stage/Timetable';
 import Clasz from './Stage/Clasz';
 import Claszunit from './Stage/Claszunit';
+import Account from './Stage/Account';
 import Assessment from './Stage/Ca';
 import Assessmentunit from './Stage/Caunit';
 import Grade from './Stage/Grade';
@@ -46,20 +47,21 @@ const Setting = (props) => {
   }
 
   let acs = props.user.user.access !== undefined && props.user.user.access.length > 0 ? JSON.parse(props.user.user.access) : {};
-  
-  if(Object.keys(acs) > 0)
-  {
-      return <Redirect to="/settings" />
-  }else
+  let mainedt = 1
+  if(Object.keys(acs) > 0 && props.user.isAdmin === false)
   {
       let ids = props.user.activeschool.id;
-      console.log(ids, sid, acs)
+      
       if(acs !== undefined  && acs.hasOwnProperty(ids))
       {
-         console.log(acs[ids][2])
+         
          if(sid in acs[ids][2])
          {
-
+            if(2 in acs[ids][2][sid])
+            {
+               mainedt = 0
+            }
+            
          }else
          {
             return <Redirect to="/settings" />
@@ -69,22 +71,27 @@ const Setting = (props) => {
       {
         return <Redirect to="/settings" />
       }
+  }else if(props.user.isAdmin === true) 
+  {
+     mainedt = 0
+  }else{
+   return <Redirect to="/settings" />
   }
 
   return (
       <>
         {parseInt(sid) === 1 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Staff edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Staff edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 2 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Student edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Student edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 3 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ?
-        confirm(sid, perm, <Calendar edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Calendar edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 3 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Term
               sid={sid}
               pid={pid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -94,7 +101,7 @@ const Setting = (props) => {
               sid={sid}
               pid={pid}
               qid={qid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -105,7 +112,7 @@ const Setting = (props) => {
               pid={pid}
               qid={qid}
               did={did}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -117,7 +124,7 @@ const Setting = (props) => {
               qid={qid}
               did={did}
               kid={kid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -129,7 +136,7 @@ const Setting = (props) => {
                qid={qid}
                did={did}
                kid={kid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -141,7 +148,7 @@ const Setting = (props) => {
                qid={qid}
                did={did}
                kid={kid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -153,7 +160,7 @@ const Setting = (props) => {
                qid={qid}
                did={did}
                kid={kid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -165,7 +172,7 @@ const Setting = (props) => {
                qid={qid}
                did={did}
                kid={kid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -176,7 +183,7 @@ const Setting = (props) => {
               pid={pid}
               qid={qid}
               did={did}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
@@ -187,14 +194,14 @@ const Setting = (props) => {
               pid={pid}
               qid={qid}
               did={did}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 4 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <School sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <School sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 5 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Department sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Department sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 5 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Unit
@@ -202,12 +209,12 @@ const Setting = (props) => {
                pid={pid}
                qid={qid}
                did={did}
-               edits={0} 
+               edits={mainedt}
                school={props.user.activeschool} 
                para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 6 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Subject sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Subject sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 6 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Theme
@@ -215,79 +222,79 @@ const Setting = (props) => {
                pid={pid}
                qid={qid}
                did={did}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 7 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Admission sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Admission sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 8 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Timetable sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Timetable sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 9 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Clasz sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Clasz sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 9 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Claszunit
               pid={pid}
               sid={sid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {(parseInt(sid) === 10 || parseInt(sid) === 11 || parseInt(sid) === 12) && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Assessment sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Account sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 13 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Grade sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Grade sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 13 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Gradeunit
               pid={pid}
               sid={sid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 14 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Report sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Report sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 15 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Fee sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Fee sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 16 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Inventory sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Inventory sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 16 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Inventoryunit
               pid={pid}
               sid={sid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 17 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Maintenance sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Maintenance sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 17 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Maintenanceunit
               pid={pid}
               sid={sid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 18 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Office sid={sid} edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Office sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 18 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Job
               sid={sid}
               pid={pid}
-              edits={0} 
+              edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 19 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Level sid={sid}edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Level sid={sid}edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 20 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Notice sid={sid}edits={0} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Notice sid={sid}edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
        </>
     )
 }

@@ -54,7 +54,7 @@ const Dashboard = (props) => {
 
 
   let dat = clasz.map((props, index)=>{
-    return <CListGroupItem target='_blank' className="m-0" href={`#/staffs/${props.id}`} active>
+    return <CListGroupItem key={index} target='_blank' className="m-0" href={`#/staffs/${props.id}`} active>
       <CRow>
         <CCol xs='2' className='m-0'>
             <img
@@ -62,7 +62,7 @@ const Dashboard = (props) => {
                height="30px"
                alt="profile-image" 
                class="profile"
-               onError={(e)=>{e.target.onerror=null; e.target.src='/icons/profile_1.png'} }
+               onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/icons/profile_1.png'} }
                />
         </CCol>
         <CCol>

@@ -58,11 +58,11 @@ render() {
         useTransform:true
       };
       var textArray = [
-        '/icons/profile_1.png',
-        '/icons/profile_2.png',
-        '/icons/profile_3.png',
-        '/icons/profile_4.png',
-        '/icons/profile_5.png'
+        process.env.PUBLIC_URL +'/icons/profile_1.png',
+        process.env.PUBLIC_URL +'/icons/profile_2.png',
+        process.env.PUBLIC_URL +'/icons/profile_3.png',
+        process.env.PUBLIC_URL +'/icons/profile_4.png',
+        process.env.PUBLIC_URL +'/icons/profile_5.png'
     ];
       var randomNumber = Math.floor(Math.random()*textArray.length)
       let data = this.props.birthdayz;
@@ -74,7 +74,7 @@ return (
             data !== undefined && Array.isArray(data) ? data.map((prp, ing)=>{
             return <div key={ing} class="col-md-12">
                     <div class="card profile-card-1">
-                        <img src="/bg.jpeg" alt="profile-sample1" class="background"/>
+                        <img src={process.env.PUBLIC_URL + "/bg.jpeg"} alt="profile-sample1" class="background"/>
                         <img 
                         src={process.env.REACT_APP_SERVER_URL + prp.photo} 
                         alt="profile-image" 

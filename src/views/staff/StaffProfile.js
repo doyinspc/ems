@@ -16,7 +16,7 @@ import StaffLessonPlan from './StaffLessonPlan';
 import StaffExperience from './StaffExperience';
 import StaffProfessional from './StaffProfessional';
 import StaffEducation from './StaffEducation';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import TheHeaderDropdown from './TheHeaderDropdown';
 import CIcon from '@coreui/icons-react'
 
@@ -45,9 +45,29 @@ const User = (props, {match}) => {
   }
   
   
-  console.log()
+
   const { employment_no, id, surname, firstname, middlename, photo } = props.staff || {};
   const fullname = surname+' '+firstname+' '+middlename;
+ 
+  let acs = props.user.access !== undefined && props.user.access.length > 0 ? JSON.parse(props.user.access) : {};
+  let secarry = {}
+  if(Object.keys(acs) > 0 && props.isAdmin === false)
+  {
+      let ids = props.activeschool !== undefined ? props.activeschool.id : null;
+      if(acs !== undefined  && acs.hasOwnProperty(ids))
+      {
+         secarry = acs[ids][0]
+      }else
+      {
+        return <Redirect to="/" />
+      }
+  }else if(props.isAdmin === true)
+  {
+     // return <Redirect to="/" />
+  }
+  else{
+      return <Redirect to="/" />
+  }
 
   return (
     <>
@@ -87,6 +107,7 @@ const User = (props, {match}) => {
                     >
                     <strong>Personal</strong>
                     </CDropdownItem>
+                    {0 in secarry || props.isAdmin ?
                     <CDropdownItem  onClick={(prev)=>setShowedx(0)}>
                         <CIcon 
                             name="cil-user" 
@@ -94,7 +115,8 @@ const User = (props, {match}) => {
                            
                         /> 
                         Basic Information
-                    </CDropdownItem>
+                    </CDropdownItem>:''}
+                    {1 in secarry || props.isAdmin ?
                     <CDropdownItem onClick={(prev)=>setShowedx(1)}>
                         <CIcon 
                             name="cil-book" 
@@ -102,7 +124,8 @@ const User = (props, {match}) => {
                             
                         /> 
                         Education History
-                    </CDropdownItem>
+                    </CDropdownItem>:''}
+                    {2 in secarry || props.isAdmin?
                     <CDropdownItem onClick={(prev)=>setShowedx(2)}>
                         <CIcon 
                             name="cil-badge" 
@@ -110,7 +133,8 @@ const User = (props, {match}) => {
                             
                         /> 
                         Professional Certifications
-                    </CDropdownItem>
+                    </CDropdownItem>:''}
+                    {3 in secarry || props.isAdmin?
                     <CDropdownItem  onClick={(prev)=>setShowedx(3)}>
                         <CIcon 
                             name="cil-mug-tea" 
@@ -118,7 +142,8 @@ const User = (props, {match}) => {
                            
                         /> 
                         Work History
-                    </CDropdownItem>
+                    </CDropdownItem>:''}
+                    {3 in secarry || props.isAdmin ?
                     <CDropdownItem>
                         <CIcon 
                             name="cil-flight-takeoff" 
@@ -126,26 +151,26 @@ const User = (props, {match}) => {
                             
                         /> 
                         Leave Applications
-                    </CDropdownItem>
+                    </CDropdownItem>:''}
+                  
                   <CDropdownItem
                     header
                     tag="div"
                     color="light"
                     className="text-center"
-                    onClick={(prev)=>setShowedx(4)}
                     >
                     <strong>Official</strong>
                     </CDropdownItem>
-                   
-                    <CDropdownItem onClick={(prev)=>setShowedx(5)}>
+                    {4 in secarry ?
+                    <CDropdownItem onClick={(prev)=>setShowedx(4)}>
                         <CIcon 
                             name="cil-weightlifitng" 
                             className="mfe-2" 
                             
                         /> 
                         Job Roles
-                    </CDropdownItem>
-                    <CDropdownItem onClick={(prev)=>setShowedx(6)}>
+                    </CDropdownItem>:''}
+                    <CDropdownItem onClick={(prev)=>setShowedx(5)}>
                         <CIcon 
                             name="cil-task" 
                             className="mfe-2" 
@@ -200,6 +225,7 @@ const User = (props, {match}) => {
       <CDropdownItem onClick={()=>setEditedx(3)}><i className='text-secondary fa fa-edit'></i>{"  ."} Next of Kin</CDropdownItem>
       <CDropdownItem onClick={()=>setEditedx(4)}><i className='text-secondary fa fa-edit'></i>{"  ."} Photo</CDropdownItem>
       <CDropdownItem onClick={()=>setEditedx(5)}><i className='text-secondary fa fa-edit'></i>{"  ."} Password</CDropdownItem>
+      <CDropdownItem onClick={()=>setEditedx(6)}><i className='text-secondary fa fa-edit'></i>{"  ."} Exit</CDropdownItem>
               </CDropdownMenu>
               </CDropdown>
             </CButtonGroup>  
@@ -209,25 +235,27 @@ const User = (props, {match}) => {
          </CCard>
       </CCol>
     </CRow>
-    {edited > 0 ? <StaffAdd editid={edited} data={props.staff} />:''}
+    {edited > 0 ? <StaffAdd editid={edited} data={props.staff} personal={false} />:''}
     {showed === 0 && edited === 0 ? <StaffBio  staff={props.staff} />:''}
     {showed === 1 && edited === 0 ? <StaffEducation  sid={staffid}  />:''}
     {showed === 2 && edited === 0 ? <StaffProfessional  sid={staffid}  />:''}
     {showed === 3 && edited === 0 ? <StaffExperience sid={staffid}   />:''}
     {showed === 4 && edited === 0 ? <StaffLeave  sid={staffid}  />:''}
-    {showed === 5 && edited === 0 ? <StaffJob  sid={staffid}  />:''}
-    {showed === 6 && edited === 0 ? <StaffReport  sid={staffid}  />:''}
-    {showed === 7 && edited === 0 ? <StaffReport  sid={staffid}  />:''}
-    {showed === 8 && edited === 0 ? <StaffClassReport sid={staffid}  />:''}
-    {showed === 9 && edited === 0 ? <StaffSubjectReport sid={staffid}  />:''}
-    {showed === 10 && edited === 0 ? <StaffLessonPlan sid={staffid}   />:''}
-    {showed === 11 && edited === 0 ? <StaffLog sid={staffid}   />:''}
-    {showed === 12 && edited === 0 ? <StaffAccess sid={staffid}  data={props.staff}  />:''}
+    {showed === 5 && edited === 0 ? <StaffJob  sid={staffid}  personal={false} />:''}
+    {showed === 6 && edited === 0 ? <StaffReport  sid={staffid} personal={false}  />:''}
+    {showed === 7 && edited === 0 ? <StaffReport  sid={staffid} personal={false}  />:''}
+    {showed === 8 && edited === 0 ? <StaffClassReport sid={staffid} personal={false}  />:''}
+    {showed === 9 && edited === 0 ? <StaffSubjectReport sid={staffid} personal={false} />:''}
+    {showed === 10 && edited === 0 ? <StaffLessonPlan sid={staffid}  personal={false}  />:''}
+    {showed === 11 && edited === 0 ? <StaffLog sid={staffid}  personal={false}  />:''}
+    {showed === 12 && edited === 0 ? <StaffAccess sid={staffid}  personal={false} data={props.staff}  />:''}
     </>
   )
 }
 const mapStateToProps = (state) =>({
   user:state.userReducer.user,
+  isAdmin:state.userReducer.isAdmin,
+  activeschool:state.userReducer.activeschool,
   staff:state.staffReducer.staff,
   staffleave:state.staffleaveReducer.staffleave,
   staffreport:state.staffreportReducer.staffreport,

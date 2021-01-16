@@ -1,3 +1,4 @@
+import { callReg, callSuccess } from "../../actions/common";
 import {
     STAFFEDUCATION_GET_MULTIPLE,
     STAFFEDUCATION_GET_ONE,
@@ -66,6 +67,7 @@ export default function(state = initialState, action){
             };
         case STAFFEDUCATION_REGISTER_SUCCESS:
             localStorage.setItem('staffeducation', JSON.stringify([...state.staffeducations, action.payload]));
+            callReg()
             return {
                 ...state,
                 staffeducations: [...state.staffeducations, action.payload],
@@ -84,7 +86,6 @@ export default function(state = initialState, action){
             localStorage.setItem('staffeducation', JSON.stringify(rem));
             return{
                 ...state,
-                msg:'DONE!!!',
                 staffeducations: rem
             }
         case STAFFEDUCATION_UPDATE_SUCCESS:
@@ -92,6 +93,7 @@ export default function(state = initialState, action){
             let newState = [...state.staffeducations];
             newState[findInd] = action.payload;
             localStorage.setItem('staffeducation', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

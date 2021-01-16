@@ -76,7 +76,6 @@ useEffect(() => {
 
 let dt = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns : [[], []];
 const changeSchool = (data) =>{
-  
       props.settSchool(data)
 }
 const changeTerm = (data) =>{
@@ -86,13 +85,13 @@ const changeMenu = () =>{
       setShowmenu(prev=>!prev);
 }
 //IF NO SCHOOL IS SET SET ACTIVE SCHOOL AUTOMATICALY
-if(!props.user.activeschool.hasOwnProperty('id') ||  props.user.activeschool === undefined || parseInt(props.user.activeschool.id) >! 0 )
+if(!props.user.activeschool.hasOwnProperty('id') ||  props.user.activeschool === undefined )
 {
   //GET STAFF SCHOOl
-  let myCurrentSchool = props.user.user !== undefined && props.user.user.hasOwnProperty('schoolid') && parseInt(props.user.user.schoolid) > 0 ? props.user.user.schoolid :'null'
+  let myCurrentSchool = props.user.user !== undefined && props.user.user !== null && props.user.user.hasOwnProperty('schoolid') && parseInt(props.user.user.schoolid) > 0 ? props.user.user.schoolid :'null'
   if(parseInt(myCurrentSchool) > 0)
   {
-      let sd = props.user.mySchoolData !== undefined && Array.isArray(props.user.mySchoolData) ? props.user.mySchoolData.filter(rw =>rw !== null).filter(rw=>parseInt(rw.id) === parseInt(myCurrentSchool)):[]
+      let sd = props.user.mySchoolData !== null && props.user.user !== undefined && Array.isArray(props.user.mySchoolData) ? props.user.mySchoolData.filter(rw =>rw !== null).filter(rw=>parseInt(rw.id) === parseInt(myCurrentSchool)):[]
       if(sd.length > 0)
       {
         changeSchool(sd[0])
@@ -104,7 +103,9 @@ if(!props.user.activeschool.hasOwnProperty('id') ||  props.user.activeschool ===
 
   
 }
+
 let schdata = props.user.mySchoolData !== undefined && Array.isArray(props.user.mySchoolData) ? props.user.mySchoolData :[]
+
 return (
     <>
     <CRow>

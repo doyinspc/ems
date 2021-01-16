@@ -22,7 +22,7 @@ const Header = (props) => {
           <CRow>
           <CCol xs={2} sm="1">
                 <img
-                    src={props.icon}
+                    src={process.env.PUBLIC_URL + props.icon}
                     height='40px'
                 />
           </CCol>

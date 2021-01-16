@@ -1,6 +1,7 @@
 import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { getStaffs, getStaff, registerStaff, updateStaff, deleteStaff } from './../../actions/staff/staff';
+import { updateUser } from './../../actions/user';
 import { getSessions } from './../../actions/setting/session';
 import { getSchools } from './../../actions/setting/school';
 import { getLevels } from './../../actions/setting/level';
@@ -23,17 +24,16 @@ import {
   CLabel,
   CCardFooter,
   CInputFile,
-  CButtonGroup
+  CButtonGroup,
+  CAlert,
+  CProgress
 
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { allrelations, setElement, states } from '../../actions/common';
-
+import { allrelationsx,  setElement, states, allpensions } from '../../actions/common';
 
 const Staffs = (props) => {
     const history = useHistory()
-    const [active, setActive] = useState(0)
-    const [editid, setEditid] = useState(props.editid)
     const [id, setId] = useState(null)
     const [title, setTitle] = useState(null)
     const [surname, setSurname] = useState('')
@@ -81,8 +81,13 @@ const Staffs = (props) => {
     const [dol, setDol] = useState('')
     const [reason, setReason] = useState('')
     const [is_active, setIs_active] = useState(0)
+
     //EDUCATION
-      
+    const [npassword, setNpassword] = useState('')
+    const [rpassword, setRpassword] = useState('')
+    const [pension, setPension] = useState([]) 
+
+    
 
     useEffect(() => {
         let data = props.data; 
@@ -175,15 +180,7 @@ const Staffs = (props) => {
     }
   
     useEffect(() => {
-    //     let params1 = {
-    //       data:JSON.stringify({
-    //           'schoolid':schoolid
-    //       }),
-    //       cat:'select',
-    //       table:'sessions',
-    //       narration:'get sessions'
-    //   }
-    //     props.getSessions(params1)
+
         let params2 = {
           data:JSON.stringify({
               'schoolid':schoolid
@@ -204,16 +201,45 @@ const Staffs = (props) => {
         props.getDepartments(params2a)
         
       }, [schoolid])
-  
     
-    const handlePictureActivate = num =>{
-        let fd = new FormData();
-        fd.append('id', id);
-        fd.append('files', photo);
-        fd.append('cat', 'update');
-        fd.append('table', 'staffs');
+    const handlePassword = () =>{ 
+        if(npassword === rpassword)
+        {
+            let fd = new FormData();
+            fd.append('id', id);
+            fd.append('passwd', npassword);
+            fd.append('cat', 'update');
+            
+            if(props.personal)
+            {
+                fd.append('table', 'staffs');
+                props.updateUser(fd)
+            }else{
+                fd.append('table', 'staffs');
+                props.updateStaff(fd)
+            }
+        }
 
-        props.updateStaff(fd)
+    }
+    const handlePasswordAutomatic = () =>{  
+        if(props.data.email.length > 0)
+        {
+            let fd = new FormData();
+            fd.append('id', id);
+            fd.append('email', props.data.email);
+            fd.append('fname', props.data.surname+" "+props.data.firstname+" "+props.data.middlename);
+            fd.append('memp', props.data.employment_no);
+            fd.append('cat', 'updatepassword');
+            
+            if(props.personal)
+            {
+                fd.append('table', 'staffs');
+                props.updateUser(fd)
+            }else{
+                fd.append('table', 'staffs');
+                props.updateStaff(fd)
+            }
+    }
 
     }
     const handlePicture1 = () =>{  
@@ -221,9 +247,16 @@ const Staffs = (props) => {
         fd.append('id', id);
         fd.append('files', photo);
         fd.append('cat', 'update');
-        fd.append('table', 'staffs');
+        
 
-        props.updateStaff(fd)
+        if(props.personal)
+        {
+            fd.append('table', 'staffs');
+            props.updateUser(fd)
+        }else{
+            fd.append('table', 'staffs');
+            props.updateStaff(fd)
+        }
 
     }
     const handleCare1 = () =>{
@@ -237,7 +270,12 @@ const Staffs = (props) => {
         fd.append('kin1_address', kin1_address);
         fd.append('cat', 'update');
         fd.append('table', 'staffs');
-        props.updateStaff(fd)
+        if(props.personal)
+        {
+                props.updateUser(fd)
+        }else{
+                props.updateStaff(fd)
+        }
         
     }
     const handleCare2 = () =>{
@@ -251,7 +289,13 @@ const Staffs = (props) => {
         fd.append('kin2_address', kin2_address);
         fd.append('cat', 'update');
         fd.append('table', 'staffs');
-        props.updateStaff(fd)
+        if(props.personal)
+        {
+            console.log(56)
+            props.updateUser(fd)
+        }else{
+            props.updateStaff(fd)
+        }
         
     }
     const handleCare1Reset = () =>{
@@ -305,11 +349,10 @@ const Staffs = (props) => {
     }
     const handleSubmit = () =>{
         let fd = new FormData();
-        fd.append('title', title);
-        fd.append('surname', surname);
-        fd.append('firstname', firstname);
-        fd.append('middlename', middlename);
-        fd.append('dob', dob);
+       // fd.append('title', title);
+       // fd.append('surname', surname);
+       // fd.append('firstname', firstname);
+       // fd.append('middlename', middlename);
         fd.append('soo', soo);
         fd.append('lga', lga);
         fd.append('tin', tin);
@@ -329,7 +372,12 @@ const Staffs = (props) => {
         {
             fd.append('id', id);
             fd.append('cat', 'update');
-            props.updateStaff(fd)
+            if(props.personal)
+            {
+                props.updateUser(fd)
+            }else{
+                props.updateStaff(fd)
+            }
         }
     }
     const handleSubmitem = () =>{
@@ -338,6 +386,8 @@ const Staffs = (props) => {
         fd.append('surname', surname);
         fd.append('firstname', firstname);
         fd.append('middlename', middlename);
+        fd.append('dob', dob);
+        fd.append('doe', doe);
         fd.append('phone1', phone1);
         fd.append('phone2', phone2);
         fd.append('email', email);
@@ -351,7 +401,12 @@ const Staffs = (props) => {
         {
             fd.append('id', id);
             fd.append('cat', 'update');
-            props.updateStaff(fd)
+            if(props.personal)
+            {
+                props.updateUser(fd)
+            }else{
+                props.updateStaff(fd)
+            }
         }else
         {
             fd.append('cat', 'insert');
@@ -395,10 +450,9 @@ let desarray = designationsarray.filter(rw=>rw !== null).map((rw, ind) =>{
     return <option key={ind} value={rw.id}>{rw.name}</option>
 })
 
-let penmanagersarray = props.penmanagers && Array.isArray(props.penmanagers) ? props.penmanagers : [];
-let penarray = penmanagersarray.filter(rw=>rw !== null).map((rw, ind) =>{
-    return <option key={ind} value={rw.id}>{rw.name}</option>
-})
+let penarray = allpensions && allpensions !== undefined && Array.isArray(allpensions)? allpensions.filter(rw=>rw !== null && rw !== undefined).map((rw, ind) =>{
+    return <option key={ind} value={rw}>{rw}</option>
+}): ''
 
 let starray = states.filter(rw=>rw !== null).map((rw, ind) =>{
     return <option key={ind} value={rw.state}>{rw.state}</option>
@@ -409,10 +463,25 @@ let lgarray = lgar.length > 0 ? lgar[0].lgas.map((rw1, ind) =>{
     return <option key={ind} value={rw1}>{rw1}</option>
 }): '';
 
-let relarray = Object.keys(allrelations).map((rw1, ind) =>{
+let relarray = Object.keys(allrelationsx).map((rw1, ind) =>{
     return <option key={ind} value={rw1}>{rw1}</option>
 });
-
+const setAlert = () =>{
+    return <CAlert
+    color="warning"
+    show={true}
+    closeButton
+  >
+    I will be closed in 400 seconds!
+    <CProgress
+      striped
+      color="warning"
+      value={400 * 10}
+      size="xs"
+      className="mb-3"
+    />
+  </CAlert>
+}
   return (
     <>
   {props.editid === 2 ?
@@ -486,6 +555,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                     <CInput 
                         id="dob" 
                         defaultValue={dob}
+                        disabled={true}
                         type='date'
                         aria-required 
                         placeholder="Enter dob"
@@ -780,7 +850,36 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                         />
                 </CFormGroup>
                 </CCol>
-                <CCol xs="12" sm='8'>
+                <CCol xs="12" sm='4'>
+                <CFormGroup>
+  <CLabel htmlFor="doe">Date of Employment<i className='text-danger'>*</i></CLabel>
+                    <CInput 
+                        id="doe" 
+                        defaultValue={doe}
+                        type='date'
+                        aria-required 
+                        onChange={(e)=>setDoe(e.target.value)} 
+                        required 
+                        />
+                </CFormGroup>
+                </CCol>
+                <CCol xs="12" sm='4'>
+                <CFormGroup>
+                    <CLabel htmlFor="dob">Date of Birth<i className='text-danger'>*</i></CLabel>
+                    <CInput 
+                        id="dob" 
+                        defaultValue={dob}
+                        type='date'
+                        aria-required 
+                        placeholder="Enter dob"
+                        onChange={(e)=>setDob(e.target.value)} 
+                        required 
+                        />
+                </CFormGroup>
+                </CCol>           
+            </CRow>          
+            <CRow>
+            <CCol xs="12" sm='4'>
                 <CFormGroup>
                     <CLabel htmlFor="School">School<i className='text-danger'>*</i></CLabel>
                     <CSelect 
@@ -797,22 +896,6 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                 </CFormGroup>
                 </CCol>
                 
-            </CRow>
-            
-            <CRow>
-                <CCol xs="12" sm='4'>
-                <CFormGroup>
-  <CLabel htmlFor="doe">Date of Employment<i className='text-danger'>*</i>{doe}</CLabel>
-                    <CInput 
-                        id="doe" 
-                        defaultValue={doe}
-                        type='date'
-                        aria-required 
-                        onChange={(e)=>setDoe(e.target.value)} 
-                        required 
-                        />
-                </CFormGroup>
-                </CCol>
                 <CCol xs="12" sm='4'>
                 <CFormGroup>
                     <CLabel htmlFor="department">Department<i className='text-danger'>*</i></CLabel>
@@ -917,7 +1000,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin1_name">Name of Next of Kin<i className='text-danger'>*</i></CLabel>
                                 <CInput 
                                     id="kin1_name" 
-                                    defaultValue={kin1_name}
+                                    value={kin1_name}
                                     aria-required 
                                     placeholder="Next of Kin Fullname"
                                     onChange={(e)=>setKin1_name(e.target.value)} 
@@ -932,7 +1015,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin1_rel">Relationship to Staff<i className='text-danger'>*</i></CLabel>
                                 <CSelect 
                                     id="kin1_rel" 
-                                    defaultValue={kin1_rel}
+                                    value={kin1_rel}
                                     aria-required 
                                     placeholder="Enter kin1_rel"
                                     onChange={(e)=>setKin1_rel(e.target.value)} 
@@ -949,7 +1032,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin1_phone1">Phone Number<i className='text-danger'>*</i></CLabel>
                                 <CInput 
                                     id="kin1_phone1" 
-                                    defaultValue={kin1_phone1}
+                                    value={kin1_phone1}
                                     aria-required 
                                     placeholder="080123456789"
                                     onChange={(e)=>setKin1_phone1(e.target.value)} 
@@ -964,7 +1047,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin1_phone2">Alternative Phone Number</CLabel>
                                 <CInput 
                                     id="kin1_phone2" 
-                                    defaultValue={kin1_phone2}
+                                    value={kin1_phone2}
                                     placeholder="080123456789"
                                     onChange={(e)=>setKin1_phone2(e.target.value)} 
                                     />
@@ -977,9 +1060,9 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin1_email">Email</CLabel>
                                 <CInput 
                                     id="kin1_email" 
-                                    defaultValue={kin1_email}
+                                    value={kin1_email}
                                     type='email'
-                                    placeholder="080123456789"
+                                    placeholder="info@mail.com"
                                     onChange={(e)=>setKin1_email(e.target.value)} 
                                     />
                             </CFormGroup>
@@ -992,7 +1075,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin1_address">Address</CLabel>
                                 <CTextarea 
                                     id="kin1_address" 
-                                    defaultValue={kin1_address}
+                                    value={kin1_address}
                                     placeholder="....P.0. Box "
                                     onChange={(e)=>setKin1_address(e.target.value)} 
                                     />
@@ -1021,7 +1104,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin2_name">Name of Next of Kin<i className='text-danger'>*</i></CLabel>
                                 <CInput 
                                     id="kin2_name" 
-                                    defaultValue={kin2_name}
+                                    value={kin2_name}
                                     aria-required 
                                     placeholder="Next of Kin Fullname"
                                     onChange={(e)=>setKin2_name(e.target.value)} 
@@ -1036,7 +1119,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin2_rel">Relationship to Staff<i className='text-danger'>*</i></CLabel>
                                 <CSelect 
                                     id="kin2_rel" 
-                                    defaultValue={kin2_rel}
+                                    value={kin2_rel}
                                     aria-required 
                                     placeholder="Enter kin2_rel"
                                     onChange={(e)=>setKin2_rel(e.target.value)} 
@@ -1053,7 +1136,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin2_phone1">Phone Number<i className='text-danger'>*</i></CLabel>
                                 <CInput 
                                     id="kin2_phone1" 
-                                    defaultValue={kin2_phone1}
+                                    value={kin2_phone1}
                                     aria-required 
                                     placeholder="080123456789"
                                     onChange={(e)=>setKin2_phone1(e.target.value)} 
@@ -1068,7 +1151,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin2_phone2">Alternative Phone Number</CLabel>
                                 <CInput 
                                     id="kin2_phone2" 
-                                    defaultValue={kin2_phone2}
+                                    value={kin2_phone2}
                                     placeholder="080123456789"
                                     onChange={(e)=>setKin2_phone2(e.target.value)} 
                                     />
@@ -1081,9 +1164,9 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin2_email">Email</CLabel>
                                 <CInput 
                                     id="kin2_email" 
-                                    defaultValue={kin2_email}
+                                    value={kin2_email}
                                     type='email'
-                                    placeholder="080123456789"
+                                    placeholder="info@mail.com"
                                     onChange={(e)=>setKin2_email(e.target.value)} 
                                     />
                             </CFormGroup>
@@ -1096,7 +1179,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 <CLabel htmlFor="kin2_address">Address</CLabel>
                                 <CTextarea 
                                     id="kin2_address" 
-                                    defaultValue={kin2_address}
+                                    value={kin2_address}
                                     placeholder="....P.0. Box "
                                     onChange={(e)=>setKin2_address(e.target.value)} 
                                     />
@@ -1127,16 +1210,17 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                     <CCol xs="12" sm='12' >
                         <CFormGroup>
                             <CLabel htmlFor="employment">
-                                Staff Photo<br/>
+                                <strong>Staff Passport photo</strong><br/>
+                                Note : image should show both ears, no glasses, hat or mask
                                 </CLabel>
                             <CCol xs="12" md="9" className='text-center'>
                             <img 
-                                src={process.env.REACT_APP_SERVER_URL+ links} 
+                                src={process.env.REACT_APP_SERVER_URL + links} 
                                 className="m-0 p-0" 
-                                width='100px'
-                                height='100px'
+                                width='180px'
+                                height='200px'
                                 alt={employment} 
-                                onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
+                                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL +'avatars/1.png' }}
                              />
                              </CCol>
                              <CCol xs="12" md="9" className='mt-5'>
@@ -1150,10 +1234,9 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 Choose file...
                                 </CLabel>
                             </CCol>
-                            <CCol xs="12" md="9" className='mt-2 text-center'>
+                            <CCol xs="12" md="6" className='mt-2 text-center'>
                             <CButtonGroup className="mr-2">
                                 <CButton color="secondary" onClick={handlePicture1}><i className='fa fa-save'></i> Save</CButton>
-                                {parseInt(photo) === 1 ? '' :<CButton color="secondary" onClick={()=>handlePictureActivate(1)}>Activate</CButton>}
                             </CButtonGroup>
                             </CCol>
                         </CFormGroup>
@@ -1165,6 +1248,47 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
     </CRow>
     :''}
   {props.editid === 5 ?
+    <CRow>
+    <CCol sm="6" md="6">
+                    <CCard>
+                        <CCardBody>
+                        <CRow>
+                            <CCol xs="12">
+                                <CFormGroup>
+                                    <CLabel htmlFor="npassword">New Password</CLabel>
+                                    <CInput 
+                                        id="npassword" 
+                                        type='password'
+                                        defaultValue={npassword}
+                                        placeholder=""
+                                        onChange={(e)=>setNpassword(e.target.value)} 
+                                        />
+                                </CFormGroup>
+                            </CCol>
+                            <CCol xs="12">
+                                <CFormGroup>
+                                    <CLabel htmlFor="rpassword">Repeat New Password</CLabel>
+                                    <CInput 
+                                        id="rpassword" 
+                                        type='password'
+                                        defaultValue={rpassword}
+                                        placeholder=""
+                                        onChange={(e)=>setRpassword(e.target.value)} 
+                                        />
+                                </CFormGroup>
+                            </CCol>
+                        </CRow>
+                        
+                        </CCardBody>
+                        <CCardFooter>
+                            <CButton type="button" size="sm" color="primary" onClick={handlePassword}><CIcon name="cil-scrubber" /> Submit</CButton>
+                            <CButton type="button" size="sm" color="danger" onClick={handlePasswordAutomatic}><CIcon name="cil-ban" /> Generate and Email New Password</CButton>
+                        </CCardFooter>
+                    </CCard>
+                    </CCol>
+    </CRow>
+   :''}
+  {props.editid === 6 ?
     <CRow>
     <CCol sm="12" md="12">
                     <CCard>
@@ -1232,6 +1356,7 @@ const mapStateToProps = (state) =>({
     getLevels,
     getDepartments,
     getDesignations,
-    getPenmanagers
+    getPenmanagers,
+    updateUser
   })(Staffs)
   

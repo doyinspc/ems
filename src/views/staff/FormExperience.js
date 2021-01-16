@@ -98,7 +98,7 @@ const Staffexperiences = (props) => {
                                     id="Organisation" 
                                     name='text'
                                     defaultValue={organisation}
-                                    placeholder="Ministry Of Education "
+                                    placeholder="Ministry Of Education, Kano "
                                     onChange={(e)=>setOrganisation(e.target.value)} 
                                     />
                             </CFormGroup>

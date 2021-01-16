@@ -8,7 +8,6 @@ import {
   CContainer,
 } from '@coreui/react'
 import { Link } from 'react-router-dom';
-import StaffDashboardDefault from './../../staff/StaffDashboardDefault'
 import Header from './Header';
 
 
@@ -39,7 +38,7 @@ const Student = (props) => {
                     <CRow className='text-center flex align-self-center justify-contents-center' lg={12} style={{marginTop:'10px', marginBottom:'20px', textAlign:'center'}}>
                       <CCol>
                         <img
-                          src={prop.icon}
+                          src={process.env.PUBLIC_URL + prop.icon}
                           height="100px"
                           style={{borderRadius:'50%'}}
                           />

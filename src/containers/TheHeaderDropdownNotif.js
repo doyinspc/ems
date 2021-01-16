@@ -10,7 +10,7 @@ import {
 import CIcon from '@coreui/icons-react'
 
 const TheHeaderDropdownNotif = () => {
-  const itemsCount = 5
+  const itemsCount = 0
   return (
     <CDropdown
       inNav
@@ -29,7 +29,7 @@ const TheHeaderDropdownNotif = () => {
         >
           <strong>You have {itemsCount} notifications</strong>
         </CDropdownItem>
-        <CDropdownItem><CIcon name="cil-user-follow" className="mr-2 text-success" /> New user registered</CDropdownItem>
+        {/*<CDropdownItem><CIcon name="cil-user-follow" className="mr-2 text-success" /> New user registered</CDropdownItem>
         <CDropdownItem><CIcon name="cil-user-unfollow" className="mr-2 text-danger" /> User deleted</CDropdownItem>
         <CDropdownItem><CIcon name="cil-chart-pie" className="mr-2 text-info" /> Sales report is ready</CDropdownItem>
         <CDropdownItem><CIcon name="cil-basket" className="mr-2 text-primary" /> New client</CDropdownItem>
@@ -62,7 +62,7 @@ const TheHeaderDropdownNotif = () => {
           <CProgress size="xs" color="danger" value={90} />
           <small className="text-muted">243GB/256GB</small>
         </CDropdownItem>
-      </CDropdownMenu>
+      */}</CDropdownMenu>
     </CDropdown>
   )
 }

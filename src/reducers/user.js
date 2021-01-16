@@ -28,21 +28,13 @@ import {
     USER_DELETE_FAIL,
     USER_EDIT
 } from "../types/user";
-//import Swal from 'sweetalert2';
+import {callSuccess, callError, callReg} from './../actions/common'
 
- const callError = ($err) =>{
-    // Swal.fire({
-    //     position: 'top-end',
-    //     icon: 'error',
-    //     title: 'Check your internet connection or confirm you are using the right loging information',
-    //     showConfirmButton: false,
-    //     timer: 1500
-    //   })
- }
+
  const callLoading = () =>{
     // Swal.fire({
     //     position: 'top-end',
-    //     icon: 'info',
+    //     icon: 'inf
     //     title: 'Please wait... processing',
     //     showConfirmButton: false,
     //     timer: 1500
@@ -58,25 +50,28 @@ let myDataStore = JSON.parse(localStorage.getItem('mydata'))
 let myTermStore = JSON.parse(localStorage.getItem('myterm'))
 let user = null
 let myregschx = null
+let mscx = ''
 if(userx !== null){
 user = userx;
 let accx = user.access !=='' ? JSON.parse(user.access):[[1],[],[],[],[]];
 let schsx = Object.keys(accx);
 myregschx = user.schoolid && parseInt(user.schoolid) > 0 ? [...schsx, user.schoolid] : schsx;
+mscx = parseInt(user.is_admin) === 1 ? [1 ,2, 3, 4, 5, 6, 7, 8, 9, 10]: myregschx;
 }        
 
+//localStorage.clear()
 const initialState = {
     token: localStorage.getItem('token'),
     user: user  && user !== undefined && parseInt(user.id) > 0 ? userx: null,
     mid: user  && user !== undefined && parseInt(user.id) > 0 ? user.id: null,
     username: user  && user !== undefined && parseInt(user.id) > 0 ? user.surname+" "+user.firstname+" "+user.middlename: null,
-    myschools:myregschx && Array.isArray(myregschx)? myregschx : [],
+    myschools:mscx && Array.isArray(mscx)? mscx : [],
     myTermData:myTermStore ? myTermStore : [],
     mySchoolData:mySchoolStore ? mySchoolStore : [],
     myData:myDataStore ? myDataStore : [],
     dropdowns:dropdownsStore ? dropdownsStore : [],
     activeschool:activeschoolStore ? activeschoolStore : {},
-    activeterm:activetermStore ? activetermStore : [],
+    activeterm:activetermStore ? activetermStore : {},
     isAuthenticated: auth  && parseInt(auth) === 1 ? true : false,
     isLoading: false,
     isRegistered: userx && parseInt(userx.id) > 0 ? true: false,
@@ -115,10 +110,11 @@ export default function(state = initialState, action){
             {
             localStorage.setItem('userx12345', JSON.stringify(action.payload));
             }
-            let acc = action.payload.access !=='' ? JSON.parse(action.payload.access):[[1],[],[],[],[]];
+            let acc = action.payload.access !=='' ? JSON.parse(action.payload.access):{};
             let schs = Object.keys(acc);
             let myregsch = action.payload.schoolid && parseInt(action.payload.schoolid) > 0 ? [...schs, action.payload.schoolid] : schs;
             let fname = action.payload.surname+" "+action.payload.firstname+" "+action.payload.middlename
+            let msc = parseInt(action.payload.is_admin) === 1 ? [1 ,2, 3, 4, 5, 6, 7, 8, 9, 10] : myregsch;
             return {
                 ...state,
                 isLoading: false,
@@ -126,7 +122,7 @@ export default function(state = initialState, action){
                 mid:action.payload.id,
                 user: JSON.parse(localStorage.getItem('userx12345')) ,
                 username: fname,
-                myschools: myregsch,
+                myschools: msc,
                 ref:23,
                 isAdmin: parseInt(action.payload.is_admin) === 1 ? true : false,
                 dates: action.payload.dates
@@ -144,11 +140,11 @@ export default function(state = initialState, action){
             };
        
          case USER_UPDATE_SUCCESS:
-            localStorage.setItem('user', JSON.stringify(action.payload));
+            localStorage.setItem('userx12345', JSON.stringify(action.payload));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,
-                dates : action.payload.dates,
                 user : action.payload
             }; 
          case USER_GET_DROPDOWNS:
@@ -206,13 +202,13 @@ export default function(state = initialState, action){
             localStorage.setItem('activeterm', JSON.stringify(action.payload));
             return {
                 ...state,
-                activeterm : action.payload
+                activeterm : JSON.parse(localStorage.getItem('activeterm'))
             };
           case USER_SET_SCHOOL:
             localStorage.setItem('activeschool', JSON.stringify(action.payload));
             return {
                 ...state,
-                activeschool : action.payload
+                activeschool : JSON.parse(localStorage.getItem('activeschool'))
             };
         case USER_LOGIN_ERROR:
         case USER_LOGOUT_SUCCESS:

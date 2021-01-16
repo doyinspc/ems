@@ -46,6 +46,20 @@ const Term = (props) => {
   const onDelete = (rw, dt) =>{
     
   }
+  const onActivate = (rw, num, sch) =>{
+  
+    let nu = parseInt(num) === 0 ? 1 : 0;
+    let fd = new FormData();
+    fd.append('id', rw);
+    fd.append('schoolid', sch);
+    fd.append('is_active', nu);
+    fd.append('cat', 'updateterm');
+    fd.append('table', 'terms');
+    fd.append('narration', `activate 0r deactivate term ${nu}`);
+    props.updateSubject(fd);
+
+  }
+
   
   const onReset = () =>{
     setId(null);
@@ -80,6 +94,7 @@ const Term = (props) => {
                 submenu={props.para.submenu}
                 onEdit={(rw)=>onEdit(rw)}
                 onDelete={(rw)=>onDelete(rw)}
+                onActivate={onActivate}
             />
           </CCardBody>
         </CCard>

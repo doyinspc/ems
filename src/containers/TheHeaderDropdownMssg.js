@@ -10,7 +10,7 @@ import {
 import CIcon from '@coreui/icons-react'
 
 const TheHeaderDropdownMssg = () => {
-  const itemsCount = 4
+  const itemsCount = 0
   return (
     <CDropdown
       inNav
@@ -28,7 +28,7 @@ const TheHeaderDropdownMssg = () => {
         >
           <strong>You have {itemsCount} messages</strong>
         </CDropdownItem>
-        <CDropdownItem href="#">
+       {/* <CDropdownItem href="#">
           <div className="message">
             <div className="pt-3 mr-3 float-left">
               <div className="c-avatar">
@@ -118,6 +118,7 @@ const TheHeaderDropdownMssg = () => {
             </div>
           </div>
         </CDropdownItem>
+        */}
         <CDropdownItem href="#" className="text-center border-top"><strong>View all messages</strong></CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

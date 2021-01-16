@@ -65,7 +65,7 @@ const Session = (props) => {
         fd.append('started', starts);
         fd.append('ended', ends);
         fd.append('table', 'sessions');
-        fd.append('schoolid', 1);
+        
   
         if(id && parseInt(id) > 0)
         {
@@ -77,7 +77,7 @@ const Session = (props) => {
         }else
         {
           //INSERT
-          
+          fd.append('schoolid', 1);
           fd.append('cat', 'insert');
           props.registerSession(fd)
         }
@@ -154,7 +154,8 @@ const Session = (props) => {
  )
 }
 const mapStateToProps = (state) =>({
-  sessions : state.sessionReducer
+  sessions : state.sessionReducer,
+  user : state.userReducer
 })
 export default connect(mapStateToProps, {
   registerSession,

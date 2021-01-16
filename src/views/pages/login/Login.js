@@ -24,6 +24,7 @@ const Login = (props) => {
   const [password, setPassword] = useState('')
 
   const handleSubmit = () =>{
+     console.log(12345)
       let fd = new FormData()
       fd.append('username', username)
       fd.append('password', password)
@@ -47,7 +48,7 @@ const Login = (props) => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
-                    <h1><img src='/avatars/logo.png' height='50px'/>Login</h1>
+                    <h1><img src={process.env.PUBLIC_URL + '/avatars/logo.png'} height='50px'/>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
@@ -73,7 +74,7 @@ const Login = (props) => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" onClick={handleSubmit} className="px-4">Login</CButton>
+                        <CButton color="primary" onClick={()=>handleSubmit()} className="px-4">Login</CButton>
                       </CCol>
                       <CCol xs="6" className="text-right">
                         

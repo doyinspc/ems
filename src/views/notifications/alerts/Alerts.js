@@ -156,11 +156,11 @@ const Alerts = () => {
                 closeButton
                 onShowChange={setVisible}
               >
-                I will be closed in {visible} seconds!
+                I will be closed in 400 seconds!
                 <CProgress
                   striped
                   color="warning"
-                  value={Number(visible) * 10}
+                  value={400 * 10}
                   size="xs"
                   className="mb-3"
                 />

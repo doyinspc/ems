@@ -1,15 +1,16 @@
-//import Swal from 'sweetalert2';
-export const API_PATHS = process.env.REACT_APP_API_PATHS;
+import Swal from 'sweetalert'
+export const API_PATHS = process.env.REACT_APP_API_PATH;
 export const API_PATH_SETTING = process.env.REACT_APP_API_PATH_SETTING;
-export const API_PATH_STUDENT = process.env.REACT_APP_API_PATH_STUDENT;
+export const API_PATH_STUDENT = process.env.REACT_APP_API_PATH_SETTING;
 export const API_PATH_STAFF = process.env.REACT_APP_API_PATH_SETTING;
-export const SERVER_PATHS = process.env.REACT_APP_SERVER_PATHS;
+export const SERVER_PATHS = process.env.REACT_APP_API_PATH_SETTING;
 export const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 export const MAIN_TOKEN ='';
 export const PICS = process.env.REACT_APP_PHOTO;
 export const imgx = process.env.REACT_APP_PHOTO;
 export const imgb = process.env.REACT_APP_BG;
 export const gradesjson = 'json/grades.json'
+export const pensionjson = 'json/pension.json'
 export const axiosConfig = {
     headers: {
         "Content-Type": "application/json;charset=UTF-8",
@@ -21,26 +22,32 @@ export const axiosConfig1 = {
         "Content-Type": "multipart/form-data",
     }
   };
+export const callReg = () =>{
+    return Swal("Done!", "Update saved!", "success");
+}
 export const callError = (err) =>{
-  /* Swal.fire({
-    position: 'top-end',
-    icon: 'error',
-    title: err,
-    showConfirmButton: false,
-    timer: 1000
-  }) */
+    return Swal("Failed!", err, "danger");
 }
 export const callSuccess = (err) =>{
-  /* Swal.fire({
-    position: 'top-end',
-    icon: 'success',
-    title: err,
-    showConfirmButton: false,
-    timer: 1000
-  }) */
+    return Swal("Saved!", "Update saved!", "success");
 }
+export const imageExist  = (imageSrc, callback) =>{
+  fetch(imageSrc, {method:'HEAD'})
+  .then(res=>{
+    if(res.ok){
+      callback(true)
+    }else{
+     callback(false)
+    }
+      
+  })
+  .catch(err=>{
+      callback(false)
+  })
+
+  }
 export const checkImage = imageSrc =>{
-      var img = new Image();
+  var img = new Image();
       try{
         img.src = imageSrc;
         return true;
@@ -67,6 +74,34 @@ export const allrelations = {
     'Grandparent':'Grandparent',
     'Sponsor':'Sponsor',
    };
+export const allrelationsx = {
+    'Father':'Father',
+    'Mother':'Mother',
+    'Spouse':'Spouse',
+    'Child':'Child',
+    'Sibling':'Sibling',
+    'Aunt':'Aunt',
+    'Uncle':'Uncle',
+    'Grandparent':'Grandparent'
+   };
+export const allpensions= ["Pensions Alliance Limited",
+"Apt Pension Fund Managers",
+"ARM Pension Managers",
+"Crusader Pensions Limited",
+"Fidelity Pensions Managers Limited",
+"First Guarantee Pension Limited",
+"First Pension Custodian Nigeria Limited",
+"Leadway Pensure PFA Limited",
+"National Pension Commission",
+"NLPC Pension Fund Administrators",
+"Oak Pensions Limited",
+"Premium Pension Limited",
+"Trustfund Pensions Plc",
+"AXA Mansard Pensions Limited",
+"Fug Pensions Limited",
+"Legacy Pension Managers Limited",
+"Sigma Pensions",
+"Stanbic IBTC Pension Managers Limited"];
 export const alllocationsObj = [
 {'value':1, 'label':'Kainji'},
 {'value':2, 'label':'Jebba'}
@@ -87,26 +122,27 @@ export const statussobj = [
 export const controls = {
     0: {
       name:'Staff',
-      data:{
-        0:'Bio Data & Employment',
-        1:'Education History',
-        2:'Professional Certificate',
-        3:'Work Experience',
-        4:'Leave Request History',
-        5:'Job Role',
-        6:'Performance',
-        7:'Report Commendations/Sanctions',
-        8:'Audit trail',
-        9:'Access',
-      }
+      data:[
+        {id:0, name:'Basic Information', icon:'cil-user'},
+        {id:1, name:'Education History', icon:'cil-book'},
+        {id:2, name:'Professional Certifications', icon:'cil-badge'},
+        {id:3, name:'Work History', icon:'cil-mug-tea'},
+        {id:4, name:'Leave', icon:'cil-flight-takeoff'},
+        {id:5, name:'Job Roles', icon:'cil-weightlifitng'},
+        {id:6, name:'Subject & Class', icon:''},
+        {id:7, name:'Comendations', icon:''},
+        {id:8, name:'Sanctios', icon:''},
+        {id:9, name:'Audit Trail', icon:''},
+        {id:10, name:'Access', icon:''}
+      ]
     },
     1: {
-      name:'Student',
-      data:{
-        0:'Biodata',
-        1:'Academic',
-        2:'Financial',
-      }
+      name:'Students',
+      data:[
+        {id:0, name:'Biodata', icon:'cil-user'},
+        {id:1, name:'Academic', icon:'cil-book'},
+        {id:2, name:'Fees', icon:'cil-money'},
+      ]
     },
     2: {
       name:'Setting',
@@ -116,6 +152,7 @@ export const controls = {
           name:'STAFF',
           icon:'/icons/staff.png',
           links:'/calendar',
+          description:'Add, Manage Staff Data',
           submenu:[
             {
               id:1,
@@ -127,13 +164,13 @@ export const controls = {
               id:2,
               name:'CURRENT STAFF',
               icon:'/icons/usergood.png',
-              links:'/staffs/1',
+              links:'/staffs',
               description:'All staff currently in employment'
             },{
               id:3,
               name:'EX STAFF',
               icon:'/icons/userbad.png',
-              links:'/staffs/2',
+              links:'/staffso',
               description:'All staff no longer in company service'
             }
           ]
@@ -143,6 +180,7 @@ export const controls = {
           name:'STUDENT',
           icon:'/icons/student.png',
           links:'/calendar',
+          description:'Add & Manage Student data',
           submenu:[
               {
                 id:1,
@@ -154,13 +192,13 @@ export const controls = {
                 id:2,
                 name:'CURRENT STUDENT',
                 icon:'/icons/usergood.png',
-                links:'/students/1',
+                links:'/students',
                 description:'All students in school base on active term'
               },{
                 id:3,
                 name:'EX STUDENT',
                 icon:'/icons/userbad.png',
-                links:'/students/2',
+                links:'/studentso',
                 description:'All students no longer in the school'
               }
             ]
@@ -170,12 +208,14 @@ export const controls = {
           name:'CALENDAR',
           icon:'/icons/calendar.png',
           links:'/setting/3/',
+          description:'Create, Modify Session, Terms, Assessments',
           submenu:[
             {
             id:1,
             name:'TERMS',
             icon:'/icons/calendar.png',
             links:'/setting/3/',
+            description:'Add, modify term',
             submenu:[
               {
                 id:1,
@@ -223,20 +263,15 @@ export const controls = {
                 links:'/setting/3/',
                 description:'Prepare school fees to be paid by students for the term'
               },
+              {
+                id:6,
+                name:'Quick Setup',
+                icon:'/icons/term_fee.png',
+                links:'/setting/3/',
+                description:'Use a previos data to update this terms data'
+              },
             ]
 
-          },
-          {
-            id:3,
-            name:'MAINTENANCE',
-            icon:'/icons/calendar.png',
-            links:'/calendar',
-          },
-          {
-            id:3,
-            name:'ANALYSIS',
-            icon:'/icons/calendar.png',
-            links:'/calendar',
           }
         ]
         },
@@ -244,18 +279,21 @@ export const controls = {
           id:4,
           name:'SCHOOL',
           icon:'/icons/school.png',
-          links:'/school'
+          links:'/school',
+          description:'Add & modify a school'
         },
         {
           id:5,
           name:'DEPARTMENT',
           icon:'/icons/department.png',
           links:'/department',
+          description:'Add & modify departments and units',
           submenu:[{
             id:1,
             name:'Unit',
             icon:'/icons/department.png',
             links:'/theme',
+            description:'Add & modify units',
             submenu:[]
           },]
         },
@@ -264,11 +302,13 @@ export const controls = {
           name:'SUBJECTS',
           icon:'/icons/subject.png',
           links:'/subject',
+          description:'Add & modify subjects, Scheme of work & Question bank',
           submenu:[{
             id:1,
             name:'SHEME OF WORK',
             icon:'/icons/department.png',
             links:'/theme',
+            description:'Add & modify subjects',
             submenu:[]
           },]
         },{
@@ -276,6 +316,7 @@ export const controls = {
           name:'ADMISSION',
           icon:'/icons/admission.png',
           links:'/admission',
+          description:'Add & Modify Admission session & Candidates',
           submenu:[{
             id:3,
             name:'ADMISSIONS',
@@ -285,18 +326,21 @@ export const controls = {
           }]
         },
         {id:8,
-          name:'TIMETABLE',
+          name:'TIMING',
           icon:'/icons/timetable.png',
           links:'/timetable',
+          description:'Set or modify class timing',
           submenu:[]
-        },
-        
+
+        },       
         {
           id:9,
           name:'CLASS',
           icon:'/icons/class.png',
           links:'/clasz',
-          submenu:[{
+          description:'Add & modify Classes and Class units',
+          submenu:[
+            {
             id:3,
             name:'CLASS UNIT',
             icon:'/icons/class.png',
@@ -306,24 +350,25 @@ export const controls = {
         },
         {
           id:10,
-          name:'ASSESSMENT',
-          icon:'/icons/assessment.png',
-          links:'/assessment',
+          name:'ACCOUNTS',
+          icon:'/icons/account.png',
+          links:'/account',
+          description:'Add & Modify bank accounts for fee payments and expenses management',
           submenu:[]
-          
         },
         {
           id:11,
-          name:'SKILLS',
-          icon:'/icons/skill.png',
-          links:'/skill',
-          submenu:{
-            id:3,
-            name:'TERMS',
-            icon:'/icons/skill.png',
-            links:'/skill',
+          name:'EXPENSES',
+          icon:'/icons/expense.png',
+          links:'/expense',
+          description:'Create & Modify expenses category and sub categories',
+          submenu:[{
+            id:11,
+            name:'EXPENSES UNITS',
+            icon:'/icons/expenses.png',
+            links:'/expenses',
             submenu:[]
-          }
+          }]
         },
         {
           id:12,
@@ -337,6 +382,7 @@ export const controls = {
           name:'GRADES',
           icon:'/icons/grade.png',
           links:'/grade',
+          description:'Setup grading system for report',
           submenu:{
             id:3,
             name:'GRADING',
@@ -350,6 +396,7 @@ export const controls = {
           name:'REPORT CARD',
           icon:'/icons/report.png',
           links:'/report',
+          description:'Create & Modify report cards template',
           submenu:[]
         },
         {
@@ -357,6 +404,7 @@ export const controls = {
           name:'FEES',
           icon:'/icons/fee.png',
           links:'/fee',
+          description:'Add and modify types of fees',
           submenu:[]
         },
         {
@@ -364,6 +412,7 @@ export const controls = {
           name:'INVENTORY',
           icon:'/icons/inventory.png',
           links:'/inventory',
+          description:'Add & modify inventory categories and Sub categories',
           submenu:[{
             id:3,
             name:'TERMS',
@@ -376,6 +425,7 @@ export const controls = {
           name:'MAINTENANCE',
           icon:'/icons/maintenance.png',
           links:'/maintenance',
+          description:'Add & modify maintenance categories and Sub categories',
           submenu:[{
             id:3,
             name:'TERMS',
@@ -387,6 +437,7 @@ export const controls = {
           name:'OFFICE',
           icon:'/icons/office.png',
           links:'/office',
+          description:'Setup offices and state job roles for each',
           submenu:[{
             id:1,
             name:'JOB ROLES',
@@ -398,12 +449,14 @@ export const controls = {
           name:'RANK/LEVEL',
           icon:'/icons/rank.png',
           links:'/rank',
+          description:'Add & modify ranks/level',
           submenu:[]
         },{
           id:20,
           name:'NOTIFICATION',
           icon:'/icons/notification.png',
           links:'/notification',
+          description:'Pass informations on notification bar',
           submenu:[{
             id:3,
             name:'MESSAGE',
@@ -412,6 +465,50 @@ export const controls = {
           }]
         },
         
+      ]
+    },
+    3:{
+      name:'Fees',
+      data:[
+        {
+          id:1,
+          name:'STAFF',
+          icon:'/icons/staff.png',
+          links:'/calendar'
+        }
+      ]
+    },
+    4:{
+      name:'Expenses',
+      data:[
+        {
+          id:1,
+          name:'STAFF',
+          icon:'/icons/staff.png',
+          links:'/calendar'
+        }
+      ]
+    },
+    5:{
+      name:'Inventory',
+      data:[
+        {
+          id:1,
+          name:'STAFF',
+          icon:'/icons/staff.png',
+          links:'/calendar'
+        }
+      ]
+    },
+    6:{
+      name:'Maintenance',
+      data:[
+        {
+          id:1,
+          name:'STAFF',
+          icon:'/icons/staff.png',
+          links:'/calendar'
+        }
       ]
     }
 }

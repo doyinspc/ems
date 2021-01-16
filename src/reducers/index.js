@@ -6,6 +6,8 @@ import clasz from "./setting/clasz";
 import claszunit from "./setting/claszunit";
 import grade from "./setting/grade";
 import gradeunit from "./setting/gradeunit";
+import expense from "./setting/expense";
+import expenseunit from "./setting/expenseunit";
 import inventory from "./setting/inventory";
 import inventoryunit from "./setting/inventoryunit";
 import inventorytransaction from "./setting/inventorytransaction";
@@ -15,6 +17,7 @@ import maintenancetransaction from "./setting/maintenancetransaction";
 import department from "./setting/department";
 import unit from "./setting/unit";
 import notice from "./setting/notice";
+import account from "./setting/account";
 import fee from "./setting/fee";
 import level from "./setting/level";
 import timetable from "./setting/timetable";
@@ -22,6 +25,7 @@ import session from "./setting/session";
 import staff from "./staff/staff";
 import staffclass from "./staff/staffclass";
 import staffsubject from "./staff/staffsubject";
+import staffstudent from "./staff/staffstudent";
 import staffsubjectreport from "./staff/staffsubjectreport";
 import staffclassreport from "./staff/staffclassreport";
 import staffleave from "./staff/staffleave";
@@ -35,6 +39,7 @@ import staffprofessional from "./staff/staffprofessional";
 import stafflessonplan from "./staff/stafflessonplan";
 import student from "./student/student";
 import studentclass from "./student/studentclass";
+import studentfee from "./student/studentfee";
 import subject from "./setting/subject";
 import theme from "./setting/theme";
 import term from "./setting/term";
@@ -55,6 +60,8 @@ export default combineReducers({
     claszunitReducer: claszunit,
     gradeReducer: grade,
     gradeunitReducer: gradeunit,
+    expenseReducer: expense,
+    expenseunitReducer: expenseunit,
     inventoryReducer: inventory,
     inventoryunitReducer: inventoryunit,
     inventorytransactionReducer: inventorytransaction,
@@ -64,6 +71,7 @@ export default combineReducers({
     departmentReducer: department,
     unitReducer: unit,
     noticeReducer: notice,
+    accountReducer: account,
     feeReducer: fee,
     timetableReducer: timetable,
     levelReducer: level,
@@ -71,6 +79,7 @@ export default combineReducers({
     termReducer: term,
     staffReducer: staff,
     staffclassReducer: staffclass,
+    staffstudentReducer: staffstudent,
     staffclassreportReducer: staffclassreport,
     staffsubjectreportReducer: staffsubjectreport,
     staffleaveReducer: staffleave,
@@ -85,6 +94,7 @@ export default combineReducers({
     staffprofessionalReducer: staffprofessional,
     studentReducer: student,
     studentclassReducer:studentclass,
+    studentfeeReducer:studentfee,
     subjectReducer: subject,
     themeReducer: theme,
     schoolReducer: school,
