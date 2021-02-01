@@ -1,3 +1,4 @@
+import { callSuccess } from "../../actions/common";
 import {
     STAFFEXPERIENCE_GET_MULTIPLE,
     STAFFEXPERIENCE_GET_ONE,
@@ -80,7 +81,7 @@ export default function(state = initialState, action){
                 staffexperiences: ac
             }
         case STAFFEXPERIENCE_DELETE_SUCCESS:
-            let rem = state.staffexperiences.filter(cat => cat.id != action.payload);
+            let rem = state.staffexperiences.filter(cat =>parseInt(cat.id) !== parseInt(action.payload));
             localStorage.setItem('staffexperience', JSON.stringify(rem));
             return{
                 ...state,
@@ -92,6 +93,7 @@ export default function(state = initialState, action){
             let newState = [...state.staffexperiences];
             newState[findInd] = action.payload;
             localStorage.setItem('staffexperience', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

@@ -51,8 +51,8 @@ export default [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Student',
-    to: '/students',
+    name: 'Class',
+    to: '/classes',
     icon: 'cil-wc',
     badge: {
       color: 'info',

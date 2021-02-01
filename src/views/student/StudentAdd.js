@@ -25,31 +25,34 @@ import {
   CLabel,
   CCardFooter,
   CInputFile,
-  CButtonGroup
+  CButtonGroup,
+  CFormText
 
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { allrelations, states } from '../../actions/common';
+import { allrelations, allplaces, states } from '../../actions/common';
 
 const Students = (props) => {
     const history = useHistory()
+
     const [active, setActive] = useState(0)
     const [id, setId] = useState(null)
     const [admission, setAdmission] = useState('')
-    const [schoolid, setSchool] = useState('')
+    const [admit, setAdmit] = useState('')
+    const [doa, setDoa] = useState('')
+    const [schoolid, setSchoolid] = useState('')
     const [surname, setSurname] = useState('')
     const [firstname, setFirstname] = useState('')
     const [middlename, setMiddlename] = useState('')
+
     const [gender, setGender] = useState('')
     const [dob, setDob] = useState('')
-    const [dol, setDol] = useState('')
-    const [admit, setAdmit] = useState('')
     const [religion, setReligion] = useState('')
     const [nationality, setNationality] = useState('')
     const [soo, setSoo] = useState('')
     const [lga, setLga] = useState('')
 
-    const [photo, setPhoto] = useState(1)
+    const [photo, setPhoto] = useState('')
     const [photo1, setPhoto1] = useState('')
     const [photo2, setPhoto2] = useState('')
     const [photo3, setPhoto3] = useState('')
@@ -73,57 +76,105 @@ const Students = (props) => {
     //const [g2_photo, setG2_photo] = useState('')
 
     const [reason, setReason] = useState('')
+    const [dol, setDol] = useState('')
     const [is_active, setIs_active] = useState(0)
+    const [is_delete, setIs_delete] = useState(0)
+
 
     useEffect(() => {
-        let params = {
-            data:JSON.stringify({}),
-            cat:'all',
-            table:'schools',
-            narration:'get schools'
+        let data = props.data; 
+        let editi = props.editid;
+        if(props.data && props.data.hasOwnProperty('id'))
+        {
+          setId(data.id)
+          setSurname(data.surname)
+          setFirstname(data.firstname)
+          setMiddlename(data.middlename)
+          setDob(data.dob)
+          setPhoto(data.photo)
+          setPhoto1(data.photo1)
+          setPhoto2(data.photo2)
+          setPhoto3(data.photo3)
+          setGender(data.gender)
+          setReligion(data.religion)
+          setNationality(data.nationality)
+          setSoo(data.soo)
+          setLga(data.lga)
+          setAdmit(data.admit)
+          setAdmission(data.admission_no)
+          setSchoolid(data.schoolid)
+          setDoa(data.doa)
+          setG1_name(data.g1_name)
+          setG1_address(data.g1_address)
+          setG1_rel(data.g1_rel)
+          setG1_phone1(data.g1_phone1)
+          setG1_phone2(data.g1_phone2)
+          setG1_email(data.g1_email)
+          setG2_name(data.g2_name)
+          setG2_address(data.g2_address)
+          setG2_rel(data.g2_rel)
+          setG2_phone1(data.g2_phone1)
+          setG2_phone2(data.g2_phone2)
+          setG2_email(data.g2_email)
+
+          setReason(data.reason)
+          setDol(data.dol)
+          setIs_active(data.is_active)
+          setIs_delete(data.is_active)
+          
         }
-      props.getStudent(params)
-      let params1 = {
-        data:JSON.stringify({
+      }, [props.data, props.editid])
 
-        }),
-        cat:'all',
-        table:'sessions',
-        narration:'get ssessions'
-    }
-      props.getSchools(params)
-    }, [])
 
-    useEffect(() => {
-      let params1 = {
-        data:JSON.stringify({
-            'schoolid':schoolid
-        }),
-        cat:'select',
-        table:'sessions',
-        narration:'get sessions'
-    }
-      props.getSessions(params1)
-    }, [schoolid])
-
+    
     const handlePictureActivate = num =>{
         let fd = new FormData();
         fd.append('id', id);
         fd.append('photo', num);
         fd.append('cat', 'update');
         fd.append('table', 'students');
-
         props.updateStudent(fd)
 
     }
     const handlePicture1 = () =>{
+        let fd = new FormData();
+        fd.append('files', photo1);
+        fd.append('links', 'photo1');
+
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }
         
     }
     const handlePicture2 = () =>{
-        
+        let fd = new FormData();
+        fd.append('files', photo2);
+        fd.append('links', 'photo2');
+
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }
     }
     const handlePicture3 = () =>{
-        
+        let fd = new FormData();
+        fd.append('files', photo3);
+        fd.append('links', 'photo3');
+
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }  
     }
     const handleCare1 = () =>{
         let fd = new FormData();
@@ -135,9 +186,13 @@ const Students = (props) => {
         fd.append('g1_email', g1_email);
         fd.append('g1_place', g1_place);
         fd.append('g1_address', g1_address);
-        fd.append('cat', 'update');
-        fd.append('table', 'students');
-        props.updateStudent(fd)
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }
         
     }
     const handleCare2 = () =>{
@@ -150,41 +205,15 @@ const Students = (props) => {
         fd.append('g2_email', g2_email);
         fd.append('g2_place', g2_place);
         fd.append('g2_address', g2_address);
-        fd.append('cat', 'update');
-        fd.append('table', 'students');
-        props.updateStudent(fd)
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }
         
-    }
-    const handleCare1Reset = () =>{
-        let fd = new FormData();
-        fd.append('id', id);
-        fd.append('g1_name', '');
-        fd.append('g1_rel', '');
-        fd.append('g1_phone1', '');
-        fd.append('g1_phone2', '');
-        fd.append('g1_email', '');
-        fd.append('g1_place', '');
-        fd.append('g1_address', '');
-        fd.append('cat', 'update');
-        fd.append('table', 'students');
-        props.updateStudent(fd)
-        
-    }
-    const handleCare2Reset = () =>{
-        let fd = new FormData();
-        fd.append('id', id);
-        fd.append('g2_name', '');
-        fd.append('g2_rel', '');
-        fd.append('g2_phone1', '');
-        fd.append('g2_phone2', '');
-        fd.append('g2_email', '');
-        fd.append('g2_place', '');
-        fd.append('g2_address', '');
-        fd.append('cat', 'update');
-        fd.append('table', 'students');
-        props.updateStudent(fd)
-        
-    }
+    }   
     const handleExit = () =>{
         let fd = new FormData();
         fd.append('id', id);
@@ -192,29 +221,36 @@ const Students = (props) => {
         fd.append('dol', dol);
         fd.append('is_delete', 1);
         fd.append('is_active', 1);
-        fd.append('table', 'students');
-        props.updateStudent(fd)
+
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }
     }
     const handleExitReset = () =>{
         let fd = new FormData();
         fd.append('id', id);
-        fd.append('reason', '');
-        fd.append('is_delete', 0);
-        fd.append('is_active', 0);
-        fd.append('table', 'students');
-        props.updateStudent(fd)
+        fd.append('reason', reason);
+        fd.append('is_delete', 1);
+        fd.append('is_active', 1);
+        
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }
     }
-
     const handleSubmit = () =>{
         let fd = new FormData();
         fd.append('surname', surname);
         fd.append('firstname', firstname);
         fd.append('middlename', middlename);
         fd.append('dob', dob);
-        fd.append('dol', dol);
-        fd.append('admission_no', admit);
-        fd.append('admission_no', admit);
-        fd.append('school', schoolid);
         fd.append('soo', soo);
         fd.append('lga', lga);
         fd.append('nationality', nationality);
@@ -226,16 +262,51 @@ const Students = (props) => {
             fd.append('id', id);
             fd.append('cat', 'update');
             fd.append('table', 'students');
-        }else{
-            fd.append('cat', 'insert');
-            fd.append('table', 'students');
+            props.updateStudent(fd)
         }
        
         
     }
+    const handleSubmitAdm = () =>{
+        let fd = new FormData();
+        fd.append('surname', surname);
+        fd.append('firstname', firstname);
+        fd.append('middlename', middlename);
+        fd.append('admission_no', admission);
+        fd.append('schoolid', schoolid);
+        fd.append('doa', doa);
+        fd.append('admit', admit);
+
+        if(id && parseInt(id) > 0)
+        {
+            fd.append('id', id);
+            fd.append('cat', 'update');
+            fd.append('table', 'students');
+            props.updateStudent(fd)
+        }else{
+            fd.append('cat', 'insert');
+            fd.append('table', 'students');
+            props.registerStudent(fd)
+        }
+       
+        
+    }
+
+
 const changeSoo = (e) =>{
     setSoo(e.target.value);
 }
+
+const changePhoto1 = (e) =>{
+    setPhoto1(e.target.files[0]);
+}
+const changePhoto2 = (e) =>{
+    setPhoto2(e.target.files[0]);
+}
+const changePhoto3 = (e) =>{
+    setPhoto3(e.target.files[0]);
+}
+
 let schoolarray = props.schools && Array.isArray(props.schools) ? props.schools : [];
 let scarray = schoolarray.filter(rw=>rw !== null).map((rw, ind) =>{
     return <option key={ind} value={rw.id}>{rw.name}</option>
@@ -261,39 +332,49 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
     return <option key={ind} value={rw1}>{rw1}</option>
 });
 
+let placearray = Object.keys(allplaces).map((rw1, ind) =>{
+    return <option key={ind} value={rw1}>{rw1}</option>
+});
+
   return (
     <>
     <CRow>
     <CCol xs="12" md="12" className="mb-4">
         <CCard>
           <CCardHeader>
-           <h4>Add Student</h4>
+          { id && parseInt(id)  > 0 ? <h4>{` Edit ${surname} ${firstname} ${middlename} Data`}</h4>:''}
           </CCardHeader>
-    <CCardBody>
+            <CCardBody>
             <CTabs activeTab={active} onActiveTabChange={idx => setActive(idx)}>
               <CNav variant="tabs">
+              <CNavItem>
+                  <CNavLink>
+                    <i className='fa fa-user'></i>
+                    { active === 0 && ' Admission'}
+                  </CNavLink>
+                </CNavItem>
                 <CNavItem>
                   <CNavLink>
                     <i className='fa fa-user'></i>
-                    { active === 0 && ' Basic Data'}
+                    { active === 1 && ' Basic Data'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                   <i className='fa fa-users'></i>
-                    { active === 1 && ' Primary Care Giver/Guardian'}
+                    { active === 2 && ' Care Giver/Guardian'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                   <i className='fa fa-image'></i>
-                    { active === 2 && ' Photos '}
+                    { active === 3 && ' Photos '}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                   <i className='fa fa-close'></i>
-                    { active === 3 && ' Exit'}
+                    { active === 4 && ' Exit'}
                   </CNavLink>
                 </CNavItem>
               </CNav>
@@ -304,20 +385,22 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                     <CCard>
                         <CCardBody>
                         <CRow>
-                            <CCol xs="12" sm='4' >
+                            <CCol xs="12" sm='12' >
                             <CFormGroup>
                                 <CLabel htmlFor="admission">Admission Number<i className='text-danger'>*</i></CLabel>
                                 <CInput 
                                     id="admission" 
                                     defaultValue={admission}
+                                    size='lg'
                                     aria-required 
                                     placeholder="Admission Number"
                                     onChange={(e)=>setAdmission(e.target.value)} 
                                     required 
                                     />
                             </CFormGroup>
+                            <CFormText></CFormText>
                             </CCol>
-                            <CCol xs="12" sm='4'>
+                            <CCol xs="12" sm='12'>
                             <CFormGroup>
                                 <CLabel htmlFor="School">School<i className='text-danger'>*</i></CLabel>
                                 <CSelect 
@@ -325,14 +408,14 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                     defaultValue={schoolid}
                                     aria-required 
                                     placeholder="Enter School"
-                                    onChange={(e)=>setSchool(e.target.value)} 
+                                    onChange={(e)=>setSchoolid(e.target.value)} 
                                     required
                                 >
                                     {scarray}
                                 </CSelect>
                             </CFormGroup>
                             </CCol>
-                            <CCol xs="12" sm='4'>
+                            <CCol xs="12" sm='6'>
                             <CFormGroup>
                                 <CLabel htmlFor="admit">Admission Year<i className='text-danger'>*</i></CLabel>
                                 <CSelect 
@@ -348,8 +431,22 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 </CSelect>
                             </CFormGroup>
                             </CCol>
+                            <CCol xs="12" sm='6'>
+                            <CFormGroup>
+                                <CLabel htmlFor="doa">Date Admitted<i className='text-danger'>*</i></CLabel>
+                                <CInput 
+                                    custom 
+                                    type='date'
+                                    id="doa" 
+                                    defaultValue={doa}
+                                    aria-required 
+                                    placeholder=""
+                                    onChange={(e)=>setDoa(e.target.value)} 
+                                    required
+                                />
+                            </CFormGroup>
+                            </CCol>
                         </CRow>
-                        
                         <CRow>
                             <CCol xs="12" sm='4'>
                             <CFormGroup>
@@ -391,8 +488,20 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 />
                             </CFormGroup>
                             </CCol>
-                        </CRow>
-                        
+                        </CRow>   
+                        </CCardBody>
+                        <CCardFooter>
+                            <CButton type="submit" size="sm" color="primary" onClick={handleSubmitAdm}><CIcon name="cil-scrubber" /> Submit</CButton>
+                        </CCardFooter>
+                    </CCard>
+                    </CCol>
+    </CRow>                    
+    </CTabPane>
+    <CTabPane>
+    <CRow>
+     <CCol xs="12" sm="12">
+                    <CCard>
+                        <CCardBody>
                         <CRow>
                             <CCol xs="12" sm='4'>
                             <CFormGroup>
@@ -588,12 +697,16 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                             <CCol xs="12">
                             <CFormGroup>
                                 <CLabel htmlFor="g1_place">Place of Work/Name of Business</CLabel>
-                                <CInput 
-                                    id="g1_place" 
+                                <CSelect 
+                                    id="g1_rel" 
                                     defaultValue={g1_place}
-                                    placeholder="MESL"
+                                    aria-required 
+                                    placeholder="Enter g1_place"
                                     onChange={(e)=>setG1_place(e.target.value)} 
-                                    />
+                                    required
+                                >
+                                  {placearray}  
+                                </CSelect>
                             </CFormGroup>
                             </CCol>
                         </CRow>
@@ -615,8 +728,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                         </CCardBody>
                         <CCardFooter>
                             <CButton onClick={handleCare1} type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>
-                            <CButton onClick={handleCare1Reset} type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
-                        </CCardFooter>
+                           </CCardFooter>
                     </CCard>
                     </CCol>
                     <CCol sm="12" md="6">
@@ -704,12 +816,16 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                             <CCol xs="12">
                             <CFormGroup>
                                 <CLabel htmlFor="g2_place">Place of Work/Name of Business</CLabel>
-                                <CInput 
-                                    id="g2_place" 
+                                <CSelect 
+                                    id="g2_rel" 
                                     defaultValue={g2_place}
-                                    placeholder="MESL"
+                                    aria-required 
+                                    placeholder="Enter g2_place"
                                     onChange={(e)=>setG2_place(e.target.value)} 
-                                    />
+                                    required
+                                >
+                                  {placearray}  
+                                </CSelect>
                             </CFormGroup>
                             </CCol>
                         </CRow>
@@ -731,8 +847,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                         </CCardBody>
                         <CCardFooter>
                             <CButton onClick={handleCare2}  type="submit" size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>
-                            <CButton  onClick={handleCare2Reset} type="reset" size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
-                        </CCardFooter>
+                                 </CCardFooter>
                     </CCard>
                     </CCol>
     
@@ -750,17 +865,17 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                     <CCol xs="12" sm='4' >
                         <CFormGroup>
                             <CLabel htmlFor="admission">
-                                Photo 1<br/>
-                                <small>Year 1</small>
+                               Passport 1<br/>
+                                <small>Year 1 & 2</small>
                                 </CLabel>
                             <CCol xs="12" md="9" className='text-center'>
                             <img 
-                                src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ photo1} 
+                                src={process.env.REACT_APP_SERVER_URL+ photo1} 
                                 className="m-0 p-0" 
                                 width='100px'
                                 height='100px'
                                 alt={admission} 
-                                onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
+                                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + 'avatars/1.png'} }
                              />
                              </CCol>
                              <CCol xs="12" md="9" className='mt-5'>
@@ -768,6 +883,8 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 custom 
                                 id="custom-file-input"
                                 name='picture1'
+                                accept="image/*:capture=camera"
+                                onChange={changePhoto1}
                                 />
                                 <CLabel htmlFor="custom-file-input" variant="custom-file">
                                 Choose file...
@@ -776,7 +893,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                             <CCol xs="12" md="9" className='mt-2 text-center'>
                             <CButtonGroup className="mr-2">
                                 <CButton color="secondary" onClick={handlePicture1}><i className='fa fa-save'></i> Save</CButton>
-                                {parseInt(photo) === 1 ? '' :<CButton color="secondary" onClick={()=>handlePictureActivate(1)}>Activate</CButton>}
+                                <CButton color="secondary" onClick={()=>handlePictureActivate(photo1)}>Activate</CButton>
                             </CButtonGroup>
                             </CCol>
                         </CFormGroup>
@@ -784,17 +901,17 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                     <CCol xs="12" sm='4' >
                     <CFormGroup>
                             <CLabel htmlFor="admission">
-                                Photo 2<br/>
-                                <small>Year 3</small>
+                                Passport 2<br/>
+                                <small>Year 3 & 4</small>
                                 </CLabel>
                             <CCol xs="12" md="9" className='text-center'>
                             <img 
-                                src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ photo1} 
+                                src={process.env.REACT_APP_SERVER_URL+ photo2} 
                                 className="m-0 p-0" 
                                 width='100px'
                                 height='100px'
                                 alt={admission} 
-                                onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
+                                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
                              />
                              </CCol>
                              <CCol xs="12" md="9" className='mt-5'>
@@ -802,6 +919,8 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 custom 
                                 id="custom-file-input2"
                                 name='picture2'
+                                accept="image/*:capture=camera"
+                                onChange={changePhoto2}
                                 />
                                 <CLabel htmlFor="custom-file-input" variant="custom-file">
                                 Choose file...
@@ -810,7 +929,7 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                             <CCol xs="12" md="9" className='mt-2 text-center'>
                             <CButtonGroup className="mr-2">
                                 <CButton color="secondary" onClick={handlePicture2}><i className='fa fa-save'></i> Save</CButton>
-                                {parseInt(photo) === 2 ? '' :<CButton color="secondary" onClick={()=>handlePictureActivate(2)}>Activate</CButton>}
+                                <CButton color="secondary" onClick={()=>handlePictureActivate(photo2)}>Activate</CButton>
                             </CButtonGroup>
                             </CCol>
                         </CFormGroup>
@@ -819,17 +938,17 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                     <CCol xs="12" sm='4' >
                     <CFormGroup>
                             <CLabel htmlFor="admission">
-                                Photo 3<br/>
-                                <small>Year 5</small>
+                                Passport 3<br/>
+                                <small>Year 5 & 6</small>
                                 </CLabel>
                             <CCol xs="12" md="9" className='text-center'>
                             <img 
-                                src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ photo3} 
+                                src={process.env.REACT_APP_SERVER_URL+ photo3} 
                                 className="m-0 p-0" 
                                 width='100px'
                                 height='100px'
                                 alt={admission} 
-                                onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
+                                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
                              />
                              </CCol>
                              <CCol xs="12" md="9" className='mt-5'>
@@ -837,19 +956,43 @@ let relarray = Object.keys(allrelations).map((rw1, ind) =>{
                                 custom 
                                 id="custom-file-input"
                                 name='picture3'
+                                accept="image/*:capture=camera"
+                                onChange={changePhoto3}
                                 />
+                                
                                 <CLabel htmlFor="custom-file-input" variant="custom-file">
                                 Choose file...
                                 </CLabel>
                             </CCol>
                             <CCol xs="12" md="9" className='mt-2 text-center'>
                             <CButtonGroup className="mr-2">
+                                
                                 <CButton color="secondary" onClick={handlePicture3}><i className='fa fa-save'></i> Save</CButton>
-                                {parseInt(photo) === 3 ? '' :<CButton color="secondary" onClick={()=>handlePictureActivate(3)}>Activate</CButton>}
+                                <CButton color="secondary" onClick={()=>handlePictureActivate(photo3)}>Activate</CButton>
                             </CButtonGroup>
                             </CCol>
                         </CFormGroup>
                     
+                    </CCol>
+                </CRow>
+                <CRow className='m-auto  p-auto d-flex text-center align-items-center justify-content-center' xs='12'>
+                    <CCol xs="12" sm='6' md='4'  className='align-middle'>
+                    <CFormGroup>
+                            <CLabel htmlFor="mm">
+                               Active Passport
+                                </CLabel>
+                            <CCol xs="12" md="9" className='text-center'>
+                            <img 
+                                src={process.env.REACT_APP_SERVER_URL+ photo} 
+                                className="m-0 p-0" 
+                                style={{width:"200px", height:"200px"}}
+                                width='200px'
+                                height='200px'
+                                alt={admission} 
+                                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
+                             />
+                             </CCol>
+                        </CFormGroup>
                     </CCol>
                 </CRow>
                 </CCardBody>
@@ -913,6 +1056,7 @@ const mapStateToProps = (state) =>({
     students : state.studentReducer,
     sessions : state.sessionReducer.sessions,
     schools : state.schoolReducer.schools,
+    dropdowns:state.userReducer.dropdowns
   })
   export default connect(mapStateToProps, {
     getStudents,

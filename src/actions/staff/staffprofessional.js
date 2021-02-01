@@ -46,12 +46,12 @@ export const getStaffprofessional = id => (dispatch, getState) => {
     });  
 };
 //STAFFPROFESSIONAL DELETE
-export const deleteStaffprofessional = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteStaffprofessional = (params, id) => (dispatch, getState) =>{
+    axios.post(path, params, axiosConfig1)
         .then(res => {
             dispatch({
                 type: STAFFPROFESSIONAL_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {

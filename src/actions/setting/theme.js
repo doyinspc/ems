@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     THEME_GET_ONE,
     THEME_GET_MULTIPLE,
+    THEME_GET_SUMMARY,
     THEME_GET_DROPDOWNS,
     THEME_REGISTER_SUCCESS,
     THEME_REGISTER_FAIL,
@@ -38,6 +39,28 @@ export const getThemes = params => (dispatch, getState) => {
                 })
             })
 };
+//GET ALL THEME 
+export const getThemesummary = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.token = MAIN_TOKEN;
+    params.table = 'themesummary';
+
+    dispatch({type : THEME_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: THEME_GET_SUMMARY,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : THEME_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+
 //GET ALL THEME 
 export const getThemedropdowns = params => (dispatch, getState) => {
     //SET PAGE LOADING

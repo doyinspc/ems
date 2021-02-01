@@ -16,6 +16,7 @@ const Staffs = (props) => {
           <div className="c-avatar">
             <img 
               src={process.env.REACT_APP_SERVER_URL+ row.photo}
+              style={{width:'40px', height:'40px'}}
               height="50px" 
               width="50px" 
               className="c-avatar-img" 
@@ -59,8 +60,8 @@ const Staffs = (props) => {
  
   return (
     <>
-    <CRow>
-      <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+    <CRow className='table-responsive'>
+      <table className="table table-hover table-outline mb-0 d-sm-table">
           <thead className="thead-light">
               <tr>
                 <th className="text-center"><CIcon name="cil-people" /></th>

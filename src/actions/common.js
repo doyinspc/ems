@@ -62,6 +62,34 @@ export const timeConvert = date =>{
 export const setElement=(id, valueToSet)=>{
   document.getElementById(id).value = valueToSet;
 }
+export const gradetype = [
+  "ND",
+  "OND",
+  "HND",
+  "NCE",
+  "B.Sc.",
+  "BA.",
+  "B.Eng.",
+  "B.Tech.",
+  "B.Tech. (Ed)",
+  "B.Ed.",
+  "M.Sc.",
+  "MA.",
+  "M.Eng.",
+  "M.Tech.",
+  "M.Ed.",
+  "Phd"
+]
+export const gradetypes = [
+  "First Class",
+  "Second Class Upper",
+  "Second Class Lower",
+  "Third Class",
+  "Upper Credit",
+  "Lower Credit",
+  "Passed",
+  "Certificate of Attencdance"
+]
 export const allgender = {
    'male':'male',
    'Female':'Female'
@@ -73,6 +101,22 @@ export const allrelations = {
     'Uncle':'Uncle',
     'Grandparent':'Grandparent',
     'Sponsor':'Sponsor',
+   };
+export const allplaces = {
+    'Others':'Others',
+    'MESL':'MESL',
+    'StreSERT Integrated Limited':'StreSERT Integrated Limited',
+    'Kombat Securities':'Kombat Securities',
+    'Door2Door':'Door2Door',
+    'Cedacrest':'Cedacrest',
+    'Hermes':'Hermes',
+    'Hydro polis':'Hydro Polis',
+    'Nigerian Army':'Nigeria Army',
+    'Nigerian Police':'Nigerian Police',
+    'Federal Civil Servant':'Federal Civil Servant',
+    'State Civil Service':'State Civil Service',
+    'Business Man/Woman':'Business Man/Woman'
+
    };
 export const allrelationsx = {
     'Father':'Father',
@@ -118,6 +162,63 @@ export const statussobj = [
     {'value':3, 'label':'High'},
     {'value':4, 'label':'Emergency'}
   ];
+export const leaves =[
+  {
+      "id":1,
+      "name":'Default',
+      color:'#ccc',
+      colors:'secondary',
+  },
+  {
+      "id":2,
+      "name":'Present',
+      color:'#cfc',
+      colors:'success',
+  },
+  {
+      "id":3,
+      "name":'Sick Leave',
+      color:'purple',
+      colors:'info',
+  },
+  {
+      "id":4,
+      "name":'Maternity Leave',
+      colors:'blue',
+      colors:'info'
+  },
+  {
+      "id":5,
+      "name":'Annual Leave',
+      color:'#000',
+      colors:'light'
+  },
+  {
+      "id":6,
+      name:'Half Day',
+      color:'yellow',
+      colors:'primary',
+  },
+  {
+    "id":7,
+    name:'Unpaid Leave',
+    color:'yellow',
+    colors:'dark',
+  },{
+    "id":8,
+    name:'Lateness',
+    color:'orange',
+    colors:'warning',
+  },{
+    "id":9,
+    name:'Absent',
+    color:'red',
+    colors:'danger',
+},
+  
+
+
+]
 
 export const controls = {
     0: {
@@ -257,14 +358,21 @@ export const controls = {
                 description:'Prepare class timetable for the term'
               },
               {
-                id:6,
+                id:10,
+                name:'ACADEMIC WEEKS',
+                icon:'/icons/week.png',
+                links:'/setting/3/',
+                description:'Week set for teaching. Facilitates lesson plan & Attendance management'
+              },
+              {
+                id:7,
                 name:'CLASS FEES',
                 icon:'/icons/term_fee.png',
                 links:'/setting/3/',
                 description:'Prepare school fees to be paid by students for the term'
               },
               {
-                id:6,
+                id:8,
                 name:'Quick Setup',
                 icon:'/icons/term_fee.png',
                 links:'/setting/3/',

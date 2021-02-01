@@ -99,10 +99,14 @@ let gradetype = [
   "NCE",
   "B.Sc.",
   "BA.",
+  "BA. (Ed)",
+  "Bsc (Ed)",
   "B.Eng.",
   "B.Tech.",
   "B.Tech. (Ed)",
   "B.Ed.",
+  "PGDE",
+  "PDE",
   "M.Sc.",
   "MA.",
   "M.Eng.",
@@ -118,8 +122,9 @@ let gradetypes = [
   "Third Class",
   "Upper Credit",
   "Lower Credit",
-  "Passed",
-  "Certificate of Attencdance"
+  "Passed(No Grading)",
+  "PASS",
+  "Certificate of Attendance"
 ]
 let starray = gradetype.map((rw, ind) =>{
     return <option key={ind} value={rw}>{rw}</option>

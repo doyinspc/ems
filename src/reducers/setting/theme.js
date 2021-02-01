@@ -1,6 +1,8 @@
+import { callReg, callSuccess } from "../../actions/common";
 import {
     THEME_GET_MULTIPLE,
     THEME_GET_DROPDOWNS,
+    THEME_GET_SUMMARY,
     THEME_GET_ONE,
     THEME_REGISTER_SUCCESS,
     THEME_REGISTER_FAIL,
@@ -25,6 +27,7 @@ const initialState = {
     msg: null,
     isEdit:-1,
     ref:null,
+    themesummary: []
 }
 
 const changeState = (aluu, actid) =>
@@ -58,6 +61,11 @@ export default function(state = initialState, action){
                 themes : action.payload,
                 msg:'DONE!!!'
             };
+        case THEME_GET_SUMMARY:
+            return {
+                ...state,
+                themesummary : action.payload
+            };
          case THEME_GET_DROPDOWNS:
             localStorage.setItem('dropdowns', JSON.stringify(action.payload));
             return {
@@ -74,6 +82,7 @@ export default function(state = initialState, action){
             };
         case THEME_REGISTER_SUCCESS:
             localStorage.setItem('theme', JSON.stringify([...state.themes, action.payload]));
+            callReg()
             return {
                 ...state,
                 themes: [...state.themes, action.payload],
@@ -82,6 +91,7 @@ export default function(state = initialState, action){
         case THEME_ACTIVATE_SUCCESS:
             let ac = changeState(state.themes, action.payload);
             localStorage.setItem('theme', JSON.stringify(ac));
+            callSuccess()
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -90,6 +100,7 @@ export default function(state = initialState, action){
         case THEME_DELETE_SUCCESS:
             let rem = state.themes.filter(cat => cat.id != action.payload);
             localStorage.setItem('theme', JSON.stringify(rem));
+            callSuccess()
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -100,6 +111,7 @@ export default function(state = initialState, action){
             let newState = [...state.themes];
             newState[findInd] = action.payload;
             localStorage.setItem('theme', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

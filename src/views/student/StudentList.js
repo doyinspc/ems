@@ -1,39 +1,24 @@
 import React  from 'react'
-import { useHistory} from 'react-router-dom'
-import {
-    CRow,
-    CCol,
-    CCardHeader,
-    CNav,
-    CNavLink,
-    CNavItem,
-    CTabContent,
-    CTabPane,
-    CCard,
-    CCardBody,
-    CTabs,
-    CButton,
-    CWidgetIcon,
-    CCardFooter,
-    CLink
-  } from '@coreui/react'
+import {useHistory} from 'react-router-dom'
+
 import CIcon from '@coreui/icons-react'
 
 const Studentclasss = (props) => {
-   let history = useHistory()
    
-  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
+   const lStudent = (id) =>{
+     window.open(process.env.PUBLIC_URL+"#/students/"+id)
+   }
+  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw != null || rw != undefined) : []
   
 let tabl = data.map((row, ind)=>{
-    return <tr key={ind}
-    onClick={() => history.push(`/studentclasss/${row.id}`)}>
+    return <tr key={ind} onClick={()=>lStudent(row.id)}>
     <td className="text-center">
       <div className="c-avatar">
         <img 
-        src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ row.photo} 
+        src={process.env.REACT_APP_SERVER_URL+ row.photo} 
         className="c-avatar-img" 
         alt={row.admission_no} 
-        onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
+        onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
         />
         <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
       </div>
@@ -70,7 +55,6 @@ let tabl = data.map((row, ind)=>{
                   <tr>
                     <th className="text-center"><CIcon name="cil-people" /></th>
                     <th>Studentclass</th>
-                    <th className="text-center">Contacts</th>
                     <th className="text-center">Dates</th>
                     <th>Origin</th>
                     <th>Gender</th>

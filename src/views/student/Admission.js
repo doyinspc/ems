@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import * as html2pdf from 'html2pdf.js'
 import {
   CCol,
   CContainer,
@@ -9,42 +10,70 @@ import {
 import { useParams } from 'react-router-dom'
 import { getAdmission } from '../../actions/setting/admission'
 
-const Register = (props) => {
+const Admission = (props) => {
 let adm = useParams().admit;
+const [show, setshow] = useState(true)
 useEffect(() => {
     props.getAdmission(adm)
 }, [adm])
+
+
 
 let {
     id,
     surname,
     firstname,
     middlename,
+    abbrv,
     cclass,
     schoolid,
     schoolname,
     session,
     address,
-    status
+    status,
+    signed
 
 } = props.admission || {}
+
+let nm = abbrv+"_"+surname+"_"+firstname+"_"+middlename+".pdf"
+const loadpdf = () => {
+    if(parseInt(props.admission.id) > 0 ){
+    var element = document.getElementById('maincont');
+    var opt = {
+        margin:       0.3,
+        filename:     nm,
+        maxnrofpages: 1,
+        image:        { type: 'png' },
+        html2canvas:  { scale: 3 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    // New Promise-based usage:
+    html2pdf().from(element).set(opt).save();
+    // Old monolithic-style usage:
+    html2pdf(element, opt);
+    }
+}
+
+loadpdf()
   return (
-    <div className="m-0 p-0 container-fluid" style={{margin:'0px', padding:'0px', height:'859px'}}>
-        <div style={{marginLeft:'auto', marginRight:'auto', marginBottom:'5px', backgroundColor:'white', height:'1559px'}}>
-                <CContainer style={{height:'859px'}}>
-                          <CRow xs={12} style={{backgroundColor:'white'}} >
-                                <CCol xs='2' style={{marginTop:'1px', marginBottom:'1px'}}>
+    <div className="m-10 p-1 container html2pdf__page-break" id="maincont" >
+        <div style={{marginLeft:'auto', marginRight:'auto', marginBottom:'5px', backgroundColor:'white'}}>
+                <CContainer >
+                          <CRow xs={12} style={{backgroundColor:'white', height:'100%'}} >
+                                <CCol xs='3' style={{marginTop:'2px', marginBottom:'2px'}}>
                                 <img 
+                                    onClick={loadpdf}
                                     src='avatars/logo.png'
                                     className="m-0 p-0" 
                                     width='100%'
-                                    height='120px'
+                                    height='100px'
                                     alt='admission' 
                                     onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
                                 />
                                 </CCol>
-                                <CCol xs='4' style={{marginTop:'1px', marginBottom:'1px'}}>
-                                <div className='my-4'>
+                                <CCol xs='3' style={{marginTop:'1px', marginBottom:'4px'}}>
+                                <div className='my-1'>
                                     <small className='pull-left '>
                                         <b>
                                             MESL Staff School <br/>
@@ -55,7 +84,8 @@ let {
                                     </small>
                                 </div>
                                 </CCol>
-                                <CCol xs='4' style={{textAlign:'right'}}>
+                                <CCol xs='1' style={{marginTop:'1px', marginBottom:'1px'}}></CCol>
+                                <CCol xs='3' style={{textAlign:'right'}}>
                                 <div className='my-2'>
                                     <small className='pull-right '>
                                         <b>
@@ -72,12 +102,11 @@ let {
                                 </div>
                                 </CCol>
                                 <CCol xs='2' className='pull-right' style={{ marginTop:'1px'}}>
-                                
                                 <img 
                                     src='/avatars/logo1.png'
                                     className="m-0 p-0" 
                                     width='100%'
-                                    height='120px'
+                                    height='100px'
                                     alt='admission' 
                                     onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
                                 />
@@ -87,40 +116,38 @@ let {
                               <CCol className='m-0 p-1' xs={12} >
                                 <br/>
                                 <br/>
-                                <br/>
-                                <div className='headBar pull-right' style={{fontSize:'20px',marginTop:'10px', marginBotom:'10px'}}>
-                                <strong> REF:MESL/KP1/{session}/{id}</strong>
+                                <div className='headBar pull-right' style={{fontSize:'20px',marginTop:'10px', marginBottom:'10px'}}>
+                                <small><strong> REF:{abbrv}{session}/{id}</strong></small>
                                    <br/>
-                                   <br/>
-                                   {moment(new Date()).format('MMMM DD, YYYY')}
+                                   <small>{moment(new Date()).format('MMMM DD, YYYY')}</small>
                                 </div>
                                 <br/>
-                                <br/>
-                                <div className='headBar' style={{marginTop:'80px', marginBotTom:'10px', fontSize:'25px', textAlign:'left', lineHeight:'100%'}}> 
+                                <div className='headBar' style={{marginTop:'80px', marginBotTom:'10px', fontSize:'20px', textAlign:'left', lineHeight:'100%'}}> 
                                 <strong>{`${surname} ${firstname} ${middlename}`}</strong><br/>
                                   {address}
                                 </div>
-                                <div className='addressBar' style={{marginTop:'100px', marginBottom:'50px'}}>
-                                    <p className='h1'><u>Admission Letter</u></p>
+                                <br/>
+                                <div className='addressBar' style={{marginTop:'10px', marginBottom:'10px'}}>
+                                    <p className='h3'><u>Admission Letter</u></p>
                                 </div>
                                 <div className='titleBar'>
-                                    <p  style={{marginTop:'20px', fontSize:'25px', textAlign:'justify', lineHeight:'200%'}}>
-  Following your performance at our <strong>{session}</strong> academic session entrance examination and interveiw exercise, 
-  we are pleased to inform you that you have been offered <strong>{status}</strong> into <strong>RECEPTION 1</strong> class at
+                                    <p  style={{marginTop:'20px', fontSize:"15px", textAlign:'justify', lineHeight:'200%'}}>
+  Following your performance at our <strong>{session}</strong> Academic Session entrance examination and interveiw exercise, 
+  we are pleased to inform you that you have been offered <strong>{status}</strong> into <strong>{cclass}</strong> class at
   <strong> {schoolname}</strong> .
                                     </p>
                                
-                                    <p  style={{marginTop:'25px', fontSize:'25px', textAlign:'justify', lineHeight:'200%'}}>
+                                    <p  style={{marginTop:'25px', fontSize:"15px", textAlign:'justify', lineHeight:'200%'}}>
                                         Attached to this letter you will find a full admission package along with specific details on how you can accept this offer. 
                                         We ask that you respond to this offer within two (2) weeks effective from the date of issuance of this letter as indicated above. 
                                         Failure to do so will result in the immediate withdrawal of this offer.
                                     </p>
-                                    <p  style={{marginTop:'25px', fontSize:'25px', textAlign:'justify', lineHeight:'200%'}}>
+                                    <p  style={{marginTop:'25px', fontSize:"15px", textAlign:'justify', lineHeight:'200%'}}>
                                         Once again, congratulations. We hope to hear from you soon.
                                     </p>
                                 </div>
                                 <br/><br/>
-                                <div className='footerBar' style={{marginTop:'25px', fontSize:'25px', textAlign:'justify', lineHeight:'200%'}}>
+                                <div className='footerBar' style={{marginTop:'15px', fontSize:'15px', textAlign:'justify', lineHeight:'200%'}}>
                                 <CRow>
                                     <CCol>
                                         Yours Sincerely,<br/><br/><br/>
@@ -136,7 +163,7 @@ let {
                                 </CRow>
                                 <CRow>
                                     <CCol>
-                                    <strong>Adeleke G. A.</strong><br/>
+                                    <strong>{signed}</strong><br/>
                                     for : School Management
                                     </CCol>
                                 </CRow>
@@ -155,4 +182,4 @@ let {
 const mapStateToProps = (state) =>({
     admission:state.admissionReducer.admission
 })
-export default connect(mapStateToProps, {getAdmission})(Register)
+export default connect(mapStateToProps, {getAdmission})(Admission)

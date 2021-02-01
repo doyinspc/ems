@@ -1,3 +1,4 @@
+import { callReg, callSuccess } from "../../actions/common";
 import {
     STAFF_GET_MULTIPLE,
     STAFF_GET_SEARCH,
@@ -15,10 +16,7 @@ import {
     STAFF_DELETE_FAIL,
     STAFF_EDIT
 } from "./../../types/staff/staff";
-import Swal from 'sweetalert'
-const callSucces = ($err) =>{
-    Swal("Saved!", "UPdate saved!", "success");
- }
+
 
 let staffStore = JSON.parse(localStorage.getItem('staff'))
 
@@ -88,6 +86,7 @@ export default function(state = initialState, action){
             let alls = [...state.staffs];
             alls.push(action.payload)
             localStorage.setItem('staff', JSON.stringify(alls));
+            callReg()
             return {
                 ...state,
                 staffs: alls,
@@ -98,6 +97,7 @@ export default function(state = initialState, action){
         case STAFF_ACTIVATE_SUCCESS:
             let ac = changeState(state.staffs, action.payload);
             localStorage.setItem('staff', JSON.stringify(ac));
+            callSuccess()
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -116,7 +116,7 @@ export default function(state = initialState, action){
             let newState = [...state.staffs];
             newState[findInd] = action.payload;
             localStorage.setItem('staff', JSON.stringify(newState));
-             callSucces();
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

@@ -67,7 +67,9 @@ const StaffDashboard = React.lazy(() => import('./views/staff/StaffDashboard'));
 const StaffAdd = React.lazy(() => import('./views/staff/StaffAdd'));
 const StaffClass = React.lazy(() => import('./views/staff/StaffClass'));
 const StaffSubject = React.lazy(() => import('./views/staff/StaffDashboardSubject'));
+const Classes = React.lazy(() => import('./views/staff/StudentDashboardClass'));
 const AdmissionList = React.lazy(() => import('./views/student/AdmissionList'));
+const Admissions = React.lazy(() => import('./views/student/Admissionsx.jsx'));
 const Students = React.lazy(() => import('./views/student/Students'));
 const Student = React.lazy(() => import('./views/student/StudentProfile'));
 const StudentAdd = React.lazy(() => import('./views/student/StudentAdd'));
@@ -89,10 +91,13 @@ const routes = [
   { path: '/staffs', name: 'Staffs', component: Staffs, exact: true },
   { path: '/staffs/:staff', name: 'Staff Profile', component: Staff, exact: true },
   { path: '/myclass', name: 'My Classes', component: StaffSubject, exact: true },
+  { path: '/classes', name: 'My Classes', component: Classes, exact: true },
   { path: '/staffa', name: 'Add Staff Data', component: StaffAdd, exact: true },
+  { path: '/studenta', name: 'Add Student Data', component: StudentAdd, exact: true },
   { path: '/termclass/:term', name: 'Class Teachers', component: StaffClass, exact: true },
   { path: '/termsubject/:term', name: 'Subject Teachers', component: StaffSubject, exact: true },
   { path: '/admission', name: 'Admission', component: AdmissionList, exact: true },
+  { path: '/admissions/:id', name: 'Admissions', component: Admissions, exact: true },
   { path: '/students', name: 'Students', component: Students, exact: true },
   { path: '/students/:student', name: 'Student Profile', component: Student, exact: true },
   { path: '/studenta', name: 'Add Student Data', component: StudentAdd, exact: true },

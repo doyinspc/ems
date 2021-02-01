@@ -57,9 +57,9 @@ const Dashboard = (props) => {
     });
 }
 
-let sch  = props.schools.map((prop, ind)=>{
+let sch  = Array.isArray(props.schools) ? props.schools.map((prop, ind)=>{
   return <option value={JSON.stringify(prop)}>{prop.name}</option>;
-});
+}):<option></option>;
 
 const changeSchool =() =>{
     props.changeSchool(JSON.parse(school))

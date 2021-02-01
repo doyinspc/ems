@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     STAFFSUBJECT_GET_ONE,
     STAFFSUBJECT_GET_MULTIPLE,
+    STAFFSUBJECT_GET_SUMMARY,
     STAFFSUBJECT_REGISTER_SUCCESS,
     STAFFSUBJECT_REGISTER_FAIL,
     STAFFSUBJECT_LOADING,
@@ -36,6 +37,26 @@ export const getStaffsubjects = params => (dispatch, getState) => {
                 })
             })
 };
+export const getStaffsubjectsummary = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.token = MAIN_TOKEN;
+
+    dispatch({type : STAFFSUBJECT_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STAFFSUBJECT_GET_SUMMARY,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STAFFSUBJECT_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+
 //GET SINGLE STAFFSUBJECT 
 export const getStaffsubject = id => (dispatch, getState) => {
     //SET PAGE LOADING
@@ -46,12 +67,12 @@ export const getStaffsubject = id => (dispatch, getState) => {
     });  
 };
 //STAFFSUBJECT DELETE
-export const deleteStaffsubject = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteStaffsubject = (params, id) => (dispatch, getState) =>{
+    axios.post(path, params, axiosConfig1)
         .then(res => {
             dispatch({
                 type: STAFFSUBJECT_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {

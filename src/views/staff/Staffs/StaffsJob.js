@@ -91,6 +91,9 @@ const Staffs = (props) => {
         <td>
           <div className="text-muted " style={{textTransform:'capitalize'}}>{row.gender}</div>
         </td>
+        <td>
+          
+        </td>
       </tr>
     });
  
@@ -103,9 +106,11 @@ const Staffs = (props) => {
                   <tr>
                     <th className="text-center">Staff ID</th>
                     <th>Fullname</th>
-                    <th className="text-center">Phone</th>
-                    <th className="text-center">Email</th>
-                    <th>Address</th>
+                    <th className="text-center">BIRTH DATE</th>
+                    <th className="text-center">DATE EMPLOYED</th>
+                    <th className="text-center">DEPARTMENT</th>
+                    <th className="text-center">LEVEL</th>
+                    <th className="text-center">JOB ROLES</th>
                   </tr>
                 </thead>
                 <tbody>

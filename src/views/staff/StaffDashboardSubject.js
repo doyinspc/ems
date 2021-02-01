@@ -7,7 +7,8 @@ import {
     CDropdownToggle, 
     CDropdownMenu, 
     CDropdownItem,
-    CWidgetDropdown
+    CWidgetDropdown,
+    CCollapse
 } from '@coreui/react';
 import StaffDashboardDefault from './StaffDashboardDefault'
 import { getStaffsubjects } from './../../actions/staff/staffsubject'
@@ -15,12 +16,19 @@ import CIcon from '@coreui/icons-react'
 import ChartLineSimple from '../charts/ChartLineSimple'
 import ChartBarSimple from '../charts/ChartBarSimple'
 import Students from './Subjects/Students'
-
+import PlanForm from './Subjects/PlanForm'
+import Plan from './Subjects/Plan'
+import Theme from './../setting/Stage/Theme'
+import Staffsubject from './../setting/Stage/Staffsubject1'
+import Themes from './Subjects/Theme'
 const Dashboard = (props) => {
     
   const [subject, setSubject]  = useState([])
+  const [page, setPage]  = useState(0)
+  const [collapser, setCollapser]  = useState(true)
+
   useEffect(() => {
-    
+
     if(props.user.activeterm !== undefined)
     {
        let params = {
@@ -41,23 +49,53 @@ const Dashboard = (props) => {
     
   }, [props.user.activeterm])
 
+  const goBack = () =>{
+    setPage(0);
+    setCollapser(true)
+  }
+
   const loadStudents = (sub) =>{
       setSubject(sub)
+      setPage(1);
+      setCollapser(false)
   }
+  const loadRecords = (sub) =>{
+      setSubject(sub)
+      setPage(2);
+      setCollapser(false)
+  }
+  const loadScheme = (sub) =>{
+    setSubject(sub)
+      setPage(3);
+      setCollapser(false)
+  }
+  const loadPlan = (sub) =>{
+      setSubject(sub)
+      setPage(4);
+      setCollapser(false)
+  }
+  const loadAnalysis = (sub) =>{
+      setSubject(sub)
+      setPage(5);
+      setCollapser(false)
+  }
+ 
 return (
     <>
     <CRow>
       <StaffDashboardDefault />
       </CRow>
+      <CCollapse show={collapser}>
       <CRow>
-        {
+        { 
           Array.isArray(props.staffsubject.staffsubjects) ? props.staffsubject.staffsubjects.filter(rw=>rw !== null & rw !== undefined).map((prp, ind)=>{
-            let numz = prp.num.split(":");
-            let numz1 = numz.filter(rw=>parseInt(rw.split(":")[0][1]) == parseInt(prp.itemid1)).lenght
-            return <CCol sm="6" lg="3"  key={ind}>
+            let numz =prp.num !== null && prp.num !== undefined ? prp.num.split(","):[];  
+            let numz1 = numz.filter(rw=>rw !== null || rw=='').filter(rw=>parseInt(rw.split(":")[1]) == parseInt(prp.itemid1) && parseInt(rw.split(":")[3]) == parseInt(prp.itemid)).length
+    
+            return <CCol sm="6" lg="4"  key={ind}>
               <CWidgetDropdown
                 color="gradient-info"
-                header={numz}
+                header={numz1 + ' Students'}
                 text={`${prp.itemname1} ${prp.itemname} `}
                 footerSlot={
                   <ChartLineSimple
@@ -77,29 +115,83 @@ return (
                   </CDropdownToggle>
                   <CDropdownMenu className="pt-0" placement="bottom-end">
                     <CDropdownItem onClick={()=>loadStudents(prp)}>Students</CDropdownItem>
-                    <CDropdownItem>Lesson Plan</CDropdownItem>
-                    <CDropdownItem>Analysis</CDropdownItem>
+                    <CDropdownItem onClick={()=>loadRecords(prp)}>Records</CDropdownItem>
+                    <CDropdownItem onClick={()=>loadScheme(prp)}>Scheme of Work</CDropdownItem>
+                    <CDropdownItem onClick={()=>loadPlan(prp)}>Lesson Plan</CDropdownItem>
+                    <CDropdownItem onClick={()=>loadAnalysis(prp)}>Result Analysis</CDropdownItem>
                   </CDropdownMenu>
                 </CDropdown>
               </CWidgetDropdown>
             </CCol>
-            
-
           }):''
         }
      
-
-      
-      
-     
       </CRow>
- 
-      <Students
+      
+      <Themes />
+      <Staffsubject
+        pid={subject.itemid1}
+        para={{'icon':process.env.PUBLIC_URL + '/icons/subject.png'}}
+        title={props.user.activeterm}
+        school={props.user.activeschool} 
         termid={props.user.activeterm.termid}
         sessionid={props.user.activeterm.sessionid}
         clientid={props.user.user.id}
         subject={subject}
+        goBack={goBack}
+      /></CCollapse>
+      {page == 1 ? 
+      <Students
+        termid={props.user.activeterm.termid}
+        sessionid={props.user.activeterm.sessionid}
+        clientid={subject.clientid}
+        subjectid={subject.itemid1}
+        claszid={subject.itemid}
+        subject={subject}
+        goBack={goBack}
+      />:''
+      }
+
+      {page == 3 ? 
+      <Theme
+        pid={subject.itemid1}
+        para={{'icon':process.env.PUBLIC_URL + '/icons/subject.png'}}
+        title={props.user.activeterm}
+        school={props.user.activeschool} 
+        termid={props.user.activeterm.termid}
+        sessionid={props.user.activeterm.sessionid}
+        clientid={props.user.user.id}
+        subject={subject}
+        goBack={goBack}
+      />:''
+      }
+
+      {page == 4 ? 
+      <>
+      <PlanForm
+        subjectid={subject.itemid1}
+        subject={subject}
+        claszid={subject.itemid}
+        termid={props.user.activeterm.termid}
+        sessionid={props.user.activeterm.sessionid}
+        staffid={props.user.user.id}
+        goBack={goBack}
+        
       />
+      <Plan
+        subjectid={subject.itemid1}
+        subject={subject}
+        claszid={subject.itemid}
+        termid={props.user.activeterm.termid}
+        sessionid={props.user.activeterm.sessionid}
+        staffid={props.user.user.id}
+        goBack={goBack}
+        
+      />
+      </>
+      
+      :''
+      }
     </>
   )
 }

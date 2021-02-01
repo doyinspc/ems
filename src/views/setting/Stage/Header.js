@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux';
-import  moment from 'moment';
-import {getSchools, getSchool, deleteSchool} from './../../../actions/setting/school';
+import React from 'react'
 import {
   CButton,
-  CCard,
-  CCardBody,
   CCardHeader,
   CCol,
-  CRow,
-  CCollapse,
+  CRow
 } from '@coreui/react'
-import SchoolForm from'./../Form/School'
-import SchoolTable from'./../Table/School'
-
 
 const Header = (props) => {
   
@@ -32,6 +23,7 @@ const Header = (props) => {
             </CCol>
             <CCol xs={4} sm="4" className="d-md-block">
               <CButton 
+                  disabled={props.editer === false ? true : false}
                   data-target='#formz' 
                   data-toggle="collapse" 
                   color="primary" 

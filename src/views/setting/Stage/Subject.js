@@ -24,21 +24,21 @@ const Subject = (props) => {
 
   //GET SUBJECTS PER SCHOOL
   useEffect(() => {
-    if(props.activeschool !== undefined && props.activeschool.hasOwnProperty('id') && parseInt(props.activeschool))
-    {
+    
+    
      let params = {
       data:JSON.stringify(
       {
-          'schoolid':props.activeschool.id
+          'is_delete':0
       }),
-      cat:'select',
+      cat:'selected',
       table:'subjects',
       narration:'get subjects'
         }
       props.getSubjects(params)
-    }
+   
     
-  }, [props.activeschool])
+  }, [])
 
   
   const onEdit = (dt) =>{

@@ -16,7 +16,7 @@ import {
     CNavbar
  } from '@coreui/react';
 
-const Staffsubject = (props) => {
+const Staffsubject = (props) => { 
   
   return (
         <>
@@ -58,13 +58,25 @@ const Staffsubject = (props) => {
                  />
                 </CTabPane>
                 <CTabPane>
-              <Staffsubject1  data={props.data}/>
+              <Staffsubject1  
+                    data={props.data}
+                    onEdit={(rw)=>props.onEdit(rw)}
+                    onDelete={(rw)=>props.onDelete(rw)}
+              />
               </CTabPane>
                 <CTabPane>
-              <Staffsubject2  data={props.data}/>
+              <Staffsubject2  
+                    data={props.data}
+                    onEdit={(rw)=>props.onEdit(rw)}
+                    onDelete={(rw)=>props.onDelete(rw)}
+                    />
               </CTabPane>
                 <CTabPane>
-              <Staffsubject3  data={props.data}/>
+              <Staffsubject3  
+                    data={props.data}
+                    onEdit={(rw)=>props.onEdit(rw)}
+                    onDelete={(rw)=>props.onDelete(rw)}
+                    />
               </CTabPane>
               </CTabContent>
             </CTabs>

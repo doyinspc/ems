@@ -1,6 +1,6 @@
 import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { registerStudentfee, updateStudentfee, deleteStudentfee } from './../../actions/student/studentfee';
+import { registerStudentfee, updateStudentfee,  getStudentfeesSingle, deleteStudentfee } from './../../actions/student/studentfee';
 import { getAccounts } from './../../actions/setting/account';
 import { getFees } from './../../actions/setting/fee';
 import SearchStudent from './../staff/SearchDashboard2';
@@ -80,18 +80,34 @@ const Studentfees = (props) => {
         
       }, [props.user.activeschool])
     
-      
+    useEffect(() => {
+        if(props.user.activeterm !== undefined && props.user.activeterm.hasOwnProperty('id') && parseInt(props.user.activeterm.id) > 0 && student !== undefined && student.hasOwnProperty('id') && parseInt(student.id) > 0)
+        { 
+         let params = {
+          data:JSON.stringify(
+          {
+              'sessionid':props.user.activeterm.sessionid,
+              'studentid':student.id
+          }),
+          cat:'studentfees',
+          table:'studentfees',
+          narration:'get studentfees'
+          }
+          props.getStudentfeesSingle(params)
+        }
+        
+      }, [props.user.activeterm, student]) 
     
-    const handleSubmit = () =>{
+      const handleSubmit = () =>{
         let mt = props.user !== undefined && props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns : [[], []];
-        let marray ='';
+        let marray = '';
         let ar = 0;
          if(mt.length > 0)
          {
             marray = mt[0].filter(rw=>rw.termid === termid);
             ar = marray && Array.isArray(marray)  && marray.length > 0 ? marray[0].sessionid : null;
         }
-        console.log(marray)
+        
             let fd = new FormData();
             fd.append('studentid', studentid);
             fd.append('amount', amount);
@@ -162,11 +178,11 @@ let { name, photo} = student || ''
 
   return (
     <>
-    <CRow className='align-center mx-auto d-flex ' style={{width:'600px'}} sm={12}>
+    <CRow className='align-center mx-auto d-flex '  sm={12}>
     <CCol sm="6" md="6" className='mx-auto'>
                     <CCard>
                       <CCardHeader>
-                        <h4>{parseInt(id) > 0 ? 'Edit':'Add'}</h4>
+                        <h4>PAY FEES : {parseInt(id) > 0 ? 'Edit':'Add'}</h4>
                       </CCardHeader>
                         <CCardBody>
                         <CForm action="" method="post" className="form-horizontal">
@@ -178,7 +194,7 @@ let { name, photo} = student || ''
                                     <SearchStudent studentz={(rw)=>onStudent(rw)}  />
                                 </CCol>
                             </CFormGroup>
-                            <CFormGroup row> 
+                            {/* <CFormGroup row> 
                                 <CCol md="3">
                                 <CLabel htmlFor="termid">Term<i className='text-danger'>*</i></CLabel>
                                 </CCol>
@@ -193,7 +209,7 @@ let { name, photo} = student || ''
                                         {temarray}
                                     </CSelect>
                                 </CCol>
-                            </CFormGroup>
+                            </CFormGroup> */}
                             <CFormGroup row> 
                                 <CCol md="3">
                                 <CLabel htmlFor="feeid">Fee<i className='text-danger'>*</i></CLabel>
@@ -255,13 +271,12 @@ let { name, photo} = student || ''
                                         />
                                 </CCol>
                             </CFormGroup>
-                        </CForm>   
+                        </CForm> 
                         </CCardBody>
                         <CCardFooter>
                             <CButton block type="submit" size="sm" color="primary" onClick={handleSubmit}><CIcon name="cil-scrubber" /> Submit</CButton>
                             <CButton block type="button" size="sm" color="danger" onClick={()=>props.handleClose()}><CIcon name="cil-ban" /> Close</CButton><br/>
-                            <CButton block type="sbutton" size="sm" color="warning" onClick={()=>props.handleClose()}><CIcon name="cil-ban" /> Clear</CButton><br/>
-                        </CCardFooter>
+                            </CCardFooter>
                     </CCard>
                     </CCol>
                     <CCol sm="6" md="6" className='mx-auto'>
@@ -282,6 +297,19 @@ let { name, photo} = student || ''
                                     
                                 </CRow>
                                 <CRow className="text-center d-flex m-auto p-auto align-items-center">
+                                    <table>
+                                        {
+                                            props.studentfee.map((prp, ind)=>{
+                                                let amt = new Intl.NumberFormat(undefined,{style:'currency', currency:'NGR'})
+                                                return <tr key={ind}>
+                                                    <td>{prp.datepaid}</td>
+                                                    <td>{prp.feename}</td>
+                                                    <td>{amt.format(prp.amount)}</td>
+                                                </tr>
+                                            })
+                                        }
+                                        
+                                    </table>
                                    
                                 </CRow>
                                 <CRow>
@@ -301,13 +329,14 @@ const mapStateToProps = (state) =>({
     fees : state.feeReducer.fees,
     accounts : state.accountReducer.accounts,
     users : state.userReducer,
-
+    studentfee : state.studentfeeReducer.studentsinglefees
   })
   export default connect(mapStateToProps, {
     registerStudentfee,
     updateStudentfee,
     getAccounts,
-    getFees
+    getFees,
+    getStudentfeesSingle
     
   })(Studentfees)
   

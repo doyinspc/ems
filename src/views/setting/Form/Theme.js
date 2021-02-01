@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerTheme, updateTheme, deleteTheme} from './../../../actions/setting/theme';
 import {getClaszs} from './../../../actions/setting/clasz';
+import CKEditor from 'ckeditor4-react';
 import { useHistory, useLocation } from 'react-router-dom'
 import {
   CBadge,
@@ -76,9 +77,9 @@ const Theme = (props) => {
       setTopic(dt.topic);
       setClaszid(dt.claszid);
       setTermid(dt.termid);
-      setObjective(JSON.parse(dt.objective));
-      setMaterial(JSON.parse(dt.material));
-      setContent(JSON.parse(dt.content));
+      setObjective(dt.objective);
+      setMaterial(dt.material);
+      setContent(dt.content);
       setElement('nf-claszid', dt.claszid )
       let termnamex = '';
       let termnames = termarray.filter(rw=>rw.id === dt.termid);
@@ -89,9 +90,9 @@ const Theme = (props) => {
       setModuleid(null);
       setNamez('');
       setClaszid('');
-      setObjective([]);
-      setMaterial([]);
-      setContent([]);
+      setObjective('');
+      setMaterial('');
+      setContent('');
     }
     
   }, [props.data])
@@ -100,17 +101,19 @@ const Theme = (props) => {
  
  
   const handleSubmit = () =>{
-    if(namez.length > 0){
+    if(namez.length > 0)
+    {
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('topic', topic);
       fd.append('claszid', claszid);
       fd.append('termid', termid);
       fd.append('moduleid', moduleid);
-      fd.append('objective', JSON.stringify(objective));
-      fd.append('material', JSON.stringify(material));
-      fd.append('content', JSON.stringify(content));
-      fd.append('checker', 'A'+subjectid+'_B'+claszid);
+      fd.append('objective', objective);
+      fd.append('material', material);
+      fd.append('content', content);
+      fd.append('staffid', props.user.user.id);
+      fd.append('checker', 'A'+moduleid+'_B'+subjectid+'_C'+claszid);
       fd.append('checker1', 'A'+moduleid+'_B'+subjectid);
       fd.append('table', 'themes');
       
@@ -128,7 +131,7 @@ const Theme = (props) => {
         fd.append('cat', 'insert');
         props.registerTheme(fd)
       }
-      props.onReset()
+     // props.onReset()
     }
   }
   const loadContent = (num, inde, dt) =>{
@@ -257,7 +260,7 @@ const Theme = (props) => {
                   type="number" 
                   id="nf-module" 
                   module="modulez"
-                  defaultValue={moduleid}
+                  value={moduleid}
                   onChange={(e)=>setModuleid(e.target.value)}
                   placeholder="00" 
                 />
@@ -269,7 +272,7 @@ const Theme = (props) => {
                   type="text" 
                   id="nf-name" 
                   name="namez"
-                  defaultValue={namez}
+                  value={namez}
                   onChange={(e)=>setNamez(e.target.value)}
                   placeholder="Matter" 
                 />
@@ -281,11 +284,11 @@ const Theme = (props) => {
                   type="text" 
                   id="nf-claszid" 
                   name="claszid"
+                  defaultValue={claszid}
                   onChange={(e)=>setClaszid(e.target.value)}
                   placeholder="" 
                 >
                   {id && parseInt(id) > 0 ? <option value={claszid}>{props.data !== null && props.data !== undefined? props.data.claszname : ''}</option>:<option></option>}
-                  
                   {clarray}
               </CSelect>
               <CFormText className="help-block">Select the class</CFormText>
@@ -296,6 +299,7 @@ const Theme = (props) => {
                   type="text" 
                   id="nf-termid" 
                   name="termid"
+                  defaultValue={termid}
                   onChange={(e)=>setTermid(e.target.value)}
                   placeholder="" 
                 >
@@ -307,107 +311,53 @@ const Theme = (props) => {
             </CFormGroup>
             <CFormGroup>
               <CLabel htmlFor="nf-content">Lesson Content</CLabel>
-              <ul className='list-items'>
-              {
-                content.map((prp, ind)=>{
-                return  <CRow style={{maxWidth:'280px'}}> 
-                          <CCol xs={10}  className='' style={{wordWrap:'break-word'}}>{prp}</CCol>
-                          <CCol xs={2}>
-                          <span className='pull-left' >
-                          <a onClick={()=>loadContent(2, ind, prp)} className='btn btn-link btn-sm'><i className='fa fa-trash'></i></a>
-                          </span>
-                          </CCol>
-                        </CRow>
-                })
-              }
-              </ul>
-              <CInputGroup>
-                  <CInput 
-                    type="text" 
-                    id="nf-contentid"
-                    value={contentind}
-                    onChange={(e)=>setContentind(e.target.value)}
-                    placeholder="Type-in content ..." 
-                  />
-                  <CInputGroupAppend>
-                    <CButton 
-                      onClick={(e)=>loadContent(0, e, 0 )} 
-                      type="button" 
-                      color="secondary"
-                      >
-                        <i className='fa fa-plus'></i></CButton>
-                  </CInputGroupAppend>
-                </CInputGroup>
+              <CKEditor
+                data ={content}
+                type='classic'
+                config={{
+                    toolbar:[[
+                        'Cut', 'Copy', 'Paste', 
+                        'PasteText', 'PasteFromWord', 
+                        'Undo', 'Redo', 'NumberedList', 'BulletedList',
+                        'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'CopyFormatting', 'RemoveFormat' 
+                    ]]
+                }}
+                onChange={e=>setContent(e.editor.getData())}
+                />
+             
+              
               <CFormText className="help-block">Add or remove subtopics outline in order of presentation</CFormText>
             </CFormGroup>
             <CFormGroup>
-              <CLabel htmlFor="nf-objective">Lesson Objectives</CLabel><i>
-              <ul className='list-items'>
-              {
-                objective.map((prp, ind)=>{
-                return  <CRow style={{maxWidth:'280px'}}> 
-                          <CCol xs={10}  className='' style={{wordWrap:'break-word'}}>{prp}</CCol>
-                          <CCol xs={2}>
-                          <span className='pull-left' >
-                          <a onClick={()=>loadObjective(2, ind, prp)} className='btn btn-link btn-sm'><i className='fa fa-trash'></i></a>
-                          </span>
-                          </CCol>
-                        </CRow>
-                })
-              }
-             </ul></i>
-              <CInputGroup>
-                  <CInput 
-                    type="text" 
-                    id="nf-objectiveid"
-                    value={objectiveind}
-                    onChange={(e)=>setObjectiveind(e.target.value)}
-                    placeholder="Type-in objective ..." 
-                  />
-                  <CInputGroupAppend>
-                    <CButton 
-                      onClick={(e)=>loadObjective(0, e, 0 )} 
-                      type="button" 
-                      color="secondary"
-                      >
-                        <i className='fa fa-plus'></i></CButton>
-                  </CInputGroupAppend>
-                </CInputGroup>
+              <CLabel htmlFor="nf-objective">Lesson Objectives</CLabel><CKEditor
+                data ={objective}
+                type='classic'
+                config={{
+                    toolbar:[[
+                        'Cut', 'Copy', 'Paste', 
+                        'PasteText', 'PasteFromWord', 
+                        'Undo', 'Redo', 'NumberedList', 'BulletedList',
+                        'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'CopyFormatting', 'RemoveFormat' 
+                    ]]
+                }}
+                onChange={e=>setObjective(e.editor.getData())}
+                />
               <CFormText className="help-block">Add or remove lesson objectives</CFormText>
             </CFormGroup>
             <CFormGroup>
-              <CLabel htmlFor="nf-material">Lesson Materials</CLabel><i>
-              <ul className='list-items'>
-              {
-                material.map((prp, ind)=>{
-                return  <CRow style={{maxWidth:'280px'}}> 
-                          <CCol xs={10}  className='' style={{wordWrap:'break-word'}}>{prp}</CCol>
-                          <CCol xs={2}>
-                          <span className='pull-left' >
-                          <a onClick={()=>loadMaterial(2, ind, prp)} className='btn btn-link btn-sm'><i className='fa fa-trash'></i></a>
-                          </span>
-                          </CCol>
-                        </CRow>
-                })
-              }
-             </ul></i>
-              <CInputGroup>
-                  <CInput 
-                    type="text" 
-                    id="nf-materialid"
-                    value={materialind}
-                    onChange={(e)=>setMaterialind(e.target.value)}
-                    placeholder="Type-in Material ..." 
-                  />
-                  <CInputGroupAppend>
-                    <CButton 
-                      onClick={(e)=>loadMaterial(0, e, 0 )} 
-                      type="button" 
-                      color="secondary"
-                      >
-                        <i className='fa fa-plus'></i></CButton>
-                  </CInputGroupAppend>
-                </CInputGroup>
+              <CLabel htmlFor="nf-material">Lesson Materials</CLabel><CKEditor
+                data ={material}
+                type='classic'
+                config={{
+                    toolbar:[[
+                        'Cut', 'Copy', 'Paste', 
+                        'PasteText', 'PasteFromWord', 
+                        'Undo', 'Redo', 'NumberedList', 'BulletedList',
+                        'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'CopyFormatting', 'RemoveFormat' 
+                    ]]
+                }}
+                onChange={e=>setMaterial(e.editor.getData())}
+                />
               <CFormText className="help-block">Add or remove Instruction Materials</CFormText>
             </CFormGroup>
          

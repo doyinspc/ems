@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerSubject, updateSubject, deleteSubject} from './../../../actions/setting/subject';
+import {getDepartments} from './../../../actions/setting/department';
+import {getUnits} from './../../../actions/setting/unit';
 import { useHistory, useLocation } from 'react-router-dom'
 import {
   CBadge,
@@ -27,23 +29,36 @@ const Subject = (props) => {
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
   const [departmentid, setDepartmentid] = useState(null)
+  const [unitid, setUnitid] = useState(null)
+  const [departmentname, setDepartmentname] = useState(null)
+  const [unitname, setUnitname] = useState(null)
   //GET DEPARTMENTS PER SCHOOL
   useEffect(() => {
-    if(props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool))
-    {
+
      let params = {
       data:JSON.stringify(
       {
-          'schoolid':props.user.activeschool.id
+          'is_active':0
       }),
-      cat:'select',
+      cat:'selected',
       table:'departments',
       narration:'get departments'
         }
       props.getDepartments(params)
-    }
+
+      let params1 = {
+        data:JSON.stringify(
+        {
+            'is_active':0
+        }),
+        cat:'selected',
+        table:'units',
+        narration:'get units'
+          }
+        props.getUnits(params1)
     
-  }, [props.activeschool])
+    
+  }, [])
 
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
@@ -54,7 +69,11 @@ const Subject = (props) => {
       setNamez(dt.name);
       setAbbrv(dt.abbrv);
       setDepartmentid(dt.departmentid);
+      setUnitid(dt.unitid);
+      setDepartmentname(dt.departmentname);
+      setUnitname(dt.unitname);
       setElement('nf-department', dt.departmentid)
+      setElement('nf-unit', dt.unitid)
     }else{
       setId(null);
       setNamez('');
@@ -70,6 +89,7 @@ const Subject = (props) => {
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
       fd.append('departmentid', departmentid);
+      fd.append('unitid', unitid);
       fd.append('table', 'subjects');
       
       if(id && parseInt(id) > 0)
@@ -87,13 +107,17 @@ const Subject = (props) => {
         props.registerSubject(fd)
       }
       setId(null);
-      setNamez('');
-      setAbbrv('');
+      
     }
   }
 
   let subs = props.departments.departments;
   let sub = subs !== undefined && Array.isArray(subs) ? subs.filter(rw=>parseInt(rw.is_active) == 0).map((row, ind)=>{
+  return <option key={ind} value={row.id}>{row.name}</option>
+  }):'';
+
+  let unis = props.units.units;
+  let uni = unis !== undefined && Array.isArray(unis) ? unis.filter(rw=>parseInt(rw.is_active) == 0 && parseInt(rw.departmentid) === parseInt(departmentid)).map((row, ind)=>{
   return <option key={ind} value={row.id}>{row.name}</option>
   }):'';
   
@@ -145,16 +169,29 @@ const Subject = (props) => {
             </CFormGroup>
             <CFormGroup>
               <CLabel htmlFor="nf-department">Department </CLabel>
-              <CSelect 
-                  type="text" 
+              <CSelect  
                   id="nf-department" 
                   name="department"
                   value={departmentid}
                   onChange={(e)=>setDepartmentid(e.target.value)}
                 >
+                  {id && parseInt(id) > 0 ?<option value={departmentid}>{departmentname})</option>: <option></option>}
                  {sub}
               </CSelect>
-              <CFormText className="help-block">Please enter subject abbrv (max 6 characters)</CFormText>
+              <CFormText className="help-block">Please select department</CFormText>
+            </CFormGroup>
+            <CFormGroup>
+              <CLabel htmlFor="nf-unit">Unit </CLabel>
+              <CSelect  
+                  id="nf-unit" 
+                  name="unit"
+                  value={unitid}
+                  onChange={(e)=>setUnitid(e.target.value)}
+                >
+                {id && parseInt(id) > 0 ?<option value={unitid}>{unitname}</option>: <option></option>}
+                 {uni}
+              </CSelect>
+              <CFormText className="help-block">Please select unit</CFormText>
             </CFormGroup>
           </CForm>
         </CCardBody>
@@ -169,10 +206,13 @@ const Subject = (props) => {
 const mapStateToProps = (state) =>({
   subjects : state.subjectReducer,
   departments : state.departmentReducer,
+  units : state.unitReducer,
   user:state.userReducer
 })
 export default connect(mapStateToProps, {
   registerSubject,
   updateSubject,
-  deleteSubject
+  deleteSubject,
+  getDepartments,
+  getUnits
 })(Subject)

@@ -59,6 +59,7 @@ const Dashboard = (props) => {
         <CCol xs='2' className='m-0'>
             <img
                src={process.env.REACT_APP_SERVER_URL + props.photo} 
+               style={{height:'40px', width:'40px'}}
                height="30px"
                alt="profile-image" 
                class="profile"

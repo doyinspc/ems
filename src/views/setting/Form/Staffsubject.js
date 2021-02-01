@@ -56,12 +56,13 @@ const Staffsubject = (props) => {
     if(props.data !== undefined && parseInt(props.data.id) > 0)
     {
       let dt = props.data;
+      
       setId(dt.id);
       setStaff(dt.clientid);
       setClaszid(dt.itemid);
       setSubjectid(dt.itemid1);
       setContact(dt.contact);
-      setElement('nf-subjectid', dt.item1id )
+      setElement('nf-subjectid', dt.itemid1 )
       setElement('nf-claszid', dt.itemid )
       setElement('nf-staff', dt.clientid )
     }else{
@@ -160,6 +161,7 @@ const Staffsubject = (props) => {
                       type="text" 
                       id="nf-subjectid" 
                       name="subjectid"
+                      defaultValue={subjectid}
                       onChange={(e)=>setSubjectid(e.target.value)}
                       placeholder="" 
                     >

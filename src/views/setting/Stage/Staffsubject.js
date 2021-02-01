@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
+import Swal from 'sweetalert';
 import {getStaffsubjects, getStaffsubject, deleteStaffsubject, updateStaffsubject} from './../../../actions/staff/staffsubject';
 import {
   CCard,
@@ -45,8 +46,23 @@ const Staffsubject = (props) => {
       setDts(dt);
       setCollapse(true)
   }
-  const onDelete = (rw, dt) =>{
+  const onDelete = (rw) =>{
     
+    Swal("Are you sure you want to delete you will not be able to restore the data.")
+    .then((value) => {
+      if(value === true && parseInt(rw.id) > 0)
+      {
+          let fd = new FormData();
+          fd.append('id', rw.id);
+          fd.append('sessionid', props.pid)
+          fd.append('table', 'accessstudentsubject')
+          fd.append('cat', 'deletes')
+          props.deleteStaffsubject(fd, rw.id);
+      }else{
+        Swal(`Not deleted`);
+      }
+      
+    });
   }
   const onActivate = (rw, num) =>{
    

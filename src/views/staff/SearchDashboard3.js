@@ -47,20 +47,21 @@ const Dashboard = (props) => {
 
 
   let dat = clasz.map((prop, index)=>{
-    return <CListGroupItem key={index} color='secondary' onClick={()=>props.studentz(prop)}  active>
-        <CRow>
-        <CCol xs='2' className='m-2'>
+    return <CListGroupItem key={index} target='_blank' className="m-0"  onClick={()=>props.studentx(prop)} active>
+      <CRow>
+        <CCol xs='2' className='m-0'>
             <img
-               src={process.env.REACT_APP_SERVER_URL + props.photo} 
+               src={process.env.REACT_APP_SERVER_URL + prop.photo} 
+               style={{height:'40px', width:'40px'}}
                height="30px"
                alt="profile-image" 
                class="profile"
                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/icons/profile_1.png'} }
                />
         </CCol>
-        <CCol style={{color:'black'}}>
-        <strong style={{color:'black'}}>{props.name}</strong><br/>
-        <small style={{color:'black'}}>{props.employment_no}</small>
+        <CCol>
+        <strong>{prop.name}</strong><br/>
+        <small>{prop.admission_no}</small>
         </CCol>
       </CRow>
       </CListGroupItem>
@@ -76,7 +77,7 @@ return (
                     className='w-100'
                     value={term}
                     onChange={(e)=>setTerm(e.target.value)}
-                    placeholder=' Student search...'
+                    placeholder=' Search for students... Name or Admission number'
                     
                     />     
                 </CFormGroup>

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 const Studentclasss = (props) => {
    let history = useHistory()
    
-  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
+  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw != null || rw != undefined) : []
   let cont = data.map((row, ind)=>{
     return <tr key={ind}
     onClick={() => history.push(`/studentclasss/${row.id}`)}>

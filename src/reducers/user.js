@@ -51,12 +51,13 @@ let myTermStore = JSON.parse(localStorage.getItem('myterm'))
 let user = null
 let myregschx = null
 let mscx = ''
-if(userx !== null){
-user = userx;
-let accx = user.access !=='' ? JSON.parse(user.access):[[1],[],[],[],[]];
-let schsx = Object.keys(accx);
-myregschx = user.schoolid && parseInt(user.schoolid) > 0 ? [...schsx, user.schoolid] : schsx;
-mscx = parseInt(user.is_admin) === 1 ? [1 ,2, 3, 4, 5, 6, 7, 8, 9, 10]: myregschx;
+if(userx !== null)
+{
+    user = userx;
+    let accx = user.access !=='' ? JSON.parse(user.access):{};
+    let schsx = Object.keys(accx);
+    myregschx = user.schoolid && parseInt(user.schoolid) > 0 ? [...schsx, user.schoolid] : schsx;
+    mscx = parseInt(user.is_admin) === 1 ? [1 ,2, 3, 4, 5, 6, 7, 8, 9, 10]: myregschx;
 }        
 
 //localStorage.clear()
@@ -70,8 +71,8 @@ const initialState = {
     mySchoolData:mySchoolStore ? mySchoolStore : [],
     myData:myDataStore ? myDataStore : [],
     dropdowns:dropdownsStore ? dropdownsStore : [],
-    activeschool:activeschoolStore ? activeschoolStore : {},
-    activeterm:activetermStore ? activetermStore : {},
+    activeschool: activeschoolStore ? activeschoolStore : {},
+    activeterm: activetermStore && activetermStore !== null && activetermStore !== undefined ? activetermStore : {},
     isAuthenticated: auth  && parseInt(auth) === 1 ? true : false,
     isLoading: false,
     isRegistered: userx && parseInt(userx.id) > 0 ? true: false,
@@ -80,17 +81,6 @@ const initialState = {
     msg: null,
     isEdit:-1,
     ref:null,
-}
-
-const changeState = (aluu, actid) =>
-{
-    let newUser = [...aluu];
-    newUser.forEach(alu => {
-        if(alu.id == actid.id){
-            alu.is_active = actid.is_active
-        }
-    });
-    return newUser;
 }
 
 
@@ -108,7 +98,7 @@ export default function(state = initialState, action){
             localStorage.setItem('auth', JSON.stringify(1));
             if(localStorage.getItem('userx12345') === null)
             {
-            localStorage.setItem('userx12345', JSON.stringify(action.payload));
+                localStorage.setItem('userx12345', JSON.stringify(action.payload));
             }
             let acc = action.payload.access !=='' ? JSON.parse(action.payload.access):{};
             let schs = Object.keys(acc);

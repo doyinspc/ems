@@ -1,11 +1,39 @@
 import React from 'react'
 import { connect } from 'react-redux';
-
+import Swal from 'sweetalert'
 
 const Staffsubject = (props) => {
-  
-  let data = []//props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== 'null' || rw !== undefined) : []
+  let popz = (dt) =>{
+    if(dt && Array.isArray(dt) && dt.length === 1){
+    Swal("Please select what you want to do ?", {
+      buttons: {
+        cancel: "Delete!",
+        catch: {
+          text: "Edit",
+          value: "catch",
+        },
+        defeat: true,
+      },
+    })
+    .then((value) => {
+      switch (value) {
+     
+        case "defeat":
+          props.onDelete(dt[0])
+          break;
+        case "catch":
+          props.onEdit(dt[0])
+          break;
+        default:
+          Swal("canceled!");
+      }
+    });
+  }
+  }
+
+  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== 'null' || rw !== undefined) : []
   let allStaff = {};
+  let allStaffz = {};
   let allStaffName = {};
   let allSubject = {};
   let allClass = {};
@@ -28,6 +56,27 @@ const Staffsubject = (props) => {
     }
 
   });
+  
+  data.filter(rw =>rw !== 'null' || rw !== null || rw !== undefined).forEach(prp => {
+    if(prp.itemid1 in allStaffz)
+    {
+        if(prp.itemid in allStaffz[prp.itemid1])
+        {
+            allStaffz[prp.itemid1][prp.itemid].push(prp)
+        }else
+        {
+            allStaffz[prp.itemid1][prp.itemid] = [prp]
+        }
+        
+    }else
+    {
+        allStaffz[prp.itemid1] = {}
+        allStaffz[prp.itemid1][prp.itemid] = [prp]
+    }
+
+  });
+  
+  
   data.forEach(prp => {
     return allStaffName[prp.clientid] = prp.clientname;
   });
@@ -54,7 +103,7 @@ const Staffsubject = (props) => {
                             row_arr.push(rz.reduce((a, b)=>parseInt(a) + parseInt(b), 0));
                             let y = rz.reduce((a, b)=>parseInt(a) + parseInt(b), 0)
                         
-                        return <th key={ind1} className='text-center'><span style={{display:'block'}}>{parseInt(y) > 0 ? y : '-'}</span></th>
+                        return <th key={ind1} onClick={()=>popz(allStaffz[row][row1])} className='text-center'><span style={{display:'block'}}>{parseInt(y) > 0 ? y : '-'}</span></th>
                     })}
                     <th className="text-center">{row_arr.reduce((a, b)=>parseInt(a) + parseInt(b), 0)}</th>
               </tr>

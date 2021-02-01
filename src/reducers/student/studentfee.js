@@ -1,5 +1,6 @@
 import {
     STUDENTFEE_GET_MULTIPLE,
+    STUDENTFEE_GET_SINGLE,
     STUDENTFEE_GET_ONE,
     STUDENTFEE_REGISTER_SUCCESS,
     STUDENTFEE_REGISTER_FAIL,
@@ -11,7 +12,10 @@ import {
     STUDENTFEE_UPDATE_FAIL,
     STUDENTFEE_DELETE_SUCCESS,
     STUDENTFEE_DELETE_FAIL,
-    STUDENTFEE_EDIT
+    STUDENTFEE_EDIT,
+    STUDENTFEE_SET_SUCCESS,
+    STUDENTFEE_SET_FAIL,
+    STUDENTFEE_SET_LOAD
 } from "./../../types/student/studentfee";
 
 let studentfeeStore = JSON.parse(localStorage.getItem('studentfee'))
@@ -19,6 +23,7 @@ let studentfeeStore = JSON.parse(localStorage.getItem('studentfee'))
 const initialState = {
     isLoading: false,
     studentfees: studentfeeStore ? studentfeeStore : [],
+    studentsinglefees:[],
     studentfee:{},
     msg: null,
     isEdit:-1,
@@ -56,6 +61,11 @@ export default function(state = initialState, action){
                 studentfees : action.payload,
                 msg:'DONE!!!'
             };
+        case STUDENTFEE_GET_SINGLE:
+            return {
+                ...state,
+                studentsinglefees : action.payload
+            };
         case STUDENTFEE_GET_ONE:
             let all = [...state.studentfees];
             let ses = all.filter(row=>row.cid == action.payload)[0];
@@ -69,6 +79,24 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 studentfees: [...state.studentfees, action.payload],
+                msg:action.msg
+            }; 
+        case STUDENTFEE_SET_SUCCESS:
+            let d = [...state.studentfees];
+            let d1 = action.payload;
+            d1.forEach(ele=>{
+                let r = d.findIndex(rw=>parseInt(rw.id) === parseInt(ele.id))
+                if(r > -1)
+                {
+                    d[r] = ele;
+                }else{
+                    d = [...d, ele];
+                }
+            })
+            localStorage.setItem('studentfee', JSON.stringify(d));
+            return {
+                ...state,
+                studentfees: d,
                 msg:action.msg
             }; 
         case STUDENTFEE_ACTIVATE_SUCCESS:

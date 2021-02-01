@@ -7,10 +7,13 @@ import {
   CCol,
   CRow,
   CCollapse,
+  CCardHeader,
+  CButton
 } from '@coreui/react'
 import StudentfeeForm from'./FeeForm'
 import StudentfeeTable from'./FeeTable'
 import Header from './../setting/Stage/Header';
+import StaffDashboardDefault from '../staff/StaffDashboardDefault';
 
 
 const Studentfee = (props) => {
@@ -26,10 +29,8 @@ const Studentfee = (props) => {
 
   //GET STUDENTFEES PER SCHOOL
   useEffect(() => {
-    console.log(props.user.activeterm)
     if(props.user.activeterm !== undefined && props.user.activeterm.hasOwnProperty('id') && parseInt(props.user.activeterm.id) > 0)
-    {
-      
+    { 
      let params = {
       data:JSON.stringify(
       {
@@ -50,11 +51,12 @@ const Studentfee = (props) => {
       setCollapse(true);
   }
 
-  
   const onDelete = (rw, dt) =>{
     
   }
   
+ 
+
   const onReset = () =>{
     setId(null);
     setDts({});
@@ -66,15 +68,43 @@ const Studentfee = (props) => {
   let data = props.studentfees.studentfees && Array.isArray(props.studentfees.studentfees) ? props.studentfees.studentfees.filter(rw =>rw !== null || rw !== undefined) : []
   
    return (
+     <>
+     <CCollapse show={collapse}>
+            <StudentfeeForm 
+                id={id}
+                data={dts}
+                onReset={onReset}
+                onClose={onClose}
+            />
+        </CCollapse>
     <CRow>
       <CCol >
         <CCard>
-          <Header 
-              icon={'fa fa-money'}
-              title={'Fees Payment' + props.user.activeterm.id} 
-              school={props.user.activeschool} 
-              toggle={toggle}
-              />
+          <StaffDashboardDefault />
+              <CCardHeader>
+          <CRow>
+          <CCol xs={2} sm="1">
+                <img
+                    src={process.env.PUBLIC_URL + props.icon}
+                    height='40px'
+                />
+          </CCol>
+            <CCol xs={6} sm="7">
+            <h4 id="traffic" className="card-title mb-0">{props.title}</h4>
+            <div className="small text-muted">{props.school != undefined && props.school.hasOwnProperty('name') && props.school.name ? props.school.name: <i>No school active</i>}</div>
+            </CCol>
+            <CCol xs={4} sm="4" className="d-md-block">
+              <CButton 
+                  data-target='#formz' 
+                  data-toggle="collapse" 
+                  color="primary" 
+                  onClick={()=>toggle()}
+                  className="float-right">
+                <i className='fa fa-plus'></i>
+              </CButton>
+            </CCol>
+          </CRow>
+</CCardHeader>
          <CCardBody className='table-responsive'>
             <StudentfeeTable  
                 data={data}
@@ -86,15 +116,9 @@ const Studentfee = (props) => {
           </CCardBody>
         </CCard>
         </CCol>
-        <CCollapse show={collapse}>
-            <StudentfeeForm 
-                id={id}
-                data={dts}
-                onReset={onReset}
-                onClose={onClose}
-            />
-        </CCollapse>
+        
     </CRow>
+    </>
   )
 }
 const mapStateToProps = (state) =>({

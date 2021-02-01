@@ -1,5 +1,7 @@
+import { callSuccess } from "../../actions/common";
 import {
     STAFFSUBJECT_GET_MULTIPLE,
+    STAFFSUBJECT_GET_SUMMARY,
     STAFFSUBJECT_GET_ONE,
     STAFFSUBJECT_REGISTER_SUCCESS,
     STAFFSUBJECT_REGISTER_FAIL,
@@ -23,6 +25,7 @@ const initialState = {
     msg: null,
     isEdit:-1,
     ref:null,
+    staffsubjectsummary:[]
 }
 
 const changeState = (aluu, actid) =>
@@ -56,6 +59,11 @@ export default function(state = initialState, action){
                 staffsubjects : action.payload,
                 msg:'DONE!!!'
             };
+        case STAFFSUBJECT_GET_SUMMARY:
+            return {
+                ...state,
+                staffsubjectsummary : action.payload
+            };
         case STAFFSUBJECT_GET_ONE:
             let all = [...state.staffsubjects];
             let ses = all.filter(row=>row.cid == action.payload)[0];
@@ -80,11 +88,11 @@ export default function(state = initialState, action){
                 staffsubjects: ac
             }
         case STAFFSUBJECT_DELETE_SUCCESS:
-            let rem = state.staffsubjects.filter(cat => cat.id != action.payload);
+            let rem = state.staffsubjects.filter(cat =>parseInt(cat.id) != parseInt(action.payload));
             localStorage.setItem('staffsubject', JSON.stringify(rem));
+            callSuccess()
             return{
                 ...state,
-                msg:'DONE!!!',
                 staffsubjects: rem
             }
         case STAFFSUBJECT_UPDATE_SUCCESS:
@@ -92,6 +100,7 @@ export default function(state = initialState, action){
             let newState = [...state.staffsubjects];
             newState[findInd] = action.payload;
             localStorage.setItem('staffsubject', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

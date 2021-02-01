@@ -25,7 +25,8 @@ import { Link, Redirect } from 'react-router-dom';
 
 const TheHeader = (props) => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector(state => state.sidebarShow)
+  const sidebarShow = useSelector(state => state.page.sidebarShow)
+  
   let user = JSON.parse(localStorage.getItem('userx12345'))
   let username = ''
   if(user !== null){
@@ -41,12 +42,11 @@ const TheHeader = (props) => {
   }
 
   const toggleSidebarMobile = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
+    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
     dispatch({type: 'set', sidebarShow: val})
   }
   
   
-
   return (
     <CHeader withSubheader>
       <CToggler

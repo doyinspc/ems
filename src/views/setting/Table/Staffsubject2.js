@@ -1,11 +1,44 @@
 import React from 'react'
 import { connect } from 'react-redux';
-
+import Swal from 'sweetalert'
 
 const Staffsubject = (props) => {
   
-  let data =[]// props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
+  let popz = (dt) =>{
+    console.log(dt)
+    Swal("Please select what you want to do ?", {
+      buttons: {
+        cancel: "Delete!",
+        catch: {
+          text: "Edit",
+          value: "catch",
+        },
+        defeat: true,
+      },
+    })
+    .then((value) => {
+      switch (value) {
+     
+        case "defeat":
+          props.onDelete(dt)
+          //Swal("Pikachu fainted! You gained 500 XP!");
+          break;
+     
+        case "catch":
+          props.onEdit(dt)
+          //Swal("Gotcha!", "Pikachu was caught!", "success");
+          break;
+     
+        default:
+          Swal("canceled!");
+      }
+    });
+  }
+  
+
+  let data =props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
   let allStaff = {};
+  let allStaffz = {};
   let allStaffName = {};
   let allSubject = {};
   let allClass = {};
@@ -36,6 +69,35 @@ const Staffsubject = (props) => {
     }
 
   });
+  
+  data.filter(rw =>rw !== 'null' || rw !== undefined).forEach(prp => {
+    if(prp.clientid in allStaffz)
+    {
+        if(prp.itemid1 in allStaffz[prp.clientid])
+        {
+            if(prp.itemid in allStaffz[prp.clientid][prp.itemid1])
+            {
+                allStaffz[prp.clientid][prp.itemid1][prp.itemid].push(prp)
+            }else
+            {
+                allStaffz[prp.clientid][prp.itemid1][prp.itemid] = [prp]
+            }
+        }else
+        {
+            allStaffz[prp.clientid][prp.itemid1] = {}
+            allStaffz[prp.clientid][prp.itemid1][prp.itemid] = [prp]
+        }
+        
+    }else
+    {
+        allStaffz[prp.clientid] = {}
+        allStaffz[prp.clientid][prp.itemid1] = {}
+        allStaffz[prp.clientid][prp.itemid1][prp.itemid] =  [prp]
+    }
+
+  });
+  
+  
   data.forEach(prp => {
     return allStaffName[prp.clientid] = prp.clientname;
   });
@@ -60,7 +122,7 @@ const Staffsubject = (props) => {
                         let arz = Object.keys(rz).map((r, i)=>{
                             col_arr[row1].push(rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0));
                             row_arr.push(rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0));
-                            return <span key={i} style={{display:'block'}}>{`${allClass[r]} (${rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0)})`}</span>
+                            return <span key={i} onClick={()=>popz(allStaffz[row][row1][r][0])} style={{display:'block'}}>{`${allClass[r]} (${rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0)})`}</span>
                         })
                         return <th key={ind1} className='text-center'>{arz}</th>
                     })}

@@ -46,12 +46,12 @@ export const getStaffexperience = id => (dispatch, getState) => {
     });  
 };
 //STAFFEXPERIENCE DELETE
-export const deleteStaffexperience = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteStaffexperience = (params, id) => (dispatch, getState) =>{
+    axios.post(path, params, axiosConfig1)
         .then(res => {
             dispatch({
                 type: STAFFEXPERIENCE_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {

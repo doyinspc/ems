@@ -7,6 +7,7 @@ import {
     CChartPie,
     CChartPolarArea
   } from '@coreui/react-chartjs'
+
 import {
   CRow,
   CCol,
@@ -26,6 +27,15 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
+import jsPDF from 'jspdf';
+import $ from 'jquery'
+let movieDetails =[
+  {
+    "title":"Result",
+    "vote_count":3,
+    "original_language":'Yoruba',
+  }
+]
 const Admissions = (props) => {
     const history = useHistory()
     const [active, setActive] = useState(0)
@@ -34,7 +44,7 @@ const Admissions = (props) => {
         let params = {
           data:JSON.stringify(
           {
-              'schoolid':3
+              'is_active':0
           }),
           cat:'selected',
           table:'admissions',
@@ -91,7 +101,7 @@ let pht = data.map((row, ind)=>{
 
    let tabl = data.map((row, ind)=>{
         return <tr key={ind}
-        onClick={() => history.push(`/admissions/${row.id}`)}>
+        onClick={() => window.open(`#/admission/${row.id}`, "_blank")}>
         <td className="text-center">
           <div className="c-avatar">
             <img 
@@ -104,12 +114,14 @@ let pht = data.map((row, ind)=>{
           </div>
         </td>
         <td>
-   <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
+   <div>{`${row.surname} ${row.firstname} ${row.middlename} ${row.id}`}</div>
                 <div className="small text-muted">
                 <span>{row.admission_no}</span>
             </div>
         </td>
-        
+        <td>
+          {row.schoolname}
+        </td>
         <td>
             <div className="small text-muted">
                 <span>Date of Birth</span>: <strong>{row.dob}</strong>
@@ -178,9 +190,20 @@ let pht = data.map((row, ind)=>{
     else
         dobTable[yr] = 1;
   }
+const  printPDF =()=> {
+    var printDoc = new jsPDF();
+    printDoc.fromHTML($(process.env.PUBLIC_URL + 'admission/170').get(0), 10, 10, {'width': 180});
+    printDoc.autoPrint();
+    printDoc.output("dataurlnewwindow"); // this opens a new popup,  after this the PDF opens the print window view but there are browser inconsistencies with how this is handled
+}
   return (
     <>
     <CRow>
+      <div>
+      
+     
+      
+      </div>
     <CCol xs="12" md="12" className="mb-4">
         <CCard>
           <CCardHeader>
@@ -194,6 +217,7 @@ let pht = data.map((row, ind)=>{
                   data-target='#formz' 
                   data-toggle="collapse" 
                   color="primary"
+                  onClick={printPDF}
                   className="float-right">
                 <CIcon name="cil-cloud-download"/>
               </CButton>
@@ -418,6 +442,7 @@ let pht = data.map((row, ind)=>{
                     <th>Admission</th>
                     <th className="text-center">Contacts</th>
                     <th className="text-center">Dates</th>
+                    <th className="text-center">School</th>
                     <th>Origin</th>
                     <th>Gender</th>
                   </tr>

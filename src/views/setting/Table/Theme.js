@@ -5,10 +5,6 @@ import { useHistory} from 'react-router-dom'
 import { 
   CRow ,
   CCol,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-  CDropdown,
   CBadge
 } from '@coreui/react';
 
@@ -30,33 +26,17 @@ const Theme = (props) => {
         <CRow>
           <CCol xs={12} sm={4}>
               <strong >The lesson would be presented as follows</strong>
-              <ul className='ul'>
-                  {
-                    row.content && row.content.length > 3 && Array.isArray(JSON.parse(row.content)) ? JSON.parse(row.content).map((pp, im)=>{
-                        return <li key={ind}>{pp}</li>
-                    }):''
-                  }
-              </ul>
+              <div style={{whiteSpace:'pre-wraps'}}  dangerouslySetInnerHTML={{__html: row.content}} />
           </CCol>
           <CCol xs={12} sm={4}>
           <strong >At the end of the lesson students should be able to</strong>
-            <ul className='ul'>
-                  {
-                    row.objective && row.objective.length > 3 && Array.isArray(JSON.parse(row.objective)) ? JSON.parse(row.objective).map((pp, im)=>{
-                        return <li key={ind}>{pp}</li>
-                    }):''
-                  }
-              </ul>
+          <div style={{whiteSpace:'pre-wraps'}}>
+            <div style={{whiteSpace:'pre-wraps'}}  dangerouslySetInnerHTML={{__html: row.objective}} />
+            </div>
           </CCol>
           <CCol xs={12}sm={4}>
           <strong >Instructional Material</strong>
-            <ul className='ul'>
-                  {
-                    row.material && row.material.length > 3 && Array.isArray(JSON.parse(row.material)) ? JSON.parse(row.objective).map((pp, im)=>{
-                        return <li key={ind}>{pp}</li>
-                    }):''
-                  }
-              </ul>
+          <div  dangerouslySetInnerHTML={{__html: row.material.replace(/(\r\n|\n|\r)/gm, "<br/>") }} />
           </CCol>
            </CRow>
            <CRow className='d-print-none'>

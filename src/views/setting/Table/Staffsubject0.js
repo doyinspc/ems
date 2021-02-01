@@ -32,8 +32,7 @@ const Staffsubject = (props) => {
                     <th><i className='fa fa-users'></i> STAFF NAME</th>
                     <th><i className='fa fa-blacboard'></i> CLASS</th>
                     <th><i className='fa fa-book'></i> SUBJECT</th>
-                    <th><i className='fa fa-clock-o'></i> PERIODS/CONTACTS<br/> (PER WEEK)</th>
-                    
+                    <th><i className='fa fa-clock-o'></i> PERIODS<br/> (PER WEEK)</th>
                     { props.editer === true  || (props.submenu !== undefined && props.submenu.length > 0) ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>

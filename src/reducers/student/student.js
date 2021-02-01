@@ -1,6 +1,8 @@
+import { callReg, callSuccess } from "../../actions/common";
 import {
     STUDENT_GET_MULTIPLE,
     STUDENT_GET_SEARCH,
+    STUDENT_GET_BIRTHDAY,
     STUDENT_GET_ONE,
     STUDENT_REGISTER_SUCCESS,
     STUDENT_REGISTER_FAIL,
@@ -15,6 +17,7 @@ import {
     STUDENT_EDIT
 } from "./../../types/student/student";
 
+
 let studentStore = JSON.parse(localStorage.getItem('student'))
 
 const initialState = {
@@ -24,7 +27,8 @@ const initialState = {
     msg: null,
     isEdit:-1,
     ref:null,
-    result:[]
+    result:[],
+    birthday:[]
 }
 
 const changeState = (aluu, actid) =>
@@ -61,26 +65,39 @@ export default function(state = initialState, action){
         case STUDENT_GET_SEARCH:
             return {
                 ...state,
-                result : action.payload
+                result: action.payload
+            };
+        case STUDENT_GET_BIRTHDAY:
+            return {
+                ...state,
+                birthday: action.payload
             };
         case STUDENT_GET_ONE:
             let all = [...state.students];
-            let ses = all.filter(row=>row.cid == action.payload)[0];
+            
+            let ses = all.filter(rw=>rw !== null).filter(row=>parseInt(row.id) === parseInt(action.payload))[0];
             return {
                 ...state,
                 student : ses,
+                ref:null,
                 MSG:"DONE!!!"
             };
         case STUDENT_REGISTER_SUCCESS:
-            localStorage.setItem('student', JSON.stringify([...state.students, action.payload]));
+            let alls = [...state.students];
+            alls.push(action.payload)
+            localStorage.setItem('student', JSON.stringify(alls));
+            callReg()
             return {
                 ...state,
-                students: [...state.students, action.payload],
+                students: alls,
+                student:action.payload,
+                ref:action.payload.id,
                 msg:action.msg
             }; 
         case STUDENT_ACTIVATE_SUCCESS:
             let ac = changeState(state.students, action.payload);
             localStorage.setItem('student', JSON.stringify(ac));
+            callSuccess()
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -95,10 +112,11 @@ export default function(state = initialState, action){
                 students: rem
             }
         case STUDENT_UPDATE_SUCCESS:
-            const findInd = state.students.findIndex(cat => cat.id == action.payload.id);
+            const findInd = state.students.findIndex(cat =>parseInt(cat.id) === parseInt(action.payload.id));
             let newState = [...state.students];
             newState[findInd] = action.payload;
             localStorage.setItem('student', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

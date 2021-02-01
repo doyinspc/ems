@@ -20,11 +20,13 @@ import {
 import CIcon from '@coreui/icons-react'
 
 const Studentclasss = (props) => {
-   let history = useHistory()
    
-  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
+   const lStudent = (id) =>{
+    window.open(process.env.PUBLIC_URL+"#/students/"+id)
+  }
+  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw != null || rw != undefined) : []
   let pht = data.map((row, ind)=>{
-    return <CCard key={ind} className='mx-2 my-2' style={{width:'100px', height:'auto'}}>
+    return <CCard onClick={()=>lStudent(row.id)} key={ind} className='mx-2 my-2' style={{width:'100px', height:'auto'}}>
         <CCardHeader className='m-0 text-center'>
         <b style={{textTransform:'capitalize'}}>{row.admission_no}</b>  
         </CCardHeader>
@@ -35,7 +37,7 @@ const Studentclasss = (props) => {
             width='100px'
             height='100px'
             alt={row.admission_no} 
-            onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
+            onError={(e)=>{e.target.onerror=null; e.target.src= process.env.PUBLIC_URL + 'avatars/1.png'} }
         />
         </CCardBody>
         <div className='m-0 text-center' style={{zIndex:'1001', position:'relative', top:'0px', backgroundColor:'rgba(0,0,0,0)'}}>

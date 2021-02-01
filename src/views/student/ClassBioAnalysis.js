@@ -23,7 +23,7 @@ const Studentclasss = (props) => {
     const par = useParams()
     const history = useHistory()
    
-  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
+  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw != null || rw != undefined) : []
 
   let genderFemale = data.filter(rw =>rw.gender === 'Female');
   let genderMale = data.filter(rw =>rw.gender === 'Male');
