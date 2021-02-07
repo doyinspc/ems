@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import { connect } from 'react-redux'
+import Swal from 'sweetalert'
 import {
   CRow,
   CDropdown,
@@ -33,8 +34,9 @@ import {
     deleteStudentattendance,
     deleteStudentattendancedaily
   } from './../../actions/student/studentattendance';
-import { leaves } from '../../actions/common'
-
+  
+import { leavestd } from '../../actions/common'
+let leaves = leavestd;
 const Students = (props) => {
    const history = useHistory()
    
@@ -57,7 +59,7 @@ const Students = (props) => {
       cat:'selected',
       table:'attendances',
       narration:'get all students'
-  }
+     }
     props.getStudentattendances(params)
 
     let params1 = {
@@ -73,7 +75,9 @@ const Students = (props) => {
       narration:'get all attendance'
   }
     props.getStudentattendancedailys(params1)
-  }, [dates, props.clasz])
+    
+   
+  }, [dates, props.clasz, props.session, props.term])
 
   let getleave=(id)=>{
       let d = leaves.filter(rw=>parseInt(rw.id) === parseInt(id));
@@ -83,7 +87,6 @@ const Students = (props) => {
     const handleAttendance = ()=>{
 
     }
-
     const handleSubmit = (id)=>{
         let fd = new FormData();
         fd.append('grp', 2);
@@ -109,16 +112,13 @@ const Students = (props) => {
             return 0;
         }
     }
-
     let acarray = leaves.map((p, i)=>{
     return <option value={p.id}>{p.name}</option>
     })
-
     const changeDates = (e) =>{
         setDates(e)
         props.setDates(e)
     }
-
     const saveAttendance=()=>{
         let fd = new FormData();
         fd.append('grp', 4);
@@ -132,12 +132,11 @@ const Students = (props) => {
 
         props.registerStudentattendancedaily(fd);
 
-      }
-      let redirectStudent = (id) =>{
-        window.open(process.env.PUBLIC_URL+"#/students/"+id)
-      }
-
-      let data = props.students && Array.isArray(props.students) ? props.students.filter(rw=>rw!==null).filter(rw =>rw !== null || rw !== undefined) : []
+    }
+    let redirectStudent = (id, sessionid) =>{
+        window.open(process.env.PUBLIC_URL+"#/studentcl/"+id+"/"+sessionid)
+    }
+     
       let registered_attendance_date = Array.isArray(props.studentattendance.studentattendancedailys)  && props.studentattendance.studentattendancedailys !== undefined? props.studentattendance.studentattendancedailys : [];
       let check_date = Array.isArray(registered_attendance_date) ? registered_attendance_date.filter(rw=>rw !== undefined && rw !== null && rw.dates === moment(dates).format("YYYY-MM-DD")) :[];
       let confirm_date = Array.isArray(check_date) && check_date.length > 0 ? true : false;
@@ -145,14 +144,15 @@ const Students = (props) => {
       let registered_attendance_issue = Array.isArray(props.studentattendance.studentattendances)  && props.studentattendance.studentattendances !== undefined? props.studentattendance.studentattendances : [];
       let check_issue = Array.isArray(registered_attendance_issue) ? registered_attendance_issue.filter(rw=>rw !== undefined && rw !== null && rw.dates === moment(dates).format("YYYY-MM-DD")) :[];
      
-       
+      //CONFIRM IF CLASS TEACHER
+      let classteacher = props.classteacher;
 
-   let tabl = props.data.map((row, ind)=>{
+   let tabl = props.data.filter(rw=> rw !== null && rw !== undefined).map((row, ind)=>{
         return <tr key={ind}>
         <td className="text-center">
           <div className="c-avatar">
             <img 
-              src={process.env.REACT_APP_SERVER_URL+ row.photo}
+              src={process.env.REACT_APP_SERVER_URL + row.photo}
               style={{width:'40px', height:'40px'}}
               height="50px" 
               width="50px" 
@@ -181,18 +181,23 @@ const Students = (props) => {
         </td>
         <td className='text-right'>
         <CButtonGroup>
+        <CTooltip content="Student profile">
         <CButton 
               size='sm' 
               color="dark" 
-              onClick={()=>redirectStudent(row.id)}
-              > <CIcon name='cil-user'  /> <span className="d-xs-none">Profile</span></CButton>
+              onClick={()=>redirectStudent(row.id, props.session)}
+              > <CIcon name='cil-user'  /> <span className="d-xs-none">Profile</span></CButton></CTooltip>
            <CButton 
               size='sm' 
               color="secondary" 
               onClick={()=>handleAttendance(row.id, props.termid, props.sessionid)}
               > <CIcon name='cil-envelope-open'  />  <span className="d-xs-none">Message</span></CButton>
+          {classteacher ?<>
           <CDropdown className="m-0">
-              <CDropdownToggle color="info" size='sm'>
+              <CDropdownToggle 
+              color="info" 
+              size='sm' 
+              disabled={ props.activeterm ? false:true }>
               <CIcon name='cil-user-follow'  />  <span className="d-xs-none">Attendance</span> 
               </CDropdownToggle>
               <CDropdownMenu className='bg-info'>
@@ -235,6 +240,12 @@ const Students = (props) => {
                 </CForm>
               </CDropdownMenu>
             </CDropdown>
+            <CTooltip content="Remove Student">
+            <button  
+              disabled={ props.activeterm ? false:true }
+              onClick={()=>props.onRemove(row.cid)} 
+              className='btn btn-sm btn-round btn-danger '><CIcon  size='md' name="cil-x"/></button>
+            </CTooltip></>:''}
             </CButtonGroup>
 
         </td>
@@ -277,8 +288,8 @@ const Students = (props) => {
             </CCol>
            
             <CCol xs={12} md={4}>
-            <CCol xs={12}>
-                { confirm_date ?
+            <CCol xs={12}>{ classteacher ?
+                confirm_date ?
                 <CButton 
                     color="dark" 
                     disabled
@@ -286,10 +297,11 @@ const Students = (props) => {
                     onClick={saveAttendance}
                 >Attendance saved ({moment(dates).format('DD MMM, YYYY')})</CButton>:
                 <CButton 
+                    disabled={ props.activeterm ? false:true }
                     color="info" 
                     block
                     onClick={saveAttendance}
-                >Save Attendance</CButton>}
+                >Save Attendance</CButton>:<CButton>No Permission to Edit</CButton>}
             </CCol>
             </CCol>
         </CRow>
@@ -312,7 +324,8 @@ const Students = (props) => {
 }
 const mapStateToProps = (state) =>({
     studentattendance : state.studentattendanceReducer,
-    user:state.userReducer
+    user:state.userReducer,
+    classstaff:state.classstaffReducer,
   })
   export default connect(mapStateToProps, {
     getStudentattendances,

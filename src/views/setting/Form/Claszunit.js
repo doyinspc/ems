@@ -59,7 +59,7 @@ const Claszunit = (props) => {
       }else
       {
         //INSERT
-        fd.append('schoolid', props.user.activeschool.id);
+        fd.append('claszid', props.pid);
         fd.append('cat', 'insert');
         props.registerClaszunit(fd)
       }

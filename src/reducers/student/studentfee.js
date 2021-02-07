@@ -1,5 +1,6 @@
 import {
     STUDENTFEE_GET_MULTIPLE,
+    STUDENTFEE_GET_SUMMARY,
     STUDENTFEE_GET_SINGLE,
     STUDENTFEE_GET_ONE,
     STUDENTFEE_REGISTER_SUCCESS,
@@ -22,9 +23,10 @@ let studentfeeStore = JSON.parse(localStorage.getItem('studentfee'))
 
 const initialState = {
     isLoading: false,
-    studentfees: studentfeeStore ? studentfeeStore : [],
+    studentfees: [], //studentfeeStore ? studentfeeStore : [],
     studentsinglefees:[],
     studentfee:{},
+    studentfeesummary:{},
     msg: null,
     isEdit:-1,
     ref:null,
@@ -55,11 +57,16 @@ export default function(state = initialState, action){
                 isLoading : true
             };
         case STUDENTFEE_GET_MULTIPLE:
-            localStorage.setItem('studentfee', JSON.stringify(action.payload));
+            //localStorage.setItem('studentfee', JSON.stringify(action.payload));
             return {
                 ...state,
                 studentfees : action.payload,
                 msg:'DONE!!!'
+            };
+         case STUDENTFEE_GET_SUMMARY:
+            return {
+                ...state,
+                studentfeesummary : action.payload
             };
         case STUDENTFEE_GET_SINGLE:
             return {

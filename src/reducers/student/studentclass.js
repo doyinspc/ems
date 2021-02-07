@@ -1,5 +1,7 @@
+import { callReg, callSuccess } from "../../actions/common";
 import {
     STUDENTCLASS_GET_MULTIPLE,
+    STUDENTCLASS_GET_SUMMARY,
     STUDENTCLASS_GET_ONE,
     STUDENTCLASS_REGISTER_SUCCESS,
     STUDENTCLASS_REGISTER_FAIL,
@@ -20,6 +22,7 @@ const initialState = {
     isLoading: false,
     studentclasss: studentclassStore ? studentclassStore : [],
     studentclass:{},
+    studentclasssummary:[],
     msg: null,
     isEdit:-1,
     ref:null,
@@ -56,9 +59,14 @@ export default function(state = initialState, action){
                 studentclasss : action.payload,
                 msg:'DONE!!!'
             };
+        case STUDENTCLASS_GET_SUMMARY:
+            return {
+                ...state,
+                studentclasssummary : action.payload
+            };
         case STUDENTCLASS_GET_ONE:
             let all = [...state.studentclasss];
-            let ses = all.filter(row=>row.cid == action.payload)[0];
+            let ses = all.filter(row=>parseInt(row.id) === parseInt(action.payload))[0];
             return {
                 ...state,
                 studentclass : ses,
@@ -66,6 +74,7 @@ export default function(state = initialState, action){
             };
         case STUDENTCLASS_REGISTER_SUCCESS:
             localStorage.setItem('studentclass', JSON.stringify([...state.studentclasss, action.payload]));
+            callReg()
             return {
                 ...state,
                 studentclasss: [...state.studentclasss, action.payload],
@@ -80,8 +89,9 @@ export default function(state = initialState, action){
                 studentclasss: ac
             }
         case STUDENTCLASS_DELETE_SUCCESS:
-            let rem = state.studentclasss.filter(cat => cat.id != action.payload);
+            let rem = state.studentclasss.filter(cat => parseInt(cat.cid) !== parseInt(action.payload));
             localStorage.setItem('studentclass', JSON.stringify(rem));
+            callReg()
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -92,6 +102,7 @@ export default function(state = initialState, action){
             let newState = [...state.studentclasss];
             newState[findInd] = action.payload;
             localStorage.setItem('studentclass', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

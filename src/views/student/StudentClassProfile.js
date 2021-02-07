@@ -5,7 +5,7 @@ import { CCard, CCardBody, CImg, CButton, CButtonGroup, CCardHeader, CCol, CRow,
 import { getStudent } from './../../actions/student/student';
 import { getStudentclass } from './../../actions/student/studentclass';
 import StudentBio from './StudentBio';
-import StudentAdd from './StudentAdd';
+import StudentAdd from './StudentAdds';
 import { Redirect, useParams } from 'react-router-dom';
 import CIcon from '@coreui/icons-react'
 
@@ -13,11 +13,12 @@ import CIcon from '@coreui/icons-react'
 
 const User = (props) => {
   const studentid = useParams().student;
+  const sessionid = useParams().session;
   const [showed, setShowed] = useState(0)
   const [edited, setEdited] = useState(0)
 
   useEffect(() => {
-    props.getStudent(studentid);
+      props.getStudentclass(studentid);
   }, [showed, studentid])
   
   
@@ -26,10 +27,10 @@ const User = (props) => {
     setShowed(0)
 }
 
-  const { admission_no, id, surname, firstname, middlename, photo, admit, abbrv } = props.student || {};
+
+  const { admission_no, id, surname, firstname, middlename, photo, admit, abbrv } = props.studentclass || {};
   const fullname = surname+' '+firstname+' '+middlename;
  
-
   return (
     <>
     <CRow>
@@ -68,8 +69,8 @@ const User = (props) => {
          </CCard>
       </CCol>
     </CRow>
-    {edited > 0 ? <StudentAdd editid={edited} data={props.student} clasz={2} personal={false} />:''}
-    {showed === 0 && edited === 0 ? <StudentBio  student={props.student} />:''}
+    {edited > 0 ? <StudentAdd editid={edited} data={props.studentclass} sessionid={sessionid} personal={false} />:''}
+    {showed === 0 && edited === 0 ? <StudentBio  student={props.studentclass} />:''}
     
     </>
   )
@@ -79,5 +80,6 @@ const mapStateToProps = (state) =>({
   isAdmin:state.userReducer.isAdmin,
   activeschool:state.userReducer.activeschool,
   student:state.studentReducer.student,
+  studentclass:state.studentclassReducer.studentclass,
 })
-export default connect(mapStateToProps, {getStudent})(User)
+export default connect(mapStateToProps, {getStudentclass})(User)

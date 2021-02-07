@@ -24,6 +24,7 @@ import timetable from "./setting/timetable";
 import session from "./setting/session";
 import staff from "./staff/staff";
 import classfee from "./setting/classfee";
+import classstaff from "./setting/classstaff";
 import staffclass from "./staff/staffclass";
 import staffsubject from "./staff/staffsubject";
 import staffstudent from "./staff/staffstudent";
@@ -82,6 +83,7 @@ export default combineReducers({
     sessionReducer: session,
     termReducer: term,
     classfeeReducer: classfee,
+    classstaffReducer: classstaff,
     staffReducer: staff,
     staffclassReducer: staffclass,
     staffstudentReducer: staffstudent,

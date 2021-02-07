@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import {getTerms, getTerm, deleteTerm} from './../../../actions/setting/term';
+import {getTerms, getTerm, deleteTerm, setActiveTerm} from './../../../actions/setting/term';
 import {
   CCard,
   CCardBody,
@@ -52,11 +52,12 @@ const Term = (props) => {
     let fd = new FormData();
     fd.append('id', rw);
     fd.append('schoolid', sch);
+    fd.append('sessionid', props.pid);
     fd.append('is_active', nu);
     fd.append('cat', 'updateterm');
     fd.append('table', 'terms');
     fd.append('narration', `activate 0r deactivate term ${nu}`);
-    props.updateSubject(fd);
+    props.setActiveTerm(fd);
 
   }
 
@@ -118,5 +119,6 @@ const mapStateToProps = (state) =>({
 })
 export default connect(mapStateToProps, {
   getTerms,
-  deleteTerm
+  deleteTerm,
+  setActiveTerm
 })(Term)

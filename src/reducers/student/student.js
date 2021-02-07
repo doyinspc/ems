@@ -1,4 +1,4 @@
-import { callReg, callSuccess } from "../../actions/common";
+import { callError, callReg, callSuccess } from "../../actions/common";
 import {
     STUDENT_GET_MULTIPLE,
     STUDENT_GET_SEARCH,
@@ -128,7 +128,7 @@ export default function(state = initialState, action){
         case STUDENT_REGISTER_FAIL:
         case STUDENT_DELETE_FAIL:
         case STUDENT_UPDATE_FAIL:
-
+        callError('Failed: Probably you are trying to use a admission number that already exist.')
             return {
                 ...state,
                 isLoading: false,

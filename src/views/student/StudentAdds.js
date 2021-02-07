@@ -1,6 +1,6 @@
 import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { getStudents, getStudent, registerStudent, updateStudent, deleteStudent } from './../../actions/student/student';
+import { getStudentclasss, getStudentclass, registerStudentclass, updateStudentclass, deleteStudentclass } from './../../actions/student/studentclass';
 import { getSessions } from './../../actions/setting/session';
 import { getSchools } from './../../actions/setting/school';
 import { useHistory, useLocation } from 'react-router-dom'
@@ -32,11 +32,13 @@ import {
 import CIcon from '@coreui/icons-react'
 import { allrelations, allplaces, states, callError, allhousess, setElement } from '../../actions/common';
 
-const Students = (props) => {
+const Studentclasss = (props) => {
     const history = useHistory()
 
     const [active, setActive] = useState(0)
     const [id, setId] = useState(null)
+    const [cid, setCid] = useState(null)
+    const [sessionid, setSessionid] = useState(null)
     const [admission, setAdmission] = useState('')
     const [admit, setAdmit] = useState('')
     const [doa, setDoa] = useState('')
@@ -86,9 +88,12 @@ const Students = (props) => {
     useEffect(() => {
         let data = props.data; 
         let editi = props.editid;
-        if(props.data && props.data.hasOwnProperty('id'))
+
+        if(props.data && props.data.hasOwnProperty('id') && props.sessionid && parseInt(props.sessionid) > 0)
         {
           setId(data.id)
+          setCid(data.cid)
+          setSessionid(props.sessionid)
           setSurname(data.surname)
           setFirstname(data.firstname)
           setMiddlename(data.middlename)
@@ -137,30 +142,32 @@ const Students = (props) => {
           setElement('g2_place', data.g2_place)
           
         }
-      }, [props.data, props.editid])
-
-
+      }, [props.data, props.editid, props.sessionid])
     
     const handlePictureActivate = num =>{
         let fd = new FormData();
         fd.append('id', id);
         fd.append('photo', num);
-        fd.append('cat', 'update');
-        fd.append('table', 'students');
-        props.updateStudent(fd)
-
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
+        fd.append('cat', 'updatestudent');
+        fd.append('table', 'studentclasss');
+        props.updateStudentclass(fd);
     }
+
     const handlePicture1 = () =>{
         let fd = new FormData();
         fd.append('files', photo1);
         fd.append('links', 'photo1');
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
 
         if(id && parseInt(id) > 0)
         {
             fd.append('id', id);
-            fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('cat', 'updatestudent');
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }
         
     }
@@ -168,26 +175,30 @@ const Students = (props) => {
         let fd = new FormData();
         fd.append('files', photo2);
         fd.append('links', 'photo2');
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
 
         if(id && parseInt(id) > 0)
         {
             fd.append('id', id);
-            fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('cat', 'updatestudent');
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }
     }
     const handlePicture3 = () =>{
         let fd = new FormData();
         fd.append('files', photo3);
         fd.append('links', 'photo3');
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
 
         if(id && parseInt(id) > 0)
         {
             fd.append('id', id);
-            fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('cat', 'updatestudent');
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }  
     }
     const handleCare1 = () =>{
@@ -200,12 +211,15 @@ const Students = (props) => {
         fd.append('g1_email', g1_email);
         fd.append('g1_place', g1_place);
         fd.append('g1_address', g1_address);
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
+
         if(id && parseInt(id) > 0)
         {
             fd.append('id', id);
-            fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('cat', 'updatestudent');
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }
         
     }
@@ -219,12 +233,15 @@ const Students = (props) => {
         fd.append('g2_email', g2_email);
         fd.append('g2_place', g2_place);
         fd.append('g2_address', g2_address);
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
+
         if(id && parseInt(id) > 0)
         {
             fd.append('id', id);
-            fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('cat', 'updatestudent');
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }
         
     }   
@@ -235,13 +252,15 @@ const Students = (props) => {
         fd.append('dol', dol);
         fd.append('is_delete', 1);
         fd.append('is_active', 1);
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
 
         if(id && parseInt(id) > 0)
         {
             fd.append('id', id);
-            fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('cat', 'updatestudent');
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }
     }
     const handleExitReset = () =>{
@@ -255,8 +274,8 @@ const Students = (props) => {
         {
             fd.append('id', id);
             fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }
     }
     const handleSubmit = () =>{
@@ -270,13 +289,15 @@ const Students = (props) => {
         fd.append('nationality', nationality);
         fd.append('religion', religion);
         fd.append('gender', gender);
+        fd.append('cid', cid);
+        fd.append('sessionid', sessionid);
 
         if(id && parseInt(id) > 0)
         {
             fd.append('id', id);
-            fd.append('cat', 'update');
-            fd.append('table', 'students');
-            props.updateStudent(fd)
+            fd.append('cat', 'updatestudent');
+            fd.append('table', 'studentclasss');
+            props.updateStudentclass(fd)
         }
        
         
@@ -285,37 +306,34 @@ const Students = (props) => {
         let arr = []
         if(surname && surname !== 'nil' && surname.length > 0 ){}else{arr.push('Please input a surname') };
         if(firstname !== 'nil' && firstname.length > 0 ){}else{arr.push('Please input a firstname') };
-        if(parseInt(schoolid) > 0 ){}else{arr.push('No School selected') };
-        if(parseInt(admission) > 0 ){}else{arr.push('Admission number must be dig1ts') };
-        if(parseInt(admission) > 0 && admission.length > 3 ){}else{arr.push('Admission number must be four digits') };
-        
         if(arr.length === 0)
         {
-            let admission_nox = schoolid+"_"+admission;
             let fd = new FormData();
             fd.append('surname', surname);
             fd.append('firstname', firstname);
             fd.append('middlename', middlename);
-            fd.append('admission_no', admission);
-            fd.append('admission_nox', admission_nox);
-            fd.append('schoolid', schoolid);
+            //fd.append('admission_no', admission);
+            //fd.append('admission_nox', admission_nox);
+            //fd.append('schoolid', schoolid);
             fd.append('place', place);
             fd.append('house', house);
             fd.append('doa', doa);
             fd.append('admit', admit);
+            fd.append('cid', cid);
+            fd.append('sessionid', sessionid);
 
             if(id && parseInt(id) > 0)
             {
                 fd.append('id', id);
-                fd.append('cat', 'update');
-                fd.append('table', 'students');
-                props.updateStudent(fd);
+                fd.append('cat', 'updatestudent');
+                fd.append('table', 'studentclasss');
+                props.updateStudentclass(fd);
 
             }else{
 
-                fd.append('cat', 'insert');
-                fd.append('table', 'students');
-                props.registerStudent(fd)
+                // fd.append('cat', 'insert');
+                // fd.append('table', 'studentclasss');
+                // props.registerStudentclass(fd)
             }
         }else
         {
@@ -423,81 +441,6 @@ let housearray = Object.keys(allhousess).map((rw1, ind) =>{
     <CCol xs="12" sm="12">
                     <CCard>
                         <CCardBody>
-                        <CRow>
-                            <CCol xs="12" sm='6' >
-                            <CFormGroup>
-                                <CLabel htmlFor="admission">Admission Number<i className='text-danger'>*</i></CLabel>
-                                <CInput 
-                                    id="admission" 
-                                    defaultValue={admission}
-                                    size='lg'
-                                    aria-required 
-                                    placeholder="Admission Number"
-                                    onChange={(e)=>setAdmission(e.target.value)} 
-                                    required 
-                                    />
-                            </CFormGroup>
-                            <CFormText></CFormText>
-                            </CCol>
-                            <CCol xs="12" sm='6'>
-                            <CFormGroup>
-                                <CLabel htmlFor="School">School<i className='text-danger'>*</i></CLabel>
-                                <CSelect 
-                                    id="school" 
-                                    defaultValue={schoolid}
-                                    size='lg'
-                                    aria-required 
-                                    placeholder="Enter School"
-                                    onChange={(e)=>setSchoolid(e.target.value)} 
-                                    required
-                                >
-                                    {scarray}
-                                </CSelect>
-                            </CFormGroup>
-                            </CCol>
-                            <CCol xs="12" sm='6'>
-                            <CFormGroup>
-                                <CLabel htmlFor="admit">Admission Year<i className='text-danger'>*</i></CLabel>
-                                <CSelect 
-                                    custom 
-                                    id="admit" 
-                                    defaultValue={admit}
-                                    aria-required 
-                                    placeholder="Select admission year"
-                                    onChange={(e)=>setAdmit(e.target.value)} 
-                                    required
-                                >
-                                    <option value="2025">2025</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2020">2020</option>
-                                    <option value="2019">2019</option>
-                                    <option value="2018">2018</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2015">2015</option>
-                                    <option value="2014">2014</option>
-                                </CSelect>
-                            </CFormGroup>
-                            </CCol>
-                            <CCol xs="12" sm='6'>
-                            <CFormGroup>
-                                <CLabel htmlFor="doa">Date Admitted<i className='text-danger'>*</i></CLabel>
-                                <CInput 
-                                    custom 
-                                    type='date'
-                                    id="doa" 
-                                    defaultValue={doa}
-                                    aria-required 
-                                    placeholder=""
-                                    onChange={(e)=>setDoa(e.target.value)} 
-                                    required
-                                />
-                            </CFormGroup>
-                            </CCol>
-                        </CRow>
                         <CRow>
                             <CCol xs="12" sm='4'>
                             <CFormGroup>
@@ -726,7 +669,7 @@ let housearray = Object.keys(allhousess).map((rw1, ind) =>{
                         <CRow>
                         <CCol xs="12">
                             <CFormGroup>
-                                <CLabel htmlFor="g1_rel">Relationship to Student<i className='text-danger'>*</i></CLabel>
+                                <CLabel htmlFor="g1_rel">Relationship to Studentclass<i className='text-danger'>*</i></CLabel>
                                 <CSelect 
                                     id="g1_rel" 
                                     defaultValue={g1_rel}
@@ -845,7 +788,7 @@ let housearray = Object.keys(allhousess).map((rw1, ind) =>{
                         <CRow>
                         <CCol xs="12">
                             <CFormGroup>
-                                <CLabel htmlFor="g2_rel">Relationship to Student<i className='text-danger'>*</i></CLabel>
+                                <CLabel htmlFor="g2_rel">Relationship to Studentclass<i className='text-danger'>*</i></CLabel>
                                 <CSelect 
                                     id="g2_rel" 
                                     defaultValue={g2_rel}
@@ -1142,18 +1085,18 @@ let housearray = Object.keys(allhousess).map((rw1, ind) =>{
 }
 
 const mapStateToProps = (state) =>({
-    students : state.studentReducer,
+    studentclasss : state.studentclassReducer,
     sessions : state.sessionReducer.sessions,
     schools : state.schoolReducer.schools,
     dropdowns:state.userReducer.dropdowns
   })
   export default connect(mapStateToProps, {
-    getStudents,
-    getStudent,
-    registerStudent,
-    updateStudent,
-    deleteStudent,
+    getStudentclasss,
+    getStudentclass,
+    registerStudentclass,
+    updateStudentclass,
+    deleteStudentclass,
     getSchools,
     getSessions
-  })(Students)
+  })(Studentclasss)
   

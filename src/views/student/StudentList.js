@@ -1,6 +1,5 @@
 import React  from 'react'
-import {useHistory} from 'react-router-dom'
-
+import moment from 'moment'
 import CIcon from '@coreui/icons-react'
 
 const Studentclasss = (props) => {
@@ -24,7 +23,7 @@ let tabl = data.map((row, ind)=>{
       </div>
     </td>
     <td>
-<div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
+<div><strong>{`${row.surname} ${row.firstname} ${row.middlename}`}</strong></div>
             <div className="small text-muted">
             <span>{row.schoolabbrv}{row.admission_no}</span>
         </div>
@@ -32,10 +31,10 @@ let tabl = data.map((row, ind)=>{
     
     <td>
         <div className="small text-muted">
-            <span>Date of Birth</span>: <strong>{row.dob}</strong>
+            <span>Date of Birth</span>: <strong>{moment(row.dob).format('Do MMM, YYYY')}</strong>
         </div>
         <div className="small text-muted">
-            <span>Date of Adm.</span>: <strong>{row.doe}</strong> 
+            <span>Age (Years)</span>: <strong>{moment().diff(row.dob, 'years')}</strong> 
         </div>
     </td>
     <td>

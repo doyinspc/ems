@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import {getStaffclasss, getStaffclass, registerStaffclass, updateStaffclass, deleteStaffclass} from './../../../actions/staff/staffclass';
+import {getClassstaffs, getClassstaff, registerClassstaff, updateClassstaff, deleteClassstaff} from '../../../actions/setting/classstaff';
 import { useHistory} from 'react-router-dom'
 
 
 
-const Staffclass = (props) => {
+const Classstaff = (props) => {
   const history = useHistory()
  
   let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
@@ -21,7 +21,7 @@ const Staffclass = (props) => {
                      <>
                     <a style={{cursor:'pointer'}} onClick={()=>props.onActivate(row.id, row.is_active)}><i className={`fa ${parseInt(row.is_active) == 1 ? 'fa-thumbs-down text-danger' : 'fa-thumbs-up text-success'} ml-2 px-2`}></i></a>
                     <a style={{cursor:'pointer'}} onClick={()=>props.onEdit(row)}><i className='fa fa-edit ml-2 px-2'></i></a>
-                    <a style={{cursor:'pointer'}} onClick={()=>props.onDelete(row)}><i className='fa fa-remove ml-2 px-2 text-danger'></i></a>
+                    <a style={{cursor:'pointer'}} onClick={()=>props.onDelete(row.id)}><i className='fa fa-remove ml-2 px-2 text-danger'></i></a>
                     </>:""}
                 </td>:''}
               </tr>
@@ -45,12 +45,12 @@ const Staffclass = (props) => {
   )
 }
 const mapStateToProps = (state) =>({
-  staffclasss : state.staffclassReducer
+  classstaffs : state.classstaffReducer
 })
 export default connect(mapStateToProps, {
-  getStaffclasss,
-  getStaffclass,
-  registerStaffclass,
-  updateStaffclass,
-  deleteStaffclass
-})(Staffclass)
+  getClassstaffs,
+  getClassstaff,
+  registerClassstaff,
+  updateClassstaff,
+  deleteClassstaff
+})(Classstaff)

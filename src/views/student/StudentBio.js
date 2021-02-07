@@ -21,23 +21,25 @@ const User = (props, {match}) => {
     lga,
     soo,
     photo,
+    house,
+    place,
     nationality,
     schoolname,
     gender,
     reason,
     is_active,
-    kin1_name,
-    kin2_name,
-    kin1_phone1,
-    kin1_phone2,
-    kin2_phone1,
-    kin2_phone2,
-    kin1_email,
-    kin2_email,
-    kin1_address,
-    kin2_address,
-    kin1_rel,
-    kin2_rel
+    g1_name,
+    g2_name,
+    g1_phone1,
+    g1_phone2,
+    g2_phone1,
+    g2_phone2,
+    g1_email,
+    g2_email,
+    g1_address,
+    g2_address,
+    g1_rel,
+    g2_rel
     } = props.student || {};
 
   return (
@@ -69,6 +71,8 @@ const User = (props, {match}) => {
                         <CRow className='p-2'><CCol xs={4}><i className='fa fa-phone'></i> Date Admitted</CCol><CCol><strong>{`${moment(doa).format('MMM DD, YYYY') !== 'Invalid date'? moment(doa).format('MMM DD, YYYY'):'--.--.--' }`}</strong></CCol></CRow>
                         <CRow className='p-2'><CCol xs={4}><i className='fa fa-pied-piper-alt'></i> Status</CCol><CCol>{parseInt(is_active) === 0 ? <strong className='text-success'>IN ACTIVE SERVICE</strong> : <strong className='text-danger'>{`${reason} ${moment(dol).format('MMM DD, YYYY')}`}</strong>}</CCol></CRow> 
                         <CRow className='p-2'><CCol xs={4}><i className='fa fa-university'></i> School</CCol><CCol>{schoolname}</CCol></CRow> 
+                        <CRow className='p-2' style={{backgroundColor:house, color:'black'}}><CCol xs={4}><i className='fa fa-university'></i> House</CCol><CCol >{house}</CCol></CRow> 
+                        <CRow className='p-2'><CCol xs={4}><i className='fa fa-university'></i> Main Sponsor</CCol><CCol>{place}</CCol></CRow> 
                         </CCol></CRow>
                     </CContainer>
                 </CCol>
@@ -89,11 +93,11 @@ const User = (props, {match}) => {
               <CContainer>
                 <CRow>
                   <CCol>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-user'></i> </CCol><CCol>{kin1_name}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-cubes'></i> </CCol><CCol>{kin1_rel}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-phone'></i> </CCol><CCol>{kin1_phone1} {kin1_phone2}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{kin1_email}</CCol></CRow>    
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-map-marker'></i> </CCol><CCol>{kin1_address}</CCol></CRow>  
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-user'></i> </CCol><CCol>{g1_name}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-cubes'></i> </CCol><CCol>{g1_rel}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-phone'></i> </CCol><CCol>{g1_phone1} {g1_phone2}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{g1_email}</CCol></CRow>    
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-map-marker'></i> </CCol><CCol>{g1_address}</CCol></CRow>  
                   </CCol>
                   </CRow>
                </CContainer> 
@@ -109,11 +113,11 @@ const User = (props, {match}) => {
           <CCardBody>
               <CContainer>
                   <CCol md={6} sm={12}>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-user'></i> </CCol><CCol>{kin2_name}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-cubes'></i> </CCol><CCol>{kin2_rel}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-phone'></i> </CCol><CCol>{kin2_phone1} {kin2_phone2}</CCol></CRow>
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{kin2_email}</CCol></CRow>    
-                    <CRow xs={12}><CCol xs={2}><i className='fa fa-map-marker'></i> </CCol><CCol>{kin2_address}</CCol></CRow>  
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-user'></i> </CCol><CCol>{g2_name}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-cubes'></i> </CCol><CCol>{g2_rel}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-phone'></i> </CCol><CCol>{g2_phone1} {g2_phone2}</CCol></CRow>
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-envelope'></i> </CCol><CCol>{g2_email}</CCol></CRow>    
+                    <CRow xs={12}><CCol xs={2}><i className='fa fa-map-marker'></i> </CCol><CCol>{g2_address}</CCol></CRow>  
                   </CCol>
               </CContainer>
           </CCardBody>

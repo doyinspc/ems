@@ -77,7 +77,7 @@ const Session = (props) => {
         }else
         {
           //INSERT
-          fd.append('schoolid', 1);
+          fd.append('schoolid', props.user.activeschool.id);
           fd.append('cat', 'insert');
           props.registerSession(fd)
         }

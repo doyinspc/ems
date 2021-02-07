@@ -1,6 +1,6 @@
 import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import {getStudentclasss, getStudentclass, registerStudentclass, updateStudentclass, deleteStudentclass} from './../../actions/student/studentclass';
+import {getStudentclasss, getStudentclass, registerStudentclass, updateStudentclass, deleteStudentclass } from './../../actions/student/studentclass';
 import { Link,  useParams } from 'react-router-dom'
 import Swal from'sweetalert'
 import moment from 'moment'
@@ -41,10 +41,12 @@ import StudentList from './StudentList'
 import StudentFeeList from './StudentFeeList'
 import Header from '../staff/Subjects/Headers';
 import StudentDefault from './StudentDefault';
+import { getClassstaffs  } from './../../actions/setting/classstaff';
 
 const Studentclasss = (props) => {
     const par = useParams()
     let groupid = 4;
+    const [activeterm, setActiveterm] = useState(false)
     const [active, setActive] = useState(0)
     const [title, setTitle] = useState('Title')
     const [term, setTerm] = useState(props.termz.termid)
@@ -55,6 +57,20 @@ const Studentclasss = (props) => {
     const [sides, setSides] = useState(false)
     const [search, setsearch] = useState('')
     const [dates, setdates] = useState(moment(new Date()).format('YYYY-MM-DD'))
+
+    
+    //CONFIRM IF ACTIVE TERM
+    useEffect(() => {
+       if(parseInt(term) === parseInt(props.termz.termid))
+       {
+        setActiveterm(true)
+       }else{
+        setActiveterm(false)
+       }
+      return () => {
+        setActiveterm(false)
+      }
+    }, [term, props.termz.termid])
     
     useEffect(() => {
         let params = {
@@ -81,12 +97,28 @@ const Studentclasss = (props) => {
             dt1 = dt[1].filter(rw=>parseInt(rw.id) === parseInt(clasz));
             let dtn0 = Array.isArray(dt0) && dt0.length > 0 ? dt0[0].name : 'Select term';
             let dtn1 = Array.isArray(dt1) && dt1.length > 0 ? dt1[0].name : 'Select class';
-            title = dtn0+" "+dtn1
+            title = dtn0+" | "+dtn1
         }
         
         setTitle(title);
         
       }, [term, clasz])
+    
+    useEffect(() => {
+    let params2 = {
+      data:JSON.stringify(
+      {
+            'termid':term,
+            'sessionid':session,
+            'itemid':clasz,
+            'grp':1
+        }),
+        cat:'staffclass',
+        table:'accessstaffclass',
+        narration:'get classstaffs'
+      }
+    props.getClassstaffs(params2);
+  }, [dates, clasz, session, term])
 
       let dt = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length > 4 ? props.dropdowns : [[], [], [], []];
       let dt0 ='';
@@ -130,42 +162,9 @@ const Studentclasss = (props) => {
           fd.append('termid', term);
           fd.append('cat', 'inserts');
           props.registerStudentclass(fd)
-      
-        
+          
    }
-   const loadStudents = () =>{
-    let dt = props.dropdowns && Array.isArray(props.dropdowns) ? props.dropdowns : [[], []];
-    let dt0 ='';
-    let dt1 ='';
-    let title ='None | No Data';
-    let sessionid = 0
-    if(dt.length > 0)
-    {
-        dt0 = dt[0].filter(rw=>parseInt(rw.id) === parseInt(term));
-        dt1 = dt[1].filter(rw=>parseInt(rw.id) === parseInt(clasz));
-        let dtn0 = Array.isArray(dt0) && dt0.length > 0 ? dt0[0].name : 'Select Term';
-        let dtn1 = Array.isArray(dt1) && dt1.length > 0 ? dt1[0].name : 'Select Class';
-        title = dtn0+" "+dtn1
-        sessionid = dt0[0].sessionid
-    }
-    
-    let params = {
-      data:JSON.stringify(
-      {
-        'termid':term,
-        'itemid':clasz,
-        'sessionid':sessionid,
-        'grp':groupid
-      }),
-      cat:'studentclass',
-      table:'accessstudentclass',
-      narration:'get all student classs'
-  }
-    props.getStudentclasss(params)
-
-    setTitle(title); 
-    
-   }
+   
    const changeClasz=(e)=>{
      setClasz(e)
       let dt = props.dropdowns && Array.isArray(props.dropdowns) ? props.dropdowns : [[], []];
@@ -186,22 +185,22 @@ const Studentclasss = (props) => {
         let dtn0  = 0;
         if(dt.length > 0)
         {
-            dt0 = dt[0].filter(rw=>parseInt(rw.id) === parseInt(e));
+            dt0 = dt[0].filter(rw=>parseInt(rw.termid) === parseInt(e));
             dtn0 = Array.isArray(dt0) && dt0.length > 0 ? dt0[0].sessionid : 0;
         }
         setSession(dtn0)
    }
-
    const onRemove =(id)=>{
-        Swal("Are you sure you want to delete you will not be able to restore the data.")
+        Swal("Are you sure you want to delete this information, You will not be able to restore the data.")
        .then((value) => {
-         if(value == true && parseInt(id) > 0){
+         if(value == true && parseInt(id) > 0)
+         {
              let fd = new FormData();
              fd.append('id', id);
              fd.append('sessionid', session)
              fd.append('table', 'accessstudentsubject')
              fd.append('cat', 'deletes')
-             props.deleteStaffclass(fd, id);
+             props.deleteStudentclass(fd, id);
          }else{
            Swal(`Not deleted`);
          }
@@ -210,22 +209,28 @@ const Studentclasss = (props) => {
      
    }
 
+let staff_available = props.classstaff.classstaffs.filter(element =>parseInt(element.clientid) === parseInt(props.user.mid));
+let classteacher = Array.isArray(staff_available) && staff_available.length > 0 ? true : false;
+   
+
 let dataq = props.studentclasss.studentclasss && Array.isArray(props.studentclasss.studentclasss) ? props.studentclasss.studentclasss.filter(rw =>rw !== null || rw !== undefined) : []
 let data = dataq;
-if(search.length > 0){
+
+if(search.length > 0 && search !== undefined)
+{
   let datas = dataq.filter(rw=>rw.surname.toLowerCase().includes(search.toLowerCase()) 
   || rw.firstname.toLowerCase().includes(search.toLowerCase()) 
   || rw.middlename.toLowerCase().includes(search.toLowerCase())
-  || rw.employment_no.toLowerCase().includes(search.toLowerCase())
+  || rw.admission_no.toLowerCase().includes(search.toLowerCase())
   )
   data = datas;
 }
 
-let d1 = data.map((p, i)=>p.id);
+let d1 = data.filter(rw=> rw !== null && rw !== undefined).map((p, i)=>p.id);
 let data1 = d1.join(',')
 
-let redirectAttendance = () =>{
-    window.open(process.env.PUBLIC_URL+"#/attendance_student/")
+let redirectAttendance = (clasz) =>{
+    window.open(process.env.PUBLIC_URL+`#/attendance_student/${clasz}`)
 }
   return (
     <>
@@ -347,7 +352,7 @@ let redirectAttendance = () =>{
                     data-toggle="collapse" 
                     color="primary"
                     className="float-right"
-                    onClick={redirectAttendance}
+                    onClick={()=>redirectAttendance(clasz)}
                     >
                   <CIcon name="cil-calendar"/>
               </CButton>
@@ -359,66 +364,72 @@ let redirectAttendance = () =>{
           <CCardBody>
             <CTabs activeTab={active} onActiveTabChange={idx => setActive(idx)}>
               <CNav variant="tabs">
-              
+              <CNavItem>
+                  <CNavLink>
+                    <CIcon name="cil-settings"/>
+                    { active === 0 && ' Setting'}
+                  </CNavLink>
+                </CNavItem>
                <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-chart-pie"/>
-                    { active === 0 && ' Biodata'}
+                    { active === 1 && ' Chart'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-calculator" />
-                    { active === 1 && ' Statistics'}
+                    { active === 2 && ' Biodata'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-map" />
-                    { active === 2 && ' Contact'}
+                    { active === 3 && ' Contact'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                     <i className='fa fa-image'></i>
-                    { active === 3 && ' Gallery'}
+                    { active === 4 && ' Gallery'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                   <i className='fa fa-money'></i>
-                    { active === 4 && ' Fees'}
+                    { active === 5 && ' Fees'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-user"/>
-                    { active === 5 && ' Next of Kin'}
+                    { active === 6 && ' Next of Kin'}
                   </CNavLink>
                 </CNavItem>
-                <CNavItem>
-                  <CNavLink>
-                    <i className='fa fa-check'></i>
-                    { active === 6 && ' Attendance'}
-                  </CNavLink>
-                </CNavItem>
-               
               </CNav>
               <CTabContent>
               
                 <CTabPane>
                   <StudentDefault 
+                   term={term}
+                   clasz={clasz}
+                   session={session}
+                   onRemove={(e)=>onRemove(e)}
                    setsearch={(e)=>setsearch(e)} 
                    dateactive={dates} 
                    data1={data1}
-                  data={data}
-                  clasz={clasz}
-                  setDates={(e)=>setdates(e)}
+                   data={data}
+                   activeterm={activeterm}
+                   setDates={(e)=>setdates(e)}
+                   classteacher={classteacher}
                    />
-                <StudentList  data={data}/>
-                </CTabPane>
+                  </CTabPane>
+                 
                 <CTabPane>
                 <ClassBioAnalysis  data={data}/>
+                </CTabPane>
+                <CTabPane>
+                <StudentList  data={data}/>
                 </CTabPane>
                 <CTabPane>
                    <StudentContactList  data={data}/>
@@ -427,7 +438,13 @@ let redirectAttendance = () =>{
                     <StudentGallery data={data} />
                 </CTabPane>
                 <CTabPane>
-                    <StudentFeeList termid={term} claszparentid={claszparent} sessionid={session} data={data} />
+                    <StudentFeeList 
+                    termid={term} 
+                    claszparentid={claszparent} 
+                    sessionid={session} 
+                    data={data} 
+                    classteacher={classteacher}
+                    />
                 </CTabPane>
               </CTabContent>
             </CTabs>
@@ -443,7 +460,8 @@ const mapStateToProps = (state) =>({
     studentclasss : state.studentclassReducer,
     dropdowns : state.userReducer.dropdowns,
     termz:state.userReducer.activeterm,
-    user:state.userReducer
+    user:state.userReducer,
+    classstaff:state.classstaffReducer
 
   })
   export default connect(mapStateToProps, {
@@ -451,6 +469,7 @@ const mapStateToProps = (state) =>({
     getStudentclass,
     registerStudentclass,
     updateStudentclass,
-    deleteStudentclass
+    deleteStudentclass,
+    getClassstaffs
   })(Studentclasss)
   

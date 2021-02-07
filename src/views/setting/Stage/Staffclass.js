@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import {getStaffclasss, getStaffclass, deleteStaffclass, updateStaffclass} from './../../../actions/staff/staffclass';
+import {getClassstaffs, getClassstaff, deleteClassstaff, updateClassstaff} from '../../../actions/setting/classstaff';
 import {
   CCard,
   CCardBody,
@@ -8,12 +8,13 @@ import {
   CRow,
   CCollapse,
 } from '@coreui/react'
-import StaffclassForm from'./../Form/Staffclass'
-import StaffclassTable from'./../Table/Staffclass'
+import Swal from 'sweetalert'
+import StaffClassForm from'./../Form/Staffclass'
+import StaffClassTable from'./../Table/Staffclass'
 import Header from './Header';
 
 
-const Staffclass = (props) => {
+const Classstaff = (props) => {
   const [collapse, setCollapse] = useState(false)
   const [id, setId] = useState('')
   const [dts, setDts] = useState({})
@@ -32,10 +33,10 @@ const Staffclass = (props) => {
         }),
         cat:'staffclass',
         table:'accessstaffclass',
-        narration:'get staffclasss'
+        narration:'get classstaffs'
   
     }
-    props.getStaffclasss(params)
+    props.getClassstaffs(params)
     
   }, [props.pid])
 
@@ -45,7 +46,23 @@ const Staffclass = (props) => {
       setDts(dt);
       setCollapse(true)
   }
-  const onDelete = (rw, dt) =>{
+  const onDelete = id =>{
+    
+    Swal("Are you sure you want to delete this information, You will not be able to restore the data."+{id})
+    .then((value) => {
+      if(value === true && parseInt(id) > 0)
+      {
+          let fd = new FormData();
+          fd.append('id', id);
+          fd.append('sessionid', props.pid);
+          fd.append('table', 'staffclasss')
+          fd.append('cat', 'deletes')
+          props.deleteClassstaff(fd, id);
+      }else{
+        Swal(`Not deleted`);
+      }
+      
+    });
     
   }
   const onActivate = (rw, num) =>{
@@ -57,8 +74,8 @@ const Staffclass = (props) => {
     fd.append('cat', 'updates');
     fd.append('sessionid', props.pid);
     fd.append('table', 'accessstaffclass');
-    fd.append('narration', `activate ande disable class ${nu}`);
-    props.updateStaffclass(fd);
+    fd.append('narration', `activate and disable class ${nu}`);
+    props.updateClassstaff(fd);
 
   }
   const onReset = () =>{
@@ -77,7 +94,7 @@ const Staffclass = (props) => {
   let tem = props.terms.filter(rw=>parseInt(rw.id) === parseInt(props.qid));
   let tems = tem && Array.isArray(tem) && tem.length > 0 ? tem[0].name : 'None'
 
-  let data = props.staffclasss.staffclasss && Array.isArray(props.staffclasss.staffclasss) ? props.staffclasss.staffclasss.filter(rw =>rw !== null || rw !== undefined) : []
+  let data = props.classstaffs.classstaffs && Array.isArray(props.classstaffs.classstaffs) ? props.classstaffs.classstaffs.filter(rw =>rw !== null || rw !== undefined) : []
   
    return (
     <CRow>
@@ -93,7 +110,7 @@ const Staffclass = (props) => {
               toggle={toggle}
               />
          <CCardBody className='table-responsive'>
-            <StaffclassTable  
+            <StaffClassTable  
                 pid={props.pid}
                 qid={props.qid}
               did={props.did}
@@ -108,7 +125,7 @@ const Staffclass = (props) => {
         </CCard>
         </CCol>
         <CCollapse show={collapse}>
-            <StaffclassForm 
+            <StaffClassForm 
                 pid={props.pid}
                 qid={props.qid}
                 did={props.did}
@@ -123,12 +140,12 @@ const Staffclass = (props) => {
   )
 }
 const mapStateToProps = (state) =>({
-  staffclasss : state.staffclassReducer,
+  classstaffs : state.classstaffReducer,
   terms : state.termReducer.terms,
   sessions : state.sessionReducer.sessions,
 })
 export default connect(mapStateToProps, {
-  getStaffclasss,
-  deleteStaffclass,
-  updateStaffclass
-})(Staffclass)
+  getClassstaffs,
+  deleteClassstaff,
+  updateClassstaff
+})(Classstaff)

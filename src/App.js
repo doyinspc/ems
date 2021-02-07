@@ -34,7 +34,7 @@ class App extends Component {
               <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />
               <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />
               <Route exact path="/attendance_staff" name="Staff Attendance" render={props => <AttendanceStaff {...props}/>} />
-              <Route exact path="/attendance_student" name="Student Attendance" render={props => <AttendanceStudent {...props}/>} />
+              <Route exact path="/attendance_student/:clasz" name="Student Attendance" render={props => <AttendanceStudent {...props}/>} />
               <Route exact path="/admission/:admit" name="Admission Letter" render={props => <Admission {...props}/>} />
               <Route exact path="/admissions/:admit" name="Admission Letter" render={props => <Admissions {...props}/>} />
               <Route exact path="/lessonplan/:admit" name="Admission Letter" render={props => <Admission {...props}/>} />

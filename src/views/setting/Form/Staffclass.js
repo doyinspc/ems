@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import {registerStaffclass, updateStaffclass, deleteStaffclass} from './../../../actions/staff/staffclass';
+import {registerClassstaff, updateClassstaff, deleteClassstaff} from '../../../actions/setting/classstaff';
 import {getStaffs} from './../../../actions/staff/staff';
 import { useHistory, useLocation } from 'react-router-dom'
 import {
@@ -24,14 +24,14 @@ import CIcon from '@coreui/icons-react'
 import {setElement} from './../../../actions/common'
 
 
-const Staffclass = (props) => {
+const Classstaff = (props) => {
   const [id, setId] = useState(null)
   const [claszid, setClaszid] = useState(null)
   const [staff, setStaff] = useState(null)
   let sessionid = props.pid;
   let termid = props.qid;
   let groupid = 1;
-  //GET STAFFCLASSS PER SCHOOL
+  //GET CLASSSTAFFS PER SCHOOL
   useEffect(() => {
     if(props.activeschool !== undefined && parseInt(props.activeschool.id) > 0){
         let params = {
@@ -82,7 +82,7 @@ const Staffclass = (props) => {
         //UPDATE 
         fd.append('id', id);
         fd.append('cat', 'updates');
-        props.updateStaffclass(fd)
+        props.updateClassstaff(fd)
         
       }else if(termid && parseInt(termid) > 0)
       {
@@ -90,7 +90,7 @@ const Staffclass = (props) => {
         fd.append('grp', groupid);
         fd.append('termid', termid);
         fd.append('cat', 'inserts');
-        props.registerStaffclass(fd)
+        props.registerClassstaff(fd)
       }
       props.onReset()
     }
@@ -112,7 +112,7 @@ const Staffclass = (props) => {
             <CCardHeader id='traffic' className="card-title mb-0">
               <CRow>
                 <CCol sm="6">
-                <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Staffclass</small></h4>
+                <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Classstaff</small></h4>
                 </CCol>
                 <CCol sm="6" className="d-md-block">
                   <CButton  
@@ -136,6 +136,7 @@ const Staffclass = (props) => {
                       onChange={(e)=>setStaff(e.target.value)}
                       placeholder="" 
                     >
+                      <option></option>
                       {starray}
                   </CSelect>
                   <CFormText className="help-block">Select the staff</CFormText>
@@ -149,6 +150,7 @@ const Staffclass = (props) => {
                       onChange={(e)=>setClaszid(e.target.value)}
                       placeholder="" 
                     >
+                      <option></option>
                       {clarray}
                   </CSelect>
                   <CFormText className="help-block">Select the class</CFormText>
@@ -164,15 +166,15 @@ const Staffclass = (props) => {
       )
 }
 const mapStateToProps = (state) =>({
-  staffclasss : state.staffclassReducer,
+  classstaffs : state.classstaffReducer,
   user:state.userReducer,
   activeschool:state.userReducer.activeschool,
   claszs : state.claszReducer.claszs,
   staffs : state.staffReducer.staffs,
 })
 export default connect(mapStateToProps, {
-  registerStaffclass,
-  updateStaffclass,
-  deleteStaffclass,
+  registerClassstaff,
+  updateClassstaff,
+  deleteClassstaff,
   getStaffs
-})(Staffclass)
+})(Classstaff)

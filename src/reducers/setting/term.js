@@ -16,7 +16,7 @@ import {
     TERM_EDIT
 } from "./../../types/setting/term";
 
-let termStore = JSON.parse(localStorage.getItem('term'))
+let termStore = [];//JSON.parse(localStorage.getItem('term'))
 
 const initialState = {
     isLoading: false,

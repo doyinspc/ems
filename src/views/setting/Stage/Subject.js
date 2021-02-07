@@ -24,8 +24,6 @@ const Subject = (props) => {
 
   //GET SUBJECTS PER SCHOOL
   useEffect(() => {
-    
-    
      let params = {
       data:JSON.stringify(
       {

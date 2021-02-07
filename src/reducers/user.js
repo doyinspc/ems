@@ -140,7 +140,7 @@ export default function(state = initialState, action){
          case USER_GET_DROPDOWNS:
             localStorage.setItem('dropdowns', JSON.stringify(action.payload));
             let tm = action.payload[3] && action.payload[3].length > 0 ? action.payload[3][0]:{}
-            localStorage.setItem('myterm', JSON.stringify(tm));
+            localStorage.setItem('activeterm', JSON.stringify(tm));
             return {
                 ...state,
                 dropdowns : action.payload,
@@ -177,13 +177,13 @@ export default function(state = initialState, action){
                 mySchoolData : []
             };
           case USER_GET_TERM:
-            localStorage.setItem('myterm', JSON.stringify(action.payload));
+            localStorage.setItem('activeterm', JSON.stringify(action.payload));
             return {
                 ...state,
                 myTermData : action.payload
             };
           case USER_GET_TERM_ERROR:
-            localStorage.setItem('myterm', JSON.stringify([]));
+            localStorage.setItem('activeterm', JSON.stringify([]));
             return {
                 ...state,
                 myTermData : []
@@ -195,7 +195,10 @@ export default function(state = initialState, action){
                 activeterm : JSON.parse(localStorage.getItem('activeterm'))
             };
           case USER_SET_SCHOOL:
-            localStorage.setItem('activeschool', JSON.stringify(action.payload));
+            if(action.payload && Array.isArray(Object.keys(action.payload)))
+            {
+                localStorage.setItem('activeschool', JSON.stringify(action.payload));
+            }
             return {
                 ...state,
                 activeschool : JSON.parse(localStorage.getItem('activeschool'))

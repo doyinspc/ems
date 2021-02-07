@@ -34,12 +34,13 @@ const School = (props) => {
   const [phone1, setPhone1] = useState('')
   const [phone2, setPhone2] = useState('')
   const [email, setEmail] = useState('')
+  const [typeid, setTypeid] = useState(null)
   const [address, setAddress] = useState('')
   const [country, setCountry] = useState('')
   const [states, setStates] = useState('')
   const [links, setLinks] = useState('')
   const [color, setColor] = useState('')
-  const [signatory, setSignatory] = useState(0)
+  const [sign, setSign] = useState(0)
 
   useEffect(() => {
     let params = {
@@ -61,11 +62,12 @@ const School = (props) => {
         setId(dt.id);
         setName(dt.name);
         setAbbrv(dt.abbrv);
+        setTypeid(dt.typeid);
         setPhone1(dt.phone1);
         setPhone2(dt.phone2);
         setEmail(dt.email);
         setLinks(dt.links);
-        setSignatory(dt.signatory);
+        setSign(dt.signed);
         setColor(dt.color);
         setAddress(dt.address);
         setCountry(dt.country);
@@ -97,11 +99,12 @@ const School = (props) => {
       fd.append('phone1', phone1);
       fd.append('phone2', phone2);
       fd.append('email', email);
+      fd.append('typeid', typeid);
       fd.append('country', country);
       fd.append('states', states);
       fd.append('address', address);
       fd.append('files', links);
-      fd.append('signatory', signatory);
+      fd.append('signed', sign);
       fd.append('color', color);
       fd.append('table', 'schools');
       
@@ -118,7 +121,7 @@ const School = (props) => {
         fd.append('cat', 'insert');
         props.registerSchool(fd)
       }
-      props.onReset()
+      //props.onReset()
     }
   }
 
@@ -155,7 +158,7 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                   <CInput 
                       type="text" 
                       id="nf-name"
-                      defaultValue={name}
+                      value={name}
                       onChange={(e)=>setName(e.target.value)}
                       placeholder="MESL SENIOR SECONDARY SCHOOL" 
                     />
@@ -166,7 +169,7 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                   <CInput 
                       type="text" 
                       id="nf-abbrv" 
-                      defaultValue={abbrv}
+                      value={abbrv}
                       onChange={(e)=>setAbbrv(e.target.value)}
                       placeholder="MESL/KS/" 
                     />
@@ -178,7 +181,7 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                       type="text" 
                       id="nf-phone1" 
                       name="phone1"
-                      defaultValue={phone1}
+                      value={phone1}
                       onChange={(e)=>setPhone1(e.target.value)}
                       placeholder="080000000000" 
                     />
@@ -190,7 +193,7 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                       type="text" 
                       id="nf-phone2" 
                       name="phone2"
-                      defaultValue={phone2}
+                      value={phone2}
                       onChange={(e)=>setPhone2(e.target.value)}
                       placeholder="080000000000" 
                     />
@@ -202,7 +205,7 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                       type="email" 
                       id="nf-email" 
                       name="email"
-                      defaultValue={email}
+                      value={email}
                       onChange={(e)=>setEmail(e.target.value)}
                       placeholder="in@gmail.com" 
                     />
@@ -213,7 +216,7 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                       type="color" 
                       id="nf-color" 
                       name="color"
-                      defaultValue={color}
+                      value={color}
                       onChange={(e)=>setColor(e.target.value)}
                     />
                 </CFormGroup>
@@ -223,7 +226,7 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                       type="textarea" 
                       id="nf-address" 
                       name="address"
-                      defaultValue={address}
+                      value={address}
                       onChange={(e)=>setAddress(e.target.value)}
                       placeholder="12 Bakonle way...." 
                     />
@@ -234,33 +237,46 @@ let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
                       type="states" 
                       id="nf-states" 
                       name="states"
-                      defaultValue={states}
+                      value={states}
                       onChange={(e)=>setStates(e.target.value)}
                       placeholder="Lagos State" 
                     />
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-country">State </CLabel>
+                  <CLabel htmlFor="nf-country">Country </CLabel>
                   <CInput 
                       type="country" 
                       id="nf-country" 
                       name="country"
-                      defaultValue={country}
+                      value={country}
                       onChange={(e)=>setCountry(e.target.value)}
                       placeholder="Nigeria" 
                     />
                 </CFormGroup>
                 <CFormGroup>
-                  <CLabel htmlFor="nf-sig1">Signatory</CLabel>
+                  <CLabel htmlFor="typeid">Category</CLabel>
                   <CSelect
-                      type="text" 
-                      id="nf-sig1" 
-                      name="sig1"
-                      onChange={(e)=>setSignatory(e.target.value)}
+                      id="typeid" 
+                      name="typeid"
+                      onChange={(e)=>setTypeid(e.target.value)}
                       placeholder="" 
                     >
-                      {starray}
+                      <option vlaue="1">Secondary</option>
+                      <option vlaue="2">Primary</option>
                   </CSelect>
+                  <CFormText className="help-block">Select Signatory</CFormText>
+                </CFormGroup>
+                <CFormGroup>
+                  <CLabel htmlFor="type">Signatory</CLabel>
+                  <CInput
+                      type="text" 
+                      id="sign" 
+                      value={sign}
+                      name="sign"
+                      onChange={(e)=>setSign(e.target.value)}
+                      placeholder="Full Name" 
+                    />
+                      
                   <CFormText className="help-block">Select Signatory</CFormText>
                 </CFormGroup>
                 

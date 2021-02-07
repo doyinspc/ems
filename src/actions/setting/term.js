@@ -83,28 +83,21 @@ export const registerTerm = data => dispatch => {
 };
 
 //TERM REGISTER
-export const setActiveTerm = (schoolid, termid) => dispatch => {
-    let fd = new FormData();
-    fd.append('schoolid', schoolid);
-    fd.append('termid', termid);
-    fd.append('cat', 'term');
-    fd.append('table', 'terms');
-    fd.append('narration', `Change term ${termid}`);
-
-
-    axios.post(path, fd, axiosConfig1)
-        .then(res => {
-            dispatch({
-                type: TERM_ACTIVE_SUCCESS,
-                payload: res.data.data
-            })
-        })
-        .catch(err => {
-            dispatch({
-                type : TERM_ACTIVE_FAIL,
-                payload: err
-            })
-        })
+export const setActiveTerm = data => dispatch => {
+     //body
+     axios.post(path, data, axiosConfig1)
+     .then(res => {
+         dispatch({
+             type: TERM_GET_MULTIPLE,
+             payload: res.data.data
+         })
+     })
+     .catch(err => {
+         dispatch({
+             type : TERM_UPDATE_FAIL,
+             payload: err
+         })
+     })
 };
  //TERM UPDATE
 export const updateTerm = (data) => (dispatch, getState) => {

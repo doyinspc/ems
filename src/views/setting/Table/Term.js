@@ -45,7 +45,7 @@ const Term = (props) => {
 }
 const mapStateToProps = (state) =>({
   terms : state.termReducer,
-  useer: state.userReducer
+  user: state.userReducer
 })
 export default connect(mapStateToProps, {
   getTerms,

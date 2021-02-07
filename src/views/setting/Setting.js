@@ -247,21 +247,23 @@ const Setting = (props) => {
                pid={pid}
                qid={qid}
                did={did}
-              edits={mainedt}
-              school={props.user.activeschool} 
-              para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
+               edits={mainedt}
+               school={props.user.activeschool} 
+               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
         {parseInt(sid) === 7 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
         confirm(sid, perm, <Admission sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 8 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
         confirm(sid, perm, <Timetable sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 9 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
-        confirm(sid, perm, <Clasz sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Clasz sid={sid} edits={mainedt} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 9 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Claszunit
               pid={pid}
               sid={sid}
+              qid={qid}
+              did={did}
               edits={mainedt}
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 

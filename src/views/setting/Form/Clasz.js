@@ -16,8 +16,10 @@ import {
   CInput,
   CCardFooter,
   CFormText,
+  CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { setElement } from '../../../actions/common';
 
 
 const Clasz = (props) => {
@@ -25,6 +27,7 @@ const Clasz = (props) => {
   const [id, setId] = useState(null)
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
+  const [typeid, setTypeid] = useState('')
 
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
@@ -34,6 +37,8 @@ const Clasz = (props) => {
       setId(dt.id);
       setNamez(dt.name);
       setAbbrv(dt.abbrv);
+      setTypeid(dt.typeid);
+      setElement('typeid', dt.typeid)
     }else{
       setId(null);
       setNamez('');
@@ -47,6 +52,7 @@ const Clasz = (props) => {
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
+      //fd.append('typeid', typeid);
       fd.append('table', 'claszs');
       
       if(id && parseInt(id) > 0)
@@ -60,6 +66,7 @@ const Clasz = (props) => {
       {
         //INSERT
         fd.append('schoolid', props.user.activeschool.id);
+        fd.append('typeid', props.user.activeschool.typeid);
         fd.append('cat', 'insert');
         props.registerClasz(fd)
       }
@@ -114,6 +121,20 @@ const Clasz = (props) => {
                 />
               <CFormText className="help-block">Please enter clasz abbrv (max 6 characters)</CFormText>
             </CFormGroup>
+            <CFormGroup>
+                  <CLabel htmlFor="typeid">Category</CLabel>
+                  <CSelect
+                      id="typeid" 
+                      name="typeid"
+                      onChange={(e)=>setTypeid(e.target.value)}
+                      placeholder="" 
+                    >
+                      <option></option>
+                      <option value="1">Secondary</option>
+                      <option value="2">Primary</option>
+                  </CSelect>
+                  <CFormText className="help-block">Select Signatory</CFormText>
+                </CFormGroup>
           </CForm>
         </CCardBody>
         <CCardFooter>

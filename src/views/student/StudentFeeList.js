@@ -4,6 +4,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { registerStudentfee, updateStudentfee,  getStudentfeesSingle, deleteStudentfee, setStudentfee } from './../../actions/student/studentfee';
 import { getAccounts } from './../../actions/setting/account';
 import { getFees } from './../../actions/setting/fee';
+import moment from 'moment';
 import { 
   CDropdownItem,
   CDropdown,
@@ -29,6 +30,7 @@ const Studentclasss = (props) => {
    const [amount, setAmount] = useState(0)
    const [accountid, setAccountid] = useState(null)
    const [feeid, setFeeid] = useState(null)
+   const [teller, setTeller] = useState(null)
 
    useEffect(() => {
    
@@ -84,7 +86,8 @@ const Studentclasss = (props) => {
     fd.append('studentid', studentid);
     fd.append('amount', amount);
     fd.append('termid', termid);
-    fd.append('datepaid', datepaid);
+    fd.append('teller', teller);
+    fd.append('datepaid', moment(datepaid).format("YYYY-MM-DD"));
     fd.append('sessionid', sessionid);
     fd.append('schoolid', props.user.activeschool.id)
     fd.append('staffid', props.user.mid);
@@ -146,9 +149,21 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
     return <tr key={ind}>
     <td className="text-center">
      {ind + 1}
+     <div className="c-avatar">
+        <img 
+        src={process.env.REACT_APP_SERVER_URL+ row.photo} 
+        className="c-avatar-img" 
+        alt={row.admission_no} 
+        onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
+        />
+        <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
+      </div>
     </td>
     <td>
-        <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
+    <div><strong>{`${row.surname} ${row.firstname} ${row.middlename}`}</strong></div>
+            <div className="small text-muted">
+            <span>{row.schoolabbrv}{row.admission_no}</span>
+        </div>
     </td>
     <td>
       { 
@@ -175,6 +190,7 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
     <td>
       {setDiff(subs, adds)}
     </td>
+    {props.classteacher ? 
     <td>
           <CButtonGroup>
            <CButton 
@@ -226,6 +242,17 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
                       </CSelect>
                   </CFormGroup>
                   <CFormGroup>
+                    <CLabel htmlFor="teller">Teller</CLabel>
+                    <CInput 
+                      className="form-control" 
+                      id="teller" 
+                      type="text"
+                      value={teller}
+                      autoComplete="teller"
+                      onChange={(e)=>setTeller(e.target.value)}
+                      />
+                      </CFormGroup>
+                  <CFormGroup>
                     <CLabel htmlFor="feeid">fee</CLabel>
                     <CSelect 
                       className="form-control" 
@@ -253,6 +280,7 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
             </CDropdown>
             </CButtonGroup>
     </td>
+    :''}
   </tr>
 })
 
@@ -268,7 +296,7 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
                     <th className="text-center">FEES</th>
                     <th className="text-center">PAYMENTS</th>
                     <th className="text-center">BALANCE</th>
-                    <th className="text-center">Pay</th>
+                    {props.classteacher ? <th className="text-center">Pay</th>:''}
                   </tr>
                 </thead>
                 <tbody>

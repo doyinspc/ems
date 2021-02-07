@@ -2,15 +2,17 @@ import { CCol, CCollapse, CRow } from '@coreui/react';
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
 import { getUserDatas, getUserSchools, getUserTerms, getUserdropdowns, settSchool, settTerm} from './../../actions/user'
-import StaffDashboardClass from './StaffDashboardClass';
 import StaffDashboardMenu from './StaffDashboardMenu';
 import StaffDashboardSchool from './StaffDashboardSchool';
 import StaffDashboardSession from './StaffDashboardSession';
-import StaffDashboardSubject from './StaffDashboardSubject';
 import Birthdays from "./Birthdays"
 import Notice from "./Notice"
 import SchoolData from "./../setting/SchoolData"
 import Search from './Search';
+import ClassPopulation from './Dasboard/ClassPopulation';
+import Staffsubject from './../setting/Stage/Staffsubject1'
+import Themes from './Subjects/Theme'
+import ClassFee from './Dasboard/ClassFee';
 
 const Dashboard = (props) => {
   const [schools, setSchools] = useState({})
@@ -19,10 +21,13 @@ const Dashboard = (props) => {
 useEffect(() => {
   //load dropdowns
   let did = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0 ? props.user.activeschool.id :'null'
+  let tid = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('typeid') && parseInt(props.user.activeschool.typeid) > 0 ? props.user.activeschool.typeid :'null'
+  
   let params = {
     data:JSON.stringify(
     {
-        'schoolid':did
+        'schoolid':did,
+        'typeid':tid
     }),
     cat:'dropdowns',
     table:'access',
@@ -75,6 +80,7 @@ useEffect(() => {
 }, [props.user.mid, props.user.activeterm]);
 
 let dt = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns : [[], []];
+
 const changeSchool = (data) =>{
       props.settSchool(data)
 }
@@ -87,7 +93,6 @@ const changeMenu = () =>{
 //IF NO SCHOOL IS SET SET ACTIVE SCHOOL AUTOMATICALY
 if(!props.user.activeschool.hasOwnProperty('id') ||  props.user.activeschool === undefined )
 {
-  //GET STAFF SCHOOl
   let myCurrentSchool = props.user.user !== undefined && props.user.user !== null && props.user.user.hasOwnProperty('schoolid') && parseInt(props.user.user.schoolid) > 0 ? props.user.user.schoolid :'null'
   if(parseInt(myCurrentSchool) > 0)
   {
@@ -96,12 +101,10 @@ if(!props.user.activeschool.hasOwnProperty('id') ||  props.user.activeschool ===
       {
         changeSchool(sd[0])
       }
-  }else{
+  }else
+  {
     //changeSchool(props.user.mySchoolData[0])
   }
-  //ELSE PICK ONE
-
-  
 }
 
 let schdata = props.user.mySchoolData !== undefined && Array.isArray(props.user.mySchoolData) ? props.user.mySchoolData :[]
@@ -117,6 +120,20 @@ return (
         changeSchool={(data)=>changeSchool(data)}
         toggleMenu={changeMenu}
       />
+      <Themes />
+      <Staffsubject
+        pid={1}
+        para={{'icon':process.env.PUBLIC_URL + '/icons/subject.png'}}
+        title={props.user.activeterm}
+        school={props.user.activeschool} 
+        termid={props.user.activeterm.termid}
+        sessionid={props.user.activeterm.sessionid}
+        clientid={props.user.user.id}
+        subject={[]}
+        
+      />
+      <ClassPopulation sessionid={props.user.activeterm.sessionid} termid={props.user.activeterm.termid}/>
+      <ClassFee sessionid={props.user.activeterm.sessionid} termid={props.user.activeterm.termid}/>
        <CCollapse
       show={showmenu}
       >

@@ -14,11 +14,12 @@ const Clasz = (props) => {
                 <td className='text-center'>{ind + 1}</td>
                 <td>{row.name}</td>
                 <td className='text-center'>{row.abbrv}</td>
+                <td className='text-center'>{parseInt(row.typeid) === 1 ? 'Secondary' :'Primary'}</td>
                 { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
                 <td className='text-center'>
                     {
                         props.submenu.map((prp, ind)=>{
-                            return <a  key={ind} title={prp.tag} onClick={(item) => history.push(`/setting/${props.sid}/${row.id}/0`)}><i className='fa fa-list ml-2 px-2'></i></a>
+                            return <a  key={ind} title={prp.tag} onClick={(item) => history.push(`/setting/${props.sid}/${row.id}/0/0/0/0/0`)}><i className='fa fa-list ml-2 px-2'></i></a>
                         })
                      }
                         
@@ -39,6 +40,7 @@ const Clasz = (props) => {
                     <th className="text-center">SN.</th>
                     <th><i className='fa fa-list'></i> Clasz</th>
                     <th className="text-center"> <i className='fa fa-text'></i> Abbrv</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> SCHOOL</th>
                     { props.editer === true  || (props.submenu !== undefined && props.submenu.length > 0) ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>

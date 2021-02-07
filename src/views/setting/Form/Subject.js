@@ -28,6 +28,7 @@ const Subject = (props) => {
   const [id, setId] = useState(null)
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
+  const [typeid, setTypeid] = useState(null)
   const [departmentid, setDepartmentid] = useState(null)
   const [unitid, setUnitid] = useState(null)
   const [departmentname, setDepartmentname] = useState(null)
@@ -67,6 +68,7 @@ const Subject = (props) => {
       let dt = props.data;
       setId(dt.id);
       setNamez(dt.name);
+      setTypeid(dt.typeid);
       setAbbrv(dt.abbrv);
       setDepartmentid(dt.departmentid);
       setUnitid(dt.unitid);
@@ -74,6 +76,7 @@ const Subject = (props) => {
       setUnitname(dt.unitname);
       setElement('nf-department', dt.departmentid)
       setElement('nf-unit', dt.unitid)
+      setElement('typeid', dt.typeid)
     }else{
       setId(null);
       setNamez('');
@@ -90,6 +93,7 @@ const Subject = (props) => {
       fd.append('abbrv', abbrv);
       fd.append('departmentid', departmentid);
       fd.append('unitid', unitid);
+      fd.append('typeid', typeid);
       fd.append('table', 'subjects');
       
       if(id && parseInt(id) > 0)
@@ -193,6 +197,20 @@ const Subject = (props) => {
               </CSelect>
               <CFormText className="help-block">Please select unit</CFormText>
             </CFormGroup>
+            <CFormGroup>
+                  <CLabel htmlFor="typeid">Category</CLabel>
+                  <CSelect
+                      id="typeid" 
+                      name="typeid"
+                      onChange={(e)=>setTypeid(e.target.value)}
+                      placeholder="" 
+                    >
+                      <option></option>
+                      <option value="1">Secondary</option>
+                      <option value="2">Primary</option>
+                  </CSelect>
+                  <CFormText className="help-block">Select Signatory</CFormText>
+                </CFormGroup>
           </CForm>
         </CCardBody>
         <CCardFooter>

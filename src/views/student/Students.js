@@ -23,9 +23,7 @@ import {
   CCardBody,
   CTabs,
   CButton,
-  CWidgetIcon,
-  CCardFooter,
-  CLink
+  CWidgetIcon
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
@@ -37,7 +35,7 @@ const Students = (props) => {
         let params = {
           data:JSON.stringify(
           {
-              'schoolid':1
+              'schoolid':props.user.activeschool.id
           }),
           cat:'select',
           table:'students',
@@ -520,7 +518,8 @@ let pht = data.map((row, ind)=>{
 }
 
 const mapStateToProps = (state) =>({
-    students : state.studentReducer
+    students : state.studentReducer,
+    user:state.userReducer
   })
   export default connect(mapStateToProps, {
     getStudents,

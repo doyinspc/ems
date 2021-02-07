@@ -24,14 +24,14 @@ const Clasz = (props) => {
 
   //GET CLASZS PER SCHOOL
   useEffect(() => {
-    if(props.activeschool !== undefined && props.activeschool.hasOwnProperty('id') && parseInt(props.activeschool))
+    if(props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0)
     {
      let params = {
       data:JSON.stringify(
       {
-          'schoolid':props.activeschool.id
+          'typeid':props.user.activeschool.typeid
       }),
-      cat:'select',
+      cat:'selected',
       table:'claszs',
       narration:'get claszs'
       }

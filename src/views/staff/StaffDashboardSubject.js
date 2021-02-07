@@ -19,8 +19,6 @@ import Students from './Subjects/Students'
 import PlanForm from './Subjects/PlanForm'
 import Plan from './Subjects/Plan'
 import Theme from './../setting/Stage/Theme'
-import Staffsubject from './../setting/Stage/Staffsubject1'
-import Themes from './Subjects/Theme'
 const Dashboard = (props) => {
     
   const [subject, setSubject]  = useState([])
@@ -128,18 +126,7 @@ return (
      
       </CRow>
       
-      <Themes />
-      <Staffsubject
-        pid={subject.itemid1}
-        para={{'icon':process.env.PUBLIC_URL + '/icons/subject.png'}}
-        title={props.user.activeterm}
-        school={props.user.activeschool} 
-        termid={props.user.activeterm.termid}
-        sessionid={props.user.activeterm.sessionid}
-        clientid={props.user.user.id}
-        subject={subject}
-        goBack={goBack}
-      /></CCollapse>
+      </CCollapse>
       {page == 1 ? 
       <Students
         termid={props.user.activeterm.termid}

@@ -40,7 +40,8 @@ const Dashboard = (props) => {
       let params = {
         data:JSON.stringify(
         {
-            'search':term
+            'search':term,
+            'schoolid': props.user.activeschool.id
         }),
         cat:'selected',
         table:'staffsearch',
@@ -50,7 +51,7 @@ const Dashboard = (props) => {
     }else{
       setClasz([])
     }
-  }, [term])
+  }, [term, props.user.activeschool.id])
 
 
   let dat = clasz.map((props, index)=>{
@@ -102,6 +103,7 @@ return (
   )
 }
 const mapStateToProps = (state) =>({
-  result:state.staffReducer.result
+  result:state.staffReducer.result,
+  user : state.userReducer
 })
 export default connect(mapStateToProps, {searchStaff})(Dashboard)

@@ -115,7 +115,19 @@ export const allplaces = {
     'Nigerian Police':'Nigerian Police',
     'Federal Civil Servant':'Federal Civil Servant',
     'State Civil Service':'State Civil Service',
-    'Business Man/Woman':'Business Man/Woman'
+    'Business Man/Woman':'Business Man/Woman',
+    'Clergy':'Clergy'
+
+   };
+export const allhousess = {
+    'Blue':'Blue',
+    'Green':'Green',
+    'Yellow':'Yellow',
+    'White':'White',
+    'Orange':'Orange',
+    'Gold':'Gold',
+    'Silver':'Silver',
+    'Brown':'Brown'
 
    };
 export const allrelationsx = {
@@ -162,6 +174,38 @@ export const statussobj = [
     {'value':3, 'label':'High'},
     {'value':4, 'label':'Emergency'}
   ];
+  export const leavestd =[
+    {
+        "id":1,
+        "name":'Default',
+        color:'#ccc',
+        colors:'secondary',
+    },
+    {
+        "id":2,
+        "name":'Present',
+        color:'#cfc',
+        colors:'success',
+    },
+    {
+        "id":3,
+        "name":'Absent with prermission',
+        color:'blue',
+        colors:'info',
+    },
+    {
+        "id":4,
+        "name":'Late',
+        color:'yellow',
+        colors:'warning'
+    },
+    {
+        "id":5,
+        "name":'Absent no reason',
+        color:'red',
+        colors:'danger'
+    }
+  ]
 export const leaves =[
   {
       "id":1,

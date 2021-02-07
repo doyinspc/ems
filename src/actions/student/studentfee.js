@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     STUDENTFEE_GET_ONE,
     STUDENTFEE_GET_MULTIPLE,
+    STUDENTFEE_GET_SUMMARY,
     STUDENTFEE_GET_SINGLE,
     STUDENTFEE_REGISTER_SUCCESS,
     STUDENTFEE_REGISTER_FAIL,
@@ -28,6 +29,26 @@ export const getStudentfees = params => (dispatch, getState) => {
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
                     type: STUDENTFEE_GET_MULTIPLE,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STUDENTFEE_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+//GET ALL STUDENTFEE 
+export const getStudentfeeSummary = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.token = MAIN_TOKEN;
+
+    dispatch({type : STUDENTFEE_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STUDENTFEE_GET_SUMMARY,
                     payload: res.data
                 })
             })

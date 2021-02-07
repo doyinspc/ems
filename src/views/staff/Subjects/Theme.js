@@ -13,20 +13,18 @@ const Studentclasss = (props) => {
   let dt = props.themes && Array.isArray(props.themes) ? props.themes.filter(rw =>rw !== null || rw !== undefined) : []
  
   let subjectid = props.subject;
- 
-
- 
   useEffect(() => {
     let params = {
         data:JSON.stringify(
         {
-            'id':0
+            'id':0,
+            'typeid':props.activeschool.typeid
         }),
         cat:'selectess',
         table:'themesummary',
         narration:'get all scheme of work'
       }
-      props.getThemesummary(params)
+      props.getThemesummary(params);
     
   }, [])
 
@@ -83,7 +81,7 @@ let th2 = Object.keys(claszs).filter(rw=>claszs[rw] !== null).map((p, i)=>{
 
 let tbs = Object.keys(subjects).map((p, i)=>{    
     return  <tr style={{padding:'2px'}}>
-                <td key={i}  className='text-left'  style={{padding:'2px'}}>{subjects[p]}</td>
+                <td key={i}  className='text-left'  style={{padding:'2px'}}>{subjects[p] ? subjects[p].toUpperCase() :'NO TITLE' }</td>
                 { Object.keys(claszs).filter(rw=>claszs[rw] !== null).map((p1, i1)=>{
                   return   Object.keys(terms).map((p2, i2)=>{
                         return   p in data && p2 in data[p] && p1 in data[p][p2] ?
@@ -128,7 +126,8 @@ let tbs = Object.keys(subjects).map((p, i)=>{
   )
 }
 const mapStatetoProps = (state)=>({
- themes:state.themeReducer.themesummary
+ themes:state.themeReducer.themesummary,
+ activeschool:state.userReducer.activeschool
 })
 export default connect(mapStatetoProps, {
     getThemesummary

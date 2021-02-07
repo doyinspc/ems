@@ -12,30 +12,51 @@ import {
     deleteStudentattendance,
     deleteStudentattendancedaily
   } from './../../actions/student/studentattendance';
-  import moment from 'moment'
-import AttendanceBox from './../staff/AttendanceBox';
-import { leaves } from '../../actions/common';
-
+import { getStudents } from './../../actions/student/student';
+import moment from 'moment'
+import AttendanceBox from './AttendanceBox';
+import { leavestd } from '../../actions/common';
+import { useParams } from 'react-router-dom';
+let leaves = leavestd;
 
 const Studentattendance = (props) => {
-     let dt = new Date();
+    let clasz = useParams().clasz
      
-     //let firstday = new Date(dt.getFullYear(), dt.getMonth(), -1);
-     //let lastday = new Date(dt.getFullYear(), dt.getMonth() + 1, 0);
      const [firstday, setfirstday] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), -1))
      const [lastday, setlastday] = useState(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0))
      const [datax, setdatax] = useState({})
 
+     let sc = props.studentclasss.studentclasss
+     let idx = sc.map((pr, ind)=>{
+         return pr.id
+     })
+     let ids = Array.isArray(idx) && idx.length > 0 ? idx.join(","): '';
+    useEffect(() => {
+        //date changes get
+        let params = {
+            data:JSON.stringify(
+            {
+                'ids':ids
+            }),
+            cat:'selected',
+            table:'studentx',
+            narration:'get all students'
+        }
+          props.getStudents(params)
+        
+    }, [ids])
+     
     useEffect(() => {
         //date changes get
         let params = {
           data:JSON.stringify(
           {
               'schoolid':props.user.activeschool.id,
-              'grp':1,
+              'clients':clasz,
+              'grp':2,
               'starts':moment(firstday).format('YYYY-MM-DD'),
-              'ends':moment(lastday).format('YYYY-MM-DD')
-    
+              'ends':moment(lastday).format('YYYY-MM-DD'),
+              'ids':ids
           }),
           cat:'selectedattendance',
           table:'attendances',
@@ -46,9 +67,9 @@ const Studentattendance = (props) => {
         let params1 = {
           data:JSON.stringify(
           {
-              'clients':props.user.activeschool.id,
+              'clients':1,
               'schoolid':props.user.activeschool.id,
-              'grp':5,
+              'grp':4,
               'starts':moment(firstday).format('YYYY-MM-DD'),
               'ends':moment(lastday).format('YYYY-MM-DD')
           }),
@@ -57,7 +78,7 @@ const Studentattendance = (props) => {
           narration:'get all attendance'
       }
         props.getStudentattendancedailys(params1)
-      }, [firstday, lastday])
+      }, [firstday, lastday, ids, clasz])
      
      const changeData = (client, ids) =>{
          let datas = {...datax}
@@ -96,13 +117,12 @@ const Studentattendance = (props) => {
      registered_attendance_date.forEach(rw =>{
          return arr_days[rw.dates] = rw.reason
      });
-      
       let registered_attendance_issue = Array.isArray(props.studentattendance.studentattendances)  && props.studentattendance.studentattendances !== undefined? props.studentattendance.studentattendances : [];
       let arr_persons = {}
       registered_attendance_issue.forEach(rw =>{
             return arr_persons[rw.dates+"_"+rw.clients] = rw.leaveid
       });
-
+    
      var listDate = [];
      var startDate = firstday ;
      var endDate = lastday;
@@ -131,9 +151,9 @@ const Studentattendance = (props) => {
 
             })
 
-     let allstudents =  props.students;
+     let allstudents =  props.studentclasss.studentclasss;
      let studenx =  allstudents.map((prop, ind)=>{
-         let dt = []
+     let dt = []
          return <tr key={ind +"_"+ prop.id}>
              <td className="text-right"><strong className='text-nowrap'>{`${prop.surname} ${prop.firstname} ${prop.middlename}`}</strong></td>
              {listDate.map((pro, ind)=>{
@@ -219,7 +239,8 @@ const mapStateToProps = (state) =>({
     
     students:state.studentReducer.students,
     studentattendance : state.studentattendanceReducer,
-    user:state.userReducer
+    user:state.userReducer,
+    studentclasss : state.studentclassReducer
 
   })
   export default connect(mapStateToProps, {
@@ -231,5 +252,6 @@ const mapStateToProps = (state) =>({
     updateStudentattendance,
     updateStudentattendancedaily,
     deleteStudentattendance,
-    deleteStudentattendancedaily
+    deleteStudentattendancedaily,
+    getStudents
   })(Studentattendance)

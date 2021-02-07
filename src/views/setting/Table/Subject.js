@@ -16,6 +16,7 @@ const Subject = (props) => {
                 <td className='text-center'>{row.abbrv}</td>
                 <td className='text-center'>{row.departmentname}</td>
                 <td className='text-center'>{row.unitname}</td>
+                <td className='text-center'>{parseInt(row.typeid) === 1 ? 'Secondary' :'Primary'}</td>
                 { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
                 <td className='text-center'>
                     {
@@ -42,7 +43,8 @@ const Subject = (props) => {
                     <th><i className='fa fa-list'></i> Subject</th>
                     <th className="text-center"> <i className='fa fa-text'></i> Abbrv</th>
                     <th className="text-center"> <i className='fa fa-text'></i> Department</th>
-                    <th className="text-center"> <i className='fa fa-text'></i> unitt</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> Unit</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> Category</th>
                     { props.editer === true  || (props.submenu !== undefined && props.submenu.length > 0) ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>

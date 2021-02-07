@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     STUDENTCLASS_GET_ONE,
     STUDENTCLASS_GET_MULTIPLE,
+    STUDENTCLASS_GET_SUMMARY,
     STUDENTCLASS_REGISTER_SUCCESS,
     STUDENTCLASS_REGISTER_FAIL,
     STUDENTCLASS_LOADING,
@@ -11,6 +12,7 @@ import {
     STUDENTCLASS_DELETE_SUCCESS,
     STUDENTCLASS_DELETE_FAIL
 } from "./../../types/student/studentclass";
+
 import { MAIN_TOKEN, API_PATH_SETTING, axiosConfig1, axiosConfig } from './../common';
 
 const path = API_PATH_SETTING;
@@ -35,6 +37,27 @@ export const getStudentclasss = params => (dispatch, getState) => {
                 })
             })
 };
+
+//GET ALL STUDENTCLASS 
+export const getStudentclassSummary = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.token = MAIN_TOKEN;
+
+    dispatch({type : STUDENTCLASS_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STUDENTCLASS_GET_SUMMARY,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STUDENTCLASS_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
 //GET SINGLE STUDENTCLASS 
 export const getStudentclass = id => (dispatch, getState) => {
     //SET PAGE LOADING
@@ -45,12 +68,12 @@ export const getStudentclass = id => (dispatch, getState) => {
     });  
 };
 //STUDENTCLASS DELETE
-export const deleteStudentclass = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteStudentclass = (params, id) => (dispatch, getState) =>{
+    axios.post(path, params, axiosConfig1)
         .then(res => {
             dispatch({
                 type: STUDENTCLASS_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {
@@ -80,6 +103,7 @@ export const registerStudentclass = data => dispatch => {
  //STUDENTCLASS UPDATE
 export const updateStudentclass = (data) => (dispatch, getState) => {
     //body
+    console.log(data)
     axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
