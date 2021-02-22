@@ -50,7 +50,9 @@ const Setting = (props) => {
 
   let acs = props.user.user.access !== undefined && props.user.user.access.length > 0 ? JSON.parse(props.user.user.access) : {};
   let mainedt = 1
-  if(Object.keys(acs) > 0 && props.user.isAdmin === false)
+  
+  //get all access in object form
+  if(Object.keys(acs).length > 0 && props.user.isAdmin === false)
   {
       let ids = props.user.activeschool.id;
       

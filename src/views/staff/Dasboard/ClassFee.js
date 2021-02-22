@@ -14,7 +14,8 @@ import {
   CCol,
   CProgress,
   CRow,
-  CCallout
+  CCallout,
+  CTooltip
 } from '@coreui/react'
 import {
     CChartBar,
@@ -25,6 +26,7 @@ import {
     CChartPolarArea
   } from '@coreui/react-chartjs';
 import CIcon from '@coreui/icons-react'
+import { nairaformat } from '../../../actions/common';
 
 
 const Dashboards= (props) => {
@@ -102,12 +104,11 @@ const Dashboards= (props) => {
    });
 
 
-   console.log(feesarray)
    let sfee = sumfee.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
    let spay = sumpay.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0)
    let spop = sumpop.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0)
 
-   let naira = new Intl.NumberFormat(undefined,{style:'currency', currency:'NGR'})
+   let naira = nairaformat;
   return (
     <>
      <CRow>
@@ -120,17 +121,20 @@ const Dashboards= (props) => {
                 <div className="small text-muted">{moment(new Date()).format('MMMM YYYY')}</div>
             </CCol>
             <CCol sm="7" className="d-none d-md-block">
+              <CTooltip content="Click to download/reload">
               <CButton color="primary" className="float-right">
-                <CIcon name="cil-cloud-download"/>
+                <CIcon 
+                name="cil-cloud-download"/>
               </CButton>
+              </CTooltip>
               <CButtonGroup className="float-right mr-3">
                 {
-                  ['Day', 'Month', 'Year'].map(value => (
+                  ['Term', 'Session'].map(value => (
                     <CButton
                       color="outline-secondary"
                       key={value}
                       className="mx-0"
-                      active={value === 'Month'}
+                      active={value === 'Term'}
                     >
                       {value}
                     </CButton>
@@ -147,21 +151,21 @@ const Dashboards= (props) => {
                       <CCallout color="info">
                         <small className="text-muted">Fee</small>
                         <br />
-            <strong className="h4">{naira.format(sfee)}</strong>
+            <strong className="h4">{nairaformat(sfee)}</strong>
                       </CCallout>
                     </CCol>
                     <CCol sm="4">
                       <CCallout color="success">
                         <small className="text-muted">Payments</small>
                         <br />
-            <strong className="h4">{naira.format(spay)}</strong>
+            <strong className="h4">{nairaformat(spay)}</strong>
                       </CCallout>
                     </CCol>
                     <CCol sm="4">
                       <CCallout color="danger">
                         <small className="text-muted">Debt</small>
                         <br />
-            <strong className="h4">{naira.format(sfee - spay)}</strong>
+            <strong className="h4">{nairaformat(sfee - spay)}</strong>
                       </CCallout>
                     </CCol>
                   </CRow>
@@ -183,7 +187,7 @@ const Dashboards= (props) => {
                       <CCol xs={2}>
                       <div className="progress-group-prepend">
                     <span className="progress-group-text pull-right m-auto">
-                      <strong><strong className="text-danger">{naira.format(prop.pop)}</strong></strong>
+                      <strong><strong className="text-danger">{nairaformat(prop.pop)}</strong></strong>
                     </span>
                   </div>
                    </CCol>

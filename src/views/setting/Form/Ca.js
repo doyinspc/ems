@@ -72,7 +72,7 @@ const Ca = (props) => {
       {
         //INSERT
         fd.append('typeid', props.did);
-        fd.append('termid', props.pid);
+        fd.append('termid', props.qid);
         fd.append('cat', 'insert');
         props.registerCa(fd)
       }

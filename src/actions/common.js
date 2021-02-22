@@ -31,6 +31,10 @@ export const callError = (err) =>{
 export const callSuccess = (err) =>{
     return Swal("Saved!", "Update saved!", "success");
 }
+export const nairaformat = (item)=>{
+  let f = new Intl.NumberFormat(undefined,{style:'currency', currency:'NGR'})
+  return f.format(item)
+}
 export const imageExist  = (imageSrc, callback) =>{
   fetch(imageSrc, {method:'HEAD'})
   .then(res=>{

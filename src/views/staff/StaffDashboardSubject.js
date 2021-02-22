@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {connect} from 'react-redux'
 import {  
     CCol, 
@@ -12,6 +12,7 @@ import {
 } from '@coreui/react';
 import StaffDashboardDefault from './StaffDashboardDefault'
 import { getStaffsubjects } from './../../actions/staff/staffsubject'
+import { getCas } from './../../actions/setting/ca'
 import CIcon from '@coreui/icons-react'
 import ChartLineSimple from '../charts/ChartLineSimple'
 import ChartBarSimple from '../charts/ChartBarSimple'
@@ -24,7 +25,7 @@ const Dashboard = (props) => {
   const [subject, setSubject]  = useState([])
   const [page, setPage]  = useState(0)
   const [collapser, setCollapser]  = useState(true)
-
+  
   useEffect(() => {
 
     if(props.user.activeterm !== undefined)
@@ -43,9 +44,21 @@ const Dashboard = (props) => {
   
       }
       props.getStaffsubjects(params)
+      let params1 = {
+        data:JSON.stringify(
+        {
+          'termid':props.user.activeterm.termid,
+          'schoolid':props.user.activeterm.sessionid
+        }),
+        cat:'dropdownca',
+        table:'dropdownca',
+        narration:'get ca'
+  
+      }
+      props.getCas(params1)
     } 
     
-  }, [props.user.activeterm])
+  }, [])
 
   const goBack = () =>{
     setPage(0);
@@ -183,7 +196,7 @@ return (
   )
 }
 const mapStateToProps = (state) =>({
-staffsubject:state.staffsubjectReducer,
-user:state.userReducer
+  staffsubject:state.staffsubjectReducer,
+  user:state.userReducer,
 })
-export default connect(mapStateToProps, { getStaffsubjects}) (Dashboard)
+export default connect(mapStateToProps, { getStaffsubjects, getCas}) (Dashboard)

@@ -195,7 +195,7 @@ const loadSubDatax = (e, sub, family, id, num) =>{
     console.log(ac)
 }
 const loadSubDataxx = (e, sub, family, id, num) =>{
-    console.log(sub, family, id, num)
+    
     let ac = {...accs};
     if(e)
     {
@@ -240,7 +240,6 @@ const loadSubDataxx = (e, sub, family, id, num) =>{
         }
     }
     setAccs(ac)
-    console.log(ac)
 }
 const loadPage = (id) =>{
     setActiveschool(id)
@@ -267,8 +266,7 @@ return (
              <CCardBody>
                 <table width='100%' border='1px solid black'>
                     <thead>
-                        <tr>
-                            
+                        <tr>             
                             <th width='5%' className='text-center'>FULL</th>
                             <th>SCHOOL NAME</th>
                             <th></th>
@@ -278,9 +276,7 @@ return (
                     {
                         schs && Array.isArray(schs) && schs.length > 0 ? schs.map((prop, index)=>{
                             let chk1 = accs.hasOwnProperty(prop.id) ? true : false;
-                           
                              return (
-                                
                                 <tr key={index}> 
                                 <td width='5%' valign='middle' >
                                         <CSwitch 

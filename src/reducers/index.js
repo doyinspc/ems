@@ -42,8 +42,11 @@ import stafflessonplan from "./staff/stafflessonplan";
 import student from "./student/student";
 import studentclass from "./student/studentclass";
 import studentfee from "./student/studentfee";
+import studentscore from "./student/studentscore";
+import studentsubject from "./student/studentsubject";
 import studentattendance from "./student/studentattendance";
 import staffattendance from "./staff/staffattendance";
+import coursematerial from "./setting/coursematerial";
 import subject from "./setting/subject";
 import theme from "./setting/theme";
 import term from "./setting/term";
@@ -102,6 +105,8 @@ export default combineReducers({
     studentReducer: student,
     studentclassReducer:studentclass,
     studentfeeReducer:studentfee,
+    studentscoreReducer:studentscore,
+    studentsubjectReducer:studentsubject,
     studentattendanceReducer:studentattendance,
     staffattendanceReducer:staffattendance,
     subjectReducer: subject,
@@ -112,6 +117,7 @@ export default combineReducers({
     penmanagerReducer: penmanager,
     designationReducer: designation,
     jobReducer: job,
+    coursematerialReducer: coursematerial,
     weekReducer: week,
     page: page,
     userReducer: user,

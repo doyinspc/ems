@@ -1,4 +1,4 @@
-import { CCol, CCollapse, CRow } from '@coreui/react';
+
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
 import { getUserDatas, getUserSchools, getUserTerms, getUserdropdowns, settSchool, settTerm} from './../../actions/user'
@@ -13,7 +13,22 @@ import ClassPopulation from './Dasboard/ClassPopulation';
 import Staffsubject from './../setting/Stage/Staffsubject1'
 import Themes from './Subjects/Theme'
 import ClassFee from './Dasboard/ClassFee';
-
+import { 
+  CCol, 
+  CCollapse, 
+  CRow,
+  CBadge,
+  CCard,
+  CCardHeader,
+  CTabs,
+  CTabPane,
+  CNav,
+  CNavItem,
+  CNavLink,
+  CTabContent,
+  CCardBody
+} from '@coreui/react';
+import ClassAttendance from './Dasboard/ClassAttendance';
 const Dashboard = (props) => {
   const [schools, setSchools] = useState({})
   const [showmenu, setShowmenu] = useState(false)
@@ -45,7 +60,7 @@ useEffect(() => {
       }
       props.getUserTerms(params1)
     
-}, [props.user.mid, props.user.activeschool])
+}, [props.user.mid, props.user.activeschool.id, props.user.activeschool.typeid ])
 
 useEffect(() => {
   //load staff schools
@@ -68,7 +83,7 @@ useEffect(() => {
     {
         'sessionid':props.user.activeterm.sessionid,
         'termid':props.user.activeterm.termid,
-        'staffid':props.user.mid,
+        'staffid':props.user.mid
     }),
     cat:'dataaccess',
     table:'access',
@@ -77,7 +92,7 @@ useEffect(() => {
     getUserDatas(params)
   
     
-}, [props.user.mid, props.user.activeterm]);
+}, [props.user.mid, props.user.activeterm.termid, props.user.activeterm.sessionid]);
 
 let dt = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns : [[], []];
 
@@ -106,7 +121,6 @@ if(!props.user.activeschool.hasOwnProperty('id') ||  props.user.activeschool ===
     //changeSchool(props.user.mySchoolData[0])
   }
 }
-
 let schdata = props.user.mySchoolData !== undefined && Array.isArray(props.user.mySchoolData) ? props.user.mySchoolData :[]
 
 return (
@@ -119,22 +133,8 @@ return (
         schools={schdata}
         changeSchool={(data)=>changeSchool(data)}
         toggleMenu={changeMenu}
-      />
-      <Themes />
-      <Staffsubject
-        pid={1}
-        para={{'icon':process.env.PUBLIC_URL + '/icons/subject.png'}}
-        title={props.user.activeterm}
-        school={props.user.activeschool} 
-        termid={props.user.activeterm.termid}
-        sessionid={props.user.activeterm.sessionid}
-        clientid={props.user.user.id}
-        subject={[]}
-        
-      />
-      <ClassPopulation sessionid={props.user.activeterm.sessionid} termid={props.user.activeterm.termid}/>
-      <ClassFee sessionid={props.user.activeterm.sessionid} termid={props.user.activeterm.termid}/>
-       <CCollapse
+      />  
+    <CCollapse
       show={showmenu}
       >
       <StaffDashboardSchool 
@@ -147,9 +147,94 @@ return (
         changeSchool={(data)=>changeSchool(data)}
         changeTerm={(data)=>changeTerm(data)}
       />
-      
       </CCollapse>
-      <SchoolData school={props.user.activeschool} />
+    
+    <CRow>
+    <CCol xs="12" md="12" className="mb-4">
+        <CCard>
+          <CCardBody>
+            <CTabs>
+              <CNav variant="tabs">
+                <CNavItem>
+                  <CNavLink>
+                    Home
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    Class
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    Fee
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    Attendance
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    Academics
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    Scheme
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    Class Allocation
+                  </CNavLink>
+                </CNavItem>
+              </CNav>
+              <CTabContent>
+                <CTabPane>
+                    <SchoolData school={props.user.activeschool} />
+                </CTabPane>
+                <CTabPane>
+                  <ClassPopulation 
+                      sessionid={props.user.activeterm.sessionid} 
+                      termid={props.user.activeterm.termid}/>
+                </CTabPane>
+                <CTabPane>
+                  <ClassFee 
+                    sessionid={props.user.activeterm.sessionid} 
+                    termid={props.user.activeterm.termid}/>
+                </CTabPane>
+                <CTabPane>
+                  <ClassAttendance
+                    sessionid={props.user.activeterm.sessionid} 
+                    termid={props.user.activeterm.termid}/>
+
+                </CTabPane>
+                <CTabPane>
+                  
+                </CTabPane>
+                <CTabPane>
+                  <Themes />
+                </CTabPane>
+                <CTabPane>
+                  <Staffsubject
+                      pid={1}
+                      para={{'icon':process.env.PUBLIC_URL + '/icons/subject.png'}}
+                      title={props.user.activeterm}
+                      school={props.user.activeschool} 
+                      termid={props.user.activeterm.termid}
+                      sessionid={props.user.activeterm.sessionid}
+                      clientid={props.user.user.id}
+                      subject={[]}
+                    />
+                </CTabPane>
+              </CTabContent>
+            </CTabs>
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </CRow>
       </CCol>
       <CCol>
         <Search />

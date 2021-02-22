@@ -107,14 +107,14 @@ const Staffsubject = (props) => {
   }
 
   let claszarray = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns[1] : [];
-  let clarray = claszarray.filter(rw=>rw !== null).map((rw, ind) =>{
+  let clarray = Array.isArray(claszarray) ? claszarray.filter(rw=>rw !== null).map((rw, ind) =>{
       return <option key={ind} value={rw.id}>{rw.name}</option>
-  })
+  }):<option></option>
 
   let subjectarray = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns[2] : [];
-  let subarray = subjectarray.filter(rw=>rw !== null).map((rw, ind) =>{
+  let subarray = Array.isArray(subjectarray) ? subjectarray.filter(rw=>rw !== null).map((rw, ind) =>{
       return <option key={ind} value={rw.id}>{rw.name}</option>
-  })
+  }):<option></option>
 
   let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
   let starray = stafarray.filter(rw=>rw !== null).map((rw, ind) =>{

@@ -1,5 +1,6 @@
 import {
     STUDENTATTENDANCE_GET_MULTIPLE,
+    STUDENTATTENDANCE_GET_SUMMARY,
     STUDENTATTENDANCE_GET_DAILY,
     STUDENTATTENDANCE_GET_ONE,
     STUDENTATTENDANCE_REGISTER_SUCCESS,
@@ -26,6 +27,7 @@ const initialState = {
     studentattendances: studentattendanceStore ? studentattendanceStore : [],
     studentattendancedailys: studentattendancedailyStore ? studentattendancedailyStore : [],
     studentattendance:{},
+    studentattendancesummary:[],
     studentattendancedaily:{},
     msg: null,
     isEdit:-1,
@@ -62,6 +64,11 @@ export default function(state = initialState, action){
                 ...state,
                 studentattendances : action.payload,
                 msg:'DONE!!!'
+            };
+        case STUDENTATTENDANCE_GET_SUMMARY:
+            return {
+                ...state,
+                studentattendancesummary : action.payload
             };
         case STUDENTATTENDANCE_GET_DAILY:
             localStorage.setItem('studentattendancedaily', JSON.stringify(action.payload));

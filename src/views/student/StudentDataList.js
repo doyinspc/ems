@@ -139,7 +139,7 @@ let tabl = data.map((row, ind)=>{
         <td className="text-center">
           <div className="c-avatar">
             <img 
-            src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ row.photo1} 
+            src={process.env.REACT_APP_SERVER_URL+ row.photo} 
             className="c-avatar-img" 
             alt={row.admission_no} 
             onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }

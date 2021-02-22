@@ -1,18 +1,24 @@
 import React, { useEffect, useState }  from 'react'
 import { useHistory} from 'react-router-dom'
 import { getStaffstudents, updateStaffstudent, registerStaffstudent, deleteStaffstudent} from './../../../actions/staff/staffstudent'
+import { getStudentscores, updateStudentscore, registerStudentscore, deleteStudentscore} from './../../../actions/student/studentscore'
+import { getStaffsubjects} from './../../../actions/staff/staffsubject'
 import CIcon from '@coreui/icons-react'
 import SearchDashboard3 from './../SearchDashboard3'
 import { connect } from 'react-redux'
-import { CCard, CCardBody, CCardHeader } from '@coreui/react'
+import { CCard, CCardBody, CCardHeader, CInput } from '@coreui/react'
 import Swal from'sweetalert'
 import Header from './Header'
+import ScoreBox from './ScoreBox'
 
 
 
 const Studentclasss = (props) => {
-  let history = useHistory()
+  
   let data = props.staffstudents.staffstudents && Array.isArray(props.staffstudents.staffstudents) ? props.staffstudents.staffstudents.filter(rw =>rw !== null || rw !== undefined) : []
+  let scoresall = props.studentscores.studentscores && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores.filter(rw =>rw !== null || rw !== undefined) : []
+  let idx = data.map((pp, ii)=>pp.clientid);
+  let ids = idx.join(',')
   let clientid = props.clientid;
   let termid = props.termid;
   let sessionid = props.sessionid;
@@ -20,8 +26,10 @@ const Studentclasss = (props) => {
   let claszid = props.claszid;
   let subject = props.subject;
   let groupid = 3;
-
-  const [studentdata, setStudentdata] = useState({})
+   
+ const [studentdata, setStudentdata] = useState({})
+ const [castore, setcastore] = useState({})
+ const [cascores, setcascores] = useState({})
  
   useEffect(() => {
     if(parseInt(subjectid) > 0 ){
@@ -29,7 +37,7 @@ const Studentclasss = (props) => {
         data:JSON.stringify(
         {
             'termid':termid,
-            'itemid':subjectid.itemid1,
+            'itemid':subject.itemid1,
             'sessionid':sessionid,
             'itemid1':clientid,
             'contact':claszid,
@@ -41,12 +49,64 @@ const Studentclasss = (props) => {
   
       }
       props.getStaffstudents(params)
+
+      
     }
   }, [termid,subjectid, sessionid, groupid, clientid])
 
-const placeStudent = (students) =>{
+  useEffect(() => {
+    let params1 = {
+      data:JSON.stringify(
+      {
+          'termid':termid,
+          'sessionid':sessionid,
+          'clientid':clientid,
+          'grp':2
+      }),
+      cat:'staffclass',
+      table:'accessstaffsubjectnum',
+      narration:'get staffsubjects'
+
+    }
+    props.getStaffsubjects(params1);
+    
+  }, [])
+
+  useEffect(() => {
+    let params1 = {
+      data:JSON.stringify(
+      {
+          'termid':termid,
+          'sessionid':sessionid,
+          'itemid':subjectid,
+          'ids': ids, 
+          'grp':8
+      }),
+      cat:'studentscore',
+      table:'accessstudentscore',
+      narration:'get scores'
+
+    }
+    props.getStudentscores(params1);
+    
+  }, [termid, sessionid, subjectid, ids, claszid])
+
+  useEffect(() => {
+    // let scs = {...cascores}
+    // scoresall.forEach(ele=>{
+    //   if(ele !== undefined)
+    //   {
+    //     let nm = ele.clientid+"_"+ele.itemid1;
+    //     scs[nm] = ele.contact
+    //   }
+     
+    // })
+    // setcascores(scs);
+  }, [scoresall])
+
+  const placeStudent = (students) =>{
    setStudentdata(students);
-}
+ }
 
 const loadStudent = () =>{
 
@@ -59,12 +119,31 @@ const loadStudent = () =>{
       fd.append('table', 'accessstudentsubject');
       fd.append('sessionid', sessionid);
      
-        //INSERT
-        fd.append('grp', groupid);
-        fd.append('termid', termid);
-        fd.append('cat', 'inserts');
-        props.registerStaffstudent(fd)
+      //INSERT
+      fd.append('grp', groupid);
+      fd.append('termid', termid);
+      fd.append('cat', 'inserts');
+      props.registerStaffstudent(fd)
       
+}
+
+const getAllStudents = () =>{
+  /**
+    * classunitid
+    * termid
+    * subjectid
+    */
+   let fd = new FormData();
+   fd.append('claszid', claszid);
+   fd.append('termid', termid);
+   fd.append('subjectid', subjectid);
+   fd.append('sessionid', sessionid);
+   fd.append('staffid', clientid);
+   fd.append('grp', groupid);
+   
+   fd.append('table', 'accessstudentclass');
+   fd.append('cat', 'insertsubject');
+   props.registerStaffstudent(fd)
 }
 
 const onRemove =(id)=>{
@@ -80,10 +159,76 @@ const onRemove =(id)=>{
       }else{
         Swal(`Not deleted`);
       }
-      
     });
+}
+
+const setShowca = (id, name, score) =>{
+    let sh = {...castore};
+    let ar = {}
+    ar['id'] = id;
+    ar['name'] = name;
+    ar['score'] = score;
+    sh[id] = ar;
+    setcastore(sh);
+    
+    // scoresall.forEach(ele => {
+    //   if(ele.itemid )
+    //   {
+
+    //   } 
+    // });
+}
+
+const saveScore = (studentid, caid, score) =>{
+
+   let fd = new FormData();
+   
+   fd.append('caid', caid);
+   fd.append('sessionid', sessionid);
+   fd.append('termid', termid);
+   fd.append('studentid', studentid);
+   fd.append('subjectid', subjectid);
+   fd.append('score', score);
+   fd.append('staffid', clientid);
+   fd.append('grp', 8);
+   fd.append('cat', 'insertscore');
+   fd.append('table', 'accessstudentscore');
+
+   props.registerStudentscore(fd)
+
+}
+
+
+const saveScoreHeader = (caid, score) =>{
+   let fd = new FormData();
+   fd.append('caid', caid);
+   fd.append('sessionid', sessionid);
+   fd.append('termid', termid);
+   fd.append('subjectid', subjectid);
+   fd.append('score', score);
+   fd.append('staffid', clientid);
+   fd.append('grp', 7);
+
+}
+
+const setScoreValues = (e, student, ca, namz, sco) =>{
+  let sc = {...cascores}
+  let nm = student+"_"+ca;
+  
+  if(parseFloat(e.target.value) <= parseFloat(sco)){
+    sc[nm] = e.target.value
+    setcascores(sc);
+  }else{
+    sc[nm] = ''
+    setcascores(sc);
+  } 
+}
+const saveScoreValues = (e, student, ca, namz, sco) =>{
+  saveScore(student, ca , e.target.value)
   
 }
+
+
 let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
     return <tr key={ind}
     >
@@ -100,14 +245,42 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
         />
         <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
       </div>
-      <span>{row.admission_no}</span>
+      
     </td>
-    <td width='340px' valign='middle' className='container'>
+    <td width='340px' valign='middle' className='container' valign="middle" >
         <div className='strong my-auto py-auto'><strong>{`${row.clientname}`}</strong></div>
             <div className="small text-muted">  
             {`${row.admission_no}`}
         </div>
     </td>
+    {
+      Object.keys(castore).map((prp, inds)=>{
+        let sd = scoresall.filter(rws=>rws !== undefined && rws !== null && parseInt(rws.itemid1) === parseInt(castore[prp].id) && parseInt(rws.clientid) === parseInt(row.clientid));
+        let sd_array = sd && Array.isArray(sd) && sd.length ? sd[0] : null;
+        let sd_val = sd_array !== null ? parseFloat(sd_array.contact) : '';
+        let sd_id = sd_array !== null ? sd_array.id : '';
+        let sd_color = sd_array !== null ? 'green' : 'black';
+        console.log(sd_val)
+        //console.log(sd, castore[prp].id, row.id, scoresall);
+        return <ScoreBox 
+                  key={inds}
+                  sessionid={sessionid}
+                  termid={termid}
+                  caid={prp}
+                  subjectid={subjectid}
+                  staffid={props.user.mid}
+                  studentid={row.clientid}
+                  id={prp}
+                  name={castore[prp].name} 
+                  score={castore[prp].score}
+                  sd_val={sd_val}
+                  sd_id={sd_id}
+                  sd_color={sd_color}
+                  setScoreValues={(e, id, name, score)=>setScoreValues(e, id, prp, name, score)}
+                  saveScoreValues={(e, id, name, score)=>saveScoreValues(e, id, prp, name, score)}
+                />
+      })
+    }
     <td >
       <span className='pull-right'>
       <button  onClick={()=>onRemove(row.id)} className='btn btn-sm btn-round btn-danger '><CIcon  size='lg' name="cil-x"/></button>
@@ -129,6 +302,9 @@ return (
         placeStudent={placeStudent}
         loadStudent={loadStudent}
         setStudentdata={(pr)=>setStudentdata(pr)}
+        getAllStudents={()=>getAllStudents()}
+        cas={props.cas}
+        setShowca={setShowca}
       />
     </CCardHeader>
    <CCardBody className='table-responsive'>
@@ -137,6 +313,20 @@ return (
             <tr>
             <th className="text-center"><CIcon name="cil-people" /></th>
             <th>Students</th>
+            {
+              Object.keys(castore).map((prp, inds)=>{
+                return <th key={inds}>
+                  {castore[prp].name}
+                  <CInput
+                    size="lg"
+                    style={{width:'100px', textAlign:'center', fontWeight:'bolder'}}
+                    value={castore[prp].score}
+                    onChange={(e)=>setScoreValues(e, prp, castore[prp].name, castore[prp].score)}
+                    onMouseOut={(e)=>saveScoreValues(e, prp, castore[prp].name, castore[prp].score)}
+                  />
+                </th>
+              })
+            }
             <th>Remove</th>
             </tr>
         </thead>
@@ -150,12 +340,20 @@ return (
   )
 }
 const mapStatetoProps = (state)=>({
- staffstudents:state.staffstudentReducer
+ staffstudents:state.staffstudentReducer,
+ studentscores:state.studentscoreReducer,
+ cas:state.caReducer.cas,
+ user:state.userReducer
 })
 export default connect(mapStatetoProps, {
     getStaffstudents,
     updateStaffstudent,
     registerStaffstudent,
-    deleteStaffstudent
+    deleteStaffstudent,
+    getStudentscores,
+    updateStudentscore,
+    registerStudentscore,
+    deleteStudentscore,
+    getStaffsubjects
 }) (Studentclasss)
   

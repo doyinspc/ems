@@ -31,15 +31,7 @@ import {
 import {callSuccess, callError, callReg} from './../actions/common'
 
 
- const callLoading = () =>{
-    // Swal.fire({
-    //     position: 'top-end',
-    //     icon: 'inf
-    //     title: 'Please wait... processing',
-    //     showConfirmButton: false,
-    //     timer: 1500
-    //   })
- }
+ 
 let userx = localStorage.getItem('userx12345') !== 'undefined' ? JSON.parse(localStorage.getItem('userx12345')) : null;
 let auth = localStorage.getItem('auth') !== 'undefined' ? JSON.parse(localStorage.getItem('auth')) : false;
 let dropdownsStore = JSON.parse(localStorage.getItem('dropdowns'))
@@ -87,7 +79,6 @@ const initialState = {
 export default function(state = initialState, action){
     switch (action.type) {
         case USER_LOADING:
-            callLoading();
             return {
                 ...state,
                 isLoading : true
@@ -100,9 +91,18 @@ export default function(state = initialState, action){
             {
                 localStorage.setItem('userx12345', JSON.stringify(action.payload));
             }
-            let acc = action.payload.access !=='' ? JSON.parse(action.payload.access):{};
+            let acc = action.payload.access !== '' ? JSON.parse(action.payload.access):{};
             let schs = Object.keys(acc);
-            let myregsch = action.payload.schoolid && parseInt(action.payload.schoolid) > 0 ? [...schs, action.payload.schoolid] : schs;
+            let myregsch = [];
+            
+            if(Array.isArray(schs) && schs.length > 0)
+            {
+                myregsch = action.payload.schoolid && parseInt(action.payload.schoolid) > 0 ? [...schs, action.payload.schoolid] : schs;
+            }else
+            {
+                myregsch.push(action.payload.schoolid);
+            }
+            
             let fname = action.payload.surname+" "+action.payload.firstname+" "+action.payload.middlename
             let msc = parseInt(action.payload.is_admin) === 1 ? [1 ,2, 3, 4, 5, 6, 7, 8, 9, 10] : myregsch;
             return {

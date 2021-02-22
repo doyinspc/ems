@@ -16,11 +16,14 @@ import {
   CButton, 
   CSelect,
   CButtonClose,
+  CInputRadio,
   CButtonGroup,
   CTooltip,
   CCol,
   CTextarea,
-  CBadge
+  CBadge,
+  CSwitch,
+  CCollapse
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { 
@@ -34,6 +37,7 @@ import {
     deleteStudentattendance,
     deleteStudentattendancedaily
   } from './../../actions/student/studentattendance';
+import {getStaffsubjects} from './../../actions/staff/staffsubject';
   
 import { leavestd } from '../../actions/common'
 let leaves = leavestd;
@@ -45,6 +49,9 @@ const Students = (props) => {
    const [reason, setreason] = useState('')
    const [leaveid, setleaveid] = useState(0)
    const [search, setsearch] = useState('')
+   const [selector, setselector] = useState({})
+   const [actions, setactions] = useState(0)
+   const [itemzs, setitemzs] = useState(0)
 
    useEffect(() => {
     //date changes get
@@ -78,14 +85,34 @@ const Students = (props) => {
     
    
   }, [dates, props.clasz, props.session, props.term])
+   
+   useEffect(() => {
 
-  let getleave=(id)=>{
+    if(props.user.activeterm !== undefined)
+    {
+      let params = {
+        data:JSON.stringify(
+        {
+            'termid':props.user.activeterm.termid,
+            'sessionid':props.user.activeterm.sessionid,
+            'clientid':props.user.user.id,
+            'clasz':props.clasz,
+            'grp':2
+        }),
+        cat:'staffclass',
+        table:'accessstaffsubjectnum1',
+        narration:'get staffsubjects'
+  
+      }
+      props.getStaffsubjects(params)
+    } 
+    
+  }, [props.user.activeterm, props.clasz])
+
+
+    let getleave=(id)=>{
       let d = leaves.filter(rw=>parseInt(rw.id) === parseInt(id));
       return d[0]
-  }
-
-    const handleAttendance = ()=>{
-
     }
     const handleSubmit = (id)=>{
         let fd = new FormData();
@@ -101,7 +128,19 @@ const Students = (props) => {
         props.registerStudentattendance(fd);
 
     }
-
+    const changeSelect = (e) =>{
+     let sel = {};
+     let d = props.data.filter(rw=> rw !== null && rw !== undefined);
+     d.forEach(element => {
+         sel[element.id] = e
+     });
+     setselector(sel)
+    }
+    const loadSelect = (e, d) =>{
+     let sel = {...selector};
+     sel[d] = e
+     setselector(sel)
+    }
     const confirm_student_available =(data, id)=>{
         
         if(Array.isArray(data) && data.length){
@@ -133,8 +172,52 @@ const Students = (props) => {
         props.registerStudentattendancedaily(fd);
 
     }
+    const submitChoice =()=>{
+      if(parseInt(actions) === 1 && parseInt(actions) > 0 )
+      {
+        props.placeStudentSubject(actions)
+      }
+      if(parseInt(actions) === 2 && parseInt(actions) > 0 )
+      {
+        props.placeStudentSubject(actions)
+      }
+    }
     let redirectStudent = (id, sessionid) =>{
         window.open(process.env.PUBLIC_URL+"#/studentcl/"+id+"/"+sessionid)
+    }
+
+    let itemoptions = '';
+    if(parseInt(actions) === 1)
+    {
+      // get staff subjects
+      itemoptions = Array.isArray(props.staffsubject.staffsubjects) ? props.staffsubject.staffsubjects.filter(rw=>rw !== null & rw !== undefined).map((prp, ind)=>{
+          return <option key={ind} value={prp.itemid1}>{`${prp.itemname1} ${prp.itemname} `}</option>
+      }):'';
+    }else if(parseInt(actions) === 2)
+    {
+      //setitemzs(0)
+      //get all subjects
+      let dt = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length > 0 ? props.dropdowns : [[], [], [], []];
+      let dt0 ='';
+      let dt1 ='';
+      let dt2 ='';
+      let dt3 ='';
+      if(dt.length > 0)
+      {
+         dt0 = dt[0].map((prop, ind)=>{
+        return <option key={ind}  value={prop.termid}>{prop.name}</option>;
+        });
+        itemoptions = dt[1].map((prop, ind)=>{
+        return <option key={ind}  value={prop.id}>{prop.name}</option>;
+        });
+        dt2 = dt[2].map((prop, ind)=>{
+        return <option key={ind}  value={prop.id}>{prop.name}</option>;
+        });
+        dt3 = dt[0].map((prop, ind)=>{
+        return <option key={ind} value={JSON.stringify(prop)}>{prop.name}</option>;
+        });
+      }
+
     }
      
       let registered_attendance_date = Array.isArray(props.studentattendance.studentattendancedailys)  && props.studentattendance.studentattendancedailys !== undefined? props.studentattendance.studentattendancedailys : [];
@@ -157,7 +240,7 @@ const Students = (props) => {
               height="50px" 
               width="50px" 
               className="c-avatar-img" 
-              alt={row.employment_no} 
+              alt={row.admission_no} 
               onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL +'/avatars/1.png' }}
             />
             <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
@@ -167,7 +250,7 @@ const Students = (props) => {
         <td>
    <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
                 <div className="small text-muted">
-                <span>{`${row.schoolabbrv}/${row.admission_no}`}</span>
+                <span>{`${row.abbrv}/${row.admission_no}`}</span>
             </div>
         </td>
         <td className="text-center">
@@ -181,6 +264,14 @@ const Students = (props) => {
         </td>
         <td className='text-right'>
         <CButtonGroup>
+        <CTooltip content="Select">
+          <CSwitch 
+            className={'my-auto mx-3'} 
+            variant={'3d'} 
+            color={'primary'}  
+            checked={Object.keys(selector).includes(row.id) && selector[row.id] === true ? true : false}
+            onChange={(e)=>loadSelect(e.target.checked, row.id)}/>
+        </CTooltip>
         <CTooltip content="Student profile">
         <CButton 
               size='sm' 
@@ -190,7 +281,6 @@ const Students = (props) => {
            <CButton 
               size='sm' 
               color="secondary" 
-              onClick={()=>handleAttendance(row.id, props.termid, props.sessionid)}
               > <CIcon name='cil-envelope-open'  />  <span className="d-xs-none">Message</span></CButton>
           {classteacher ?<>
           <CDropdown className="m-0">
@@ -243,6 +333,7 @@ const Students = (props) => {
             <CTooltip content="Remove Student">
             <button  
               disabled={ props.activeterm ? false:true }
+          
               onClick={()=>props.onRemove(row.cid)} 
               className='btn btn-sm btn-round btn-danger '><CIcon  size='md' name="cil-x"/></button>
             </CTooltip></>:''}
@@ -252,8 +343,6 @@ const Students = (props) => {
       </tr>
     });
 
-    
- 
   return (
     <>
     <CRow className='table-responsive'>
@@ -305,13 +394,79 @@ const Students = (props) => {
             </CCol>
             </CCol>
         </CRow>
+        <CCollapse show={Object.values(selector).filter(rw=>rw === true).length > 0 ? true : false}>
+        <CRow className=' mt-2'>
+        <CCol xs={12} md={4}>
+            <CFormGroup>
+                  <CCol xs="12" md="12">
+                  <CSelect
+                    className="my-auto"
+                   custom
+                   value={actions}
+                   type='search'
+                   onChange={(e)=>setactions(e.target.value)}
+                   placeholder="Search for student...."
+                >
+                  <option value="0">Select an action</option>
+                  <option value="1">Send selected student to my subject</option>
+                  <option value="2">Send selected student to a subject</option>
+                  <option value="3">Move selected students to another class</option>
+                  <option value="4">Remove selected students from class</option>
+                  <option value="5">Send an email message to selected students</option>
+                  <option value="6">Send an sms message to selected students</option>
+                  <option value="7">Send a Whatsapp message to selected students</option>
+                  <option value="8"></option>
+                  </CSelect>
+                  </CCol>
+            </CFormGroup>
+            </CCol>
+            <CCol xs={12} md={4}>
+            <CFormGroup>
+            { parseInt(actions) > 0?
+                  <CCol xs="12" md="12">
+                  <CSelect
+                    className="my-auto"
+                    custom
+                    value={itemzs}
+                    type='search'
+                    onChange={(e)=>setitemzs(e.target.value)}
+                    placeholder="Search for student...."
+                  >
+                    <option></option>
+                  {itemoptions}
+                  </CSelect>
+                  </CCol>:""}
+            </CFormGroup>
+           </CCol>
+           
+            <CCol xs={12} md={4}>
+            <CCol xs={12}>{ parseInt(itemzs) > 0 &&  parseInt(actions) > 0?
+                <CButton 
+                    disabled={ props.activeterm ? false:true }
+                    color="info" 
+                    block
+                    onClick={submitChoice}
+                >Submit </CButton>:<CButton></CButton>}
+            </CCol>
+            </CCol>
+        </CRow>
+        </CCollapse>
       <table className="table table-hover table-outline mb-0 d-sm-table">
           <thead className="thead-light">
               <tr>
                 <th className="text-center"><CIcon name="cil-people" /></th>
                 <th>Student</th>
                 <th>Attendance</th>
-                <th>Action</th>
+                <th>{" .     . "}
+                <CTooltip content="Select All">
+                  <CSwitch 
+                  className={'my-auto mx-3'} 
+                  variant={'3d'} 
+                  color={'primary'}  
+                  onChange={(e)=>changeSelect(e.target.checked)}/>
+                </CTooltip>
+                Actions
+                </th>
               </tr>
            </thead>
             <tbody>
@@ -326,6 +481,8 @@ const mapStateToProps = (state) =>({
     studentattendance : state.studentattendanceReducer,
     user:state.userReducer,
     classstaff:state.classstaffReducer,
+    staffsubject : state.staffsubjectReducer,
+    dropdowns : state.userReducer.dropdowns,
   })
   export default connect(mapStateToProps, {
     getStudentattendances,
@@ -336,6 +493,7 @@ const mapStateToProps = (state) =>({
     updateStudentattendance,
     updateStudentattendancedaily,
     deleteStudentattendance,
-    deleteStudentattendancedaily
+    deleteStudentattendancedaily,
+    getStaffsubjects
   })(Students)
   

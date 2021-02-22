@@ -26,7 +26,7 @@ const Ca = (props) => {
     let params = {
         data:JSON.stringify(
         {
-            'termid':props.pid,
+            'termid':props.qid,
             'typeid':props.did
         }),
         cat:'select',
@@ -51,7 +51,6 @@ const Ca = (props) => {
 
   }
   const onEdit = (dt) =>{
-     console.log(dt)
       setId(dt.id);
       setDts(dt);
       setCollapse(true)

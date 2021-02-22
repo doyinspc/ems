@@ -41,7 +41,7 @@ const Classfee = (props) => {
         let params = {
         data:JSON.stringify(
         {
-            'schoolid': props.activeschool.id,
+            
             'is_active':0
         }),
         cat:'select',
@@ -53,7 +53,7 @@ const Classfee = (props) => {
         let params1 = {
           data:JSON.stringify(
           {
-              'schoolid': props.activeschool.id,
+              'typeid': props.activeschool.typeid,
               'is_active':0
           }),
           cat:'select',

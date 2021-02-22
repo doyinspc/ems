@@ -1,11 +1,7 @@
 import React, { useEffect }  from 'react'
-import { useHistory} from 'react-router-dom'
 import { getThemesummary} from './../../../actions/setting/theme'
-import CIcon from '@coreui/icons-react'
-import SearchDashboard3 from '../SearchDashboard3'
 import { connect } from 'react-redux'
 import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
-import Swal from'sweetalert'
 
 
 
@@ -67,7 +63,9 @@ const Studentclasss = (props) => {
     .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
     
 let terms = { 1:'Ist', 2:'2nd', 3:'3rd'};
-
+const moveDir = (sub, term, clasz) =>{
+        window.open('#/scheme/'+clasz+'/'+term+'/'+sub)
+}
 
 let th1 = Object.keys(claszs).filter(rw=>claszs[rw] !== null).map((p, i)=>{
     return <td colSpan={3} style={{padding:'2px'}}>{claszs[p]}</td>
@@ -85,7 +83,7 @@ let tbs = Object.keys(subjects).map((p, i)=>{
                 { Object.keys(claszs).filter(rw=>claszs[rw] !== null).map((p1, i1)=>{
                   return   Object.keys(terms).map((p2, i2)=>{
                         return   p in data && p2 in data[p] && p1 in data[p][p2] ?
-                        <td key={i2} style={{padding:'2px'}}>{data[p][p2][p1]}</td>:<td style={{padding:'2px'}}>{'-.-'}</td>
+                        <td key={i2} style={{padding:'2px', cursor:'pointer'}} onClick={()=>moveDir(p, p2, p1)}>{data[p][p2][p1]}</td>:<td style={{padding:'2px'}}>{'-.-'}</td>
                     })
                   })
                 }
@@ -100,6 +98,7 @@ let tbs = Object.keys(subjects).map((p, i)=>{
          <CRow>
            <CCol>
               <h4>SCHEME OF WORK: SUMMARY</h4>
+              Click the number of themes to veiw.
             </CCol>
          </CRow>
       </CContainer>

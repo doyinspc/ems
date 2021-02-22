@@ -5,7 +5,8 @@ import {
     CButtonGroup, 
     CCardHeader, 
     CCol, 
-    CRow, 
+    CRow,
+    CTooltip, 
    
 } from '@coreui/react';
 
@@ -27,13 +28,15 @@ return (
               </CCol>
               <CCol className="d-md-block btn-group">
               <CButtonGroup className='pull-right'>
+                <CTooltip content='Click here to switch between schools'>
               <CButton  
                   color="primary" 
                   className=""
                   onClick={()=>props.toggleMenu()}
                   >
-                <i className='fa fa-search'></i>
+                <i className='fa fa-university'></i>
               </CButton>
+              </CTooltip>
               </CButtonGroup>  
             </CCol>
             </CRow>

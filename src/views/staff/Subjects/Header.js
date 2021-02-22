@@ -9,16 +9,47 @@ import {
     CDropdownItem,
     CDropdownMenu,
     CWidgetDropdown,
-    CDropdownToggle
+    CDropdownToggle,
+    CButton
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
 
 const Header = (props) => {
- let secarry =[]
  let {subject, len, studentdata} = props || '';
  let setShowedx = true
- let setEditedx = true
+ let cas = props.cas;
+
+ let ca_array = {};
+ let caunit_array = {};
+ cas.forEach(ele => {
+     if(Object.keys(ca_array).includes(ele.sid))
+     {
+        //ca_array[ele.sid] = ele.cname;
+     }else{
+        ca_array[ele.sid] = ele.caname;
+     }
+
+     if(Object.keys(caunit_array).includes(ele.sid))
+     {
+         let arr = {}
+         arr['id'] = ele.id;
+         arr['name'] = ele.name;
+         arr['score'] = ele.maxscore;
+         caunit_array[ele.sid].push(arr);
+     }else
+     {
+        caunit_array[ele.sid] = [];
+        let arr = {}
+        arr['id'] = ele.id;
+        arr['name'] = ele.name;
+        arr['score'] = ele.maxscore;
+        caunit_array[ele.sid].push(arr);
+     }
+ });
+
+ 
+ 
  return(
     <CContainer>
         <CRow>
@@ -31,71 +62,43 @@ const Header = (props) => {
                 className="btn btn-info"><i className='fa fa-backward'></i>
               </button>
               <CButtonGroup className='pull-right'>
+              
               <CDropdown color="secondary" >
-                <CDropdownToggle caret color="secondary">
-                  <i className='fa fa-list'></i> <span className='hidden-phone'> Menu</span>
+              <CDropdownToggle caret color="secondary">
+                  <i className='fa fa-list'></i> <span className='hidden-phone'> CAS</span>
                 </CDropdownToggle>
                 <CDropdownMenu className="pt-0" placement="bottom-end">
-                <CDropdownItem
-                        header
-                        tag="div"
-                        color="light"
-                        className="text-center"
-                        >
-                        <strong>Personal</strong>
+                  {
+                      Object.keys(ca_array).map((prp, ind)=>{
+                        return <><CDropdownItem
+                          header
+                          tag="div"
+                          color="light"
+                          className="text-center"
+                          >
+                          <strong key={ind}>{ca_array[prp]}</strong>
                         </CDropdownItem>
-                       
-                        <CDropdownItem  onClick={(prev)=>setShowedx(0)}>
-                            <CIcon 
-                                name="cil-user" 
-                                className="mfe-2" 
-                            
-                            /> 
-                            Basic Information
-                        </CDropdownItem>
-                        <CDropdownItem onClick={(prev)=>setShowedx(1)}>
-                            <CIcon 
-                                name="cil-book" 
-                                className="mfe-2" 
-                                
-                            /> 
-                            Education History
-                        </CDropdownItem>
-                        <CDropdownItem onClick={(prev)=>setShowedx(2)}>
-                            <CIcon 
-                                name="cil-badge" 
-                                className="mfe-2" 
-                                
-                            /> 
-                            Professional Certifications
-                        </CDropdownItem>
-                        
-                        
-                    
-                    <CDropdownItem
-                        header
-                        tag="div"
-                        color="light"
-                        className="text-center"
-                        >
-                        <strong>Official</strong>
-                        </CDropdownItem>
-                     
+                        { Object.keys(caunit_array[prp]).map((prps, inds)=>{
+                        return <CDropdownItem key={inds}  onClick={(prev)=>props.setShowca(caunit_array[prp][prps].id, caunit_array[prp][prps].name, caunit_array[prp][prps].score)}>
+                                <CIcon 
+                                    name="cil-book" 
+                                    className="mfe-2" 
+                                /> 
+                                {`${caunit_array[prp][prps].name} (${caunit_array[prp][prps].score})`}
+                            </CDropdownItem>
+                        })}
+                        </>
+                      })
+                  }
                 </CDropdownMenu>     
-                </CDropdown>
-                <CDropdown color="secondary">
-                    <CDropdownToggle caret color="secondary">
-                    <i className='fa fa-edit'></i> <span className='d-n0ne'> Edit</span>
-                    </CDropdownToggle>
-                    <CDropdownMenu>
-        <CDropdownItem onClick={()=>setEditedx(1)}><i className='text-secondary fa fa-edit'></i>{"  ."} Employment</CDropdownItem>
-        <CDropdownItem onClick={()=>setEditedx(2)}><i className='text-secondary fa fa-edit'></i>{"  ."} Biodata</CDropdownItem>
-        <CDropdownItem onClick={()=>setEditedx(3)}><i className='text-secondary fa fa-edit'></i>{"  ."} Next of Kin</CDropdownItem>
-        <CDropdownItem onClick={()=>setEditedx(4)}><i className='text-secondary fa fa-edit'></i>{"  ."} Photo</CDropdownItem>
-        <CDropdownItem onClick={()=>setEditedx(5)}><i className='text-secondary fa fa-edit'></i>{"  ."} Password</CDropdownItem>
-        <CDropdownItem onClick={()=>setEditedx(6)}><i className='text-secondary fa fa-edit'></i>{"  ."} Exit</CDropdownItem>
-                </CDropdownMenu>
-                </CDropdown>
+              </CDropdown>
+                <CButton
+                color='dark'
+                size="sm"
+                onClick={()=>props.getAllStudents()}
+                >
+                    Get All
+                </CButton>
                 </CButtonGroup>  
             </CCol>
         </CRow>

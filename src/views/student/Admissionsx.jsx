@@ -37,7 +37,7 @@ let {
                           <CRow xs={12} style={{backgroundColor:'white'}} >
                                 <CCol xs='2' style={{marginTop:'1px', marginBottom:'1px'}}>
                                 <img 
-                                    src='avatars/logo.png'
+                                    src={process.env.PUBLIC_URL+'/avatars/logo.png'}
                                     className="m-0 p-0" 
                                     width='100%'
                                     height='120px'

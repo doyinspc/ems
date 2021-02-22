@@ -27,6 +27,7 @@ const initialState = {
     studentsinglefees:[],
     studentfee:{},
     studentfeesummary:{},
+    studentfeesummarys:[],
     msg: null,
     isEdit:-1,
     ref:null,
@@ -66,7 +67,8 @@ export default function(state = initialState, action){
          case STUDENTFEE_GET_SUMMARY:
             return {
                 ...state,
-                studentfeesummary : action.payload
+                studentfeesummary : action.payload,
+                studentfeesummarys : action.payload
             };
         case STUDENTFEE_GET_SINGLE:
             return {
@@ -115,8 +117,8 @@ export default function(state = initialState, action){
                 studentfees: ac
             }
         case STUDENTFEE_DELETE_SUCCESS:
-            let rem = state.studentfees.filter(cat => cat.id != action.payload);
-            localStorage.setItem('studentfee', JSON.stringify(rem));
+            let rem = state.studentfees.filter(cat =>parseInt(cat.id) !== parseInt(action.payload));
+            //localStorage.setItem('studentfee', JSON.stringify(rem));
             return{
                 ...state,
                 msg:'DONE!!!',

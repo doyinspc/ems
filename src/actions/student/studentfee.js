@@ -89,12 +89,12 @@ export const getStudentfee = id => (dispatch, getState) => {
     });  
 };
 //STUDENTFEE DELETE
-export const deleteStudentfee = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteStudentfee = (params, id) => (dispatch, getState) =>{
+    axios.post(path, params, axiosConfig1)
         .then(res => {
             dispatch({
                 type: STUDENTFEE_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {

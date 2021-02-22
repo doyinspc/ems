@@ -57,7 +57,7 @@ const Theme = (props) => {
     let params1 = {
       data:JSON.stringify(
       {
-          'schoolid': props.school.id
+          'typeid': props.school.typeid
       }),
       cat:'select',
       table:'claszs',
@@ -65,7 +65,7 @@ const Theme = (props) => {
     }
     props.getClaszs(params1);
     
-  }, [subjectid, props.school.id])
+  }, [subjectid, props.school.typeid])
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
     if(props.data !== undefined && parseInt(props.data.id) > 0)

@@ -1,7 +1,7 @@
 import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom'
-import { registerStudentfee, updateStudentfee,  getStudentfeesSingle, deleteStudentfee, setStudentfee } from './../../actions/student/studentfee';
+import { getStudentfees, registerStudentfee, updateStudentfee,  getStudentfeesSingle, deleteStudentfee, setStudentfee } from './../../actions/student/studentfee';
 import { getAccounts } from './../../actions/setting/account';
 import { getFees } from './../../actions/setting/fee';
 import moment from 'moment';
@@ -22,15 +22,43 @@ import {
   CButtonClose,
   CButtonGroup
 } from '@coreui/react';
+import { nairaformat } from '../../actions/common';
+import CIcon from '@coreui/icons-react';
+import Swal from'sweetalert'
 
 const Studentclasss = (props) => {
-   let history = useHistory()
+   let clasz = props.clasz;
+   let terms = props.termid;
+   let sessions = props.sessionid;
+   let data1 = props.data1;
+  
    const [id, setId] = useState(null)
    const [datepaid, setDatepaid] = useState(new Date())
    const [amount, setAmount] = useState(0)
    const [accountid, setAccountid] = useState(null)
    const [feeid, setFeeid] = useState(null)
    const [teller, setTeller] = useState(null)
+
+   useEffect(() => {
+   
+    if(props.users.activeschool !== undefined && props.users.activeschool.hasOwnProperty('id') && parseInt(props.users.activeschool.id) > 0)
+    {
+     let params = {
+      data:JSON.stringify(
+      {
+          'sessionid':sessions,
+          'termid':terms,
+          'ids':data1
+      }),
+      cat:'studentfeess',
+      table:'studentfeess',
+      narration:'get student fees'
+     }
+     props.getStudentfees(params)
+
+    }
+    
+  }, [props.users.activeschool, clasz, terms, sessions, data1 ])
 
    useEffect(() => {
    
@@ -80,6 +108,23 @@ const Studentclasss = (props) => {
 
    }
 
+   const handleSubmitFeeOnly = (studentid, termid, sessionid) =>{
+
+    let fd = new FormData();
+    
+    fd.append('studentid', studentid);
+    fd.append('amount', amount);
+    fd.append('feeid', feeid);
+    fd.append('termid', termid);
+    fd.append('claszid', props.claszparentid);
+    fd.append('sessionid', sessionid);
+    fd.append('staffid', props.user.mid);
+    fd.append('cat', 'insertsetfees');
+    fd.append('table', 'studentfeez');
+
+    props.setStudentfee(fd);
+
+}
    const handleSubmit = (studentid, termid, sessionid) =>{
 
     let fd = new FormData();
@@ -111,11 +156,25 @@ const Studentclasss = (props) => {
 
 
    }
-   const lStudent = (id) =>{
+  const lStudent = (id) =>{
     window.open(process.env.PUBLIC_URL+"#/students/"+id)
   }
 
-const onDelete = () =>{
+const onDelete = (id) =>{
+  Swal("Are you sure you want to delete you will not be able to restore the data.")
+  .then((value) => {
+    if(value == true && parseInt(id) > 0){
+      let fd = new FormData();
+      fd.append('id', id)
+      fd.append('sessionid', sessions)
+      fd.append('cat', 'deletefee')
+      fd.append('table', 'fees')
+      fd.append('narration', 'delete students fees slready recorded')
+      props.deleteStudentfee(fd, id);
+    }else{
+      Swal(`Not deleted`);
+    }
+  })
 
 }
 
@@ -126,13 +185,13 @@ const setDiff=(subzs, addzs)=>
   let diff = subz - addz;
   if(diff > 0)
   {
-    return <><span>{Number(diff).toFixed(2)}</span></>
+    return <><span className='text-danger'><strong>{nairaformat(diff)}</strong></span></>
   }else{
-    return <span>{Number(diff).toFixed(2)}</span>
+    return <span className='text-info'><strong>{nairaformat(diff * -1)}</strong></span>
   }
 
 }
-
+//console.log(new Date(new Date().setHours(new Date().getHours() + 1)))
 let fearray = props.fees && props.fees!== undefined && Array.isArray( props.fees)? props.fees.filter(rw=>rw !== null && rw !== undefined).map((rw, ind) =>{
     return <option key={ind} value={rw.id}>{rw.name}</option>
 }): ''
@@ -167,11 +226,11 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
     </td>
     <td>
       { 
-      std.filter(rw=>parseInt(rw.studentid) === parseInt(row.id) && parseInt(rw.grp) === 1).map((p, i)=>{
+        std.filter(rw=>parseInt(rw.studentid) === parseInt(row.id) && parseInt(rw.grp) === 1).map((p, i)=>{
         subs.push(parseFloat(p.amount))
-        return <div className="small text-muted">
-                  <span className='pull-left'><i onClick={()=>onDelete(p.id)} className="text-danger fa fa-remove"></i></span>
-                  <span className='pull-left'>{p.feename}</span>: <strong className='pull-right'>{p.amount}</strong>
+        return <div key={i} className="small text-muted">
+                  {props.classteacher ?  new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 722)) ? <span  style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
+                  <span >{p.feename}</span>: <strong >{nairaformat(p.amount)}</strong>
               </div>
       })
       }
@@ -180,9 +239,9 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
     { 
       std.filter(rw=>parseInt(rw.studentid) === parseInt(row.id) && parseInt(rw.grp) === 0).map((p, i)=>{
         adds.push(parseFloat(p.amount))
-        return <div className="small text-muted">
-          <span><i onClick={()=>onDelete(p.id)} className="text-danger fa fa-remove"></i></span>
-                  <span>{p.datepaid}</span>: <strong>{p.amount}</strong>
+        return <div key={i} className="small text-muted">
+         {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 712)) ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
+                  <span>{moment().format(p.datepaid, 'DD MM YYYY')}</span> : <i>{p.teller}</i>: <strong>{nairaformat(p.amount)}</strong> 
               </div>
       })
       }
@@ -193,11 +252,62 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
     {props.classteacher ? 
     <td>
           <CButtonGroup>
-           <CButton 
-              size='sm' 
-              color="secondary" 
-              onClick={()=>handleSubmitFee(row.id, props.termid, props.sessionid)}
-              >Set Fee</CButton>
+           
+          <CDropdown className="m-0">
+              <CDropdownToggle color="secondary" size='sm'>
+                Set Fees
+              </CDropdownToggle>
+              <CDropdownMenu className='bg-info'>
+                <CForm className="px-4 py-3" >
+                 
+                  <CFormGroup>
+                    <CLabel htmlFor="amount">Amount</CLabel>
+                    <CInput 
+                      className="form-control" 
+                      style={{color:'blue', fontWeight:'bolder'}}
+                      id="amount" 
+                      type="text"
+                      value={amount}
+                      autoComplete="amount"
+                      onChange={(e)=>setAmount(e.target.value)}
+                      />
+                  </CFormGroup>
+                  
+                  <CFormGroup>
+                    <CLabel htmlFor="feeid">Select Fee</CLabel>
+                    <CSelect 
+                      className="form-control" 
+                      id="feeid" 
+                      type="date"
+                      value={feeid}
+                      autoComplete="feeid"
+                      onChange={(e)=>setFeeid(e.target.value)}
+                      >
+                        <option></option>
+                        {fearray}
+                      </CSelect>
+                  </CFormGroup>
+                  
+                  
+                  <CFormGroup className="mt-2">
+                    <CButton 
+                    className='mb-2'
+                    size='sm'
+                    block
+                    color="primary" 
+                    type="button"
+                    onClick={()=>handleSubmitFeeOnly(row.id, props.termid, props.sessionid)}
+                    >Set Fee</CButton>
+                    <CButton 
+                    block
+                      size='sm' 
+                      color="secondary" 
+                      onClick={()=>handleSubmitFee(row.id, props.termid, props.sessionid)}
+                      >Use Default Fee</CButton>
+                  </CFormGroup>
+                </CForm>
+              </CDropdownMenu>
+          </CDropdown>
           <CDropdown className="m-0">
               <CDropdownToggle color="info" size='sm'>
                 Pay Fees
@@ -277,7 +387,7 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
                   </CFormGroup>
                 </CForm>
               </CDropdownMenu>
-            </CDropdown>
+          </CDropdown>
             </CButtonGroup>
     </td>
     :''}
@@ -321,6 +431,8 @@ export default connect(mapStateToProps, {
   getAccounts,
   getFees,
   getStudentfeesSingle,
-  setStudentfee
+  setStudentfee,
+  getStudentfees,
+  deleteStudentfee
   
 })(Studentclasss)

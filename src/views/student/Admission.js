@@ -64,7 +64,7 @@ loadpdf()
                                 <CCol xs='3' style={{marginTop:'2px', marginBottom:'2px'}}>
                                 <img 
                                     onClick={loadpdf}
-                                    src='avatars/logo.png'
+                                    src={process.env.PUBLIC_URL+'/avatars/logo.png'}
                                     className="m-0 p-0" 
                                     width='100%'
                                     height='100px'

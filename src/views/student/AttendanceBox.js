@@ -3,7 +3,6 @@ import {  leavestd } from '../../actions/common';
 let leaves = leavestd
 const AttendanceBox = (props) => {
     const [color, setcolor] = useState('#ccc');
-    //console.log(props.client, props.issue)
     //if pass current date
     useEffect(() => {
         //confirm if its date yet else return grey
@@ -25,8 +24,6 @@ const AttendanceBox = (props) => {
                     setcolor('#cfc') 
                     props.setData(props.client, 1)
                 }
-                
-
             }else
             {
                 //client not present that day
@@ -43,7 +40,6 @@ const AttendanceBox = (props) => {
     return(
         <>
         <td className='text-center'  style={{backgroundColor:color, width:'25px'}} >
-
         </td>
         </>
     )

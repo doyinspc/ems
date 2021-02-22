@@ -343,6 +343,7 @@ const changePhoto3 = (e) =>{
 }
 
 let schoolarray = props.schools && Array.isArray(props.schools) ? props.schools : [];
+console.log(schoolarray);
 let scarray = schoolarray.filter(rw=>rw !== null).map((rw, ind) =>{
     return <option key={ind} value={rw.id}>{rw.name}</option>
 })
@@ -451,6 +452,7 @@ let housearray = Object.keys(allhousess).map((rw1, ind) =>{
                                     onChange={(e)=>setSchoolid(e.target.value)} 
                                     required
                                 >
+                                    <option></option>
                                     {scarray}
                                 </CSelect>
                             </CFormGroup>
@@ -1144,7 +1146,7 @@ let housearray = Object.keys(allhousess).map((rw1, ind) =>{
 const mapStateToProps = (state) =>({
     students : state.studentReducer,
     sessions : state.sessionReducer.sessions,
-    schools : state.schoolReducer.schools,
+    schools : state.userReducer.mySchoolData,
     dropdowns:state.userReducer.dropdowns
   })
   export default connect(mapStateToProps, {

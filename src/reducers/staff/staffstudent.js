@@ -1,3 +1,4 @@
+import { callError, callReg } from "../../actions/common";
 import {
     STAFFSTUDENT_GET_MULTIPLE,
     STAFFSTUDENT_GET_ONE,
@@ -14,11 +15,11 @@ import {
     STAFFSTUDENT_EDIT
 } from "./../../types/staff/staffstudent";
 
-let staffstudentStore = JSON.parse(localStorage.getItem('staffstudent'))
+let staffstudentStore = []//JSON.parse(localStorage.getItem('staffstudent'))
 
 const initialState = {
     isLoading: false,
-    staffstudents: staffstudentStore ? staffstudentStore : [],
+    staffstudents:  [],
     staffstudent:{},
     msg: null,
     isEdit:-1,
@@ -65,10 +66,21 @@ export default function(state = initialState, action){
                 MSG:"DONE!!!"
             };
         case STAFFSTUDENT_REGISTER_SUCCESS:
-            localStorage.setItem('staffstudent', JSON.stringify([...state.staffstudents, action.payload]));
+            let acs =[]
+            
+            if(action.payload && action.payload.hasOwnProperty('id'))
+            {
+                acs = [...state.staffstudents, action.payload];
+            }else if(Array.isArray(action.payload))
+            {
+                
+               acs = action.payload;
+            }
+            localStorage.setItem('staffstudent', acs);
+            callReg();
             return {
                 ...state,
-                staffstudents: [...state.staffstudents, action.payload],
+                staffstudents: acs,
                 msg:action.msg
             }; 
         case STAFFSTUDENT_ACTIVATE_SUCCESS:
@@ -103,7 +115,7 @@ export default function(state = initialState, action){
         case STAFFSTUDENT_REGISTER_FAIL:
         case STAFFSTUDENT_DELETE_FAIL:
         case STAFFSTUDENT_UPDATE_FAIL:
-
+             callError(JSON.stringify(action.msg))
             return {
                 ...state,
                 isLoading: false,

@@ -1,6 +1,9 @@
 import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {getStudentclasss, getStudentclass, registerStudentclass, updateStudentclass, deleteStudentclass } from './../../actions/student/studentclass';
+import {registerStaffstudent} from './../../actions/staff/staffstudent';
+import {getStudentsubjects, getStudentsubject, registerStudentsubject, updateStudentsubject, deleteStudentsubject } from './../../actions/student/studentsubject';
+import { getUserDatas, getUserSchools, getUserTerms, getUserdropdowns, settSchool, settTerm} from './../../actions/user'
 import { Link,  useParams } from 'react-router-dom'
 import Swal from'sweetalert'
 import moment from 'moment'
@@ -120,7 +123,37 @@ const Studentclasss = (props) => {
     props.getClassstaffs(params2);
   }, [dates, clasz, session, term])
 
-      let dt = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length > 4 ? props.dropdowns : [[], [], [], []];
+  useEffect(() => {
+    //load dropdowns
+    let did = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0 ? props.user.activeschool.id :'null'
+    let tid = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('typeid') && parseInt(props.user.activeschool.typeid) > 0 ? props.user.activeschool.typeid :'null'
+    
+    let params = {
+      data:JSON.stringify(
+      {
+          'schoolid':did,
+          'typeid':tid
+      }),
+      cat:'dropdowns',
+      table:'access',
+      narration:'get all dropdowns'
+      }
+      props.getUserdropdowns(params)
+    let params1 = {
+        data:JSON.stringify(
+        {
+            'schoolid':did
+        }),
+        cat:'accessterms',
+        table:'access',
+        narration:'get current term'
+        }
+        props.getUserTerms(params1)
+      
+  }, [props.user.mid, props.user.activeschool.id, props.user.activeschool.typeid ])
+  
+
+      let dt = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length > 0 ? props.dropdowns : [[], [], [], []];
       let dt0 ='';
       let dt1 ='';
       let dt2 ='';
@@ -144,10 +177,11 @@ const Studentclasss = (props) => {
     const placeStudent = (students) =>{
       setStudentdata(students);
     }
-   let len = 5
+
+   let len = 5;
    let subject = [];
    const loadStudent = () =>{
-   
+  
          let fd = new FormData();
          fd.append('itemid', clasz);
          fd.append('itemid1', 0);
@@ -158,13 +192,31 @@ const Studentclasss = (props) => {
          fd.append('sessionid', session);
         
            //INSERT
-          fd.append('grp', groupid);
-          fd.append('termid', term);
-          fd.append('cat', 'inserts');
-          props.registerStudentclass(fd)
+        fd.append('grp', groupid);
+        fd.append('termid', term);
+        fd.append('cat', 'inserts');
+        props.registerStudentclass(fd)
           
    }
-   
+   const placeStudentSubject = (subject) =>{
+   /**
+    * classunitid
+    * termid
+    * subjectid
+    */
+    let fd = new FormData();
+    fd.append('claszid', clasz);
+    fd.append('termid', term);
+    fd.append('subjectid', subject);
+    fd.append('sessionid', session);
+    fd.append('staffid', props.user.mid);
+    fd.append('grp', groupid);
+    
+    fd.append('table', 'accessstudentclass');
+    fd.append('cat', 'insertsubject');
+    props.registerStaffstudent(fd)
+     
+   }
    const changeClasz=(e)=>{
      setClasz(e)
       let dt = props.dropdowns && Array.isArray(props.dropdowns) ? props.dropdowns : [[], []];
@@ -209,10 +261,9 @@ const Studentclasss = (props) => {
      
    }
 
-let staff_available = props.classstaff.classstaffs.filter(element =>parseInt(element.clientid) === parseInt(props.user.mid));
+let staff_available = props.classstaff.classstaffs && Array.isArray(props.classstaff.classstaffs)  && props.classstaff.classstaffs.length > 0? props.classstaff.classstaffs.filter(rw=>rw !== null || rw !== "null" || rw !== undefined).filter(element =>element !== null && parseInt(element.clientid) === parseInt(props.user.mid)):[];
 let classteacher = Array.isArray(staff_available) && staff_available.length > 0 ? true : false;
    
-
 let dataq = props.studentclasss.studentclasss && Array.isArray(props.studentclasss.studentclasss) ? props.studentclasss.studentclasss.filter(rw =>rw !== null || rw !== undefined) : []
 let data = dataq;
 
@@ -228,6 +279,7 @@ if(search.length > 0 && search !== undefined)
 
 let d1 = data.filter(rw=> rw !== null && rw !== undefined).map((p, i)=>p.id);
 let data1 = d1.join(',')
+
 
 let redirectAttendance = (clasz) =>{
     window.open(process.env.PUBLIC_URL+`#/attendance_student/${clasz}`)
@@ -411,20 +463,20 @@ let redirectAttendance = (clasz) =>{
               
                 <CTabPane>
                   <StudentDefault 
-                   term={term}
-                   clasz={clasz}
-                   session={session}
-                   onRemove={(e)=>onRemove(e)}
-                   setsearch={(e)=>setsearch(e)} 
-                   dateactive={dates} 
-                   data1={data1}
-                   data={data}
-                   activeterm={activeterm}
-                   setDates={(e)=>setdates(e)}
-                   classteacher={classteacher}
+                    term={term}
+                    clasz={clasz}
+                    session={session}
+                    onRemove={(e)=>onRemove(e)}
+                    setsearch={(e)=>setsearch(e)} 
+                    dateactive={dates} 
+                    data1={data1}
+                    data={data}
+                    activeterm={activeterm}
+                    setDates={(e)=>setdates(e)}
+                    classteacher={classteacher}
+                    placeStudentSubject={(e)=>placeStudentSubject(e)}
                    />
                   </CTabPane>
-                 
                 <CTabPane>
                 <ClassBioAnalysis  data={data}/>
                 </CTabPane>
@@ -439,11 +491,12 @@ let redirectAttendance = (clasz) =>{
                 </CTabPane>
                 <CTabPane>
                     <StudentFeeList 
-                    termid={term} 
-                    claszparentid={claszparent} 
-                    sessionid={session} 
-                    data={data} 
-                    classteacher={classteacher}
+                      termid={term} 
+                      claszparentid={claszparent} 
+                      sessionid={session} 
+                      data={data} 
+                      data1={data1} 
+                      classteacher={classteacher}
                     />
                 </CTabPane>
               </CTabContent>
@@ -462,7 +515,6 @@ const mapStateToProps = (state) =>({
     termz:state.userReducer.activeterm,
     user:state.userReducer,
     classstaff:state.classstaffReducer
-
   })
   export default connect(mapStateToProps, {
     getStudentclasss,
@@ -470,6 +522,14 @@ const mapStateToProps = (state) =>({
     registerStudentclass,
     updateStudentclass,
     deleteStudentclass,
-    getClassstaffs
+    getClassstaffs,
+    getStudentsubjects,
+    getStudentsubject,
+    registerStudentsubject,
+    updateStudentsubject,
+    deleteStudentsubject,
+    registerStaffstudent,
+    getUserdropdowns,
+    getUserTerms
   })(Studentclasss)
   

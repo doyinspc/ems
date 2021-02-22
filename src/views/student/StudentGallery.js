@@ -32,12 +32,12 @@ const Studentclasss = (props) => {
         </CCardHeader>
         <CCardBody className='m-0 p-0 ' >
         <img 
-            src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ row.photo1} 
+            src={process.env.REACT_APP_SERVER_URL+ row.photo} 
             className="m-0 p-0" 
             width='100px'
             height='100px'
             alt={row.admission_no} 
-            onError={(e)=>{e.target.onerror=null; e.target.src= process.env.PUBLIC_URL + 'avatars/1.png'} }
+            onError={(e)=>{e.target.onerror=null; e.target.src= process.env.PUBLIC_URL + '/avatars/1.png'} }
         />
         </CCardBody>
         <div className='m-0 text-center' style={{zIndex:'1001', position:'relative', top:'0px', backgroundColor:'rgba(0,0,0,0)'}}>

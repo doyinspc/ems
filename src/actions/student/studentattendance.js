@@ -13,7 +13,8 @@ import {
     STUDENTATTENDANCE_UPDATE_FAIL,
     STUDENTATTENDANCE_DELETE_SUCCESS,
     STUDENTATTENDANCE_DELETE_DAILY,
-    STUDENTATTENDANCE_DELETE_FAIL
+    STUDENTATTENDANCE_DELETE_FAIL,
+    STUDENTATTENDANCE_GET_SUMMARY
 } from "./../../types/student/studentattendance";
 import { MAIN_TOKEN, API_PATH_STUDENT, axiosConfig1, axiosConfig } from './../common';
 
@@ -30,6 +31,26 @@ export const getStudentattendances = params => (dispatch, getState) => {
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
                     type: STUDENTATTENDANCE_GET_MULTIPLE,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STUDENTATTENDANCE_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+//GET ALL STUDENTATTENDANCE 
+export const getStudentattendanceSummary = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.token = MAIN_TOKEN;
+
+    dispatch({type : STUDENTATTENDANCE_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STUDENTATTENDANCE_GET_SUMMARY,
                     payload: res.data
                 })
             })
