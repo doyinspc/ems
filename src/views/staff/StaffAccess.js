@@ -290,7 +290,7 @@ return (
                                             onChange={(e)=>loadSchool(e, prop.id, 0, 1)}
                                         /></td>
                                     <td>
-                                        <span style={{textTransform:'uppercase'}}><a on>{prop.name}</a></span><br/>
+                             <span style={{textTransform:'uppercase'}}><a on>{prop.name}</a></span><br/>
                                     </td>
                                     <td><a onClick={()=>loadPage(prop.id)}>NEXT</a></td>
                                     
@@ -364,7 +364,7 @@ return (
                                             onChange={(e)=>loadDatax(e, pro, activeSchool, 2)}
                                         /></td>
                                     <td>
-                                        <strong style={{textTransform:'uppercase'}}>{prop.name}</strong><br/>
+                                        <strong style={{textTransform:'uppercase'}}>{prop.name}{" : "}{pro}{" --"}</strong><br/>
                                     </td>
                                     
                                 </tr>
@@ -392,9 +392,9 @@ return (
                                             labelOn={'\u2713'} 
                                             labelOff={'\u2715'} 
                                             onChange={(e)=>loadSubDatax(e, pp, pro, activeSchool, 1)}
-                                        /></td>
+                                        />
+                                        </td>
                                         <td width='5%' className='text-center' >
-                                       
                                        <CSwitch 
                                            className={`mx-1 ${cl}_2 `} 
                                            color={'primary'} 
@@ -407,11 +407,10 @@ return (
                                            labelOff={'\u2715'} 
                                            onChange={(e)=>loadSubDatax(e, pp, pro, activeSchool, 2)}
                                        />
-                                       
                                        </td>
                                         
                                         <td> <i className="m-auto pb-8" style={{textTransform:'uppercase' }}>
-                                            {d.name}</i>
+                                             {d.name}{/* {" -- "}{activeSchool}{" -- "}{pro}{" -- "}{pp} */}</i>
                                         </td>
                                        
                                         

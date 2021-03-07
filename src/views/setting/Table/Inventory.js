@@ -9,7 +9,7 @@ const Inventory = (props) => {
   const history = useHistory()
  
   let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
-  let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
+  let tabl = Array.isArray(data) ? data.filter(rw=>rw !== null).map((row, ind)=>{
       return <tr key={ind}>
                 <td className='text-center'>{ind + 1}</td>
                 <td>{row.name}</td>
@@ -17,9 +17,9 @@ const Inventory = (props) => {
                 { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
                 <td className='text-center'>
                     {
-                        props.submenu.map((prp, ind)=>{
-                            return <a  key={ind} title={prp.tag} onClick={(item) => history.push(`/setting/${props.sid}/${row.id}/0`)}><i className='fa fa-list ml-2 px-2'></i></a>
-                        })
+                        Array.isArray(props.submenu) ? props.submenu.map((prp, ind)=>{
+                            return <a  key={ind} title={prp.tag} onClick={(item) =>history.push(`/setting/${props.sid}/${row.id}/0/0/0/0/0`)}><i className='fa fa-list ml-2 px-2'></i></a>
+                        }):''
                      }
                         
                     {props.editer === true ?
@@ -30,7 +30,7 @@ const Inventory = (props) => {
                     </>:""}
                 </td>:''}
               </tr>
-  })
+  }):''
   return (
 
           <table className="table table-hover table-outline mb-0  d-sm-table">

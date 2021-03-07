@@ -98,7 +98,7 @@ const Expense = (props) => {
                   name="namez"
                   value={namez}
                   onChange={(e)=>setNamez(e.target.value)}
-                  placeholder="West Africa Examination Council" 
+                  placeholder="Operational Expenses" 
                 />
               <CFormText className="help-block">Please enter expense name</CFormText>
             </CFormGroup>
@@ -110,7 +110,7 @@ const Expense = (props) => {
                   name="abbrv"
                   value={abbrv}
                   onChange={(e)=>setAbbrv(e.target.value)}
-                  placeholder="WAEC" 
+                  placeholder="OPEXP" 
                 />
               <CFormText className="help-block">Please enter expense abbrv (max 6 characters)</CFormText>
             </CFormGroup>

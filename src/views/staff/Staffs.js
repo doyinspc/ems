@@ -73,9 +73,7 @@ const Staffs = (props) => {
     const [search, setsearch] = useState('')
 
     
-
-    
-    useEffect(() => {
+      useEffect(() => {
         let params = {
           data:JSON.stringify(
           {
@@ -123,15 +121,28 @@ const Staffs = (props) => {
       
       let secarry = {}
       let sec = []
-      if(Object.keys(acs) > 0 && props.isAdmin === false)
+      
+      if(Object.keys(acs).length > 0 && props.isAdmin !== false)
       {
+         
           let ids = props.user.activeschool !== undefined ? props.user.activeschool.id : null;
+          
           if(acs !== undefined  && acs.hasOwnProperty(ids))
           {
-            secarry = acs[ids][0]
+            let acss = Object.keys(acs[ids]);
+            
+            if(acss !== undefined && acss.includes("0") )
+            {
+              secarry = acs[ids][0]
+              
+            }else{
+              return <Redirect to="/" />
+
+            }
+           
           }else
           {
-            return <Redirect to="/" />
+           return <Redirect to="/" />
           }
       }else if(props.user.isAdmin === true)
       {
@@ -156,7 +167,8 @@ const Staffs = (props) => {
 
      
   let data = dataq;
-  if(search.length > 0){
+  if(search.length > 0)
+  {
     let datas = dataq.filter(rw=>rw.surname.toLowerCase().includes(search.toLowerCase()) 
     || rw.firstname.toLowerCase().includes(search.toLowerCase()) 
     || rw.middlename.toLowerCase().includes(search.toLowerCase())

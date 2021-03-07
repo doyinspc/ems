@@ -7,21 +7,12 @@ import { getStaff } from './../../actions/staff/staff';
 
 
 const StaffLeave = (props, {match}) => {
-  const data = props.data
 
   return (
     <>
     <CRow>
         <table width='100%'>
-            {
-                data.map((prop, index)=>{
-                    return (
-                        <tr>
-
-                        </tr>
-                    )
-                })
-            }
+           
         </table>
     </CRow>
 </>

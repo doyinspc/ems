@@ -53,6 +53,7 @@ import term from "./setting/term";
 import school from "./setting/school";
 import admission from "./setting/admission";
 import office from "./setting/office";
+import report from "./setting/report";
 import designation from "./setting/designation";
 import job from "./setting/job";
 import week from "./setting/week";
@@ -114,6 +115,7 @@ export default combineReducers({
     schoolReducer: school,
     admissionReducer: admission,
     officeReducer: office,
+    reportReducer: report,
     penmanagerReducer: penmanager,
     designationReducer: designation,
     jobReducer: job,

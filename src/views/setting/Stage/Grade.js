@@ -85,6 +85,8 @@ const Grade = (props) => {
               />
          <CCardBody className='table-responsive'>
             <GradeTable  
+               sid={props.sid}
+               pid={props.pid}
                 data={data}
                 title={props.para.name} 
                 submenu={props.para.submenu}

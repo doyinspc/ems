@@ -28,7 +28,7 @@ const Gradeunit = (props) => {
         {
             'gradeid':props.pid
         }),
-        cat:'select',
+        cat:'selected',
         table:'gradeunits',
         narration:'get gradeunits'
   

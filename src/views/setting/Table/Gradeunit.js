@@ -12,15 +12,12 @@ const Gradeunit = (props) => {
   let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
       return <tr key={ind}>
                 <td className='text-center'>{ind + 1}</td>
-                <td style={{color: row.color}}>{row.name}{" "}{row.abbrv}</td>
-                <td className="text-center" style={{color: row.color}}>{row.maxscore}{" "}{row.minscore}</td>
+                <td style={{color: row.color}}>{row.name}{" ("}{row.abbrv}{") "}</td>
+                <td className="text-center" style={{color: row.color}}><strong>{row.maxscore}{" - "}{row.minscore}</strong></td>
+                <td style={{color: row.color}}>{row.comment}</td>
                 { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
                 <td className='text-center'>
-                    {
-                        props.submenu.map((prp, ind)=>{
-                            return <a  key={ind} title={prp.tag} onClick={(item) => history.push(`/setting/${props.sid}/${props.pid}/${row.id}`)}><i className='fa fa-list ml-2 px-2'></i></a>
-                        })
-                     }
+                   
                         
                     {props.editer === true ?
                      <>
@@ -33,12 +30,13 @@ const Gradeunit = (props) => {
   })
   return (
 
-          <table className="table table-hover table-outline mb-0  d-sm-table">
+          <table className="table table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>
                     <th className="text-center">SN.</th>
                     <th><i className='fa fa-list'></i> Name</th>
                     <th><i className='fa fa-list'></i> Range</th>
+                    <th><i className='fa fa-list'></i> Comment</th>
                     { props.editer === true  || (props.submenu !== undefined && props.submenu.length > 0) ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>

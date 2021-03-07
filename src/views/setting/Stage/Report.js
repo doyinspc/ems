@@ -1,28 +1,35 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import {getExpenses, updateExpense, deleteExpense} from './../../../actions/setting/expense';
+import {getReports, getReport, updateReport, deleteReport} from './../../../actions/setting/report';
 import {
   CCard,
   CCardBody,
   CCol,
   CRow,
   CCollapse,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CButton
 } from '@coreui/react'
-import ExpenseForm from'./../Form/Expense'
-import ExpenseTable from'./../Table/Expense'
+import ReportForm from'./../Form/Report'
+import ReportTable from'./../Table/Report'
 import Header from './Header';
 
 
-const Expense = (props) => {
+const Report = (props) => {
   const [collapse, setCollapse] = useState(false)
   const [id, setId] = useState('')
   const [dts, setDts] = useState({})
-
+  const [modal, setModal] = useState(true)
   const toggle = () => {
-    setCollapse(!collapse)
+    setModal(!modal)
+    setDts({})
   }
 
-  //GET EXPENSES PER SCHOOL
+  //GET REPORTS PER SCHOOL
   useEffect(() => {
    
     if(props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0)
@@ -31,14 +38,13 @@ const Expense = (props) => {
      let params = {
       data:JSON.stringify(
       {
-         // 'schoolid':props.user.activeschool.id,
-          'is_delete':0
+          'schoolid':props.user.activeschool.id
       }),
-      cat:'selected',
-      table:'expenses',
-      narration:'get expenses'
+      cat:'select',
+      table:'reports',
+      narration:'get reports'
       }
-      props.getExpenses(params)
+      props.getReports(params)
     }
     
   }, [props.user.activeschool])
@@ -46,8 +52,10 @@ const Expense = (props) => {
   
   const onEdit = (dt) =>{
       setDts(dt);
-      setCollapse(true);
+      setModal(true);
+      props.getReport(dt.id)
   }
+
   const onActivate = (rw, num) =>{
    
     let nu = parseInt(num) === 0 ? 1 : 0;
@@ -55,11 +63,12 @@ const Expense = (props) => {
     fd.append('id', rw);
     fd.append('is_active', nu);
     fd.append('cat', 'update');
-    fd.append('table', 'expenses');
-    fd.append('narration', `activate ande disable expense ${nu}`);
-    props.updateExpense(fd);
+    fd.append('table', 'reports');
+    fd.append('narration', `activate ande disable report ${nu}`);
+    props.updateReport(fd);
 
   }
+
   const onDelete = (rw, dt) =>{
     
   }
@@ -68,11 +77,12 @@ const Expense = (props) => {
     setId(null);
     setDts({});
   }
+  
   const onClose = () =>{
     setCollapse(false)
   }
  
-  let data = props.expenses.expenses && Array.isArray(props.expenses.expenses) ? props.expenses.expenses.filter(rw =>rw !== null || rw !== undefined) : []
+  let data = props.reports.reports && Array.isArray(props.reports.reports) ? props.reports.reports.filter(rw =>rw !== null || rw !== undefined) : []
   
    return (
     <CRow>
@@ -85,37 +95,50 @@ const Expense = (props) => {
               toggle={toggle}
               />
          <CCardBody className='table-responsive'>
-            <ExpenseTable  
-               sid={props.sid}
-               pid={props.pid}
+            <ReportTable  
                 data={data}
                 title={props.para.name} 
                 submenu={props.para.submenu}
                 editer={true}
                 onActivate={(rw, num)=>onActivate(rw, num)}
                 onEdit={(rw)=>onEdit(rw)}
-                onDelete={(rw)=>onDelete(rw)}
+                onDelete={(rw)=>onDelete(rw)}  
             />
           </CCardBody>
         </CCard>
         </CCol>
-        <CCollapse show={collapse}>
-            <ExpenseForm 
+        <CModal 
+              show={modal} 
+              onClose={setModal}
+            >
+              <CModalHeader closeButton>
+                <CModalTitle>Prepare Report Card</CModalTitle>
+              </CModalHeader> 
+              <CModalBody>
+              <ReportForm 
                 id={id}
                 data={dts}
-                onReset={onReset}
-                onClose={onClose}
             />
-        </CCollapse>
+              </CModalBody>
+              <CModalFooter>
+                
+                <CButton 
+                  color="secondary" 
+                  onClick={() => setModal(false)}
+                >Cancel</CButton>
+              </CModalFooter>
+            </CModal>
+        
     </CRow>
   )
 }
 const mapStateToProps = (state) =>({
-  expenses : state.expenseReducer,
+  reports : state.reportReducer,
   user:state.userReducer
 })
 export default connect(mapStateToProps, {
-  getExpenses,
-  updateExpense,
-  deleteExpense
-})(Expense)
+  getReports,
+  getReport,
+  updateReport,
+  deleteReport
+})(Report)

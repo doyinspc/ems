@@ -31,9 +31,9 @@ const Expenseunit = (props) => {
      let params = {
       data:JSON.stringify(
       {
-          'schoolid':props.user.activeschool.id
+          'expenseid':props.pid
       }),
-      cat:'select',
+      cat:'selected',
       table:'expenseunits',
       narration:'get expenseunits'
       }

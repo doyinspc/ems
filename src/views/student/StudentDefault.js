@@ -230,7 +230,7 @@ const Students = (props) => {
       //CONFIRM IF CLASS TEACHER
       let classteacher = props.classteacher;
 
-   let tabl = props.data.filter(rw=> rw !== null && rw !== undefined).map((row, ind)=>{
+      let tabl = props.data.filter(rw=> rw !== null && rw !== undefined).map((row, ind)=>{
         return <tr key={ind}>
         <td className="text-center">
           <div className="c-avatar">
@@ -248,7 +248,7 @@ const Students = (props) => {
         </td>
         
         <td>
-   <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
+        <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
                 <div className="small text-muted">
                 <span>{`${row.abbrv}/${row.admission_no}`}</span>
             </div>
@@ -420,7 +420,7 @@ const Students = (props) => {
                   </CCol>
             </CFormGroup>
             </CCol>
-            <CCol xs={12} md={4}>
+        <CCol xs={12} md={4}>
             <CFormGroup>
             { parseInt(actions) > 0?
                   <CCol xs="12" md="12">
@@ -438,8 +438,7 @@ const Students = (props) => {
                   </CCol>:""}
             </CFormGroup>
            </CCol>
-           
-            <CCol xs={12} md={4}>
+        <CCol xs={12} md={4}>
             <CCol xs={12}>{ parseInt(itemzs) > 0 &&  parseInt(actions) > 0?
                 <CButton 
                     disabled={ props.activeterm ? false:true }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {getStudentclasss, getStudentclass, registerStudentclass, updateStudentclass, deleteStudentclass } from './../../actions/student/studentclass';
 import {registerStaffstudent} from './../../actions/staff/staffstudent';
 import {getStudentsubjects, getStudentsubject, registerStudentsubject, updateStudentsubject, deleteStudentsubject } from './../../actions/student/studentsubject';
-import { getUserDatas, getUserSchools, getUserTerms, getUserdropdowns, settSchool, settTerm} from './../../actions/user'
+import { getUserTerms, getUserdropdowns } from './../../actions/user'
 import { Link,  useParams } from 'react-router-dom'
 import Swal from'sweetalert'
 import moment from 'moment'
@@ -44,6 +44,10 @@ import StudentList from './StudentList'
 import StudentFeeList from './StudentFeeList'
 import Header from '../staff/Subjects/Headers';
 import StudentDefault from './StudentDefault';
+import StudentScoreList from './StudentScoreList';
+import StudentReportList from './StudentReportList';
+import StudentReportList1 from './StudentReportList1';
+import StudentClassTeacher from './StudentClassTeacher';
 import { getClassstaffs  } from './../../actions/setting/classstaff';
 
 const Studentclasss = (props) => {
@@ -123,7 +127,7 @@ const Studentclasss = (props) => {
     props.getClassstaffs(params2);
   }, [dates, clasz, session, term])
 
-  useEffect(() => {
+    useEffect(() => {
     //load dropdowns
     let did = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0 ? props.user.activeschool.id :'null'
     let tid = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('typeid') && parseInt(props.user.activeschool.typeid) > 0 ? props.user.activeschool.typeid :'null'
@@ -134,9 +138,9 @@ const Studentclasss = (props) => {
           'schoolid':did,
           'typeid':tid
       }),
-      cat:'dropdowns',
-      table:'access',
-      narration:'get all dropdowns'
+        cat:'dropdowns',
+        table:'access',
+        narration:'get all dropdowns'
       }
       props.getUserdropdowns(params)
     let params1 = {
@@ -288,6 +292,7 @@ let redirectAttendance = (clasz) =>{
     <>
     <CRow xs={12}>
       <CCol  xs="12" md="12" >
+        {active === 0 ?
       <CCard xs="12" md="12">
         <CCardHeader>
           <CRow  className='mt-2 m-2' >
@@ -302,13 +307,13 @@ let redirectAttendance = (clasz) =>{
                           <CInputGroupPrepend>
                           <CInputGroupText>Select Term</CInputGroupText>
                           </CInputGroupPrepend>
-                        <CSelect 
-                          custom 
-                          size="md" 
-                          name="term" 
-                          id="term"
-                          onChange={(e)=>changeTerm(e.target.value)}
-                          >
+                          <CSelect 
+                            custom 
+                            size="md" 
+                            name="term" 
+                            id="term"
+                            onChange={(e)=>changeTerm(e.target.value)}
+                            >
                             <option value="0">Select Term</option>
                             {dt0}
                           </CSelect>
@@ -386,7 +391,7 @@ let redirectAttendance = (clasz) =>{
           </CCollapse>
         </CCardHeader>
       </CCard>     
-      </CCol>
+      :""}</CCol>
     </CRow>
     <CRow>
     <CCol xs="12" md="12" className="mb-4">
@@ -437,7 +442,7 @@ let redirectAttendance = (clasz) =>{
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-map" />
-                    { active === 3 && ' Contact'}
+                    { active === 3 && ' Next of Kin'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
@@ -455,7 +460,25 @@ let redirectAttendance = (clasz) =>{
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-user"/>
-                    { active === 6 && ' Next of Kin'}
+                    { active === 6 && ' Scores'}
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    <CIcon name="cil-user"/>
+                    { active === 7 && ' Subject Teachers'}
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    <CIcon name="cil-user"/>
+                    { active === 8 && ' report'}
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    <CIcon name="cil-badge"/>
+                    { active === 9 && ' report'}
                   </CNavLink>
                 </CNavItem>
               </CNav>
@@ -497,6 +520,58 @@ let redirectAttendance = (clasz) =>{
                       data={data} 
                       data1={data1} 
                       classteacher={classteacher}
+                    />
+                </CTabPane>
+                <CTabPane>
+                    <StudentClassTeacher 
+                      term={term}
+                      clasz={clasz}
+                      session={session}
+                      dateactive={dates} 
+                      data1={data1}
+                      data={data}
+                      activeterm={activeterm}
+                      classteacher={classteacher}
+                      claszparentid={claszparent} 
+                    />
+                </CTabPane>
+                <CTabPane>
+                    <StudentScoreList 
+                      term={term}
+                      clasz={clasz}
+                      session={session}
+                      dateactive={dates} 
+                      data1={data1}
+                      data={data}
+                      activeterm={activeterm}
+                      classteacher={classteacher}
+                      claszparentid={claszparent} 
+                    />
+                </CTabPane>
+                <CTabPane>
+                    <StudentReportList 
+                      term={term}
+                      clasz={clasz}
+                      session={session}
+                      dateactive={dates} 
+                      data1={data1}
+                      data={data}
+                      activeterm={activeterm}
+                      classteacher={classteacher}
+                      claszparent={claszparent} 
+                    />
+                </CTabPane>
+                <CTabPane>
+                    <StudentReportList1 
+                      term={term}
+                      clasz={clasz}
+                      session={session}
+                      dateactive={dates} 
+                      data1={data1}
+                      data={data}
+                      activeterm={activeterm}
+                      classteacher={classteacher}
+                      claszparent={claszparent} 
                     />
                 </CTabPane>
               </CTabContent>

@@ -55,6 +55,7 @@ const Gradeunit = (props) => {
   }, [props.data])
 
   const handleSubmit = () =>{
+    console.log(namez)
     if(namez.length > 0){
       let fd = new FormData();
       fd.append('name', namez);
@@ -76,6 +77,7 @@ const Gradeunit = (props) => {
       {
         //INSERT
         fd.append('gradeid', props.pid);
+        //fd.append('schoolid', props.pid);
         fd.append('cat', 'insert');
         props.registerGradeunit(fd)
       }
@@ -180,7 +182,7 @@ const Gradeunit = (props) => {
                 </CForm>
             </CCardBody>
             <CCardFooter>
-              <CButton type="submit" onClick={handleSubmit} size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>{' '}
+              <CButton type="submit" onClick={()=>handleSubmit()} size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>{' '}
               <CButton type="reset" onClick={props.onReset} size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
             </CCardFooter>
           </CCard>

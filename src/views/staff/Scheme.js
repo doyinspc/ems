@@ -60,7 +60,7 @@ const Staffattendance = (props) => {
       }
 
       let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
-      let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
+      let tabl = data.filter(rw=>rw != null || rw !== undefined).map((row, ind)=>{
           let q_val = row.question.length > 0 ? JSON.parse(row.question):'';
           let q_num = Array.isArray(Object.keys(q_val)) && Object.keys(q_val).length > 0 ? Object.keys(q_val).length : 0;
           return <tr key={ind}>

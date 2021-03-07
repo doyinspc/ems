@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
 import { registerStudentscore, deleteStudentscore } from './../../../actions/student/studentscore'
-
+import ReactRateComponent from'react-rate-component';
 import { 
     CButton,
     CCol,
@@ -24,14 +24,14 @@ const ScoreBox = (props) => {
     const [sd_val, setsd_val] = useState(props.sd_val)
 
     useEffect(() => {
-        setvalue(props.sd_val)
+        setvalue(parseFloat(props.sd_val) * 5)
         setsd_val(props.sd_val)
-    }, [props.sd_val])
+    }, [])
 
-  const saveScore = () =>{
+  const saveScore = (sc) =>{
 
         let fd = new FormData();
-        let val = parseFloat(value) > 0 ? parseFloat(value) / props.score : 0;
+        let val = parseFloat(sc) > 0 ? parseFloat(sc) / 5 : 0;
         fd.append('caid', props.caid);
         fd.append('sessionid', props.sessionid);
         fd.append('termid', props.termid);
@@ -62,56 +62,39 @@ const deleteScore = (id) =>{
 } 
 
 const setvalues = (id) =>{
-    if(parseFloat(id) > parseFloat(props.score))
+    if(parseFloat(id) > parseFloat(5))
     {
         setvalue('')
     }else{
         setvalue(id)
     }
-    
+    saveScore(id)
 }
+
+console.log(props.sd_val, value, sd_val * 5)
+
 
 return (
     <>
     <td valign="middle" width="500px">
         <CFormGroup row>
-            <CCol md="12">
-            <CInputGroup>
-            <CInputGroupPrepend>
-            { parseFloat(value)  === parseFloat(sd_val) ?
-            <CButton 
-            size='lg' 
-            type="button" 
-            color="success"><CIcon name="cil-check" />
-            </CButton>:
-            <CButton 
-            onClick={saveScore}
-            size='lg' 
-            type="button" 
-            color="info"><CIcon name="cil-save" />
-            </CButton>}
-            </CInputGroupPrepend>
-            { parseFloat(value)  === parseFloat(sd_val)  ?
-            <CInput
-                size='lg'
-                style={{ textAlign:'center', fontWeight:'bolder', padding:'0px'}}
-                defaultValue={sd_val * props.score}
-                onChange={(e)=>setvalues(e.target.value)}  
+            <CCol md="12">{sd_val * 5}{" - "}{value}
+            { parseFloat(value)  === parseFloat(sd_val * 5)  ?
+            <ReactRateComponent
+                defaultValue={value}
+                showCount={false}
+                onChange={setvalues}
+                size='30'
+            />:
+            <ReactRateComponent
+                showCount={false}
+                onChange={setvalues}
+                defaultValue={value ? value : ''}
+                size='30'
             />
-               :
-            <CInput
-               size='lg'
-               style={{ textAlign:'center', fontWeight:'bolder', padding:'0px'}}
-               value={value ? value : ''}
-               onChange={(e)=>setvalues(e.target.value)}  
-            />
-                }
-            <CInputGroupAppend>
-                {parseInt(props.sd_id) > 0 ?
-                <CButton  onClick={()=>deleteScore(props.sd_id)} size='lg' type="button" color={ parseInt(props.sd_id) > 0 ? "danger":"secondary"}><CIcon name="cil-x" /></CButton>:
-                <CButton  disabled size='lg' type="button" color={ parseInt(props.sd_id) > 0 ? "danger":"secondary"}><CIcon name="cil-x" /></CButton>}
-            </CInputGroupAppend>
-            </CInputGroup>
+
+}
+            
             </CCol>
         </CFormGroup>
           

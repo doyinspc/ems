@@ -10,7 +10,7 @@ import { CCard, CCardBody, CCardHeader, CInput } from '@coreui/react'
 import Swal from'sweetalert'
 import Header from './Header'
 import ScoreBox from './ScoreBox'
-
+import ScoreStar from './ScoreStar'
 
 
 const Studentclasss = (props) => {
@@ -30,7 +30,10 @@ const Studentclasss = (props) => {
  const [studentdata, setStudentdata] = useState({})
  const [castore, setcastore] = useState({})
  const [cascores, setcascores] = useState({})
- 
+ const [bhstore, setbhstore] = useState({})
+ const [skstore, setskstore] = useState({})
+ const [itemz, setitemz] = useState(0)
+
   useEffect(() => {
     if(parseInt(subjectid) > 0 ){
      let params = {
@@ -106,7 +109,7 @@ const Studentclasss = (props) => {
 
   const placeStudent = (students) =>{
    setStudentdata(students);
- }
+  }
 
 const loadStudent = () =>{
 
@@ -164,19 +167,60 @@ const onRemove =(id)=>{
 
 const setShowca = (id, name, score) =>{
     let sh = {...castore};
+    if(Object.keys(sh).includes(id))
+    {
+      delete sh[id];
+      setcastore(sh);
+      setitemz(1)
+    }else{
     let ar = {}
     ar['id'] = id;
     ar['name'] = name;
     ar['score'] = score;
     sh[id] = ar;
     setcastore(sh);
-    
-    // scoresall.forEach(ele => {
-    //   if(ele.itemid )
-    //   {
-
-    //   } 
-    // });
+    setitemz(1)
+    }
+    setskstore({})
+    setbhstore({})
+}
+const setShowbh = (id, name, score) =>{
+  let sh = {...bhstore};
+  if(Object.keys(sh).includes(id))
+    {
+      delete sh[id];
+      setbhstore(sh);
+      setitemz(2)
+    }else{
+    let ar = {}
+    ar['id'] = id;
+    ar['name'] = name;
+    ar['score'] = score;
+    sh[id] = ar;
+    setbhstore(sh);
+    setitemz(2)
+    }
+    setcastore({})
+    setskstore({})
+}
+const setShowsk = (id, name, score) =>{
+  let sh = {...skstore};
+  if(Object.keys(sh).includes(id))
+    {
+      delete sh[id];
+      setskstore(sh);
+      setitemz(3)
+    }else{
+      let ar = {}
+      ar['id'] = id;
+      ar['name'] = name;
+      ar['score'] = score;
+      sh[id] = ar;
+      setskstore(sh);
+      setitemz(3)
+    }
+    setcastore({})
+    setbhstore({})
 }
 
 const saveScore = (studentid, caid, score) =>{
@@ -197,7 +241,6 @@ const saveScore = (studentid, caid, score) =>{
    props.registerStudentscore(fd)
 
 }
-
 
 const saveScoreHeader = (caid, score) =>{
    let fd = new FormData();
@@ -223,6 +266,7 @@ const setScoreValues = (e, student, ca, namz, sco) =>{
     setcascores(sc);
   } 
 }
+
 const saveScoreValues = (e, student, ca, namz, sco) =>{
   saveScore(student, ca , e.target.value)
   
@@ -241,11 +285,10 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
           height='50px'
           width='50px'
           alt={row.admission_no} 
-          onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + 'avatars/1.png'} }
+          onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
         />
         <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
       </div>
-      
     </td>
     <td width='340px' valign='middle' className='container' valign="middle" >
         <div className='strong my-auto py-auto'><strong>{`${row.clientname}`}</strong></div>
@@ -253,15 +296,15 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
             {`${row.admission_no}`}
         </div>
     </td>
-    {
+    { itemz === 1 ?
       Object.keys(castore).map((prp, inds)=>{
+
         let sd = scoresall.filter(rws=>rws !== undefined && rws !== null && parseInt(rws.itemid1) === parseInt(castore[prp].id) && parseInt(rws.clientid) === parseInt(row.clientid));
         let sd_array = sd && Array.isArray(sd) && sd.length ? sd[0] : null;
         let sd_val = sd_array !== null ? parseFloat(sd_array.contact) : '';
         let sd_id = sd_array !== null ? sd_array.id : '';
         let sd_color = sd_array !== null ? 'green' : 'black';
-        console.log(sd_val)
-        //console.log(sd, castore[prp].id, row.id, scoresall);
+     
         return <ScoreBox 
                   key={inds}
                   sessionid={sessionid}
@@ -280,7 +323,63 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
                   saveScoreValues={(e, id, name, score)=>saveScoreValues(e, id, prp, name, score)}
                 />
       })
-    }
+    :''}
+    { itemz === 2 ?
+      Object.keys(bhstore).map((prp, inds)=>{
+
+        let sd = scoresall.filter(rws=>rws !== undefined && rws !== null && parseInt(rws.itemid1) === parseInt(bhstore[prp].id) && parseInt(rws.clientid) === parseInt(row.clientid));
+        let sd_array = sd && Array.isArray(sd) && sd.length ? sd[0] : null;
+        let sd_val = sd_array !== null ? parseFloat(sd_array.contact) : '';
+        let sd_id = sd_array !== null ? sd_array.id : '';
+        let sd_color = sd_array !== null ? 'green' : 'black';
+     
+        return <ScoreStar 
+                  key={inds}
+                  sessionid={sessionid}
+                  termid={termid}
+                  caid={prp}
+                  subjectid={subjectid}
+                  staffid={props.user.mid}
+                  studentid={row.clientid}
+                  id={prp}
+                  name={bhstore[prp].name} 
+                  score={bhstore[prp].score}
+                  sd_val={sd_val}
+                  sd_id={sd_id}
+                  sd_color={sd_color}
+                  setScoreValues={(e, id, name, score)=>setScoreValues(e, id, prp, name, score)}
+                  saveScoreValues={(e, id, name, score)=>saveScoreValues(e, id, prp, name, score)}
+                />
+      })
+    :''}
+      { itemz === 3 ?
+      Object.keys(skstore).map((prp, inds)=>{
+
+        let sd = scoresall.filter(rws=>rws !== undefined && rws !== null && parseInt(rws.itemid1) === parseInt(skstore[prp].id) && parseInt(rws.clientid) === parseInt(row.clientid));
+        let sd_array = sd && Array.isArray(sd) && sd.length ? sd[0] : null;
+        let sd_val = sd_array !== null ? parseFloat(sd_array.contact) : '';
+        let sd_id = sd_array !== null ? sd_array.id : '';
+        let sd_color = sd_array !== null ? 'green' : 'black';
+     
+        return <ScoreStar 
+                  key={inds}
+                  sessionid={sessionid}
+                  termid={termid}
+                  caid={prp}
+                  subjectid={subjectid}
+                  staffid={props.user.mid}
+                  studentid={row.clientid}
+                  id={prp}
+                  name={skstore[prp].name} 
+                  score={skstore[prp].score}
+                  sd_val={sd_val}
+                  sd_id={sd_id}
+                  sd_color={sd_color}
+                  setScoreValues={(e, id, name, score)=>setScoreValues(e, id, prp, name, score)}
+                  saveScoreValues={(e, id, name, score)=>saveScoreValues(e, id, prp, name, score)}
+                />
+      })
+    :''}
     <td >
       <span className='pull-right'>
       <button  onClick={()=>onRemove(row.id)} className='btn btn-sm btn-round btn-danger '><CIcon  size='lg' name="cil-x"/></button>
@@ -305,6 +404,8 @@ return (
         getAllStudents={()=>getAllStudents()}
         cas={props.cas}
         setShowca={setShowca}
+        setShowbh={setShowbh}
+        setShowsk={setShowsk}
       />
     </CCardHeader>
    <CCardBody className='table-responsive'>
@@ -313,19 +414,35 @@ return (
             <tr>
             <th className="text-center"><CIcon name="cil-people" /></th>
             <th>Students</th>
-            {
+            { itemz === 1 ?
               Object.keys(castore).map((prp, inds)=>{
                 return <th key={inds}>
                   {castore[prp].name}
                   <CInput
                     size="lg"
-                    style={{width:'100px', textAlign:'center', fontWeight:'bolder'}}
+                    style={{width:'150px', textAlign:'center', fontWeight:'bolder'}}
                     value={castore[prp].score}
                     onChange={(e)=>setScoreValues(e, prp, castore[prp].name, castore[prp].score)}
                     onMouseOut={(e)=>saveScoreValues(e, prp, castore[prp].name, castore[prp].score)}
                   />
                 </th>
-              })
+              }):''
+            }
+            { itemz === 2 ?
+              Object.keys(bhstore).map((prp, inds)=>{
+                return <th key={inds} style={{minWidth:'200px'}}>
+                  {bhstore[prp].name}
+                  
+                </th>
+              }):''
+            }
+            { itemz === 3 ?
+              Object.keys(skstore).map((prp, inds)=>{
+                return <th key={inds} style={{minWidth:'200px'}}>
+                  {skstore[prp].name}
+                  
+                </th>
+              }):''
             }
             <th>Remove</th>
             </tr>

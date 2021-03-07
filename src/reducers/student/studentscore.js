@@ -102,7 +102,7 @@ export default function(state = initialState, action){
                     d = [...d, ele];
                 }
             })
-            localStorage.setItem('studentscore', JSON.stringify(d));
+            //localStorage.setItem('studentscore', JSON.stringify(d));
             return {
                 ...state,
                 studentscores: d,
@@ -110,7 +110,7 @@ export default function(state = initialState, action){
             }; 
         case STUDENTSCORE_ACTIVATE_SUCCESS:
             let ac = changeState(state.studentscores, action.payload);
-            localStorage.setItem('studentscore', JSON.stringify(ac));
+            //localStorage.setItem('studentscore', JSON.stringify(ac));
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -128,7 +128,7 @@ export default function(state = initialState, action){
             const findInd = state.studentscores.findIndex(cat => cat.id == action.payload.id);
             let newState = [...state.studentscores];
             newState[findInd] = action.payload;
-            localStorage.setItem('studentscore', JSON.stringify(newState));
+            //localStorage.setItem('studentscore', JSON.stringify(newState));
             return {
                 ...state,
                 ...action.payload,

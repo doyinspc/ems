@@ -539,13 +539,15 @@ export const controls = {
           icon:'/icons/grade.png',
           links:'/grade',
           description:'Setup grading system for report',
-          submenu:{
-            id:3,
-            name:'GRADING',
+          submenu:[
+            {
+            id:1,
+            name:'GRADE',
             icon:'/icons/grade.png',
-            links:'/calendar',
+            links:'/gradeunit',
+            description:'Add & modify grades',
             submenu:[]
-          }
+          },]
         },
         {
           id:14,

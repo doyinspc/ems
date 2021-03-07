@@ -56,27 +56,44 @@ const Dashboards= (props) => {
     
    
    let data = props.summary && Array.isArray(props.summary) ? props.summary.filter(rw=>rw.id !== null):[];
+   console.log(data)
    let feearray = {};
    let feesarray = [];
    let payarray = {};
+   let balarray = {};
+   let balsarray = {};
    let namearray = {};
    let sumpop = [];
    let sumfee = [];
    let sumpay = [];
+   let sumbal = [];
+   let sumbals = [];
    data.forEach(element => {
       
        let nm = element.name;
        let pop = parseInt(element.nums);
-       let pay = parseFloat(element.pay) > 0 ? parseFloat(element.pay) : 0;
-       
-       if(parseInt(element.grp) > 0)
-       {
-         feearray[element.id] =  pay;
-         sumfee.push(pay)
-       }else{
-         payarray[element.id] =  pay;
-         sumpay.push(pay)
-       }
+       let pay = parseFloat(element.pay) >= 0 ? parseFloat(element.pay) : 0;
+       let fee = parseFloat(element.fee) >= 0 ? parseFloat(element.fee) : 0;
+       let bal = parseFloat(element.bal) >= 0 ? parseFloat(element.bal) : 0;
+       let bals = parseFloat(element.bals) >= 0 ? parseFloat(element.bals) : 0;
+
+       feearray[element.id] =  fee;
+       payarray[element.id] =  pay;
+       balarray[element.id] =  bal;
+       balsarray[element.id] = bals;
+
+       sumfee.push(fee)
+       sumpay.push(pay)
+       sumbal.push(bal)
+       sumbals.push(bals)
+      //  if(parseInt(element.grp) > 0)
+      //  {
+      //    feearray[element.id] =  pay;
+      //    sumfee.push(pay)
+      //  }else{
+      //    payarray[element.id] =  pay;
+      //    sumpay.push(pay)
+      //  }
 
        if(Object.keys(namearray).includes(element.id))
        {
@@ -91,13 +108,19 @@ const Dashboards= (props) => {
        let arr = {}
        let fee = feearray[element];
        let pay = payarray[element];
-       let money = parseFloat(pay) > 0  && parseFloat(fee) > 0 ? (parseFloat(pay)/parseFloat(fee)) * 100 : 0;
+       let bal = balarray[element];
+       let bals = balsarray[element];
+       let payz = parseFloat(payarray[element]) - parseFloat(balsarray[element]);
+       let money = parseFloat(pay) > 0  && parseFloat(fee) > 0 ? (parseFloat(payz)/parseFloat(fee)) * 100 : 0;
 
         arr['name'] = namearray[element];
         
         arr['fee'] = fee;
         arr['pay'] = pay;
+        arr['bal'] = bal;
+        arr['bals'] = bals;
         arr['pop'] = fee - pay;
+        console.log(bals)
         arr['money'] = money;
 
         feesarray.push(arr)

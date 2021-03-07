@@ -32,6 +32,8 @@ let {
 } = props.admission || {}
   return (
     <div className="m-0 p-0 container-fluid" style={{margin:'0px', padding:'0px', height:'859px'}}>
+        <br/>
+        <br/>
         <div style={{marginLeft:'auto', marginRight:'auto', marginBottom:'5px', backgroundColor:'white', height:'859px'}}>
                 <CContainer style={{height:'859px'}}>
                           <CRow xs={12} style={{backgroundColor:'white'}} >

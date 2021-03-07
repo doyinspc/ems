@@ -59,7 +59,7 @@ const Expenseunit = (props) => {
       }else
       {
         //INSERT
-        fd.append('schoolid', props.user.activeschool.id);
+        fd.append('expenseid', props.pid);
         fd.append('cat', 'insert');
         props.registerExpenseunit(fd)
       }
@@ -98,22 +98,11 @@ const Expenseunit = (props) => {
                   name="namez"
                   value={namez}
                   onChange={(e)=>setNamez(e.target.value)}
-                  placeholder="West Africa Examination Council" 
+                  placeholder="Purchase Books" 
                 />
               <CFormText className="help-block">Please enter expenseunit name</CFormText>
             </CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="nf-abbrv">Abbrv </CLabel>
-              <CInput 
-                  type="text" 
-                  id="nf-abbrv" 
-                  name="abbrv"
-                  value={abbrv}
-                  onChange={(e)=>setAbbrv(e.target.value)}
-                  placeholder="WAEC" 
-                />
-              <CFormText className="help-block">Please enter abbrv (max 6 characters)</CFormText>
-            </CFormGroup>
+            
           </CForm>
         </CCardBody>
         <CCardFooter>
