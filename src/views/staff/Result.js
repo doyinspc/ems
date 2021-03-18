@@ -1,52 +1,60 @@
 import React, { useEffect, useState }  from 'react'
 import { connect } from 'react-redux'
-import { useHistory} from 'react-router-dom'
-import {
-    CRow,
-    CCol,
-    CCardHeader,
-    CFormGroup,
-    CSelect,
-    CNav,
-    CNavLink,
-    CNavItem,
-    CTabContent,
-    CTabPane,
-    CCard,
-    CCardBody,
-    CTabs,
-    CButton,
-    CWidgetIcon,
-    CCardFooter,
-    CLink
-  } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import { useHistory, useLocation} from 'react-router-dom'
 
-import ScoreReportTable from './ScoreReportTable';
-import StudentReportTable from './StudentReportTable';
+
+import ScoreReportTable from './../student/ScoreReportTable';
+import StudentReportTable from './../student/StudentReportTable1';
 import {getReports} from './../../actions/setting/report';
 import {getCas} from './../../actions/setting/ca';
 import {getStudentscores} from './../../actions/student/studentscore';
 
 const StudentReportList = (props) => {
-    let history = useHistory();
 
-    //PASS DATA FROM PARENT PAGE
-    let studentids = props.data1;
-    let students = props.data;
-    let termid = props.term;
-    let sessionid = props.session;
-    let classteacher = props.classteacher;
-    let clasz = props.clasz;
-    let claszparent = props.claszparent;
-    let activeterm = props.activeterm;
-    let staffid = props.user.mid;
-    console.log(sessionid)
-
+    let location = useLocation()
+    let history = useHistory()
+    
+    
     //STORE DATA IN STATES
     const [repid, setrepid] = useState(0)
     const [active, setActive] = useState(0)
+    const [report, setreport] = useState(0)
+    const [studentids, setstudentids] = useState('')
+    const [students, setstudents] = useState([])
+    const [termid, settermid] = useState(null)
+    const [sessionid, setsessionid] = useState(null)
+    const [classteacher, setclassteacher] = useState(true)
+    const [clasz, setclasz] = useState({})
+    const [claszparent, setclaszparent] = useState(null)
+    const [activeterm, setactiveterm] = useState({})
+    const [staffid, setstaffid] = useState(null)
+    const [cass, setcass] = useState([])
+    if(location.state !== undefined && location.state !== null & Array.isArray(Object.keys(location.state)))
+    {
+        //console.log(Object.keys(location.state))
+        localStorage.setItem('reporters', JSON.stringify(location.state))
+    }else{
+       // console.log(Object.keys(location.state))
+    }
 
+    useEffect(() => {
+    //PASS DATA FROM PARENT PAGE
+        let loca = JSON.parse(localStorage.getItem('reporters'))
+        let report = loca.report; setreport(report);
+        let studentids = loca.studentids; setstudentids(studentids);
+        let students = loca.students; setstudents(students);
+        let termid = loca.term; settermid(termid);
+        let sessionid = loca.sessionid; setsessionid(sessionid);
+        let classteacher = loca.classteacher; setclassteacher(classteacher);
+        let clasz = loca.clasz; setclasz(clasz);
+        let claszparent = loca.claszparent; setclaszparent(claszparent);
+        let activeterm = loca.activeterm; setactiveterm(activeterm);
+        let staffid = loca.staffid;setstaffid(staffid);
+        let cas = loca.cas;setcass(cas);
+
+    }, [location])
+    
+    
     
     //GET DATA NEED FOR THIS PAGE
     //ALL REPORTS FOR THE SESSION
@@ -108,7 +116,6 @@ const StudentReportList = (props) => {
           props.getStudentscores(params);
         }
     }, [repid, studentids, claszparent, clasz])
-
     
     let studentscorearray = props.studentscores && Array.isArray(props.studentscores[0]) ? props.studentscores[0] : [];
     let arr = {};
@@ -272,7 +279,7 @@ const StudentReportList = (props) => {
              student_class_position_store[ele.studentid] = frr;        
          
      })
- 
+
      //ARRANGE CLASS POSITION
      let student_ca_score = props.studentscores && Array.isArray(props.studentscores[8]) ? props.studentscores[8] : [];
      let student_ca_score_store = {}
@@ -305,16 +312,15 @@ const StudentReportList = (props) => {
          
      })
  
-
     let reportarray = props.reports && Array.isArray(props.reports) ? props.reports : [];
         let report_array = reportarray.filter(rw=>rw !== null).map((rw, ind) =>{
             return <option key={ind} value={rw.id}>{rw.title}</option>
     })
 
         //SET ASSESSMENT
-        let cas = Array.isArray(props.cas) ? props.cas : [];
+        let cas = Array.isArray(cass) ? cass : [];
         let ca_array = {};
-        let ca_score = {};
+        let ca_score= {};
         let ca1_array = {};
         let ca2_array = {};
         let caunit_array = {};
@@ -364,112 +370,45 @@ const StudentReportList = (props) => {
             }
         });
 
-
         let theadm = Object.keys(ca_array).map((prop, ind)=>{
-                    return <th key={ind} colSpan={caunit_array[prop].length + 1}>{ca_array[prop]}</th>
+                    return <th key={ind} >{ca_array[prop]}<br/>{ca_score[prop]}</th>
         })
-        let theadm1 = Object.keys(ca_array).map((prop, ind)=>{
-            return <>{Object.keys(caunit_array[prop]).map((pro, inds)=>{
-                return <th key={inds}>{caunit_array[prop][pro].name}<br/>{caunit_array[prop][pro].score}</th>
-                })}
-                <th >{ca_score[prop]}</th></>
-            })
-        
-       let SUBStopic = Object.keys(allsubjects).filter(rw=>allsubjects[rw] !== undefined && allsubjects[rw].length > 0).map((sub, idx)=>{
-                return <CNavItem key={idx}>
-                <CNavLink>
-                {allsubjects[sub]}
-                { active === idx }
-                </CNavLink>
-            </CNavItem>
-        })
-
-       let SUBS = Object.keys(allsubjects).map((sub, idx)=>{
-           return <ScoreReportTable 
-                key={idx}
-                subjectid={sub}
-                subjectname={allsubjects[sub]}
-                theadm={theadm}
-                theadm1={theadm1}
-                data={students}
-                ca_array={ca_array}
-                ca_score={ca_score}
-                caunit_array={caunit_array}
-                arr={arr[sub]}
-                classparent_subject_average={classparent_subject_average[sub]}
-                class_subject_average={class_subject_average[sub]}
-                student_classparent_subject_position_store={student_classparent_subject_position_store}
-                student_class_subject_position_store={student_class_subject_position_store}
-                student_classparent_position_store={student_classparent_position_store}
-                student_class_position_store={student_class_position_store}
-                student_ca_score_store={student_ca_score_store}
-           />
-       })
-
+             
+       let STUDENTZ = students.map((sub, idx)=>{
+        return <StudentReportTable 
+             key={idx}
+             studentid={sub.id}
+             studentids={sub.ids}
+             ssessionid={sessionid}
+             report={report}
+             studentname={sub}
+             theadm={theadm}
+             data={allsubjects}
+             ca_array={ca_array}
+             ca_score={ca_score}
+             caunit_array={caunit_array}
+             arr={srr[sub.id]}
+             classparent_subject_average={classparent_subject_average}
+             class_subject_average={class_subject_average}
+             student_classparent_subject_position_store={student_classparent_subject_position_store[sub.id]}
+             student_class_subject_position_store={student_class_subject_position_store[sub.id]}
+             student_classparent_position_store={student_classparent_position_store[sub.id]}
+             student_class_position_store={student_class_position_store[sub.id]}
+             student_ca_score_store={student_ca_score_store[sub.id]}
+        />
+    })
 
   
  return (
    <>
-   
-   <CRow  xs={12}  className="d-print-none">
-        <CCol xs={12} md={4}>
-            <CFormGroup>
-                  <CCol xs="12" md="12">
-                  <CSelect
-                    className="my-auto"
-                   custom
-                   value={repid}
-                   type='search'
-                   onChange={(e)=>setrepid(e.target.value)}
-                   placeholder="Select a Report"
-                >
-                  <option>Select an action</option>
-                  {report_array}
-                  </CSelect>
-                  </CCol>
-            </CFormGroup>
-            </CCol>       
-        <CCol xs={12} md={4}>
-            <CCol xs={12}>
-                <CButton 
-                    color="info" 
-                    block
-                >Submit </CButton>
-            </CCol>
-            </CCol>
-        <CCol xs={12} md={4}>
-            <CButton 
-            onClick={()=>history.push({
-                pathname:`/results/${repid}/1`,
-                state:{
-                    report: parseInt(repid) > 0 ? reportarray.filter(rw=>parseInt(rw.id) === parseInt(repid))[0] : {},
-                    studentids : props.data1,
-                    students : props.data,
-                    sessionid : sessionid,
-                    termid : props.term,
-                    sessionid : props.session,
-                    classteacher : props.classteacher,
-                    clasz : props.clasz,
-                    claszparent : props.claszparent,
-                    activeterm : props.activeterm,
-                    staffid : props.user.mid,
-                    cas:props.cas
-                }
-            })}
-                color="success" 
-                block
-                >Report Card </CButton>
-        </CCol>
- </CRow>
-        <CTabs activeTab={active} onActiveTabChange={idx => setActive(idx)}>
-        <CNav variant="tabs" className="d-print-none">
-            {SUBStopic}
-        </CNav>
-        <CTabContent>
-            {SUBS} 
-        </CTabContent>
-        </CTabs>
-        
+   <div className="container" id="maincont1" style={{margin:'auto', padding:'auto'}} >
+        <div 
+            className="printpage" 
+            style={{marginLeft:'auto', marginRight:'auto'}}
+          >
+                {STUDENTZ}               
+        </div>   
+    </div>  
    </>
   )
 }

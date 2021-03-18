@@ -277,9 +277,43 @@ const StudentReportList = (props) => {
             return <option key={ind} value={rw.id}>{rw.title}</option>
     })
 
+    //ARRANGE CLASS POSITION
+    let student_ca_score = props.studentscores && Array.isArray(props.studentscores[8]) ? props.studentscores[8] : [];
+    let student_ca_score_store = {}
+    student_ca_score.forEach(ele=>{
+      
+       if(Object.keys(student_ca_score_store).includes(ele.studentid))
+       {
+           if(Object.keys(student_ca_score_store[ele.studentid]).includes(ele.subjectid))
+           {
+               if(Object.keys(student_ca_score_store[ele.studentid][ele.subjectid]).includes(ele.caid))
+               {
+
+               }else
+               {
+                   student_ca_score_store[ele.studentid][ele.subjectid][ele.caid] = ele.score;
+               }
+
+           }else
+           {
+               student_ca_score_store[ele.studentid][ele.subjectid] = {};
+               student_ca_score_store[ele.studentid][ele.subjectid][ele.caid] = ele.score;
+           }
+
+       }else
+       {
+           student_ca_score_store[ele.studentid] = {};
+           student_ca_score_store[ele.studentid][ele.subjectid] = {};
+           student_ca_score_store[ele.studentid][ele.subjectid][ele.caid] = ele.score;
+       }        
+        
+    })
+
+
         //SET ASSESSMENT
         let cas = Array.isArray(props.cas) ?props.cas : [];
         let ca_array = {};
+        let ca_score = {};
         let ca1_array = {};
         let ca2_array = {};
         let caunit_array = {};
@@ -290,6 +324,7 @@ const StudentReportList = (props) => {
                //ca_array[ele.sid] = ele.cname;
             }else{
                ca_array[ele.sid] = ele.caabbrv;
+               ca_score[ele.sid] = ele.score;
             }
           }else if(parseInt(ele.typeid) === 2){
            if(Object.keys(ca_array).includes(ele.sid))
@@ -336,17 +371,11 @@ const StudentReportList = (props) => {
             return <>{Object.keys(caunit_array[prop]).map((pro, inds)=>{
                 return <th key={inds}>{caunit_array[prop][pro].name}<br/>{caunit_array[prop][pro].score}</th>
                 })}
-                <th >10</th></>
+                <th >{ca_score[prop]}</th></>
             })
-        let theadm2 = Object.keys(ca_array).map((prop, ind)=>{
-            return <>{Object.keys(caunit_array[prop]).map((pro, inds)=>{
-                return <th key={inds}>{caunit_array[prop][pro].name}<br/>{caunit_array[prop][pro].score}</th>
-                })}
-                <th >10</th><th >10</th></>
-            })
+        
 
-
-            let StudStopic = students.map((row, idx)=>{
+        let StudStopic = students.filter(rw=>rw!==null && rw!=="null").map((row, idx)=>{
                 return <CNavItem key={idx}>
                 <CNavLink>
                 {`${row.surname} ${row.firstname} ${row.middlename}`}
@@ -355,33 +384,8 @@ const StudentReportList = (props) => {
               </CNavItem>
           })   
         
-      let SUBStopic = Object.keys(allsubjects).map((sub, idx)=>{
-            return <CNavItem key={idx}>
-            <CNavLink>
-              {allsubjects[sub]}
-              { active === idx }
-            </CNavLink>
-          </CNavItem>
-      })
-
-
-       let SUBS = Object.keys(allsubjects).map((sub, idx)=>{
-           return <ScoreReportTable 
-           key={idx}
-                subjectid={sub}
-                subjectname={allsubjects[sub]}
-                theadm={theadm}
-                theadm1={theadm1}
-                data={students}
-                ca_array={ca_array}
-                caunit_array={caunit_array}
-                arr={arr[sub]}
-           />
-       })
-
-
-       console.log(student_class_position_store)
-       let STUDENTZ = students.map((sub, idx)=>{
+      
+       let STUDENTZ = students.filter(rw=>rw!==null && rw!=="null").map((sub, idx)=>{
         return <StudentReportTable 
              key={idx}
              studentid={sub.id}
@@ -390,6 +394,7 @@ const StudentReportList = (props) => {
              theadm1={theadm1}
              data={allsubjects}
              ca_array={ca_array}
+             ca_score={ca_score}
              caunit_array={caunit_array}
              arr={srr[sub.id]}
              classparent_subject_average={classparent_subject_average}
@@ -398,22 +403,23 @@ const StudentReportList = (props) => {
              student_class_subject_position_store={student_class_subject_position_store[sub.id]}
              student_classparent_position_store={student_classparent_position_store[sub.id]}
              student_class_position_store={student_class_position_store[sub.id]}
+             student_ca_score_store={student_ca_score_store[sub.id]}
         />
     })
   
  return (
    <>
-   <CRow >
-        <CCol xs={12} md={4}>
+   <CRow xs={12} className="d-print-none" >
+        <CCol xs={12} md={4}  className="d-print-none">
             <CFormGroup>
                   <CCol xs="12" md="12">
                   <CSelect
                     className="my-auto"
-                   custom
-                   value={repid}
-                   type='search'
-                   onChange={(e)=>setrepid(e.target.value)}
-                   placeholder="Select a Report"
+                    custom
+                    value={repid}
+                    type='search'
+                    onChange={(e)=>setrepid(e.target.value)}
+                    placeholder="Select a Report"
                 >
                   <option>Select an action</option>
                   {report_array}
@@ -421,7 +427,6 @@ const StudentReportList = (props) => {
                   </CCol>
             </CFormGroup>
             </CCol>
-        
         <CCol xs={12} md={4}>
             <CCol xs={12}>
                 <CButton 
@@ -432,9 +437,9 @@ const StudentReportList = (props) => {
             </CCol>
         <CCol xs={12} md={4}>
         </CCol>
-        </CRow>
+  </CRow>
         <CTabs activeTab={active} onActiveTabChange={idx => setActive(idx)}>
-        <CNav variant="tabs">
+        <CNav variant="tabs" className="d-print-none">
             {StudStopic}
         </CNav>
         <CTabContent>

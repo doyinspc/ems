@@ -1,0 +1,63 @@
+@page { margin: 0 }
+.printpage { margin: 0 }
+.sheet {
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  page-break-after: always;
+}
+
+/** Paper sizes **/
+.printpage .A3               .sheet { width: 297mm; height: 419mm }
+.printpage .A3.landscape     .sheet { width: 420mm; height: 296mm }
+.printpage.A4               .sheet { width: 210mm; height: 296mm }
+.printpage.A4.landscape     .sheet { width: 297mm; height: 209mm }
+.printpage.A5               .sheet { width: 148mm; height: 209mm }
+.printpage.A5.landscape     .sheet { width: 210mm; height: 147mm }
+.printpage.letter           .sheet { width: 216mm; height: 279mm }
+.printpage.letter.landscape .sheet { width: 280mm; height: 215mm }
+.printpage.legal            .sheet { width: 216mm; height: 356mm }
+.printpage.legal.landscape  .sheet { width: 357mm; height: 215mm }
+
+/** Padding area **/
+.sheet.padding-5mm { padding: 5mm }
+.sheet.padding-10mm { padding: 10mm }
+.sheet.padding-15mm { padding: 15mm }
+.sheet.padding-20mm { padding: 20mm }
+.sheet.padding-25mm { padding: 25mm }
+
+/** For screen preview **/
+@media screen {
+  .printpage { background: #e0e0e0 }
+  .sheet {
+    background: white;
+    box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+    margin: 5mm auto;
+  }
+}
+
+/** Fix for Chrome issue #273306 **/
+@media print {
+  .printpage.A3.landscape { width: 420mm }
+  .printpage.A3, .printpage.A4.landscape { width: 297mm }
+  .printpage.A4, .printpage.A5.landscape { width: 210mm }
+  .printpage.A5                    { width: 148mm }
+  .printpage.letter, .printpage.legal    { width: 216mm }
+  .printpage.letter.landscape      { width: 280mm }
+  .printpage.legal.landscape       { width: 357mm }
+  .printpage > h2 {
+        font-size: '170pt';
+  }
+  .printpage.A4{
+      height: 100%;
+  }
+
+  .scales {
+     
+      height: 20mm;
+      border: solid 1px #000;
+      min-width: 100%;
+      background-color: #ccc;
+  }
+}

@@ -208,6 +208,12 @@ export const statussobj = [
         "name":'Absent no reason',
         color:'red',
         colors:'danger'
+    },
+    {
+        "id":6,
+        "name":'Half-day Present in the Morning',
+        color:'yellow',
+        colors:'warning'
     }
   ]
 export const leaves =[

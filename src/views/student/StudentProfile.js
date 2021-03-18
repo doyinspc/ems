@@ -40,7 +40,7 @@ const User = (props) => {
               <CCol xs={1} sm={1} className='m-0 p-0'>
               <div className="c-avatars m-0">
                 <CImg
-                    src={process.env.REACT_APP_SERVER_URL+ photo} 
+                    src={process.env.REACT_APP_SERVER_URL + photo} 
                     className="c-avatar-imgf img-responsive m-0"
                     height='50px'
                     width="45px"

@@ -13,6 +13,7 @@ import {
     CInputGroupText
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
+import { callError, callReg } from '../../../actions/common';
 
 
 
@@ -22,29 +23,42 @@ const ScoreBox = (props) => {
     const [colors, setcolors] = useState('')
     const [bgcolors, setbgcolors] = useState('')
     const [sd_val, setsd_val] = useState(props.sd_val)
+    const [mscore, setmscore] = useState(0)
 
     useEffect(() => {
         setvalue(props.sd_val)
         setsd_val(props.sd_val)
     }, [props.sd_val])
 
-  const saveScore = () =>{
+    useEffect(() => {
+        setmscore(props.score)
+    }, [props.score])
 
-        let fd = new FormData();
-        let val = parseFloat(value) > 0 ? parseFloat(value) / props.score : 0;
-        fd.append('caid', props.caid);
-        fd.append('sessionid', props.sessionid);
-        fd.append('termid', props.termid);
-        fd.append('studentid', props.studentid);
-        fd.append('subjectid', props.subjectid);
-        fd.append('score', val.toString());
-        fd.append('staffid', props.staffid);
-        fd.append('grp', 8);
-        fd.append('cat', 'insertscore');
-        fd.append('table', 'accessstudentscore');
-     
-        props.registerStudentscore(fd);
-     
+  const saveScore = () =>{
+        if(mscore > 0)
+        {
+            if(parseFloat(value) <= mscore){
+                let fd = new FormData();
+                let val = parseFloat(value) > 0 ? parseFloat(value) / mscore : 0;
+                fd.append('caid', props.caid);
+                fd.append('sessionid', props.sessionid);
+                fd.append('termid', props.termid);
+                fd.append('studentid', props.studentid);
+                fd.append('subjectid', props.subjectid);
+                fd.append('score', val.toString());
+                fd.append('staffid', props.staffid);
+                fd.append('grp', 8);
+                fd.append('cat', 'insertscore');
+                fd.append('table', 'accessstudentscore');
+            
+                props.registerStudentscore(fd);
+            }else{
+                callError('The imput value is more than the maximum score')
+            }
+        }else{
+            callError('Please input a max score value')
+        }
+    
 } 
 
 const deleteScore = (id) =>{
@@ -62,7 +76,7 @@ const deleteScore = (id) =>{
 } 
 
 const setvalues = (id) =>{
-    if(parseFloat(id) > parseFloat(props.score))
+    if(parseFloat(id) > parseFloat(mscore))
     {
         setvalue('')
     }else{
@@ -70,6 +84,7 @@ const setvalues = (id) =>{
     }
     
 }
+
 
 return (
     <>
@@ -94,13 +109,15 @@ return (
             { parseFloat(value)  === parseFloat(sd_val)  ?
             <CInput
                 size='lg'
+                type="number"
                 style={{ textAlign:'center', fontWeight:'bolder', padding:'0px'}}
-                defaultValue={sd_val * props.score}
+                value={sd_val * mscore}
                 onChange={(e)=>setvalues(e.target.value)}  
             />
                :
             <CInput
                size='lg'
+               type="number"
                style={{ textAlign:'center', fontWeight:'bolder', padding:'0px'}}
                value={value ? value : ''}
                onChange={(e)=>setvalues(e.target.value)}  

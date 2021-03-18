@@ -1,5 +1,6 @@
 import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
+import moment from 'moment'
 import {getStudents, getStudent, registerStudent, updateStudent, deleteStudent} from './../../actions/student/student';
 import { useHistory, useLocation } from 'react-router-dom'
 import {
@@ -37,7 +38,7 @@ const Students = (props) => {
           {
               'schoolid':props.user.activeschool.id
           }),
-          cat:'select',
+          cat:'selected',
           table:'students',
           narration:'get all students'
       }
@@ -57,14 +58,8 @@ const Students = (props) => {
         <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
     </td>
     <td>
-            <strong><a href={`mailto:${row.phone1}`}>{row.phone1}</a> <a href={`mailto:${row.phone2}`}>{row.phone2}</a></strong>
-    </td>
-    <td>
-        <strong><a href={`mailto:${row.email}`}>{row.email}</a></strong> 
-    </td>
-    
-    <td>
-      <div className="text-muted " style={{textTransform:'capitalize'}}>{row.address}</div>
+            {row.g1_name.length > 0 ? <><strong>{row.g1_name} (<i>{row.g1_rel}</i>) <i className="text-info" style={{textTransform:'capitalize'}}>{row.g1_place}</i></strong>{' '}<a href={`mailto:${row.g1_phone1}`}>{row.g1_phone1}</a> <a href={`mailto:${row.g1_phone2}`}>{row.g1_phone2}</a><a href={`mailto:${row.g1_email}`}>{row.g1_email}</a>{' '}{row.g1_address}</>:''}<br/>
+            {row.g2_name.length > 0 ? <><strong>{row.g2_name} (<i>{row.g2_rel}</i>) <i className="text-info" style={{textTransform:'capitalize'}}>{row.g1_place}</i></strong>{' '}<a href={`mailto:${row.g2_phone1}`}>{row.g2_phone1}</a> <a href={`mailto:${row.g2_phone2}`}>{row.g2_phone2}</a><a href={`mailto:${row.g2_email}`}>{row.g2_email}</a>{' '}{row.g2_address}</>:''}  
     </td>
   </tr>
 })
@@ -79,32 +74,25 @@ let acct = data.map((row, ind)=>{
         <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
     </td>
     <td>
-        {props.tin}
-    </td>
-    <td>
-        {props.nin}
-    </td>
-        {props.pen}
-    <td>
-      
+        
     </td>
   </tr>
 })
 
 
-let pht = data.map((row, ind)=>{
+  let pht = data.map((row, ind)=>{
     return <CCard key={ind} className='mx-3 ' style={{width:'140px', height:'200px'}}>
         <CCardHeader className='m-0 text-center'>
         <b style={{textTransform:'capitalize'}}>{row.admission_no}</b>  
         </CCardHeader>
         <CCardBody className='m-0 p-0 ' style={{height:'160px'}}>
         <img 
-            src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ row.photo1} 
+            src={process.env.REACT_APP_SERVER_URL+ row.photo} 
             className="m-0 p-0" 
             width='100%'
             height='160px'
             alt={row.admission_no} 
-            onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.jpg'} }
+            onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL+ '/avatars/1.jpg'} }
         />
         </CCardBody>
         <div className='m-2' style={{backgroundColor:'rgba(0,0,0,0)'}}>
@@ -113,16 +101,16 @@ let pht = data.map((row, ind)=>{
     </CCard>
 })
 
-   let tabl = data.map((row, ind)=>{
+  let tabl = data.map((row, ind)=>{
         return <tr key={ind}
         onClick={() => history.push(`/students/${row.id}`)}>
         <td className="text-center">
           <div className="c-avatar">
             <img 
-            src={process.env.REACT_APP_SERVER_URL+ '/passport/'+ row.photo1} 
+            src={process.env.REACT_APP_SERVER_URL+ row.photo} 
             className="c-avatar-img" 
             alt={row.admission_no} 
-            onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.jpg'} }
+            onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.jpg'} }
             />
             <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
           </div>
@@ -130,17 +118,17 @@ let pht = data.map((row, ind)=>{
         <td>
    <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
                 <div className="small text-muted">
-                <span>{row.admission_no}</span>
+                <span>{row.abbrv}{row.admission_no}</span>
             </div>
         </td>
         
         <td>
-            <div className="small text-muted">
-                <span>Date of Birth</span>: <strong>{row.dob}</strong>
-            </div>
-            <div className="small text-muted">
-                <span>Date of Adm.</span>: <strong>{row.doe}</strong> 
-            </div>
+        <div className="small text-muted">
+            <span>Date of Birth</span>: <strong>{moment(row.dob).format('Do MMM, YYYY')}</strong>
+        </div>
+        <div className="small text-muted">
+            <span>Age (Years)</span>: <strong>{moment().diff(row.dob, 'years')}</strong> 
+        </div>
         </td>
         <td>
           <div className="small text-muted " style={{textTransform:'capitalize'}}>{row.soo}</div>
@@ -152,7 +140,6 @@ let pht = data.map((row, ind)=>{
       </tr>
     });
  
-
   let genderFemale = data.filter(rw =>rw.gender === 'Female');
   let genderMale = data.filter(rw =>rw.gender === 'Male');
 
@@ -211,7 +198,7 @@ let pht = data.map((row, ind)=>{
           <CRow>
             <CCol sm="5">
               <h4 id="traffic" className="card-title mb-0">Students List</h4>
-              <div className="small text-muted">Academic Calendar</div>
+  <div className="small text-muted">{props.user.activeschool.namw}</div>
             </CCol>
             <CCol sm="7" className="d-md-block">
               <CButton 
@@ -229,43 +216,48 @@ let pht = data.map((row, ind)=>{
               <CNav variant="tabs">
               <CNavItem>
                   <CNavLink>
-                    <CIcon name="cil-chart-pie"/>
-                    { active === 0 && ' Dashboard'}
+                    <CIcon name="cil-calculator"/>
+                    { active === 0 && ' Bio-data'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
-                    <CIcon name="cil-calculator" />
-                    { active === 1 && ' Biodata'}
+                    <CIcon name="cil-chart-pie" />
+                    { active === 1 && ' Chart'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-map" />
-                    { active === 2 && ' Contact'}
+                    { active === 2 && ' Next Of Kin'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
-                    <CIcon name="cil-pin"/>
-                    { active === 3 && ' Finance'}
-                  </CNavLink>
-                </CNavItem>
-                <CNavItem>
-                  <CNavLink>
-                    <CIcon name="cil-user"/>
-                    { active === 4 && ' Next of Kin'}
-                  </CNavLink>
-                </CNavItem>
-                <CNavItem>
-                  <CNavLink>
-                    <CIcon name="cil-user"/>
-                    { active === 4 && ' Next of Kin'}
+                    <CIcon name="cil-image"/>
+                    { active === 3 && ' Gallery'}
                   </CNavLink>
                 </CNavItem>
                
+               
               </CNav>
               <CTabContent>
+              <CTabPane>
+                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
+                <thead className="thead-light">
+                  <tr>
+                    <th className="text-center"><CIcon name="cil-people" /></th>
+                    <th>Student</th>
+                    <th className="text-center">Dates</th>
+                    <th>Origin</th>
+                    <th>Gender</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tabl}
+                </tbody>
+                </table>
+                </CTabPane>
               <CTabPane>
                 <br/>
                     <CRow className='mt-20 py-90'>
@@ -452,32 +444,14 @@ let pht = data.map((row, ind)=>{
     
             
             </CTabPane>
-                <CTabPane>
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center"><CIcon name="cil-people" /></th>
-                    <th>Student</th>
-                    <th className="text-center">Contacts</th>
-                    <th className="text-center">Dates</th>
-                    <th>Origin</th>
-                    <th>Gender</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tabl}
-                </tbody>
-                </table>
-                </CTabPane>
+               
                 <CTabPane>
                 <table className="table table-hover table-outline mb-0 d-none d-sm-table">
                 <thead className="thead-light">
                   <tr>
                     <th className="text-center">Student ID</th>
                     <th>Fullname</th>
-                    <th className="text-center">Phone</th>
-                    <th className="text-center">Email</th>
-                    <th>Address</th>
+                    <th className="text-center">Guardian/Contact</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -485,23 +459,7 @@ let pht = data.map((row, ind)=>{
                 </tbody>
                 </table>
                 </CTabPane>
-                <CTabPane>
-                <table className="table table-hover table-outline mb-0 d-none d-sm-table">
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center">Student ID</th>
-                    <th>Student</th>
-                    <th className="text-center">NIN</th>
-                    <th className="text-center">TIN</th>
-                    <th className="text-center">PENSION</th>
-                    <th className="text-center">ACCOUNT</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {acct}
-                </tbody>
-                </table>
-                </CTabPane>
+               
                 <CTabPane>
                     <CRow className='d-flex flex-wrap justify-content-center'>
                         {pht}

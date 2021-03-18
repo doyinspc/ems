@@ -123,10 +123,19 @@ const Report = (props) => {
           narration:'get sessions'
       }
         props.getClaszs(params2)
+
+        let params3 = {
+          data:JSON.stringify({
+            'is_active': 0
+          }),
+          cat:'selected',
+          table:'grades',
+          narration:'get grades'
+      }
+        props.getGrades(params3)
     }
     
   }, [props.user.activeschool])
-
 
   useEffect(() => {
     let params1 = {
@@ -401,7 +410,7 @@ let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? pro
                       onChange={(e)=>setsessionid(e.target.value)}
                        
                     >
-                      {id && parseInt(id) > 0 ? <option value={props.data.sessionid}>{props.data.sessionname}nn</option>:<option></option>}
+                      {id && parseInt(id) > 0 ? <option value={data.sessionid}>{data.sessionname}nn</option>:<option></option>}
                       {session_array}
                   </CSelect>
                   <CFormText className="help-block">Select the session</CFormText>
@@ -416,7 +425,7 @@ let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? pro
                       onChange={(e)=>settermid(e.target.value)}
                        
                     >
-                      {id && parseInt(id) > 0 ? <option value={props.data.termid}>{props.data.termname}</option>:<option></option>}
+                      {id && parseInt(id) > 0 ? <option value={data.termid}>{data.termname}</option>:<option></option>}
                       {term_array}
                   </CSelect>
                   <CFormText className="help-block">Select the Term</CFormText>
@@ -457,7 +466,7 @@ let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? pro
           </CRow>
         </CCardBody>
         <CCardFooter>
-        {id > 0 ?
+          {id > 0 ?
           <CButton type="reset" onClick={(prev)=>setpage(prev=>prev - 1)} size="sm" color="danger"><CIcon name="cil-ban" /> Prev..</CButton>:""}
           <CButton type="button" onClick={handleSubmitCa} size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>{' '}
           {id > 0 ?
@@ -486,7 +495,7 @@ let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? pro
     <CCard>
         <CCardBody>
           <CRow><CCol><h5>Select the grading system to you use.</h5></CCol></CRow>
-        <CRow>
+            <CRow>
             {grade_array}
             </CRow>
         </CCardBody>

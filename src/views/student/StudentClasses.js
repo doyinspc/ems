@@ -49,6 +49,7 @@ import StudentReportList from './StudentReportList';
 import StudentReportList1 from './StudentReportList1';
 import StudentClassTeacher from './StudentClassTeacher';
 import { getClassstaffs  } from './../../actions/setting/classstaff';
+import { callError } from '../../actions/common';
 
 const Studentclasss = (props) => {
     const par = useParams()
@@ -186,6 +187,7 @@ const Studentclasss = (props) => {
    let subject = [];
    const loadStudent = () =>{
   
+    if(parseInt(studentdata.id) > 0 && parseInt(clasz) > 0){
          let fd = new FormData();
          fd.append('itemid', clasz);
          fd.append('itemid1', 0);
@@ -200,6 +202,10 @@ const Studentclasss = (props) => {
         fd.append('termid', term);
         fd.append('cat', 'inserts');
         props.registerStudentclass(fd)
+    }else
+    {
+      callError('No Student of Class selected')
+    }
           
    }
    const placeStudentSubject = (subject) =>{
@@ -290,8 +296,8 @@ let redirectAttendance = (clasz) =>{
 }
   return (
     <>
-    <CRow xs={12}>
-      <CCol  xs="12" md="12" >
+    <CRow xs={12}  className="d-print-none">
+      <CCol  xs="12" md="12"   className="d-print-none">
         {active === 0 ?
       <CCard xs="12" md="12">
         <CCardHeader>
@@ -393,7 +399,7 @@ let redirectAttendance = (clasz) =>{
       </CCard>     
       :""}</CCol>
     </CRow>
-    <CRow>
+    <CRow >
     <CCol xs="12" md="12" className="mb-4">
         <CCard>
           <CCardHeader>
@@ -420,7 +426,7 @@ let redirectAttendance = (clasz) =>{
           </CCardHeader>
           <CCardBody>
             <CTabs activeTab={active} onActiveTabChange={idx => setActive(idx)}>
-              <CNav variant="tabs">
+              <CNav  className="d-print-none" variant="tabs">
               <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-settings"/>
@@ -460,25 +466,25 @@ let redirectAttendance = (clasz) =>{
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-user"/>
-                    { active === 6 && ' Scores'}
+                    { active === 6 && ' Subject Teachers'}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
-                    <CIcon name="cil-user"/>
-                    { active === 7 && ' Subject Teachers'}
-                  </CNavLink>
-                </CNavItem>
-                <CNavItem>
-                  <CNavLink>
-                    <CIcon name="cil-user"/>
-                    { active === 8 && ' report'}
+                    <CIcon name="cil-notes"/>
+                    { active === 7 && ' Subject Report '}
                   </CNavLink>
                 </CNavItem>
                 <CNavItem>
                   <CNavLink>
                     <CIcon name="cil-badge"/>
-                    { active === 9 && ' report'}
+                    { active === 8 && ' Student Report'}
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    <CIcon name="cil-spreadsheet"/>
+                    { active === 9 && ' Spreadsheet'}
                   </CNavLink>
                 </CNavItem>
               </CNav>
@@ -536,19 +542,6 @@ let redirectAttendance = (clasz) =>{
                     />
                 </CTabPane>
                 <CTabPane>
-                    <StudentScoreList 
-                      term={term}
-                      clasz={clasz}
-                      session={session}
-                      dateactive={dates} 
-                      data1={data1}
-                      data={data}
-                      activeterm={activeterm}
-                      classteacher={classteacher}
-                      claszparentid={claszparent} 
-                    />
-                </CTabPane>
-                <CTabPane>
                     <StudentReportList 
                       term={term}
                       clasz={clasz}
@@ -572,6 +565,19 @@ let redirectAttendance = (clasz) =>{
                       activeterm={activeterm}
                       classteacher={classteacher}
                       claszparent={claszparent} 
+                    />
+                </CTabPane>
+                <CTabPane>
+                    <StudentScoreList 
+                      term={term}
+                      clasz={clasz}
+                      session={session}
+                      dateactive={dates} 
+                      data1={data1}
+                      data={data}
+                      activeterm={activeterm}
+                      classteacher={classteacher}
+                      claszparentid={claszparent} 
                     />
                 </CTabPane>
               </CTabContent>

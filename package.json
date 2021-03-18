@@ -14,7 +14,7 @@
       "url": ""
     }
   ],
-  "homepage": "",
+  "homepage": "https://www.skoolq.com/ems/",
   "copyright": "Copyright 2021 StreSERT Int. Ltd",
   "license": "MIT",
   "private": true,
@@ -52,6 +52,7 @@
     "react-dom": "16.13.1",
     "react-player": "^2.9.0",
     "react-rate-component": "^1.0.2",
+    "react-rating-stars-component": "^2.2.0",
     "react-redux": "7.2.0",
     "react-router-dom": "5.2.0",
     "react-select": "^4.0.2",

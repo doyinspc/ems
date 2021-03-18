@@ -15,14 +15,8 @@ const Studentclasss = (props) => {
         <div>{`${row.surname} ${row.firstname} ${row.middlename}`}</div>
     </td>
     <td>
-            <strong><a href={`mailto:${row.phone1}`}>{row.phone1}</a> <a href={`mailto:${row.phone2}`}>{row.phone2}</a></strong>
-    </td>
-    <td>
-        <strong><a href={`mailto:${row.email}`}>{row.email}</a></strong> 
-    </td>
-    
-    <td>
-      <div className="text-muted " style={{textTransform:'capitalize'}}>{row.address}</div>
+            {row.g1_name.length > 0 ? <><strong>{row.g1_name} (<i>{row.g1_rel}</i>) <i className="text-info" style={{textTransform:'capitalize'}}>{row.g1_place}</i></strong>{' '}<a href={`mailto:${row.g1_phone1}`}>{row.g1_phone1}</a> <a href={`mailto:${row.g1_phone2}`}>{row.g1_phone2}</a><a href={`mailto:${row.g1_email}`}>{row.g1_email}</a>{' '}{row.g1_address}</>:''}<br/>
+            {row.g2_name.length > 0 ? <><strong>{row.g2_name} (<i>{row.g2_rel}</i>) <i className="text-info" style={{textTransform:'capitalize'}}>{row.g1_place}</i></strong>{' '}<a href={`mailto:${row.g2_phone1}`}>{row.g2_phone1}</a> <a href={`mailto:${row.g2_phone2}`}>{row.g2_phone2}</a><a href={`mailto:${row.g2_email}`}>{row.g2_email}</a>{' '}{row.g2_address}</>:''}  
     </td>
   </tr>
 })

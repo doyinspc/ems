@@ -4,6 +4,7 @@ import catype from "./setting/catype";
 import caunit from "./setting/caunit";
 import clasz from "./setting/clasz";
 import claszunit from "./setting/claszunit";
+import comment from "./setting/comment";
 import grade from "./setting/grade";
 import gradeunit from "./setting/gradeunit";
 import expense from "./setting/expense";
@@ -119,6 +120,7 @@ export default combineReducers({
     penmanagerReducer: penmanager,
     designationReducer: designation,
     jobReducer: job,
+    commentReducer: comment,
     coursematerialReducer: coursematerial,
     weekReducer: week,
     page: page,

@@ -21,8 +21,7 @@ const Staffsubject = (props) => {
 
   const toggle = () => {
     setCollapse(!collapse)
-  }
-  
+  } 
   useEffect(() => {
     let params = {
         data:JSON.stringify(
@@ -40,7 +39,6 @@ const Staffsubject = (props) => {
     
   }, [props.pid])
 
-  
   const onEdit = (dt) =>{
       setId(dt.id);
       setDts(dt);

@@ -3,13 +3,7 @@ import SearchDashboard3 from '../SearchDashboard3'
 import { 
     CCol, 
     CContainer, 
-    CRow,
-    CButtonGroup,
-    CDropdown ,
-    CDropdownItem,
-    CDropdownMenu,
-    CWidgetDropdown,
-    CDropdownToggle
+    CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 

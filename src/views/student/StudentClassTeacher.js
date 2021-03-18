@@ -20,6 +20,7 @@ const Studentclasss = (props) => {
    let termid = props.term;
    let sessionid = props.session;
    let groupid = 2;
+   let classteacher = props.classteacher;
   
    const [id, setId] = useState(null)
    const [staffid, setstaffid] = useState(null)
@@ -46,14 +47,13 @@ const Studentclasss = (props) => {
   }, [termid, sessionid, claszid])
 
    useEffect(() => {
-   
     if(props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0)
     {
       
      let params = {
       data:JSON.stringify(
       {
-         typeid:props.user.activeschool.typeid,
+          typeid:props.user.activeschool.typeid,
           is_active:0
       }),
       cat:'selected',
@@ -65,7 +65,7 @@ const Studentclasss = (props) => {
      let params1 = {
         data:JSON.stringify(
         {
-            'schoolid':props.user.activeschool.id,
+            schoolid:props.user.activeschool.id,
             is_active:0
         }),
         cat:'selected',
@@ -107,6 +107,7 @@ const Studentclasss = (props) => {
       onEdit(undefined)
     }
   }
+  
 
   let subjectarray = props.subjects && Array.isArray(props.subjects) ? props.subjects : [];
   let subarray = Array.isArray(subjectarray) ? subjectarray.filter(rw=>rw !== null).map((rw, ind) =>{
@@ -119,18 +120,18 @@ const Studentclasss = (props) => {
   })
 
   const onActivate = (rw, num) =>{
+   
     let nu = parseInt(num) === 0 ? 1 : 0;
     let fd = new FormData();
     fd.append('id', rw);
     fd.append('is_active', nu);
     fd.append('cat', 'updates');
-    fd.append('sessionid', props.pid);
+    fd.append('sessionid', sessionid);
     fd.append('table', 'accessstaffclass');
-    fd.append('narration', `activate ande disable class ${nu}`);
+    fd.append('narration', `activate or disable class ${nu}`);
     props.updateStaffsubject(fd);
 
   }
-
   const onEdit = (data) =>{
     if(data !== undefined && parseInt(data.id) > 0)
     {
@@ -147,10 +148,7 @@ const Studentclasss = (props) => {
       setstaffid('');
       setcontact('');
     }
-
   }
-  
-  
 
   const onDelete = (rw) =>{
     
@@ -171,7 +169,6 @@ const Studentclasss = (props) => {
     });
   }
 
-  
 let data = props.staffsubjects && Array.isArray(props.staffsubjects) ? props.staffsubjects.filter(rw =>rw !== null || rw !== undefined) : []
 let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
       return <tr key={ind}>
@@ -190,7 +187,7 @@ let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
                 </CFormGroup> : row.clientname}</td>
                 
                 <td className='text-left'>
-                {parseInt(id) > 0  && parseInt(id) === parseInt(row.id) ? <CFormGroup>
+                {parseInt(id) > 0  && parseInt(id) === parseInt(row.id) && classteacher ? <CFormGroup>
                   <CSelect
                       type="text" 
                       id="nf-subject" 
@@ -223,17 +220,18 @@ let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
                     <a style={{cursor:'pointer'}} className='btn btn-sm' onClick={()=>onEdit({})}>Clear</a>
                    
                     </>
-                </td>:
-                <td className='text-center'>
+                </td>: classteacher ?
+                <td className='text-center'> 
                 <>
-                    <a style={{cursor:'pointer'}} onClick={()=>onActivate(row.id, row.is_active)}><i className={`fa ${parseInt(row.is_active) == 1 ? 'fa-thumbs-down text-danger' : 'fa-thumbs-up text-success'} ml-2 px-2`}></i></a>
+                    <a style={{cursor:'pointer'}} onClick={()=>onActivate(row.id, row.is_active)}><i className={`fa ${parseInt(row.is_active) == 1 ? 'fa-lock text-danger' : 'fa-unlock text-success'} ml-2 px-2`}></i></a>
                     <a style={{cursor:'pointer'}} onClick={()=>onEdit(row)}><i className='fa fa-edit ml-2 px-2'></i></a>
                     <a style={{cursor:'pointer'}} onClick={()=>onDelete(row)}><i className='fa fa-remove ml-2 px-2 text-danger'></i></a>
                 </>
-                </td>
+                </td>:''
                 }
               </tr>
   })
+  
   return (
    <>
    <h4>Manage Subject teachers <small>Assign permissions to Subject teachers so they can input scores.</small></h4>
@@ -245,12 +243,12 @@ let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
                     <th><i className='fa fa-book'></i> SUBJECT</th>
                     <th><i className='fa fa-clock-o'></i> PERIODS<br/> (PER WEEK)</th>
                     <th><i className='fa fa-blacboard'></i> TIMING</th>
-                   <th className="text-center"><i className='fa fa-gear'></i> Action</th>
+                    {classteacher ? <th className="text-center"><i className='fa fa-gear'></i> Action</th> : ''}
                   </tr>
                 </thead>
                 <tbody>
                   {tabl}
-                  <tr>
+                 { classteacher ? <tr>
                       <td>ADD</td>
                       <td>
                           <CSelect
@@ -290,7 +288,7 @@ let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
                       <td>
                       <a style={{cursor:'pointer'}} className='btn btn-sm btn-info' onClick={handleSubmit}>Save</a>
                       </td>
-                  </tr>
+                  </tr>:''}
                 </tbody>
               </table>
    </>

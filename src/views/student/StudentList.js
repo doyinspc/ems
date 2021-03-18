@@ -25,7 +25,7 @@ let tabl = data.map((row, ind)=>{
     <td>
 <div><strong>{`${row.surname} ${row.firstname} ${row.middlename}`}</strong></div>
             <div className="small text-muted">
-            <span>{row.schoolabbrv}{row.admission_no}</span>
+            <span>{row.abbrv}{row.admission_no}</span>
         </div>
     </td>
     

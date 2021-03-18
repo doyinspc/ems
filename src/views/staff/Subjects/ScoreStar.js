@@ -1,18 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
 import { registerStudentscore, deleteStudentscore } from './../../../actions/student/studentscore'
-import ReactRateComponent from'react-rate-component';
-import { 
-    CButton,
+import {
     CCol,
     CFormGroup,
-    CInput,
-    CInputGroup,
-    CInputGroupAppend,
-    CInputGroupPrepend,
-    CInputGroupText
+    
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
+import ScoreRate from './ScoreRate';
 
 
 
@@ -62,39 +57,30 @@ const deleteScore = (id) =>{
 } 
 
 const setvalues = (id) =>{
-    if(parseFloat(id) > parseFloat(5))
+    console.log(id)
+    if(parseFloat(id) > 0)
     {
-        setvalue('')
-    }else{
         setvalue(id)
+    }else{
+       
     }
     saveScore(id)
 }
 
-console.log(props.sd_val, value, sd_val * 5)
+//console.log(props.sd_val, value, sd_val * 5)
 
 
 return (
     <>
     <td valign="middle" width="500px">
+        
         <CFormGroup row>
             <CCol md="12">{sd_val * 5}{" - "}{value}
             { parseFloat(value)  === parseFloat(sd_val * 5)  ?
-            <ReactRateComponent
-                defaultValue={value}
-                showCount={false}
-                onChange={setvalues}
-                size='30'
-            />:
-            <ReactRateComponent
-                showCount={false}
-                onChange={setvalues}
-                defaultValue={value ? value : ''}
-                size='30'
-            />
-
-}
-            
+            <ScoreRate value={parseFloat(value)} setvalues={(e)=>setvalues(e)} />
+            :
+            <ScoreRate value={parseFloat(value)} setvalues={(e)=>setvalues(e)} />
+            }
             </CCol>
         </CFormGroup>
           

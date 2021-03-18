@@ -30,12 +30,14 @@ const Studentclasss = (props) => {
  const [studentdata, setStudentdata] = useState({})
  const [castore, setcastore] = useState({})
  const [cascores, setcascores] = useState({})
+ const [cakeeps, setcakeeps] = useState({})
  const [bhstore, setbhstore] = useState({})
  const [skstore, setskstore] = useState({})
  const [itemz, setitemz] = useState(0)
 
   useEffect(() => {
-    if(parseInt(subjectid) > 0 ){
+    if(parseInt(subjectid) > 0 )
+    {
      let params = {
         data:JSON.stringify(
         {
@@ -49,13 +51,12 @@ const Studentclasss = (props) => {
         cat:'staffclass',
         table:'accessstudentsubject',
         narration:'get staff student subjects'
-  
       }
       props.getStaffstudents(params)
 
       
     }
-  }, [termid,subjectid, sessionid, groupid, clientid])
+  }, [termid, subjectid, sessionid, groupid, clientid])
 
   useEffect(() => {
     let params1 = {
@@ -94,19 +95,6 @@ const Studentclasss = (props) => {
     
   }, [termid, sessionid, subjectid, ids, claszid])
 
-  useEffect(() => {
-    // let scs = {...cascores}
-    // scoresall.forEach(ele=>{
-    //   if(ele !== undefined)
-    //   {
-    //     let nm = ele.clientid+"_"+ele.itemid1;
-    //     scs[nm] = ele.contact
-    //   }
-     
-    // })
-    // setcascores(scs);
-  }, [scoresall])
-
   const placeStudent = (students) =>{
    setStudentdata(students);
   }
@@ -129,7 +117,6 @@ const loadStudent = () =>{
       props.registerStaffstudent(fd)
       
 }
-
 const getAllStudents = () =>{
   /**
     * classunitid
@@ -148,7 +135,6 @@ const getAllStudents = () =>{
    fd.append('cat', 'insertsubject');
    props.registerStaffstudent(fd)
 }
-
 const onRemove =(id)=>{
      Swal("Are you sure you want to delete you will not be able to restore the data.")
     .then((value) => {
@@ -164,22 +150,26 @@ const onRemove =(id)=>{
       }
     });
 }
-
 const setShowca = (id, name, score) =>{
     let sh = {...castore};
+    let th = {...cakeeps};
     if(Object.keys(sh).includes(id))
     {
       delete sh[id];
+      delete th[id];
       setcastore(sh);
+      setcakeeps(th);
       setitemz(1)
     }else{
-    let ar = {}
-    ar['id'] = id;
-    ar['name'] = name;
-    ar['score'] = score;
-    sh[id] = ar;
-    setcastore(sh);
-    setitemz(1)
+      let ar = {}
+      ar['id'] = id;
+      ar['name'] = name;
+      ar['score'] = score;
+      sh[id] = ar;
+      th[id] = score;
+      setcastore(sh);
+      setcakeeps(th);
+      setitemz(1)
     }
     setskstore({})
     setbhstore({})
@@ -222,7 +212,6 @@ const setShowsk = (id, name, score) =>{
     setcastore({})
     setbhstore({})
 }
-
 const saveScore = (studentid, caid, score) =>{
 
    let fd = new FormData();
@@ -241,7 +230,6 @@ const saveScore = (studentid, caid, score) =>{
    props.registerStudentscore(fd)
 
 }
-
 const saveScoreHeader = (caid, score) =>{
    let fd = new FormData();
    fd.append('caid', caid);
@@ -253,7 +241,6 @@ const saveScoreHeader = (caid, score) =>{
    fd.append('grp', 7);
 
 }
-
 const setScoreValues = (e, student, ca, namz, sco) =>{
   let sc = {...cascores}
   let nm = student+"_"+ca;
@@ -266,7 +253,17 @@ const setScoreValues = (e, student, ca, namz, sco) =>{
     setcascores(sc);
   } 
 }
-
+const serScoreValues = (e, ca, namz, sco) =>{
+  let sk = {...cakeeps}
+  
+  if(parseFloat(e.target.value) >0){
+    sk[ca] = e.target.value
+    setcakeeps(sk);
+  }else{
+    sk[ca] = ''
+    setcakeeps(sk);
+  } 
+}
 const saveScoreValues = (e, student, ca, namz, sco) =>{
   saveScore(student, ca , e.target.value)
   
@@ -298,7 +295,7 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
     </td>
     { itemz === 1 ?
       Object.keys(castore).map((prp, inds)=>{
-
+        
         let sd = scoresall.filter(rws=>rws !== undefined && rws !== null && parseInt(rws.itemid1) === parseInt(castore[prp].id) && parseInt(rws.clientid) === parseInt(row.clientid));
         let sd_array = sd && Array.isArray(sd) && sd.length ? sd[0] : null;
         let sd_val = sd_array !== null ? parseFloat(sd_array.contact) : '';
@@ -315,7 +312,7 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
                   studentid={row.clientid}
                   id={prp}
                   name={castore[prp].name} 
-                  score={castore[prp].score}
+                  score={cakeeps[prp]}
                   sd_val={sd_val}
                   sd_id={sd_id}
                   sd_color={sd_color}
@@ -352,7 +349,7 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
                 />
       })
     :''}
-      { itemz === 3 ?
+    { itemz === 3 ?
       Object.keys(skstore).map((prp, inds)=>{
 
         let sd = scoresall.filter(rws=>rws !== undefined && rws !== null && parseInt(rws.itemid1) === parseInt(skstore[prp].id) && parseInt(rws.clientid) === parseInt(row.clientid));
@@ -387,6 +384,8 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
     </td>
   </tr>
 });
+
+
 let len = data.filter(rw=>rw !== null && rw !== undefined).length;
 
 return (
@@ -419,11 +418,9 @@ return (
                 return <th key={inds}>
                   {castore[prp].name}
                   <CInput
-                    size="lg"
                     style={{width:'150px', textAlign:'center', fontWeight:'bolder'}}
-                    value={castore[prp].score}
-                    onChange={(e)=>setScoreValues(e, prp, castore[prp].name, castore[prp].score)}
-                    onMouseOut={(e)=>saveScoreValues(e, prp, castore[prp].name, castore[prp].score)}
+                    defaultValue={cakeeps[prp]}
+                    onChange={(e)=>serScoreValues(e, prp, castore[prp].name, cakeeps[prp])}
                   />
                 </th>
               }):''

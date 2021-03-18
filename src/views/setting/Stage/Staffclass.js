@@ -75,7 +75,7 @@ const Classstaff = (props) => {
     fd.append('sessionid', props.pid);
     fd.append('table', 'accessstaffclass');
     fd.append('narration', `activate and disable class ${nu}`);
-    props.updateClassstaff(fd);
+    props.updateClassstaff(fd);   
 
   }
   const onReset = () =>{
