@@ -38,6 +38,8 @@ const StudentReportList = (props) => {
     let classteacher = props.classteacher;
     let clasz = props.clasz;
     let claszparent = props.claszparent;
+    let claszname = props.claszname;
+    let claszparentname = props.claszparentname;
     let activeterm = props.activeterm;
     let staffid = props.user.mid;
     
@@ -88,11 +90,13 @@ const StudentReportList = (props) => {
         let casss = reportarrays.filter(rw=>rw !== null && parseInt(rw.id) === parseInt(repid));
         let cass = Array.isArray(casss) && casss.length > 0 ? casss[0].ca : '';
         let cas = cass.length > 0 ? JSON.parse(cass).join(",") : '';
-        if(parseInt(repid) > 0){
-        let params = {
+        if(parseInt(repid) > 0)
+        {
+           let params = {
             data:JSON.stringify(
             {
                   'sessionid':sessionid,
+                  'reportid':repid,
                   'termid':termid,
                   'ids':studentids,
                   'clasz':clasz,
@@ -104,7 +108,7 @@ const StudentReportList = (props) => {
               table:'studentscore',
               narration:'get reports'
             }
-          props.getStudentscores(params);
+           props.getStudentscores(params);
         }
     }, [repid, studentids, claszparent, clasz])
 
@@ -115,6 +119,7 @@ const StudentReportList = (props) => {
     let allsubjects = {};
     studentscorearray.forEach(ele => {
         //by subjects
+        if(parseInt(ele.subjectid) > -1){
         if(Object.keys(arr).includes(ele.subjectid))
         {
             if(Object.keys(arr[ele.subjectid]).includes(ele.studentid))
@@ -161,6 +166,7 @@ const StudentReportList = (props) => {
             srr[ele.studentid][ele.subjectid][ele.caid] = ele.score
         }
         allsubjects[ele.subjectid] = ele.subjectname 
+       }
     });
 
     //ARRANGE
@@ -185,10 +191,11 @@ const StudentReportList = (props) => {
         frr['score'] = ele.score;
         class_subject_average[ele.subjectid] = frr;
     })
-
     //ARRANGE SUBJECT CLASS PARENT POSITION
     let student_classparent_subject_position_array = props.studentscores && Array.isArray(props.studentscores[4]) ? props.studentscores[4] : [];
     let student_classparent_subject_position_store = {}
+    let student_classparent_subject_position_stores = []
+    
     student_classparent_subject_position_array.forEach(ele=>{
         
         if(Object.keys(student_classparent_subject_position_store).includes(ele.studentid))
@@ -199,25 +206,34 @@ const StudentReportList = (props) => {
             }else
             {
                 let frr = {};
-                frr['average'] = ele.average;
-                frr['position'] = ele.position;
+                frr['score'] = ele.avgr;
                 student_classparent_subject_position_store[ele.studentid][ele.subjectid] = frr;
+                let prr = {};
+                prr['score'] = ele.avgr;
+                prr['studentid'] = ele.studentid;
+                prr['subjectid'] = ele.subjectid;
+                student_classparent_subject_position_stores.push(prr)
             }
 
         }else
         {
             let frr = {};
-            frr['average'] = ele.average;
-            frr['position'] = ele.position;
+            frr['score'] = ele.avgr;
             student_classparent_subject_position_store[ele.studentid] = {};
             student_classparent_subject_position_store[ele.studentid][ele.subjectid] = frr;
+            let prr = {};
+            prr['score'] = ele.avgr;
+            prr['studentid'] = ele.studentid;
+            prr['subjectid'] = ele.subjectid;
+            student_classparent_subject_position_stores.push(prr)
         }
         
     })
-
+    
     //ARRANGE SUBJECT CLASS PARENT POSITION
     let student_class_subject_position_array = props.studentscores && Array.isArray(props.studentscores[5]) ? props.studentscores[5] : [];
     let student_class_subject_position_store = {}
+    let student_class_subject_position_stores = []
     student_class_subject_position_array.forEach(ele=>{
         
         if(Object.keys(student_class_subject_position_store).includes(ele.studentid))
@@ -228,53 +244,56 @@ const StudentReportList = (props) => {
             }else
             {
                 let frr = {};
-                frr['average'] = ele.average;
-                frr['position'] = ele.position;
+                frr['score'] = ele.avgr;
                 student_class_subject_position_store[ele.studentid][ele.subjectid] = frr;
+                let prr = {};
+                prr['score'] = ele.avgr;
+                prr['studentid'] = ele.studentid;
+                prr['subjectid'] = ele.subjectid;
+               student_class_subject_position_stores.push(prr)
             }
 
         }else
         {
             let frr = {};
-            frr['average'] = ele.average;
-            frr['position'] = ele.position;
+            frr['score'] = ele.avgr;
             student_class_subject_position_store[ele.studentid] = {};
             student_class_subject_position_store[ele.studentid][ele.subjectid] = frr;
+            let prr = {};
+            prr['score'] = ele.avgr;
+            prr['studentid'] = ele.studentid;
+            prr['subjectid'] = ele.subjectid;
+            student_class_subject_position_stores.push(prr)
         }
         
     })
 
     //ARRANGE CLASS PARENT POSITION
     let student_classparent_position_array = props.studentscores && Array.isArray(props.studentscores[6]) ? props.studentscores[6] : [];
-    let student_classparent_position_store = {}
+    let student_classparent_position_store = []
     student_classparent_position_array.forEach(ele=>{
       
             let frr = {};
             frr['average'] = ele.avg;
-            frr['position'] = ele.position;
-            frr['total'] = ele.total;
-            frr['subjects'] = ele.nums;
-            student_classparent_position_store[ele.studentid] = frr;        
+            frr['score'] = ele.total;
+            frr['subjectid'] = ele.nums;
+            frr['studentid'] = ele.studentid;
+            student_classparent_position_store.push(frr);        
         
     })
 
     //ARRANGE CLASS POSITION
     let student_class_position_array = props.studentscores && Array.isArray(props.studentscores[7]) ? props.studentscores[7] : [];
-    let student_class_position_store = {}
+    let student_class_position_store = []
     student_class_position_array.forEach(ele=>{
       
             let frr = {};
             frr['average'] = ele.avg;
-            frr['position'] = ele.position;
-            frr['total'] = ele.total;
-            frr['subjects'] = ele.nums;
-            student_class_position_store[ele.studentid] = frr;        
+            frr['score'] = ele.total;
+            frr['subjectid'] = ele.nums;
+            frr['studentid'] = ele.studentid;
+            student_class_position_store.push(frr);       
         
-    })
-  
-    let reportarray = props.reports && Array.isArray(props.reports) ? props.reports : [];
-        let report_array = reportarray.filter(rw=>rw !== null).map((rw, ind) =>{
-            return <option key={ind} value={rw.id}>{rw.title}</option>
     })
 
     //ARRANGE CLASS POSITION
@@ -309,9 +328,68 @@ const StudentReportList = (props) => {
         
     })
 
+   let reportarray = props.reports && Array.isArray(props.reports) ? props.reports : [];
+       let report_array = reportarray.filter(rw=>rw !== null).map((rw, ind) =>{
+           return <option key={ind} value={rw.id}>{rw.title}</option>
+   })
 
-        //SET ASSESSMENT
-        let cas = Array.isArray(props.cas) ?props.cas : [];
+   var ranksubjectclassunit = {};
+   Object.keys(allsubjects).forEach(rw=>{
+        let data = student_class_subject_position_stores.filter(r=>parseInt(r.subjectid) === parseInt(rw));
+        data.sort(function(a,b){ return b.score - a.score; });
+
+        data.forEach(function(player, i, arr) {
+        player.rank = i === 0 || player.score != arr[i-1].score
+                   ? i + 1
+                   : arr[i-1].rank;
+        });
+        ranksubjectclassunit[rw] = data
+   })
+
+   var ranksubjectclass = {};
+   Object.keys(allsubjects).forEach(rw=>{
+        let data = student_classparent_subject_position_stores.filter(r=>parseInt(r.subjectid) === parseInt(rw));
+        data.sort(function(a,b){ return b.score - a.score; });
+
+        data.forEach(function(player, i, arr) {
+        player.rank = i === 0 || player.score != arr[i-1].score
+                   ? i + 1
+                   : arr[i-1].rank;
+        });
+        ranksubjectclass[rw] = data
+   })
+   
+   var rankclass = {};
+   students.forEach(ro=>{
+        let rw = ro.id
+        let data = student_classparent_position_store.filter(r=>parseInt(r.studentid) === parseInt(rw));
+        data.sort(function(a,b){ return b.score - a.score; });
+
+        data.forEach(function(player, i, arr) {
+        player.rank = i === 0 || player.score != arr[i-1].score
+                   ? i + 1
+                   : arr[i-1].rank;
+        });
+        rankclass[rw] = data
+   })
+   
+   var rankclassunit = {};
+  
+   students.forEach(ro=>{
+        let rw = ro.id
+        let data = student_class_position_store.filter(r=>parseInt(r.studentid) === parseInt(rw));
+        data.sort(function(a,b){ return b.score - a.score; });
+
+        data.forEach(function(player, i, arr) {
+        player.rank = i === 0 || player.score != arr[i-1].score
+                   ? i + 1
+                   : arr[i-1].rank;
+        });
+        rankclassunit[rw] = data
+   })
+        
+   //SET ASSESSMENT
+        let cas = Array.isArray(props.cas) ? props.cas : [];
         let ca_array = {};
         let ca_score = {};
         let ca1_array = {};
@@ -363,7 +441,6 @@ const StudentReportList = (props) => {
             }
         });
 
-
         let theadm = Object.keys(ca_array).map((prop, ind)=>{
                     return <th key={ind} colSpan={caunit_array[prop].length + 1}>{ca_array[prop]}</th>
         })
@@ -372,9 +449,7 @@ const StudentReportList = (props) => {
                 return <th key={inds}>{caunit_array[prop][pro].name}<br/>{caunit_array[prop][pro].score}</th>
                 })}
                 <th >{ca_score[prop]}</th></>
-            })
-        
-
+            })        
         let StudStopic = students.filter(rw=>rw!==null && rw!=="null").map((row, idx)=>{
                 return <CNavItem key={idx}>
                 <CNavLink>
@@ -385,11 +460,13 @@ const StudentReportList = (props) => {
           })   
         
       
-       let STUDENTZ = students.filter(rw=>rw!==null && rw!=="null").map((sub, idx)=>{
+        let STUDENTZ = students.filter(rw=>rw!==null && rw!=="null").map((sub, idx)=>{
         return <StudentReportTable 
              key={idx}
              studentid={sub.id}
              studentname={sub}
+             claszname={claszname}
+             claszparentname={claszparentname}
              theadm={theadm}
              theadm1={theadm1}
              data={allsubjects}
@@ -399,10 +476,10 @@ const StudentReportList = (props) => {
              arr={srr[sub.id]}
              classparent_subject_average={classparent_subject_average}
              class_subject_average={class_subject_average}
-             student_classparent_subject_position_store={student_classparent_subject_position_store[sub.id]}
-             student_class_subject_position_store={student_class_subject_position_store[sub.id]}
-             student_classparent_position_store={student_classparent_position_store[sub.id]}
-             student_class_position_store={student_class_position_store[sub.id]}
+             student_classparent_subject_position_store={ranksubjectclass}
+             student_class_subject_position_store={ranksubjectclassunit}
+             student_classparent_position_store={rankclass[sub.id]}
+             student_class_position_store={rankclassunit[sub.id]}
              student_ca_score_store={student_ca_score_store[sub.id]}
         />
     })

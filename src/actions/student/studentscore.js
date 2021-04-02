@@ -2,10 +2,14 @@ import axios from 'axios';
 import {
     STUDENTSCORE_GET_ONE,
     STUDENTSCORE_GET_MULTIPLE,
+    STUDENTSCORE_GET_MULTIPLE_CA,
+    STUDENTSCORE_DELETE_CA,
     STUDENTSCORE_GET_SUMMARY,
     STUDENTSCORE_GET_SINGLE,
     STUDENTSCORE_REGISTER_SUCCESS,
     STUDENTSCORE_REGISTER_FAIL,
+    STUDENTSCORE_REGISTER_CA,
+    STUDENTSCORE_REGISTER_CA_FAIL,
     STUDENTSCORE_LOADING,
     STUDENTSCORE_LOADING_ERROR,
     STUDENTSCORE_UPDATE_SUCCESS,
@@ -29,6 +33,24 @@ export const getStudentscores = params => (dispatch, getState) => {
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
                     type: STUDENTSCORE_GET_MULTIPLE,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : STUDENTSCORE_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+//GET ALL STUDENTSCORE 
+export const getStudentscorecas = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+        params.token = MAIN_TOKEN;
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: STUDENTSCORE_GET_MULTIPLE_CA,
                     payload: res.data
                 })
             })
@@ -117,6 +139,38 @@ export const registerStudentscore = data => dispatch => {
         .catch(err => {
             dispatch({
                 type : STUDENTSCORE_REGISTER_FAIL,
+                payload: err
+            })
+        })
+};
+//STUDENTSCORE REGISTER
+export const insertStudentca = data => dispatch => {
+    axios.post(path, data, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: STUDENTSCORE_REGISTER_CA,
+                payload: res.data.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : STUDENTSCORE_REGISTER_CA_FAIL,
+                payload: err
+            })
+        })
+};
+//STUDENTSCORE REGISTER
+export const deleteStudentca = data => dispatch => {
+    axios.post(path, data, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: STUDENTSCORE_DELETE_CA,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : STUDENTSCORE_REGISTER_CA_FAIL,
                 payload: err
             })
         })

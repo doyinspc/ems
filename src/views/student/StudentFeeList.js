@@ -2,7 +2,9 @@ import React , { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { getStudentfees, registerStudentfee, updateStudentfee,  getStudentfeesSingle, deleteStudentfee, setStudentfee } from './../../actions/student/studentfee';
+import { updateStudentclass } from './../../actions/student/studentclass';
 import { getAccounts } from './../../actions/setting/account';
+import { getStaffAll } from './../../actions/staff/staff';
 import { getFees } from './../../actions/setting/fee';
 import moment from 'moment';
 import { 
@@ -37,7 +39,9 @@ const Studentclasss = (props) => {
    const [amount, setAmount] = useState(0)
    const [accountid, setAccountid] = useState(null)
    const [feeid, setFeeid] = useState(null)
+   const [staffid, setstaffid] = useState(null)
    const [teller, setTeller] = useState(null)
+   const [data, setdata] = useState()
 
    useEffect(() => {
    
@@ -59,6 +63,21 @@ const Studentclasss = (props) => {
     }
     
   }, [props.users.activeschool, clasz, terms, sessions, data1 ])
+
+   useEffect(() => {
+   
+     let params = {
+      data:JSON.stringify(
+      {
+          'is_active':0,
+          'is_delete':0
+      }),
+      cat:'selected',
+      table:'allstaffs',
+      narration:'get all staff'
+     }
+     props.getStaffAll(params) 
+  }, [])
 
    useEffect(() => {
    
@@ -91,7 +110,21 @@ const Studentclasss = (props) => {
     }
     
   }, [props.user.activeschool])
+  
+   useEffect(() => {
+      let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw != null || rw != undefined) : []
+      setdata(data)
+   }, [props.data])
+  const handleSubmitStudent = (id) =>{
+    let fd = new FormData();
+    fd.append('parentid', staffid);
+    fd.append('id', id);
+    fd.append('cat', 'updatestudentclasss');
+    fd.append('table', 'accessstudentclass');
+    fd.append('sessionid', sessions);
+    props.updateStudentclass(fd)
 
+}
    const handleSubmitFee = (studentid, termid, sessionid) =>{
 
         let fd = new FormData();
@@ -107,7 +140,6 @@ const Studentclasss = (props) => {
         props.setStudentfee(fd);
 
    }
-
    const handleSubmitFeeOnly = (studentid, termid, sessionid) =>{
 
     let fd = new FormData();
@@ -124,7 +156,7 @@ const Studentclasss = (props) => {
 
     props.setStudentfee(fd);
 
-}
+   }
    const handleSubmit = (studentid, termid, sessionid) =>{
 
     let fd = new FormData();
@@ -196,13 +228,15 @@ let fearray = props.fees && props.fees!== undefined && Array.isArray( props.fees
     return <option key={ind} value={rw.id}>{rw.name}</option>
 }): ''
 
+let staffarray = props.staffs && props.staffs!== undefined && Array.isArray( props.staffs)? props.staffs.filter(rw=>rw !== null && rw !== undefined).map((rw, ind) =>{
+  return <option key={ind} value={rw.id}>{rw.surname}{" "}{rw.firstname !== undefined && rw.firstname.length > 0  ? rw.firstname.substring(0, 1):''}{". "}({rw.schoolabbrv})</option>
+}): ''
 let acarray = props.accounts && props.accounts !== undefined && Array.isArray( props.accounts)  ? props.accounts.filter(rw=>rw !== null && rw !== undefined).map((rw, ind) =>{
-  return <option key={ind} value={rw.id}>{rw.name}</option>
+return <option key={ind} value={rw.id}>{rw.name}</option>
 }): ''
   let std = props.studentfees && Array.isArray(props.studentfees) ? props.studentfees.filter(rw =>rw != null || rw != undefined) : []
-  let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw != null || rw != undefined) : []
   
-  let acct = data.map((row, ind)=>{
+  let acct = Array.isArray(data) && data.length > 0 ? data.map((row, ind)=>{
     let subs= [];
     let adds = [];
     return <tr key={ind}>
@@ -229,32 +263,32 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
         std.filter(rw=>parseInt(rw.studentid) === parseInt(row.id) && parseInt(rw.grp) === 1).map((p, i)=>{
         subs.push(parseFloat(p.amount))
         return <div key={i} className="small text-muted">
-                  {props.classteacher ?  new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 722)) ? <span  style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
+                  {props.classteacher ?  new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) ? <span  style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
                   <span >{p.feename}</span>: <strong >{nairaformat(p.amount)}</strong>
               </div>
       })
       }
     </td>
     <td>
+    {parseInt(row.parentid) === 0 ? "": <b><i>{'Recover from source'}<br/>{row.parentname}</i></b>}
     { 
       std.filter(rw=>parseInt(rw.studentid) === parseInt(row.id) && parseInt(rw.grp) === 0).map((p, i)=>{
         adds.push(parseFloat(p.amount))
         return <div key={i} className="small text-muted">
-         {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 712)) ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
+         {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) && parseInt(row.parentid) === 0 ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
                   <span>{moment().format(p.datepaid, 'DD MM YYYY')}</span> : <i>{p.teller}</i>: <strong>{nairaformat(p.amount)}</strong> 
               </div>
       })
-      }
+    }
     </td>
     <td>
       {setDiff(subs, adds)}
     </td>
     {props.classteacher ? 
-    <td>
-          <CButtonGroup>
-           
+    <td className="text-center">
+          <CButtonGroup>          
           <CDropdown className="m-0">
-              <CDropdownToggle color="secondary" size='sm'>
+              <CDropdownToggle color="secondary" size='sm' block>
                 Set Fees
               </CDropdownToggle>
               <CDropdownMenu className='bg-info'>
@@ -287,8 +321,7 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
                         {fearray}
                       </CSelect>
                   </CFormGroup>
-                  
-                  
+                                    
                   <CFormGroup className="mt-2">
                     <CButton 
                     className='mb-2'
@@ -308,6 +341,7 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
                 </CForm>
               </CDropdownMenu>
           </CDropdown>
+          {parseInt(row.parentid) === 0 ?
           <CDropdown className="m-0">
               <CDropdownToggle color="info" size='sm'>
                 Pay Fees
@@ -387,14 +421,52 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
                   </CFormGroup>
                 </CForm>
               </CDropdownMenu>
+          </CDropdown>:''} </CButtonGroup>
+          
+          <CDropdown className="m-0">
+              <CDropdownToggle color="dark" size='sm' block>
+                Deduct from Source
+              </CDropdownToggle>
+              <CDropdownMenu className='bg-dark'>
+                <CForm className="px-4 py-3" >
+                 
+                  
+                  
+                  <CFormGroup>
+                    <CLabel htmlFor="staffid">Select Staff Name & School</CLabel>
+                    <CSelect 
+                      className="form-control" 
+                      id="staffid" 
+                      type="date"
+                      value={staffid}
+                      autoComplete="staffid"
+                      onChange={(e)=>setstaffid(e.target.value)}
+                      >
+                        <option></option>
+                        {staffarray}
+                      </CSelect>
+                  </CFormGroup>
+                  
+              
+                  <CFormGroup className="mt-2">
+                    <CButton 
+                    className='mb-2'
+                    size='sm'
+                    block
+                    color="primary" 
+                    type="button"
+                    onClick={()=>handleSubmitStudent(row.id)}
+                    >Deduct From Source</CButton>
+                    
+                  </CFormGroup>
+                </CForm>
+              </CDropdownMenu>
           </CDropdown>
-            </CButtonGroup>
     </td>
     :''}
   </tr>
 })
-
-  
+              :'';
   return (
    <>
    
@@ -422,6 +494,7 @@ const mapStateToProps = (state) =>({
   fees : state.feeReducer.fees,
   accounts : state.accountReducer.accounts,
   users : state.userReducer,
+  staffs : state.staffReducer.staffall,
   studentfees : state.studentfeeReducer.studentfees,
   studentfee : state.studentfeeReducer.studentsinglefees
 })
@@ -433,6 +506,8 @@ export default connect(mapStateToProps, {
   getStudentfeesSingle,
   setStudentfee,
   getStudentfees,
-  deleteStudentfee
+  deleteStudentfee,
+  getStaffAll,
+  updateStudentclass
   
 })(Studentclasss)

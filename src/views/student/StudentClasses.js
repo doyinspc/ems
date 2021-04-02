@@ -60,6 +60,8 @@ const Studentclasss = (props) => {
     const [term, setTerm] = useState(props.termz.termid)
     const [session, setSession] = useState(props.termz.sessionid)
     const [clasz, setClasz] = useState(0)
+    const [claszname, setclaszname] = useState('')
+    const [claszparentname, setclaszparentname] = useState('')
     const [claszparent, setClaszparent] = useState(0)
     const [studentdata, setStudentdata] = useState('')
     const [sides, setSides] = useState(false)
@@ -96,6 +98,7 @@ const Studentclasss = (props) => {
         props.getStudentclasss(params)
 
         let dt = props.dropdowns && Array.isArray(props.dropdowns) ? props.dropdowns : [[], []];
+        
         let dt0 ='';
         let dt1 ='';
         let title ='None | No Data'
@@ -105,7 +108,11 @@ const Studentclasss = (props) => {
             dt1 = dt[1].filter(rw=>parseInt(rw.id) === parseInt(clasz));
             let dtn0 = Array.isArray(dt0) && dt0.length > 0 ? dt0[0].name : 'Select term';
             let dtn1 = Array.isArray(dt1) && dt1.length > 0 ? dt1[0].name : 'Select class';
+            let dtn2 = Array.isArray(dt1) && dt1.length > 0 ? dt1[0].caname : 'None';
+            
             title = dtn0+" | "+dtn1
+            setclaszparentname(dtn2)
+            setclaszname(dtn1)
         }
         
         setTitle(title);
@@ -157,7 +164,6 @@ const Studentclasss = (props) => {
       
   }, [props.user.mid, props.user.activeschool.id, props.user.activeschool.typeid ])
   
-
       let dt = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length > 0 ? props.dropdowns : [[], [], [], []];
       let dt0 ='';
       let dt1 ='';
@@ -182,7 +188,7 @@ const Studentclasss = (props) => {
     const placeStudent = (students) =>{
       setStudentdata(students);
     }
-
+  
    let len = 5;
    let subject = [];
    const loadStudent = () =>{
@@ -551,7 +557,10 @@ let redirectAttendance = (clasz) =>{
                       data={data}
                       activeterm={activeterm}
                       classteacher={classteacher}
-                      claszparent={claszparent} 
+                      claszparent={claszparent}
+                      claszparentname={claszparentname}
+                      claszname={claszname}
+
                     />
                 </CTabPane>
                 <CTabPane>
@@ -565,6 +574,8 @@ let redirectAttendance = (clasz) =>{
                       activeterm={activeterm}
                       classteacher={classteacher}
                       claszparent={claszparent} 
+                      claszparentname={claszparentname}
+                      claszname={claszname}
                     />
                 </CTabPane>
                 <CTabPane>
@@ -577,7 +588,9 @@ let redirectAttendance = (clasz) =>{
                       data={data}
                       activeterm={activeterm}
                       classteacher={classteacher}
-                      claszparentid={claszparent} 
+                      claszparentid={claszparent}
+                      claszparentname={claszparentname}
+                      claszname={claszname} 
                     />
                 </CTabPane>
               </CTabContent>

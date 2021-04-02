@@ -57,7 +57,7 @@ const deleteScore = (id) =>{
 } 
 
 const setvalues = (id) =>{
-    console.log(id)
+    
     if(parseFloat(id) > 0)
     {
         setvalue(id)
@@ -67,7 +67,6 @@ const setvalues = (id) =>{
     saveScore(id)
 }
 
-//console.log(props.sd_val, value, sd_val * 5)
 
 
 return (
@@ -75,7 +74,7 @@ return (
     <td valign="middle" width="500px">
         
         <CFormGroup row>
-            <CCol md="12">{sd_val * 5}{" - "}{value}
+            <CCol md="12">{'SAVED'}{" : "} {sd_val * 5}{" - "}{value}
             { parseFloat(value)  === parseFloat(sd_val * 5)  ?
             <ScoreRate value={parseFloat(value)} setvalues={(e)=>setvalues(e)} />
             :

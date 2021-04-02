@@ -67,7 +67,7 @@ const Report = (props) => {
       setsessionid(dt.sessionid);
       let ccl = dt.clasz.length > 0 ? JSON.parse(dt.clasz):[];
       setclasz(ccl);
-      let cal = dt.ca.length > 0 ? JSON.parse(dt.ca):[];
+      let cal = dt.ca.length > 0 ? dt.ca.split(","):[];
       setca(cal);
       let co = dt.composite.length > 0 ? JSON.parse(dt.composite):[];
       setcomposite(co);
@@ -206,7 +206,7 @@ const Report = (props) => {
   const handleSubmitCa = () =>{
     let fd = new FormData();
     
-      fd.append('ca', JSON.stringify(ca));
+      fd.append('ca', ca.join(","));
       fd.append('table', 'reports');
       
       if(id && parseInt(id) > 0)
@@ -323,13 +323,13 @@ let termarray = props.terms.terms && Array.isArray(props.terms.terms) ? props.te
       return <option key={ind} value={rw.id}>{rw.name}</option>
 })
 
-let caarray = props.cas.cas && Array.isArray(props.cas.cas) ? props.cas.cas : [];
+let caarray = props.cas.cas && Array.isArray(props.cas.cas) && props.cas.cas.length > 0  ? props.cas.cas : [];
   let ca_array = caarray.filter(rw=>rw !== null).map((rw, ind) =>{
     return <><CCol xs={12}><CSwitch 
     className={'my-auto mx-3'} 
     variant={'3d'} 
     color={'info'} 
-    checked={Array.isArray(ca) && ca.includes(rw.id.toString()) ? true : false}
+    checked={rw.id !== undefined ? Array.isArray(ca) && ca.includes(rw.id.toString()) ? true : false:false}
     onChange={(e)=>loadca(e.target.checked, rw.id)}/><span className="pb-auto">{rw.name}</span></CCol></>
 })
 

@@ -35,6 +35,20 @@ export const nairaformat = (item)=>{
   let f = new Intl.NumberFormat(undefined,{style:'currency', currency:'NGR'})
   return f.format(item)
 }
+export const ordinal_suffix_of = (i)=> {
+  var j = i % 10,
+      k = i % 100;
+  if (j == 1 && k != 11) {
+      return i + "st";
+  }
+  if (j == 2 && k != 12) {
+      return i + "nd";
+  }
+  if (j == 3 && k != 13) {
+      return i + "rd";
+  }
+  return i + "th";
+}
 export const imageExist  = (imageSrc, callback) =>{
   fetch(imageSrc, {method:'HEAD'})
   .then(res=>{
@@ -534,10 +548,17 @@ export const controls = {
         },
         {
           id:12,
-          name:'BEHAVIORS',
-          icon:'/icons/behavior.png',
-          links:'/behavior',
-          submenu:[]
+          name:'CBT',
+          icon:'/icons/exam.png',
+          links:'/cbt',
+          description:'Set up CBT test',
+          submenu:[{
+            id:12,
+            name:'Test Parameters',
+            icon:'/icons/exam.png',
+            links:'/expenses',
+            submenu:[]
+          }]
         },
         {
           id:13,

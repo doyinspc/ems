@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     STAFF_GET_ONE,
     STAFF_GET_MULTIPLE,
+    STAFF_GET_ALL,
     STAFF_GET_BIRTHDAY,
     STAFF_GET_SEARCH,
     STAFF_REGISTER_SUCCESS,
@@ -36,6 +37,26 @@ export const getStaffs = params => (dispatch, getState) => {
                 dispatch({
                     type : STAFF_LOADING_ERROR,
                     payload:err
+                })
+            })
+};
+//GET ALL STAFF 
+export const getStaffAll = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.token = MAIN_TOKEN;
+
+    dispatch({type : STAFF_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                      
+                dispatch({
+                    type: STAFF_GET_ALL,
+                    payload: res.data
+                 })
+            })
+            .catch(err => {
+                dispatch({
+                   type : STAFF_LOADING_ERROR,
+                   payload:err
                 })
             })
 };

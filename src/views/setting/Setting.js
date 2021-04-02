@@ -16,6 +16,8 @@ import Admission from './Stage/Admission';
 import Timetable from './Stage/Timetable';
 import Clasz from './Stage/Clasz';
 import Claszunit from './Stage/Claszunit';
+import Cbt from './Stage/Cbt';
+import Cbtexam from './Stage/Cbtexam';
 import Account from './Stage/Account';
 import Assessment from './Stage/Ca';
 import Assessmentunit from './Stage/Caunit';
@@ -279,6 +281,19 @@ const Setting = (props) => {
         {parseInt(sid) === 11 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Expenseunit
+               pid={pid}
+               sid={sid}
+               qid={qid}
+               did={did}
+               edits={mainedt}
+               school={props.user.activeschool} 
+               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
+            />):''}
+        {parseInt(sid) === 12 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
+        confirm(sid, perm, <Cbt sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        {parseInt(sid) === 12 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
+        confirm(sid, perm,
+           <Cbtexam
                pid={pid}
                sid={sid}
                qid={qid}

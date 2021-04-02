@@ -1,6 +1,7 @@
 import { callReg, callSuccess } from "../../actions/common";
 import {
     STAFF_GET_MULTIPLE,
+    STAFF_GET_ALL,
     STAFF_GET_SEARCH,
     STAFF_GET_BIRTHDAY,
     STAFF_GET_ONE,
@@ -23,6 +24,7 @@ let staffStore = JSON.parse(localStorage.getItem('staff'))
 const initialState = {
     isLoading: false,
     staffs: staffStore ? staffStore : [],
+    staffall: [],
     staff:{},
     msg: null,
     isEdit:-1,
@@ -61,6 +63,11 @@ export default function(state = initialState, action){
                 ...state,
                 staffs : action.payload,
                 msg:'DONE!!!'
+            };
+        case STAFF_GET_ALL:
+            return {
+                ...state,
+                staffall : action.payload
             };
         case STAFF_GET_SEARCH:
             return {

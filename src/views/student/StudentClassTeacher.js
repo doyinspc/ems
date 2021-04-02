@@ -60,19 +60,20 @@ const Studentclasss = (props) => {
       table:'subjects',
       narration:'get Subjects'
      }
-     props.getSubjects(params)
-
+     props.getSubjects(params);
+       
      let params1 = {
         data:JSON.stringify(
         {
             schoolid:props.user.activeschool.id,
-            is_active:0
+            is_active:0,
+            is_delete:0
         }),
         cat:'selected',
-        table:'staffs',
-        narration:'get staffs'
-       }
-       props.getStaffs(params1)
+        table:'allstaffs',
+        narration:'get staffs summary'
+     }
+     props.getStaffs(params1)
     }
     
   }, [props.user.activeschool])
@@ -116,7 +117,7 @@ const Studentclasss = (props) => {
  
   let stafarray = props.staffs && Array.isArray(props.staffs) ? props.staffs : [];
   let starray = stafarray.filter(rw=>rw !== null).map((rw, ind) =>{
-      return <option key={ind} value={rw.id}>{rw.surname}</option>
+      return <option key={ind} value={rw.id}>{rw.surname}{" "}{rw.firstname}{" "}{rw.middlename}</option>
   })
 
   const onActivate = (rw, num) =>{
@@ -149,7 +150,6 @@ const Studentclasss = (props) => {
       setcontact('');
     }
   }
-
   const onDelete = (rw) =>{
     
     Swal("Are you sure you want to delete you will not be able to restore the data.")
@@ -158,7 +158,7 @@ const Studentclasss = (props) => {
       {
           let fd = new FormData();
           fd.append('id', rw.id);
-          fd.append('sessionid', props.pid)
+          fd.append('sessionid', sessionid)
           fd.append('table', 'accessstudentsubject')
           fd.append('cat', 'deletes')
           props.deleteStaffsubject(fd, rw.id);

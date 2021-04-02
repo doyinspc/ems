@@ -38,7 +38,6 @@ export const getStudents = params => (dispatch, getState) => {
                 })
             })
 };
-
 //GET ALL STUDENT 
 export const searchStudent = params => (dispatch, getState) => {
    

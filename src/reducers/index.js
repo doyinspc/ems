@@ -16,6 +16,8 @@ import maintenance from "./setting/maintenance";
 import maintenanceunit from "./setting/maintenanceunit";
 import maintenancetransaction from "./setting/maintenancetransaction";
 import department from "./setting/department";
+import cbt from "./setting/cbt";
+import cbtexam from "./setting/cbtexam";
 import unit from "./setting/unit";
 import notice from "./setting/notice";
 import account from "./setting/account";
@@ -68,6 +70,8 @@ export default combineReducers({
     caunitReducer: caunit,
     claszReducer: clasz,
     claszunitReducer: claszunit,
+    cbtReducer: cbt,
+    cbtexamReducer: cbtexam,
     gradeReducer: grade,
     gradeunitReducer: gradeunit,
     expenseReducer: expense,

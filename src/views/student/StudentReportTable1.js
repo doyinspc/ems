@@ -4,20 +4,9 @@ import { connect} from "react-redux";
 import {
     CRow,
     CCol,
-    CContainer,
-    CCardHeader,
-    CNav,
-    CNavLink,
-    CNavItem,
-    CTabContent,
-    CTabPane,
-    CCard,
-    CCardBody,
-    CTabs,
+   
     CButton,
-    CWidgetIcon,
-    CCardFooter,
-    CLink,
+   
     CModal,
     CModalBody,
     CModalHeader,
@@ -31,22 +20,26 @@ import {
     CSelect
   } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import Chart1 from './Chart1'
 import {registerComment, updateComment, getComment, getComments, deleteComment} from './../../actions/setting/comment'
 import {getStudentfees} from './../../actions/student/studentfee'
+import ReactStars from "react-rating-stars-component";
+import { ordinal_suffix_of } from '../../actions/common';
 
 const StudentReportList = (props) => {
+
     let studentid = props.studentid;
     let sessionid = props.sessionid;
     let studentids = props.studentids;
     let report = props.report;
     let rows = props.studentname;
     let theadm = props.theadm;
-    let theadm1 = props.theadm1;
-    let caunit_array = props.caunit_array;
     let ca_array = props.ca_array;
+    let cascored_array = props.cascored_array;
     let ca_score = props.ca_score;
-    let arr = props.arr
+    let class_average = props.class_average;
+    let class_population = props.class_population;
+    let claszname = props.claszname;
+    let claszparentname = props.claszparentname;
     let classparent_subject_average = props.classparent_subject_average
     let class_subject_average = props.class_subject_average
     let student_classparent_subject_position_store = props.student_classparent_subject_position_store
@@ -55,6 +48,42 @@ const StudentReportList = (props) => {
     let student_class_position_store = props.student_class_position_store
     let student_ca_score_store = props.student_ca_score_store
 
+    let allcas = props.allcas;
+    let allcid = props.allcid;
+    let allcaunits = props.allcaunits;
+    let allcaid = props.allcaid;
+    let beh_array = props.beh_array;
+
+    
+    let total_subjects = 0;
+    let total_scores = [];
+    
+    let std_position = student_classparent_position_store.filter(rw=>parseInt(rw.studentid) === parseInt(studentid))
+    let std_positions = student_class_position_store.filter(rw=>parseInt(rw.studentid) === parseInt(studentid)) 
+    let comments ='';
+    if(std_positions[0] !== undefined && std_positions[0].rank > 0 && student_classparent_position_store !== undefined && student_classparent_position_store.length > 0)
+    {
+        let diff = student_classparent_position_store.length - std_positions[0].rank;
+        let tot = (std_positions[0].rank/student_classparent_position_store.length) * 100;
+        if(Math.floor(tot) <= 5)
+        {
+            comments = "Congratulations! you are one of the top "+5+"% in "+claszparentname;
+        }else if(Math.floor(tot) <= 10)
+        {
+            comments = "and one of the top "+10+"% in "+claszparentname+" "+student_classparent_position_store.length;
+        }
+        else if(Math.floor(tot) <= 20)
+        {
+            comments = "and one of the top "+20+"% in "+claszparentname+" "+student_classparent_position_store.length;;
+        }
+        else if(Math.floor(tot) <= 50)
+        {
+            comments = "and one of the top "+50+"% in "+claszparentname+" "+student_classparent_position_store.length;;
+        }else{
+            comments=""
+        }
+
+    }
 
     
     let reportid = report.id;
@@ -63,6 +92,9 @@ const StudentReportList = (props) => {
     const [owner, setowner] = useState(0)
     const [comment, setcomment] = useState('')
     const [office, setoffice] = useState('')
+    const [fontz, setfontz] = useState(20)
+
+    const [fontz1, setfontz1] = useState(20)
 
     useEffect(() => {
         //get comments
@@ -96,11 +128,11 @@ const StudentReportList = (props) => {
         
     }, [sessionid, studentid])
 
-    const compute = (sumz, totz, id)=>{
+    const compute = (sumz, totz)=>{
         let sums = sumz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
         let tots = totz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
         
-        let res = sums > 0 && tots > 0 ? (sums/tots) * ca_score[id] : 0;
+        let res = sums > 0 && tots > 0 ? (sums/tots) * 100 : 0;
         return Number(res).toFixed(1)
     }
     const compute100 = (sumz, totz)=>{
@@ -108,6 +140,31 @@ const StudentReportList = (props) => {
         let tots = totz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
         
         let res = sums > 0 && tots > 0 ? (sums/tots) * 100 : 0;
+        return Number(res).toFixed(1)
+    }
+    const sum100 = (sumz)=>{
+        if(sumz !== undefined)
+        {
+        let sums = sumz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
+        return Number(sums).toFixed(1)
+        }
+    }
+    const avg = (sumz)=>{
+        if(sumz !== undefined){
+        let sums = sumz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
+        let tots = sumz.length;
+        
+        let res = sums > 0 && tots > 0 ? (sums/tots) : 0;
+        return Number(res).toFixed(0)
+        }
+    }
+    const get_student_total = (sumz)=>{
+        let sums = sumz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
+        return Number(sums).toFixed(1)
+    }
+    const get_student_average = (sumz, tots)=>{
+        let sums = sumz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
+        let res = sums > 0 && tots > 0 ? (sums/tots) : 0;
         return Number(res).toFixed(1)
     }
     const onSubmit = () =>{
@@ -159,56 +216,147 @@ const StudentReportList = (props) => {
 
         }
 
+    }
+
+    const grading = (scor, gra) =>{
+        if(scor!== undefined)
+        {
+            let score = scor.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
+            
+            
+            let re = gra.filter(ele=>parseInt(score) > parseInt(ele.minscore) && parseInt(score) <= parseInt(ele.maxscore))
+            console.log(score,  re);
+            return re !==undefined && Array.isArray(re) && re.length > 0  ? re[0].abbrv:'-';
         }
+    }
+
+    const gradingfinal = (score) =>{
+      
+        let re = props.gradeunits.filter(ele=>parseFloat(Math.floor(score)) > parseFloat(ele.minscore) && parseFloat(Math.floor(score)) <= parseFloat(ele.maxscore))
+        return Array.isArray(re) && re.length > 0  ? re[0].comment:'';
+    }
 
     const changeOwner = (e) =>{
         setowner(e.target.value)
     }
+
+    let ca_sum = {}
+    let ca_total = []
+     /**
+     * sort position by student
+     * sort maxscore
+     */
+    let rank_array_classparent ={}
+    let total_array_classparent = {}
+    let avg_array_classparent = {}
+
+    Object.keys(student_classparent_subject_position_store).forEach(el => {
+      let ra = student_classparent_subject_position_store[el].filter(rw=>parseInt(rw.studentid) === parseInt(studentid))[0]
+      if(ra !== undefined)
+      {
+        rank_array_classparent[el] = ra.rank;
+        total_array_classparent[el] = ra.score;
+        avg_array_classparent[el] = ra.average;
+      }
+    });
+
+    let rank_array_class ={}
+    let total_array_class = {}
+    let avg_array_class = {}
+    let numbering = 0;
     let data = props.data && Array.isArray(Object.keys(props.data)) ? props.data : []
+    Object.keys(data).forEach(row=>{
+        if(cascored_array && Array.isArray(Object.keys(cascored_array)) && Object.keys(cascored_array).includes(row)  && cascored_array[row] !== undefined )
+          {
+          let subx= [];
+          let addx = [];  
+              Object.keys(ca_array).map((prop, inds)=>{
+                let sumxrow = [];
+                let totxrow = [];
+                
+                if(cascored_array && Array.isArray(Object.keys(cascored_array)) && Object.keys(cascored_array).includes(row) && Object.keys(cascored_array[row]).includes(prop) )
+                {
+                    //SET CA SUM
+                  let sh = cascored_array[row][prop];
+                  
+                 
+                  subx.push(sh)
+    
+                }
+             })  
+          total_scores.push(sum100(subx))
+         
+        }
+      })
+
+    Object.keys(student_class_subject_position_store).forEach(el => {
+      let ra = student_class_subject_position_store[el].filter(rw=>parseInt(rw.studentid) === parseInt(studentid))[0]
+      if(ra !== undefined)
+      {
+        rank_array_class[el] = ra.rank;
+        total_array_class[el] = ra.total;
+        avg_array_class[el] = ra.score;
+      }
+    });
+    let x = 0;
     
     let acct = Object.keys(data).map((row, ind)=>{
+    if(cascored_array && Array.isArray(Object.keys(cascored_array)) && Object.keys(cascored_array).includes(row)  && cascored_array[row] !== undefined )
+      {
       let subs= [];
       let adds = [];
-      return <tr key={ind+"_"+row.id}>
+      total_subjects = total_subjects + 1;
+      return <tr key={ind+"_"+row}>
       <td className="text-center">
-       {ind + 1}
+       {numbering = numbering + 1}
       </td>
       <td>
-      <div><strong style={{textTransform:'capitalize'}}>{data[row]}</strong></div>
+      <div style={{fontSize: fontz}}><strong style={{textTransform:'capitalize'}}>{data[row]}</strong></div>
       </td>
       {
           
           Object.keys(ca_array).map((prop, inds)=>{
             let sumrow = [];
             let totrow = [];
-            
-  
-            if(student_ca_score_store && Array.isArray(Object.keys(student_ca_score_store)) && Object.keys(student_ca_score_store).includes(row) && Object.keys(student_ca_score_store[row]).includes(prop) )
+            if(ca_sum.hasOwnProperty(prop)){  }
+            else{ca_sum[prop] = []}
+        
+            if(cascored_array && Array.isArray(Object.keys(cascored_array)) && Object.keys(cascored_array).includes(row) && Object.keys(cascored_array[row]).includes(prop) )
             {
-              let sh = student_ca_score_store[row][prop];
+                //SET CA SUM
+              let sh = cascored_array[row][prop];
+              if(sh > -1)
+              { 
+                 ca_sum[prop].push(sh) 
+              }
               let shmax = ca_score[prop];
-              
               sumrow.push(sh)
               totrow.push(shmax)
               subs.push(sh)
               adds.push(shmax)
-              return <td className='text-center' key={ind}>{parseFloat(sh) > 0 ? Number(sh).toFixed(1):0}</td>
+
+              return <td className='text-center' style={{fontSize: fontz}} key={ind}>{parseFloat(sh) > 0 ? Number(sh).toFixed(1):0}</td>
             }else
             {
-              return <td className='text-danger text-center'><CIcon name="cil-x"/></td>
+            return <td className='text-danger text-center'><CIcon name="cil-x"/>{subs}</td>
             }   
-         })
+         })  
       }
-      <th className='text-center' >{compute100(subs, adds)}</th>
-      <th className='text-center' >{Number(props.class_subject_average[row].average).toFixed(1)}</th>
-      <th className='text-center' >{Number(props.classparent_subject_average[row].average).toFixed(1)}</th>
-      <th className='text-center' >{student_class_subject_position_store !== undefined && Array.isArray(Object.keys(student_class_subject_position_store))  && Object.keys(student_class_subject_position_store).includes(row) ? student_class_subject_position_store[row].position:'--'} of {class_subject_average[row].pop}</th>
-      <th className='text-center' >{student_classparent_subject_position_store !== undefined && Array.isArray(Object.keys(student_classparent_subject_position_store))  && Object.keys(student_classparent_subject_position_store).includes(row) ? student_classparent_subject_position_store[row].position:'--'} of {classparent_subject_average[row].pop} </th>
+      
+      <th className='text-center' style={{fontSize: fontz}} >{sum100(subs)}</th>
+      <th className='text-center' style={{fontSize: fontz}}>{grading(subs, props.gradeunits)}</th>
+      <th className='text-center' style={{fontSize: fontz}}>{class_subject_average.hasOwnProperty(row) && props.class_subject_average[row].hasOwnProperty('average') ? Number(props.class_subject_average[row].average).toFixed(1):'0'}</th>
+      <th className='text-center' style={{fontSize: fontz}}>{ordinal_suffix_of(rank_array_class[row])}</th>
     </tr>
+    }
   })
   
+    let lastrow =  Object.keys(ca_array).map((prop, inds)=>{
+    return  <th key={inds +'kt'} className='text-center'>{avg(ca_sum[prop])}</th>
+    })
+  
     let commenter = Array.isArray(props.comments.comments) ? props.comments.comments.filter(rw=>rw !== null && rw !== undefined && parseInt(rw.reportid) === parseInt(reportid) && parseInt(rw.studentid) === parseInt(studentid)): []
-    console.log(sessionid)
+    
     return (
    <>
         <div className="A4" >
@@ -280,82 +428,156 @@ const StudentReportList = (props) => {
                                         <th 
                                             className="text-center" 
                                             style={{textTransform:'uppercase'}}>
-                                            <h4 style={{lineHeight:'normal'}} >mainstream energy solution primary school, </h4>
+                                            <h5 style={{lineHeight:'normal'}} >{props.user.activeschool.name}</h5>
                                         </th>
                                         </tr>
                                     <tr>
                                         <th 
                                             className="text-center" 
                                             style={{textTransform:'uppercase'}}>
-                                            <h4 >PRIMARY</h4>
+                                            <h5 style={{fontFamily:"fantasy", color:'brown'}} >{parseInt(props.user.activeschool.typeid) == 1 ? 'SECONDARY SCHOOL' : 'PRIMARY SCHOOL'}</h5>
                                         </th>
                                     </tr>
                                 </thead >
-                                <tbody >     
-         <CRow className='mb-5 mt-5'>
-            <CCol xs={9}>
-            <h3>{`${rows.surname} ${rows.firstname} ${rows.middlename}`}</h3>
-            <h5>{rows.schoolabbrv}{rows.admission_no}</h5>
-            <h6>{`CLASS POSITION : ${student_class_position_store !== undefined ? student_class_position_store.position: ''} `}</h6>
-            <h6>{`CLASS POSITION : ${student_classparent_position_store !== undefined ? student_classparent_position_store.position: ''} `}</h6>
-            <h6>{`STUDENT AVERAGE : ${student_class_position_store !== undefined ? Number(student_class_position_store.average).toFixed(1): ''} `}</h6>
-            <h6>{`TOTAL SCORE OBTAINED : ${student_class_position_store !== undefined ? Number(student_class_position_store.total).toFixed(1): ''} `}</h6>
-            <h6>{`TOTAL SUBJECTS RECORDED : ${student_class_position_store !== undefined ? student_class_position_store.subjects: 0} subjects`}</h6>
+                        </table>
+                        </CCol>
+                        <CCol>
+                    <CRow xs={12}>
+                        <CCol xs={10} className="ml-0 pl-0">
+                        <table>
+                            <tbody > 
+                                <CCol>                
+                                    <CRow className='mb-5 mt-1'>
+                                    <CCol xs={2}>
+                                        <div className="c-avata">
+                                            <img 
+                                            src={process.env.REACT_APP_SERVER_URL+ rows.photo} 
+                                            className="c-" 
+                                            style={{width:'120px'}}
+                                            alt={rows.admission_no} 
+                                            onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
+                                            />
+                                            <span className={`c-avatar-status ${rows.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
+                                        </div>
+                                        </CCol>
+                                        <CCol xs={10}>
+                                            <h3 style={{textTransform:'capitalize', fontFamily:'Bubblegum Sans'}}>{`${rows.surname} ${rows.firstname} ${rows.middlename}`} {" -"}<small>{` ${rows.abbrv}${rows.admission_no} `}</small></h3>
+                                            <h5>Gender : {rows.gender}</h5>
+                                            <h4 style={{fontFamily:'Lobster Two'}}>{`${std_positions[0] !== undefined && std_positions[0].hasOwnProperty('rank') ? ordinal_suffix_of(std_positions[0].rank) : '-'} position out of  ${class_population} pupils in ${claszname}`}</h4>
+                                            {/* <h4 style={{fontFamily:'Lobster Two'}}>{`${comments}`}</h4> */}
+                                        </CCol>
+                                        
+                                        <CCol xs={12}>
+                                                <table className='table-condensed' width="100%" border="solid 3px teal " style={{borderColor:'teal'}}>
+                                                    <thead className="text-center">
+                                                    <tr>
+                                                            <th rowSpan={2}>SN</th><th rowSpan={2}>FULLNAME</th>
+                                                            {theadm}
+                                                            <th rowSpan={2}>TOTAL<br/> (100%)</th>
+                                                            <th rowSpan={2}>GRADE<br/></th>
+                                                            <th rowSpan={2}>SUBJECT<br/>AVERAGE</th>
+                                                            <th rowSpan={2}>RANK</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody >
+                                                    {
+                                                        acct
+                                                    }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            {lastrow}
+                                                            <th className='text-center'>{get_student_average(total_scores, total_subjects)}</th>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                <CCol xs="12">
+            <table width="100%" style={{fontSize:'10px'}} >
+              <tr>
+                <th className="text-right" width="15%"><strong>{`TOTAL SCORE`}</strong></th>
+                <td width="15%" style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}>{get_student_total(total_scores)}</td>
+                <th className="text-right" width="15%"><strong>{`CLASS AVERAGE`}</strong></th>
+                <td width="15%" style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}>{class_average}</td>
+                <th className="text-right" width="15%"><strong>{`TOTAL FEES`}</strong></th>
+                <td width="15%" style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}></td>
+              </tr>
+              <tr>
+                <th className="text-right"><strong>{`SUBJECTS RECORDED`}</strong></th>
+                <td style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}>{total_subjects}</td>
+                <th className="text-right" width="15%"><strong>{`CLASS POPULATION`}</strong></th>
+                <td width="15%" style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}>{class_population}</td>
+                <th className="text-right"><strong>{`TOTAL PAIDS`}</strong></th>
+                <td style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}></td>
+              </tr>
+              <tr>
+                <th className="text-right"><strong>{`STUDENT AVERAGE `}</strong></th>
+                <td style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}>{get_student_average(total_scores, total_subjects)}</td>
+                <th className="text-right" width="15%"><strong></strong></th>
+                <td width="15%" style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}></td>
+                <th className="text-right"><strong>{'BALANCE'}</strong></th>
+                <td style={{fontFamily:'tahoma', fontStyle:"italic", paddingLeft:'9px'}}></td>
+              </tr>
+            </table>
             </CCol>
-            <CCol xs={3}>
-            <div className="c-avata">
-                <img 
-                src={process.env.REACT_APP_SERVER_URL+ rows.photo} 
-                className="c-" 
-                style={{width:'120px'}}
-                alt={rows.admission_no} 
-                onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
-                />
-                <span className={`c-avatar-status ${rows.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
-            </div>
-            </CCol>
-                <CCol>
-                    <table className='table-condensed' width="100%" border="solid 3px teal " style={{borderColor:'teal'}}>
-                        <thead className="text-center">
-                        <tr>
-                                <th rowSpan={2}>SN</th><th rowSpan={2}>FULLNAME</th>
-                                {theadm}
-                                <th rowSpan={2}>TOTAL<br/> (100%)</th>
-                                <th rowSpan={2}>AVG<br/> ARM</th>
-                                <th rowSpan={2}>AVG<br/> CLASS</th>
-                                <th rowSpan={2}>RANK<br/> ARM</th>
-                                <th rowSpan={2}>RANK<br/> CLASS</th>
-                            </tr>
-                        </thead>
-                        {
-                            acct
-                        }
-                    </table>
-                </CCol>
-            </CRow> 
-                                </tbody>
-                            </table>
+                                            </CCol>
+                                    </CRow> 
+                                </CCol>
+                            </tbody>
+                        </table>
+                        </CCol>
+                        <CCol xs={2} className="m-0 pr-0" >
                             
+                            <CRow className="m-0 p-0">
+                                <CCol className="m-0" style={{fontSize:'24px'}}><h5 style={{fontFamily:'Lobster', fontSize:'20px'}}>BEHAVIOR & PSYCHOMOTOR</h5></CCol>
+                                {
+                                 Object.keys(allcaid).map((rop, idc)=>{
+                                    return <>
+                                    {Object.keys(allcaid[rop]).map((rop1, idc1)=>{
+                                    if(beh_array.hasOwnProperty(studentid) && beh_array[studentid].hasOwnProperty(rop1)){
+                                    let numz = avg(beh_array[studentid][rop1])
+                                    return <>
+                                            <CCol key={idc} xs={12} className="m-0 p-0">
+                                                <strong>{
+                                                    beh_array.hasOwnProperty(studentid) && beh_array[studentid].hasOwnProperty(rop1) ? 
+                                                    <><strong>{allcaunits[rop1]}</strong><br/>
+                                                    <ReactStars
+                                                        count={numz}
+                                                        size={20}
+                                                        isHalf={true}
+                                                        emptyIcon={<i className="far fa-star"></i>}
+                                                        halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                                        fullIcon={<i className="fa fa-star"></i>}
+                                                        activeColor="#ffd700"
+                                                        /></>
+                                                    : ''
+                                                }</strong>
+                                            </CCol></>  } 
+                                                                        
+                                    })}</>
+                                })
+                            }
+                            </CRow>
+                       
                         </CCol>
-                    </CRow>
-                    <CRow xs='12' className='mb-0' >
-                        <CCol xs='6'>
-                        <Chart1 />
-                        </CCol>
-                        <CCol xs='6'>
-                        <Chart1 />
-                        </CCol>
+                    </CRow>  
+                        </CCol>    
                     </CRow>
                     <CRow xs='12' className='mt-1'>
-                        <h3>Comments</h3>
-                    <CCol xs='12'>
+                        <h4>Comments</h4>
+                    <CCol xs='12' style={{fontSize:fontz1}}>
+                        <CCol xs='12' style={{fontFamily:'Bubblegum sans'}}>{gradingfinal(get_student_average(total_scores, total_subjects))}</CCol>
                         {
                             commenter.map((prp, ind)=>{
                                 return <CRow xs="12">
                                     <CCol xs="3">
                                        <b> {prp.office}</b>
                                     </CCol>
-                                    <CCol xs="9">
+                                    <CCol xs="9" style={{fontFamily:'Bubblegum sans'}}>
                                        <i> {prp.comment}</i>
                                     </CCol>
                                 </CRow>
@@ -364,12 +586,33 @@ const StudentReportList = (props) => {
                     </CCol>
 
                     </CRow>
-                    <CButton size="sm" className="print" color="info" onClick={()=>setSmall(prev=>!prev)}>
+                    <CButton size="sm" className="d-print-none" color="info" onClick={()=>setSmall(prev=>!prev)}>
                         Add Comment
                     </CButton>
-                    <div className="scales" style={{bottom:'0px', left:"5px", padding:'5px', fontSize:'9px'}}>
-                        grading
+                    <CRow xs={12}>
+                        <CCol>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <b>__________________________</b><br/>
+                            <strong>{props.user.activeschool.signed}</strong><br/>
+                                    for : School Management
+                        </CCol>
+                        <hr/>
+                    </CRow>
+                    <CRow xs={12} className="navbar-fixed-bottom">
+                    <div className="scaless" 
+                    style={{
+                        position:'relative',  height: '150px',  paddingTop:'20px', bottom:'0px', left:"5px", padding:'5px', fontSize:'11px', fontWeight:'bold'}}
+                    >
+                        <strong>KEY:{" "} </strong>
+                        {
+                            props.gradeunits.map((rw, ind)=>{
+                            return <span className="pills">{rw.abbrv} {"=>"} {rw.name}{"    ,   "}</span>
+                            })
+                        }
                     </div>
+                    </CRow>
                 </div>   
         </div>
         <CModal 
@@ -420,7 +663,8 @@ const mapStateToProps = (state) =>({
     students : state.studentReducer,
     comments : state.commentReducer,
     studentfees : state.studentfeeReducer,
-    user:state.userReducer
+    user:state.userReducer,
+    gradeunits:state.gradeunitReducer.gradeunits
   })
   export default connect(mapStateToProps, {
     getStudentfees,

@@ -98,7 +98,6 @@ const Studentclasss = (props) => {
   const placeStudent = (students) =>{
    setStudentdata(students);
   }
-
 const loadStudent = () =>{
 
       let fd = new FormData();

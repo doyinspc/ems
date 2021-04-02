@@ -109,7 +109,6 @@ const Students = (props) => {
     
   }, [props.user.activeterm, props.clasz])
 
-
     let getleave=(id)=>{
       let d = leaves.filter(rw=>parseInt(rw.id) === parseInt(id));
       return d[0]
@@ -230,7 +229,9 @@ const Students = (props) => {
       //CONFIRM IF CLASS TEACHER
       let classteacher = props.classteacher;
 
-      let tabl = props.data.filter(rw=> rw !== null && rw !== undefined).map((row, ind)=>{
+        let tabl = props.data.filter(rw=> rw !== null && rw !== undefined).map((row, ind)=>{
+        let dup = row.dupli !== undefined && row.dupli !== null && row.dupli.length > 0 ? row.dupli.split(","): null;
+        let numdup = dup !== null ? dup.length : 1;
         return <tr key={ind}>
         <td className="text-center">
           <div className="c-avatar">
@@ -254,6 +255,7 @@ const Students = (props) => {
             </div>
         </td>
         <td className="text-center">
+        { numdup > 1 ? <><strong><small style={{color:'red'}}> Error Duplicated {row.dupli}</small></strong><br/></>: ""}
         { confirm_student_available(check_issue, row.id) > 0 ? <>
         <CBadge className="mr-0" color={getleave(confirm_student_available(check_issue, row.id)).colors}>{getleave(confirm_student_available(check_issue, row.id)).name}</CBadge>
         <CBadge className="mr-1" color="dark">{moment(dates).format("Do MMMM, YYYY")}</CBadge></>

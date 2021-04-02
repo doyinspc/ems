@@ -1,10 +1,14 @@
 import {
     STUDENTSCORE_GET_MULTIPLE,
+    STUDENTSCORE_GET_MULTIPLE_CA,
+    STUDENTSCORE_DELETE_CA,
     STUDENTSCORE_GET_SUMMARY,
     STUDENTSCORE_GET_SINGLE,
     STUDENTSCORE_GET_ONE,
     STUDENTSCORE_REGISTER_SUCCESS,
     STUDENTSCORE_REGISTER_FAIL,
+    STUDENTSCORE_REGISTER_CA,
+    STUDENTSCORE_REGISTER_CA_FAIL,
     STUDENTSCORE_LOADING,
     STUDENTSCORE_LOADING_ERROR,
     STUDENTSCORE_ACTIVATE_FAIL,
@@ -23,11 +27,12 @@ let studentscoreStore = JSON.parse(localStorage.getItem('studentscore'))
 
 const initialState = {
     isLoading: false,
-    studentscores: [], //studentscoreStore ? studentscoreStore : [],
+    studentscores: [],
     studentsinglescores:[],
     studentscore:{},
     studentscoresummary:{},
     studentscoresummarys:[],
+    studentscoreca : [],
     msg: null,
     isEdit:-1,
     ref:null,
@@ -58,11 +63,15 @@ export default function(state = initialState, action){
                 isLoading : true
             };
         case STUDENTSCORE_GET_MULTIPLE:
-            //localStorage.setItem('studentscore', JSON.stringify(action.payload));
             return {
                 ...state,
                 studentscores : action.payload,
                 msg:'DONE!!!'
+            };
+        case STUDENTSCORE_GET_MULTIPLE_CA:
+            return {
+                ...state,
+                studentscoreca : action.payload
             };
          case STUDENTSCORE_GET_SUMMARY:
             return {
@@ -77,11 +86,19 @@ export default function(state = initialState, action){
             };
         case STUDENTSCORE_GET_ONE:
             let all = [...state.studentscores];
-            let ses = all.filter(row=>row.cid == action.payload)[0];
+            let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
                 studentscore : ses,
                 MSG:"DONE!!!"
+            };
+        case STUDENTSCORE_DELETE_CA:
+            let allz = [...state.studentscoreca];
+            let stz = action.payload.data.length > 0 ? action.payload.data.split() : [];
+            let sesz = allz.filter(row=>parseInt(row.termid) === parseInt(action.payload.reportid) && parseInt(row.itemid) === parseInt(action.payload.subjectid) && stz.includes(row.itemid));
+            return {
+                ...state,
+                studentscoreca : sesz
             };
         case STUDENTSCORE_REGISTER_SUCCESS:
             localStorage.setItem('studentscore', JSON.stringify([...state.studentscores, action.payload]));
@@ -89,9 +106,9 @@ export default function(state = initialState, action){
                 ...state,
                 studentscores: [...state.studentscores, action.payload],
                 msg:action.msg
-            }; 
-        case STUDENTSCORE_SET_SUCCESS:
-            let d = [...state.studentscores];
+            };
+        case STUDENTSCORE_REGISTER_CA:
+            let d = [...state.studentscoreca];
             let d1 = action.payload;
             d1.forEach(ele=>{
                 let r = d.findIndex(rw=>parseInt(rw.id) === parseInt(ele.id))
@@ -102,15 +119,30 @@ export default function(state = initialState, action){
                     d = [...d, ele];
                 }
             })
-            //localStorage.setItem('studentscore', JSON.stringify(d));
+           return {
+                ...state,
+                studentscoreca:d
+            };  
+        case STUDENTSCORE_SET_SUCCESS:
+            let dx = [...state.studentscores];
+            let d1x = action.payload;
+            d1x.forEach(ele=>{
+                let r = dx.findIndex(rw=>parseInt(rw.id) === parseInt(ele.id))
+                if(r > -1)
+                {
+                    dx[r] = ele;
+                }else{
+                    dx = [...d, ele];
+                }
+            })
+            
             return {
                 ...state,
-                studentscores: d,
+                studentscores: dx,
                 msg:action.msg
             }; 
         case STUDENTSCORE_ACTIVATE_SUCCESS:
             let ac = changeState(state.studentscores, action.payload);
-            //localStorage.setItem('studentscore', JSON.stringify(ac));
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -138,6 +170,7 @@ export default function(state = initialState, action){
         case STUDENTSCORE_LOADING_ERROR:
         case STUDENTSCORE_ACTIVATE_FAIL:
         case STUDENTSCORE_REGISTER_FAIL:
+        case STUDENTSCORE_REGISTER_CA_FAIL:
         case STUDENTSCORE_DELETE_FAIL:
         case STUDENTSCORE_UPDATE_FAIL:
 

@@ -1,3 +1,4 @@
+import { callReg } from "../../actions/common";
 import {
     STUDENTFEE_GET_MULTIPLE,
     STUDENTFEE_GET_SUMMARY,
@@ -85,6 +86,7 @@ export default function(state = initialState, action){
             };
         case STUDENTFEE_REGISTER_SUCCESS:
             localStorage.setItem('studentfee', JSON.stringify([...state.studentfees, action.payload]));
+            callReg()
             return {
                 ...state,
                 studentfees: [...state.studentfees, action.payload],
