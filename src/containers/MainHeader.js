@@ -60,7 +60,7 @@ const TheHeader = (props) => {
         onClick={toggleSidebar}
       />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <h2>SIL EDUCATION</h2>
+      <h2>{process.env.REACT_APP_SUB_NAME}</h2>
       </CHeaderBrand>
       <CHeaderNav className="d-md-down-none mr-auto">
       <h3>{username}</h3>
@@ -76,7 +76,7 @@ const TheHeader = (props) => {
         />
       </CHeaderNav>
 
-      <CSubheader className="px-3 justify-content-between">
+      <CSubheader className="px-3 justify-content-between d-print-none">
         <CBreadcrumbRouter 
           className="border-0 c-subheader-nav m-0 px-0 px-md-3" 
           routes={routes} 

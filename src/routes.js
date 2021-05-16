@@ -58,6 +58,9 @@ const Department = React.lazy(() => import('./views/setting/Department'));
 const Subject = React.lazy(() => import('./views/setting/Subject'));
 const Theme = React.lazy(() => import('./views/setting/Theme'));
 const Fees = React.lazy(() => import('./views/fee/Fee'));
+const Inventorys = React.lazy(() => import('./views/inventory/Inventory'));
+const Expenses = React.lazy(() => import('./views/expense/Expense'));
+const Maintenances = React.lazy(() => import('./views/maintenance/Maintenance'));
 const Question = React.lazy(() => import('./views/setting/Theme'));
 const Clasz = React.lazy(() => import('./views/setting/Clasz'));
 const Claszunit = React.lazy(() => import('./views/setting/Claszunit'));
@@ -90,6 +93,9 @@ const routes = [
   { path: '/department/:subject/:theme/:question', name: 'Question Bank', component: Question, exact: true },
   { path: '/catype', name: 'CA Type', component: Catype, exact: true },
   { path: '/fees', name: 'Fee Payments', component: Fees, exact: true },
+  { path: '/inventorys', name: 'Inventories', component: Inventorys, exact: true },
+  { path: '/expenses', name: 'Expenses', component: Expenses, exact: true },
+  { path: '/maintenances', name: 'Maintenances', component: Maintenances, exact: true },
   { path: '/staffs', name: 'Staffs', component: Staffs, exact: true },
   { path: '/staffs/:staff', name: 'Staff Profile', component: Staff, exact: true },
   { path: '/myclass', name: 'My Classes', component: StaffSubject, exact: true },

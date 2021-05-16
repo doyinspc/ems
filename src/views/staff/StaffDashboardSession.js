@@ -27,7 +27,7 @@ return (
               
               </CCol>
               <CCol className="d-md-block btn-group">
-              <CButtonGroup className='pull-right'>
+              <CButtonGroup className='pull-right d-print-none'>
                 <CTooltip content='Click here to switch between schools'>
               <CButton  
                   color="primary" 

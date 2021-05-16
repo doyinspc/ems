@@ -105,7 +105,7 @@ const Studentclasss = (props) => {
         fd.append('cat', 'inserts');
         props.registerStaffsubject(fd)
       }
-      onEdit(undefined)
+      //onEdit(undefined)
     }
   }
   

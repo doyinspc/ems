@@ -29,6 +29,7 @@ import {
   CCardBody
 } from '@coreui/react';
 import ClassAttendance from './Dasboard/ClassAttendance';
+import ClassAcademics from './Dasboard/ClassAcademics';
 const Dashboard = (props) => {
   const [schools, setSchools] = useState({})
   const [showmenu, setShowmenu] = useState(false)
@@ -126,7 +127,7 @@ let schdata = props.user.mySchoolData !== undefined && Array.isArray(props.user.
 return (
     <>
     <CRow>
-    <CCol sm={9}>
+    <CCol  className="print A4">
     <StaffDashboardSession 
         activeterm={props.user.activeterm}
         activeschool={props.user.activeschool}
@@ -150,11 +151,11 @@ return (
       </CCollapse>
     
     <CRow>
-    <CCol xs="12" md="12" className="mb-4">
-        <CCard>
-          <CCardBody>
-            <CTabs>
-              <CNav variant="tabs">
+    <CCol xs="12" md="12" className="mb-4 d-print">
+        <CCard className="m-0 p-0">
+          <CCardBody className="m-0 p-0">
+            <CTabs className="d-print-none">
+              <CNav variant="tabs" className="d-print-none">
                 <CNavItem>
                   <CNavLink>
                     Home
@@ -209,10 +210,11 @@ return (
                   <ClassAttendance
                     sessionid={props.user.activeterm.sessionid} 
                     termid={props.user.activeterm.termid}/>
-
                 </CTabPane>
-                <CTabPane>
-                  
+                <CTabPane className="m-0 p-0 ">
+                  <ClassAcademics
+                    sessionid={props.user.activeterm.sessionid} 
+                    termid={props.user.activeterm.id} />
                 </CTabPane>
                 <CTabPane>
                   <Themes />
@@ -236,7 +238,7 @@ return (
       </CCol>
     </CRow>
       </CCol>
-      <CCol>
+      <CCol  sm={12} sm={3} className="d-print-none d-xs-none">
         <Search />
         <Birthdays />
         <Notice />

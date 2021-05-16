@@ -73,7 +73,7 @@ export default [
   {
     _tag: 'CSidebarNavItem',
     name: 'Inventory',
-    to: '/inventory',
+    to: '/inventorys',
     icon: 'cil-line-weight',
     badge: {
       color: 'info',
@@ -83,7 +83,16 @@ export default [
   {
     _tag: 'CSidebarNavItem',
     name: 'Maintenance',
-    to: '/maintenance',
+    to: '/maintenances',
+    icon: 'cil-paint',
+    badge: {
+      color: 'info',
+      text: '',
+    }
+  },{
+    _tag: 'CSidebarNavItem',
+    name: 'Expense',
+    to: '/expenses',
     icon: 'cil-paint',
     badge: {
       color: 'info',

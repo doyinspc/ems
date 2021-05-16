@@ -21,6 +21,8 @@ const AttendanceStudent = React.lazy(() => import('./views/student/Attendance'))
 const AttendanceStaff = React.lazy(() => import('./views/staff/Attendance'));
 const Scheme = React.lazy(() => import('./views/staff/Scheme'));
 const Results = React.lazy(() => import('./views/staff/Result'));
+const TimeTable = React.lazy(() => import('./views/staff/TimeTable'));
+const TimeTablePage = React.lazy(() => import('./views/staff/TimeTablePage'));
 const Admission = React.lazy(() => import('./views/student/Admission'));
 const Admissions = React.lazy(() => import('./views/student/Admissionsx.jsx'));
 const Result = React.lazy(() => import('./views/student/Result'));
@@ -38,6 +40,8 @@ class App extends Component {
               <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />
               <Route exact path="/results/:clasz/:term" name="result" render={props => <Results {...props}/>} />
               <Route exact path="/scheme/:clasz/:term/:id" name="Scheme Of Work" render={props => <Scheme {...props}/>} />
+              <Route exact path="/timetable/:sessionid/:termid/:ids" name="Time table" render={props => <TimeTable {...props}/>} />
+              <Route exact path="/timetablepage/:id" name="Time table Page" render={props => <TimeTablePage {...props}/>} />
               <Route exact path="/attendance_staff" name="Staff Attendance" render={props => <AttendanceStaff {...props}/>} />
               <Route exact path="/attendance_student/:clasz" name="Student Attendance" render={props => <AttendanceStudent {...props}/>} />
               <Route exact path="/admission/:admit" name="Admission Letter" render={props => <Admission {...props}/>} />

@@ -415,7 +415,7 @@ let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? pro
                   </CSelect>
                   <CFormText className="help-block">Select the session</CFormText>
                 </CFormGroup>
-                <CFormGroup>
+            <CFormGroup>
                   <CLabel htmlFor="nf-termid">Term </CLabel>
                   <CSelect
                       type="text" 

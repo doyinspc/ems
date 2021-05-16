@@ -36,9 +36,9 @@ const Studentclasss = (props) => {
  const [itemz, setitemz] = useState(0)
 
   useEffect(() => {
-    if(parseInt(subjectid) > 0 )
-    {
-     let params = {
+      if(parseInt(subjectid) > 0 )
+      {
+        let params = {
         data:JSON.stringify(
         {
             'termid':termid,
@@ -51,11 +51,9 @@ const Studentclasss = (props) => {
         cat:'staffclass',
         table:'accessstudentsubject',
         narration:'get staff student subjects'
+        }
+       props.getStaffstudents(params)
       }
-      props.getStaffstudents(params)
-
-      
-    }
   }, [termid, subjectid, sessionid, groupid, clientid])
 
   useEffect(() => {
@@ -98,7 +96,7 @@ const Studentclasss = (props) => {
   const placeStudent = (students) =>{
    setStudentdata(students);
   }
-const loadStudent = () =>{
+  const loadStudent = () =>{
 
       let fd = new FormData();
       fd.append('itemid', subjectid);
@@ -115,7 +113,7 @@ const loadStudent = () =>{
       fd.append('cat', 'inserts');
       props.registerStaffstudent(fd)
       
-}
+  }
 const getAllStudents = () =>{
   /**
     * classunitid
@@ -264,8 +262,7 @@ const serScoreValues = (e, ca, namz, sco) =>{
   } 
 }
 const saveScoreValues = (e, student, ca, namz, sco) =>{
-  saveScore(student, ca , e.target.value)
-  
+  saveScore(student, ca , e.target.value);
 }
 
 
@@ -383,7 +380,6 @@ let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
     </td>
   </tr>
 });
-
 
 let len = data.filter(rw=>rw !== null && rw !== undefined).length;
 

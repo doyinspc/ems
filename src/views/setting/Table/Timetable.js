@@ -12,8 +12,10 @@ const Timetable = (props) => {
   let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
       return <tr key={ind}>
                 <td className='text-center'>{ind + 1}</td>
-                <td>{row.name}</td>
-                <td className='text-center'>{row.abbrv}</td>
+                <td>{row.sessionname}</td>
+                <td>{row.termname}</td>
+                <td className='text-left'>{row.claszname}</td>
+                <td className='text-left'>{row.periods}</td>
                 { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
                 <td className='text-center'>
                     {
@@ -37,8 +39,10 @@ const Timetable = (props) => {
                 <thead className="thead-light" >
                   <tr>
                     <th className="text-center">SN.</th>
-                    <th><i className='fa fa-list'></i> Timetable</th>
-                    <th className="text-center"> <i className='fa fa-text'></i> Abbrv</th>
+                    <th><i className='fa fa-list'></i> Session</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> Term</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> Class</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> Periods</th>          
                     { props.editer === true  || (props.submenu !== undefined && props.submenu.length > 0) ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>

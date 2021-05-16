@@ -5,7 +5,6 @@ import Swal from 'sweetalert'
 const Staffsubject = (props) => {
   
   let popz = (dt) =>{
-    console.log(dt)
     Swal("Please select what you want to do ?", {
       buttons: {
         cancel: "Delete!",
@@ -134,7 +133,7 @@ const Staffsubject = (props) => {
     return <th key={ind} className='text-center'>{foo}</th>
     })
   return (
-
+    <div className="table-responsive">
           <table className="table table-hover table-outline mb-0  d-sm-table">
               <thead>
                   <td>STAFF</td>{tablhead}<th>TOTAL</th>
@@ -146,7 +145,7 @@ const Staffsubject = (props) => {
                   <td>TOTAL</td>{tablfooter}<th></th>
               </thead>
               </table>
-         
+     </div>    
   )
 }
 const mapStateToProps = (state) =>({

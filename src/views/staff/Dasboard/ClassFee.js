@@ -16,15 +16,7 @@ import {
   CRow,
   CCallout,
   CTooltip
-} from '@coreui/react'
-import {
-    CChartBar,
-    CChartLine,
-    CChartDoughnut,
-    CChartRadar,
-    CChartPie,
-    CChartPolarArea
-  } from '@coreui/react-chartjs';
+} from '@coreui/react';
 import CIcon from '@coreui/icons-react'
 import { nairaformat } from '../../../actions/common';
 
@@ -38,98 +30,135 @@ const Dashboards= (props) => {
             data:JSON.stringify(
             {
                 'sessionid':sessionid,
-                'termid':termid,
-                'typeid':2
+                'termid':termid
             }),
-            cat:'datasummary',
-            table:'access',
-            narration:'get all schools'
+            cat:'studentfees',
+            table:'studentfees',
+            narration:'get studentfees'
+            // cat:'datasummary',
+            // table:'access',
+            // narration:'get all schools'
             }
         props.getStudentfeeSummary(params)
-        return () => {
-            //cleanup
-        }
     }, [termid, sessionid])
 
-    
- 
-    
+    const summer = (arr) =>{
+      if(arr !== undefined && Array.isArray(arr))
+      {
+        let ar = arr.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
+        return ar;
+      }else
+      {
+        return 0;
+      }
+  
+    }
+   let datas = props.summary && Array.isArray(props.summary) ? props.summary.filter(rw=>rw.id !== null):[];
+  
+   let struc = {};
+  datas.forEach((ele)=>{
+    if(struc.hasOwnProperty(ele.studentid))
+    {
+        struc[ele.studentid][parseInt(ele.grp)].push(parseFloat(ele.amount))
+    }else
+    {
+        struc[ele.studentid] = {}
+        struc[ele.studentid][0] = []
+        struc[ele.studentid][1] = []
+        struc[ele.studentid][2] = ele.studentname;
+        struc[ele.studentid][3] = ele.classname;
+        struc[ele.studentid][4] = ele.classid;
+
+        if(parseInt(ele.grp) === 0)
+        {
+          struc[ele.studentid][0].push(parseFloat(ele.amount))
+        }else
+        {
+          struc[ele.studentid][1].push(parseFloat(ele.amount))
+        }
+    }
+  })
+
+  let strucs = []
+  Object.keys(struc).forEach((ele)=>{
+      let struc1 = {};
+      struc1[0] = struc[ele][0].reduce((a, b) => a + b, 0);
+      struc1[1] = struc[ele][1].reduce((a, b) => a + b, 0);
+      struc1[2] = struc[ele][2];
+      struc1[3] = struc[ele][3];
+      struc1[4] = struc[ele][4];
+      strucs.push(struc1);
+  })
+
+
+  let sumar = {}
+  strucs.forEach(ele=>{
+    if(sumar.hasOwnProperty(ele[4]))
+    {
+      sumar[ele[4]][0].push(ele[0])
+      sumar[ele[4]][1].push(ele[1])
+      let dif = parseFloat(ele[0]) - parseFloat(ele[1]);
+        if(dif >= 0)
+        {
+          //student still owing
+          if(dif !== undefined && dif !== 'undefined')
+          {
+            sumar[ele[4]][3].push(dif)
+          } 
+        }else if(parseFloat(dif) < 0 )
+        {
+          //student been owed
+          sumar[ele[4]][4].push(dif * -1)
+        }
+    }else
+    {
+        sumar[ele[4]] = {}
+        sumar[ele[4]][0] = []
+        sumar[ele[4]][1] = []
+        sumar[ele[4]][0].push(ele[0])
+        sumar[ele[4]][1].push(ele[1])
+        sumar[ele[4]][2] = ele[3];
+        sumar[ele[4]][3] = []
+        sumar[ele[4]][4] = []
+
+        let dif = parseFloat(ele[0]) - parseFloat(ele[1]);
+        if(parseFloat(dif) >= 0 )
+        {
+          if(dif !== undefined && dif !== 'undefined')
+          {
+            sumar[ele[4]][3].push(dif)
+          } 
+        }
+        else if(parseFloat(dif) < 0 )
+        {
+          sumar[ele[4]][4].push(dif * -1)
+        }
+    }
+  })
+  
+  let sumarx = []
+  let sumfee = []
+  let sumpay = []
+  let sumowe = []
+  let sumdeb = []
+  Object.keys(sumar).forEach(ele=>{
+      let sumar1 = {};
+      sumar1[0] = sumar[ele][1].reduce((a, b) => a + b, 0);
+      sumar1[1] = sumar[ele][0].reduce((a, b) => a + b, 0);
+      sumar1[3] = sumar[ele][4].reduce((a, b) => a + b, 0);
+      sumar1[4] = sumar[ele][3].reduce((a, b) => a + b, 0);
+      sumar1[2] = sumar[ele][2];
+      sumarx.push(sumar1);
+      sumfee.push(sumar[ele][1].reduce((a, b) => a + b, 0))
+      sumpay.push(sumar[ele][0].reduce((a, b) => a + b, 0))
+      sumdeb.push(sumar[ele][4].reduce((a, b) => a + b, 0))
+      sumowe.push(sumar[ele][3].reduce((a, b) => a + b, 0))
+  })
    
-   let data = props.summary && Array.isArray(props.summary) ? props.summary.filter(rw=>rw.id !== null):[];
-   console.log(data)
-   let feearray = {};
-   let feesarray = [];
-   let payarray = {};
-   let balarray = {};
-   let balsarray = {};
-   let namearray = {};
-   let sumpop = [];
-   let sumfee = [];
-   let sumpay = [];
-   let sumbal = [];
-   let sumbals = [];
-   data.forEach(element => {
-      
-       let nm = element.name;
-       let pop = parseInt(element.nums);
-       let pay = parseFloat(element.pay) >= 0 ? parseFloat(element.pay) : 0;
-       let fee = parseFloat(element.fee) >= 0 ? parseFloat(element.fee) : 0;
-       let bal = parseFloat(element.bal) >= 0 ? parseFloat(element.bal) : 0;
-       let bals = parseFloat(element.bals) >= 0 ? parseFloat(element.bals) : 0;
-
-       feearray[element.id] =  fee;
-       payarray[element.id] =  pay;
-       balarray[element.id] =  bal;
-       balsarray[element.id] = bals;
-
-       sumfee.push(fee)
-       sumpay.push(pay)
-       sumbal.push(bal)
-       sumbals.push(bals)
-      //  if(parseInt(element.grp) > 0)
-      //  {
-      //    feearray[element.id] =  pay;
-      //    sumfee.push(pay)
-      //  }else{
-      //    payarray[element.id] =  pay;
-      //    sumpay.push(pay)
-      //  }
-
-       if(Object.keys(namearray).includes(element.id))
-       {
-            
-       }else{
-            namearray[element.id] = nm;
-       }
-
-   });
-   
-   Object.keys(namearray).forEach(element => {
-       let arr = {}
-       let fee = feearray[element];
-       let pay = payarray[element];
-       let bal = balarray[element];
-       let bals = balsarray[element];
-       let payz = parseFloat(payarray[element]) - parseFloat(balsarray[element]);
-       let money = parseFloat(pay) > 0  && parseFloat(fee) > 0 ? (parseFloat(payz)/parseFloat(fee)) * 100 : 0;
-
-        arr['name'] = namearray[element];
-        
-        arr['fee'] = fee;
-        arr['pay'] = pay;
-        arr['bal'] = bal;
-        arr['bals'] = bals;
-        arr['pop'] = fee - pay;
-        console.log(bals)
-        arr['money'] = money;
-
-        feesarray.push(arr)
-   });
-
-
-   let sfee = sumfee.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
-   let spay = sumpay.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0)
-   let spop = sumpop.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0)
+  
+   let sfee = 0;
+   let spay = 0;
+   let spop = 0;
 
    let naira = nairaformat;
   return (
@@ -170,47 +199,54 @@ const Dashboards= (props) => {
               <CRow>
               <CCol xs="12" md="12" xl="12">
               <CRow>
-                    <CCol sm="4">
+                    <CCol xs={12} sm={6} md={6}>
                       <CCallout color="info">
-                        <small className="text-muted">Fee</small>
+                        <small className="text-muted">Expected Fees</small>
                         <br />
-            <strong className="h4">{nairaformat(sfee)}</strong>
+            <strong className="h5">{nairaformat(summer(sumfee))}</strong>
                       </CCallout>
                     </CCol>
-                    <CCol sm="4">
+                    <CCol xs={12} sm={6} md={6}>
                       <CCallout color="success">
                         <small className="text-muted">Payments</small>
                         <br />
-            <strong className="h4">{nairaformat(spay)}</strong>
+            <strong className="h5">{nairaformat(summer(sumpay))}</strong>
                       </CCallout>
                     </CCol>
-                    <CCol sm="4">
+                    <CCol xs={12} sm={6} md={6}>
+                      <CCallout color="secondary">
+                        <small className="text-muted">Excess Payments</small>
+                        <br />
+            <strong className="h5">{nairaformat(summer(sumowe))}</strong>
+                      </CCallout>
+                    </CCol>
+                    <CCol xs={12} sm={6} md={6}>
                       <CCallout color="danger">
                         <small className="text-muted">Debt</small>
                         <br />
-            <strong className="h4">{nairaformat(sfee - spay)}</strong>
+            <strong className="h5">{nairaformat(summer(sumdeb))}</strong>
                       </CCallout>
                     </CCol>
                   </CRow>
                 
-                {feesarray.map((prop, index)=>{
+                {sumarx.map((prop, index)=>{
                   return <CRow key={index}>
                   <CCol>
                 <div className="progress-group mb-4">
                   <div className="progress-group-bars">
                   <div className="progress-group-header">
                         <CIcon className="progress-group-icon" name="cil-money" />
-                        <span className="title">{prop.name}</span>
-                <span className="ml-auto font-weight-bold">{parseInt(prop.money)}%</span>
+                        <span className="title">{prop[2]}</span>
+                <span className="ml-auto font-weight-bold">{Math.floor(( (parseInt(prop[0])- (parseInt(prop[3]) + parseInt(prop[4])))  / parseInt(prop[0])) * 100)}%</span>
                         </div>
-                    <CProgress className="progress-xs" color="warning" value={parseInt(prop.money)} />
+                    <CProgress className="progress-xs" color="warning" value={parseInt(prop[4])} />
                     </div>
                 </div>
                 </CCol>
                       <CCol xs={2}>
                       <div className="progress-group-prepend">
                     <span className="progress-group-text pull-right m-auto">
-                      <strong><strong className="text-danger">{nairaformat(prop.pop)}</strong></strong>
+                      <strong><strong className="text-danger">{nairaformat(prop[3])}</strong></strong>
                     </span>
                   </div>
                    </CCol>

@@ -34,7 +34,8 @@ const Studentfee = (props) => {
      let params = {
       data:JSON.stringify(
       {
-          'sessionid':props.user.activeterm.sessionid
+          'sessionid':props.user.activeterm.sessionid,
+          'termid' : props.user.activeterm.id
       }),
       cat:'studentfees',
       table:'studentfees',

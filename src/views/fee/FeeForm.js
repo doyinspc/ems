@@ -283,14 +283,7 @@ let { name, photo} = student || ''
                         <CCard className='h-100'>
                             <CCardBody>
                                 <CRow xs={12} style={{backgroundColor:'red'}} className="text-center d-flex justify-contents-center align-items-center m-auto" >
-                                    <CCol>
-                                    <img
-                                        src={process.env.REACT_APP_SERVER_URL + photo}
-                                        height='100px'
-                                        alt="profile-image" 
-                                        onError={(e)=>{e.target.onerror=null; e.target.src='/icons/profile_1.png'} }
-                                    />
-                                    </CCol>
+                                    
                                     <CCol>
                                     <h4 style={{color:'white'}}>{name}</h4>
                                     </CCol>

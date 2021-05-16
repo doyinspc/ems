@@ -22,6 +22,9 @@ export const axiosConfig1 = {
         "Content-Type": "multipart/form-data",
     }
   };
+export const validateDate = (date) =>{
+    return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+}
 export const callReg = () =>{
     return Swal("Done!", "Update saved!", "success");
 }
@@ -35,6 +38,63 @@ export const nairaformat = (item)=>{
   let f = new Intl.NumberFormat(undefined,{style:'currency', currency:'NGR'})
   return f.format(item)
 }
+export const inventorystate = [
+  {
+      id:1,
+      name:'Store',
+      description:'Send the items to the store',
+      color:'green',
+      source:'Supplier',
+      cost:'Total Price'
+  },
+  {
+      id:2,
+      name:'Dispatch',
+      description:'Consumables',
+      color:'grey',
+      source:'Location/Destination',
+      cost:'Extimated Price'
+  },
+  {
+      id:3,
+      name:'Deploy',
+      description:'move from store to a unit, department. ',
+      color:'blue',
+      source:'Location/Destination',
+      cost:'Extimated Price'
+  },
+  {
+      id:4,
+      name:'Damaged',
+      description:'Item can nolonger be used ',
+      color:'red',
+      source:'Damaged by/Reason',
+      cost:'Estimated Price'
+  }
+]
+export const inventorytypez = [
+  {
+      id:1,
+      name:'Consumable/Perishable',
+      extra:'Duration of value (Years)'
+  },
+  {
+      id:2,
+      name:'Depreciable',
+      extra:'Maximum years from date instore/inuse'
+  },
+  {
+      id:3,
+      name:'Expires',
+      extra:'Number of Years'
+  },
+  {
+      id:4,
+      name:'Appreciable',
+      extra:'Percentage per annum (%)'
+  },
+  
+]
 export const ordinal_suffix_of = (i)=> {
   var j = i % 10,
       k = i % 100;
@@ -444,7 +504,7 @@ export const controls = {
                 name:'Quick Setup',
                 icon:'/icons/term_fee.png',
                 links:'/setting/3/',
-                description:'Use a previos data to update this terms data'
+                description:'Use a previos records to update this terms data'
               },
             ]
 

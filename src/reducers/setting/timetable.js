@@ -1,3 +1,4 @@
+import { callSuccess } from "../../actions/common";
 import {
     TIMETABLE_GET_MULTIPLE,
     TIMETABLE_GET_ONE,
@@ -56,7 +57,8 @@ export default function(state = initialState, action){
             };
         case TIMETABLE_GET_ONE:
             let all = [...state.timetables];
-            let ses = all.filter(row=>row.id == action.payload)[0];
+            let ses = all.filter(row=>parseInt(row.id) === parseInt(action.payload))[0];
+            
             return {
                 ...state,
                 timetable : ses,
@@ -64,6 +66,7 @@ export default function(state = initialState, action){
             };
         case TIMETABLE_REGISTER_SUCCESS:
             localStorage.setItem('timetable', JSON.stringify([...state.timetables, action.payload]));
+            callSuccess()
             return {
                 ...state,
                 timetables: [...state.timetables, action.payload],
@@ -86,10 +89,11 @@ export default function(state = initialState, action){
                 timetables: rem
             }
         case TIMETABLE_UPDATE_SUCCESS:
-            const findInd = state.timetables.findIndex(cat => cat.id == action.payload.id);
+            const findInd = state.timetables.findIndex(cat => parseInt(cat.id) == parseInt(action.payload.id));
             let newState = [...state.timetables];
             newState[findInd] = action.payload;
             localStorage.setItem('timetable', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

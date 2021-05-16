@@ -58,7 +58,7 @@ const Classfee = (props) => {
     fd.append('is_active', nu);
     fd.append('cat', 'update');
     fd.append('table', 'classfees');
-    fd.append('narration', `activate ande disable class ${nu}`);
+    fd.append('narration', `activate and disable class ${nu}`);
     props.updateClassfee(fd);
 
   }

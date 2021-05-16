@@ -7,10 +7,10 @@ const Staffsubject = (props) => {
   let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
       return <tr key={ind}>
                 <td className='text-center'>{ind + 1}</td>
-                <td className='text-left'>{row.itemname}</td>
+                <td>{row.clientname}</td>
+                <td className='text-left'>{parseInt(row.staffid) === 1 ? row.itemnameops :row.itemname}</td>
                 <td className='text-left'>{row.itemname1}</td>
                 <td className='text-center'>{row.contact}</td>
-                <td>{row.clientname}</td>
                 { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
                 <td className='text-center'>
                    
@@ -25,6 +25,7 @@ const Staffsubject = (props) => {
   })
   return (
         <>
+        <div className="table-responsive">
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>
@@ -40,6 +41,7 @@ const Staffsubject = (props) => {
                   {tabl}
                  </tbody>
               </table>
+              </div>
               </>
          
   )

@@ -6,7 +6,7 @@ import moment from 'moment'
 import { useParams } from 'react-router-dom';
 import CourseFormAssessment from './Question/Form/CourseFormAssessment';
 import Theme from './Question/Form/CardFormTheme'
-
+import PageHeader  from './PageHeader';
 
   const termarray ={
     1:'First term',
@@ -139,59 +139,10 @@ const Staffattendance = (props) => {
             style={{marginLeft:'auto', marginRight:'auto', marginTop:'9px',  marginBottom:'5px', backgroundColor:'grey'}}
           >
                 <CContainer style={{  minHeight:'900px', maxWidth:'720px', backgroundColor:'white'}}>
-                          <CRow xs={12} style={{backgroundColor:'white', height:'100%'}} >
-                                <CCol xs='3' style={{marginTop:'2px', marginBottom:'2px'}}>
-                                <img 
-                                    
-                                    src={process.env.PUBLIC_URL + '/avatars/logo.png'}
-                                    className="m-0 p-0" 
-                                    width='100%'
-                                    height='100px'
-                                    alt='admission' 
-                                    onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
-                                />
-                                </CCol>
-                                <CCol xs='3' style={{marginTop:'1px', marginBottom:'4px'}}>
-                                <div className='my-1'>
-                                    <small className='pull-left '>
-                                        <b>
-                                            MESL Staff School <br/>
-                                            Kainji & Jebba Hydro Power Plant<br/>
-                                            07035992972 (Jebba)<br/>
-                                            07035839707 (Kainji)<br/>
-                                        </b>
-                                    </small>
-                                </div>
-                                </CCol>
-                                <CCol xs='1' style={{marginTop:'1px', marginBottom:'1px'}}></CCol>
-                                <CCol xs='3' style={{textAlign:'right'}}>
-                                <div className='my-2'>
-                                    <small className='pull-right '>
-                                        <b>
-                                        2nd Floor, ACHILLES PLACE<br/>
-                                        11, Maye Street<br/>
-                                        Off Commercial Avenue
-                                         <br/>
-                                         Yaba, Lagos Statet<br/>
-                                         +234 906 8808 021<br/>
-                                         info@stresertintegrated.com<br/>
-                                        </b>
-                                       
-                                    </small>
-                                </div>
-                                </CCol>
-                                <CCol xs='2' className='pull-right' style={{ marginTop:'1px'}}>
-                                <img 
-                                    src={process.env.PUBLIC_URL + '/avatars/logo1.png'}
-                                    className="m-0 p-0" 
-                                    width='100%'
-                                    height='100px'
-                                    alt='admission' 
-                                    onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
-                                />
-                                </CCol> 
-                          </CRow>
-                          <CRow xs={12} >
+                    <PageHeader />     
+                           
+                           
+            <CRow xs={12} >
                           <table className="table table-border table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>

@@ -113,7 +113,7 @@ const Staffsubject = (props) => {
     return <th key={ind} className='text-center'>{foo}</th>
     })
   return (
-
+    <div className="table-responsive">
           <table className="table table-hover table-outline mb-0  d-sm-table">
               <thead>
                   <td>STAFF</td>{tablhead}<th>TOTAL</th>
@@ -125,7 +125,7 @@ const Staffsubject = (props) => {
                   <td>TOTAL</td>{tablfooter}<th></th>
               </thead>
               </table>
-         
+       </div>  
   )
 }
 const mapStateToProps = (state) =>({

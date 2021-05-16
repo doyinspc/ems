@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerStaffsubject, updateStaffsubject, deleteStaffsubject} from './../../../actions/staff/staffsubject';
 import {getStaffs} from './../../../actions/staff/staff';
+
 import { useHistory, useLocation } from 'react-router-dom'
 import {
   CBadge,
@@ -25,14 +26,17 @@ import {setElement} from './../../../actions/common'
 
 
 const Staffsubject = (props) => {
+
   const [id, setId] = useState(null)
   const [claszid, setClaszid] = useState(null)
   const [subjectid, setSubjectid] = useState(null)
   const [staff, setStaff] = useState(null)
   const [contact, setContact] = useState(null)
+
   let sessionid = props.pid;
   let termid = props.qid;
   let groupid = 2;
+
   //GET STAFFSUBJECTS PER SCHOOL
   useEffect(() => {
     if(props.activeschool !== undefined && parseInt(props.activeschool.id) > 0){
@@ -59,12 +63,12 @@ const Staffsubject = (props) => {
       
       setId(dt.id);
       setStaff(dt.clientid);
-      setClaszid(dt.itemid);
+      setClaszid(dt.staffid+"_"+dt.itemid);
       setSubjectid(dt.itemid1);
       setContact(dt.contact);
-      setElement('nf-subjectid', dt.itemid1 )
-      setElement('nf-claszid', dt.itemid )
-      setElement('nf-staff', dt.clientid )
+      //setElement('nf-subjectid', dt.itemid1 )
+      //setElement('nf-claszid', dt.itemid )
+      //setElement('nf-staff', dt.clientid )
     }else{
       setId(null);
       setStaff('');
@@ -74,12 +78,15 @@ const Staffsubject = (props) => {
     }
     
   }, [props.data])
-
+  
   const handleSubmit = () =>{
     if(parseInt(staff) > 0)
     {
+      let cl = claszid.length > 0 ? claszid.split("_") : '';
+
       let fd = new FormData();
-      fd.append('itemid', claszid);
+      fd.append('itemid', cl[1]);
+      fd.append('staffid', cl[0]);
       fd.append('itemid1', subjectid);
       fd.append('clientid', staff);
       fd.append('contact', contact);
@@ -102,13 +109,28 @@ const Staffsubject = (props) => {
         fd.append('cat', 'inserts');
         props.registerStaffsubject(fd)
       }
-      props.onReset()
+      //onReset()
+      
     }
   }
 
+  const onReset = ()=>{
+    setId('');
+    setStaff('');
+    setClaszid('');
+    setSubjectid('');
+    setContact(0);
+  }
+  
+  
   let claszarray = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns[1] : [];
   let clarray = Array.isArray(claszarray) ? claszarray.filter(rw=>rw !== null).map((rw, ind) =>{
-      return <option key={ind} value={rw.id}>{rw.name}</option>
+      return <option key={ind} value={`0_${rw.id}`}>{rw.name}</option>
+  }):<option></option>
+
+  let clasarray = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns[7] : [];
+  let clarr = Array.isArray(clasarray) ? clasarray.filter(rw=>rw !== null).map((rw, ind) =>{
+      return <option key={ind} value={`1_${rw.id}`}>{rw.name}</option>
   }):<option></option>
 
   let subjectarray = props.user.dropdowns && Array.isArray(props.user.dropdowns) ? props.user.dropdowns[2] : [];
@@ -122,8 +144,8 @@ const Staffsubject = (props) => {
   })
  
    return (
-    <CCol xl={12}  id="#formz">
-        <CCard>
+    <CCol xl={12}  id="#formz" >
+        <CCard style={{position:'static', zIndex:'101'}}>
             <CCardHeader id='traffic' className="card-title mb-0">
               <CRow>
                 <CCol sm="6">
@@ -151,6 +173,7 @@ const Staffsubject = (props) => {
                       onChange={(e)=>setStaff(e.target.value)}
                       placeholder="" 
                     >
+                     {id && parseInt(id) > 0 ? <option value={staff}>{props.data.clientname}</option> : <option></option>}
                       {starray}
                   </CSelect>
                   <CFormText className="help-block">Select the staff</CFormText>
@@ -165,6 +188,7 @@ const Staffsubject = (props) => {
                       onChange={(e)=>setSubjectid(e.target.value)}
                       placeholder="" 
                     >
+                       {id && id > 0 ? <option value={subjectid}>{props.data.itemname1}</option> : <option></option>}
                       {subarray}
                   </CSelect>
                   <CFormText className="help-block">Select the subject</CFormText>
@@ -178,7 +202,9 @@ const Staffsubject = (props) => {
                       onChange={(e)=>setClaszid(e.target.value)}
                       placeholder="" 
                     >
+                       {id && id > 0 ? <option value={claszid}>{props.data.itemname}</option> : <option></option>}
                       {clarray}
+                      {clarr}
                   </CSelect>
                   <CFormText className="help-block">Select the class</CFormText>
                 </CFormGroup>
@@ -198,7 +224,7 @@ const Staffsubject = (props) => {
             </CCardBody>
             <CCardFooter>
               <CButton type="submit" onClick={handleSubmit} size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>{' '}
-              <CButton type="reset" onClick={props.onReset} size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
+              <CButton type="reset" onClick={onReset} size="sm" color="danger"><CIcon name="cil-ban" /> Reset</CButton>
             </CCardFooter>
           </CCard>
       </CCol>
@@ -216,5 +242,5 @@ export default connect(mapStateToProps, {
   registerStaffsubject,
   updateStaffsubject,
   deleteStaffsubject,
-  getStaffs
+  getStaffs,
 })(Staffsubject)

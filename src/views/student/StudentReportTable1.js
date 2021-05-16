@@ -3,10 +3,8 @@ import { useHistory} from 'react-router-dom'
 import { connect} from "react-redux";
 import {
     CRow,
-    CCol,
-   
+    CCol,   
     CButton,
-   
     CModal,
     CModalBody,
     CModalHeader,
@@ -24,6 +22,7 @@ import {registerComment, updateComment, getComment, getComments, deleteComment} 
 import {getStudentfees} from './../../actions/student/studentfee'
 import ReactStars from "react-rating-stars-component";
 import { ordinal_suffix_of } from '../../actions/common';
+import PageHeader  from './../staff/PageHeader2';
 
 const StudentReportList = (props) => {
 
@@ -359,61 +358,35 @@ const StudentReportList = (props) => {
     
     return (
    <>
-        <div className="A4" >
-                <div className="sheet padding-5mm" >
-                    <CRow style={{backgroundColor:'white', height:'30mm', paddingTop:'3mm'}} >
-                        <CCol  style={{marginTop:'2px', marginBottom:'2px', width:'30mm'}}>
-                        <img 
+        <div className="A4" style={{
+                            overflow:'hidden',
+                            position: 'relative',
                             
-                            src={process.env.PUBLIC_URL + '/avatars/logo.png'}
-                            className="m-0 p-0" 
-                            width='100%'
-                            height='100px'
-                            alt='admission' 
-                            onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
-                        />
-                        </CCol>
-                        <CCol xs='3' style={{marginTop:'1px', marginBottom:'4px'}}>
-                        <div className='my-1'>
-                            <small className='pull-left '>
-                                <b>
-                                    MESL Staff School <br/>
-                                    Kainji & Jebba Hydro Power Plant<br/>
-                                    07035992972 (Jebba)<br/>
-                                    07035839707 (Kainji)<br/>
-                                </b>
-                            </small>
-                        </div>
-                        </CCol>
-                        <CCol xs='1' style={{marginTop:'1px', marginBottom:'1px'}}></CCol>
-                        <CCol xs='3' style={{textAlign:'right'}}>
-                        <div className='my-2'>
-                            <small className='pull-right '>
-                                <b>
-                                2nd Floor, ACHILLES PLACE<br/>
-                                11, Maye Street<br/>
-                                Off Commercial Avenue
-                                    <br/>
-                                    Yaba, Lagos Statet<br/>
-                                    +234 906 8808 021<br/>
-                                    info@stresertintegrated.com<br/>
-                                </b>
-                                
-                            </small>
-                        </div>
-                        </CCol>
-                        <CCol xs='2' className='pull-right' style={{ marginTop:'1px'}}>
-                    <img 
-                        src={process.env.PUBLIC_URL + '/avatars/logo1.png'}
-                        className="m-0 p-0" 
-                        width='100%'
-                        height='100px'
-                        alt='admission' 
-                        onError={(e)=>{e.target.onerror=null; e.target.src='avatars/1.png'} }
-                    />
-                    </CCol> 
-                    </CRow>
-                    <CRow xs={12} >
+                        }}>
+        <img
+                             src={process.env.REACT_APP_SERVER_URL + props.user.activeschool.links}
+                             className="text-center align-self-center"
+                             style={{
+                                 margin:'auto',
+                                 padding:'auto',
+                                 position:'absolute',
+                                 left:'20%',
+                                 top:'20%',
+                                 bottom:'0',
+                                 width:'50%',
+                                 height:'auto',
+                                 opacity:'0.2'
+                             }}
+
+                            />
+                <div className="sheet padding-5mm"  >
+                   <PageHeader photo={rows.photo} admission_no={rows.admission_no} />
+                  
+                   <CRow 
+                        xs={12} 
+                        className="watermark"
+                        >
+                            
                         <CCol xs={12}>
                             <table className="mb-3 mt-5" width='100%' style={{fontSize:'14px'}}>
                                 <thead className="thead-light mb-7" >
@@ -448,19 +421,8 @@ const StudentReportList = (props) => {
                             <tbody > 
                                 <CCol>                
                                     <CRow className='mb-5 mt-1'>
-                                    <CCol xs={2}>
-                                        <div className="c-avata">
-                                            <img 
-                                            src={process.env.REACT_APP_SERVER_URL+ rows.photo} 
-                                            className="c-" 
-                                            style={{width:'120px'}}
-                                            alt={rows.admission_no} 
-                                            onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
-                                            />
-                                            <span className={`c-avatar-status ${rows.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
-                                        </div>
-                                        </CCol>
-                                        <CCol xs={10}>
+                                   
+                                        <CCol xs={12}>
                                             <h3 style={{textTransform:'capitalize', fontFamily:'Bubblegum Sans'}}>{`${rows.surname} ${rows.firstname} ${rows.middlename}`} {" -"}<small>{` ${rows.abbrv}${rows.admission_no} `}</small></h3>
                                             <h5>Gender : {rows.gender}</h5>
                                             <h4 style={{fontFamily:'Lobster Two'}}>{`${std_positions[0] !== undefined && std_positions[0].hasOwnProperty('rank') ? ordinal_suffix_of(std_positions[0].rank) : '-'} position out of  ${class_population} pupils in ${claszname}`}</h4>

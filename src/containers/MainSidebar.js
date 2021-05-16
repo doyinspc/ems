@@ -32,7 +32,7 @@ const TheSidebar = () => {
           height={35}
         />
         <img
-        src={process.env.PUBLIC_URL +'/avatars/logo1.png'}
+        src={process.env.PUBLIC_URL + process.env.REACT_APP_LOGO2}
         height='60px'/>
       </CSidebarBrand>
       <CSidebarNav>

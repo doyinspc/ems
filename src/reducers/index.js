@@ -9,6 +9,7 @@ import grade from "./setting/grade";
 import gradeunit from "./setting/gradeunit";
 import expense from "./setting/expense";
 import expenseunit from "./setting/expenseunit";
+import expensetransaction from "./setting/expensetransaction";
 import inventory from "./setting/inventory";
 import inventoryunit from "./setting/inventoryunit";
 import inventorytransaction from "./setting/inventorytransaction";
@@ -76,6 +77,7 @@ export default combineReducers({
     gradeunitReducer: gradeunit,
     expenseReducer: expense,
     expenseunitReducer: expenseunit,
+    expensetransactionReducer: expensetransaction,
     inventoryReducer: inventory,
     inventoryunitReducer: inventoryunit,
     inventorytransactionReducer: inventorytransaction,

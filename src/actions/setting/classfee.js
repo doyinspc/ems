@@ -79,6 +79,22 @@ export const registerClassfee = data => dispatch => {
             })
         })
 };
+//CLASSFEE REGISTER
+export const insertClassfee = data => dispatch => {
+    axios.post(path, data, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: CLASSFEE_REGISTER_SUCCESS,
+                payload: res.data.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : CLASSFEE_REGISTER_FAIL,
+                payload: err
+            })
+        })
+};
  //CLASSFEE UPDATE
 export const updateClassfee = (data) => (dispatch, getState) => {
     //body

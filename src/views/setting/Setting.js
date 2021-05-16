@@ -26,6 +26,7 @@ import Gradeunit from './Stage/Gradeunit';
 import Classallocation from './Stage/Staffclass';
 import Subjectallocation from './Stage/Staffsubject';
 import Classfee from './Stage/Classfee'
+import QuickSetup from './Stage/QuickSetup'
 import Week from './Stage/Week';
 import Report from './Stage/Report';
 import Fee from './Stage/Fee';
@@ -195,7 +196,7 @@ const Setting = (props) => {
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
-        {parseInt(sid) === 3 && parseInt(pid) > 0 &&  parseInt(qid) > 0 &&  parseInt(did) == 5?
+        {parseInt(sid) === 3 && parseInt(pid) > 0 &&  parseInt(qid) > 0 &&  parseInt(did) == 5 ?
         confirm(sid, perm,
            <Subjectallocation
               sid={sid}
@@ -221,6 +222,17 @@ const Setting = (props) => {
          {parseInt(sid) === 3 && parseInt(pid) > 0 &&  parseInt(qid) > 0 &&  parseInt(did) == 10?
         confirm(sid, perm,
            <Week
+              sid={sid}
+              pid={pid}
+              qid={qid}
+              did={did}
+              edits={mainedt}
+              school={props.user.activeschool} 
+              para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
+            />):''}
+        {parseInt(sid) === 3 && parseInt(pid) > 0 &&  parseInt(qid) > 0 &&  parseInt(did) == 8?
+        confirm(sid, perm,
+           <QuickSetup
               sid={sid}
               pid={pid}
               qid={qid}

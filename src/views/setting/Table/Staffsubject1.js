@@ -120,7 +120,7 @@ const Staffsubject = (props) => {
                         let arz = Object.keys(rz).map((r, i)=>{
                             col_arr[row1].push(rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0));
                             row_arr.push(rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0));
-                            return <span key={i} onClick={()=>popz(allStaffz[row][row1][r][0])}>{`${allSubject[r]} (${rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0)})`}</span>
+                            return <span key={i} onClick={()=>popz(allStaffz[row][row1][r][0])}>{`${allSubject[r]} (${rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0)})`}eer</span>
                         })
                         return <th key={ind1} className='text-center'>{arz}</th>
                     })}
@@ -132,7 +132,7 @@ const Staffsubject = (props) => {
     return <th key={ind} className='text-center'>{foo}</th>
     })
   return (
-
+      <div className="table-responsive">
           <table className="table table-hover table-outline mb-0  d-sm-table">
               <thead>
                   <td>STAFF</td>{tablhead}<th>TOTAL</th>
@@ -144,7 +144,7 @@ const Staffsubject = (props) => {
                   <td>TOTAL</td>{tablfooter}<th></th>
               </thead>
               </table>
-         
+      </div>   
   )
 }
 const mapStateToProps = (state) =>({

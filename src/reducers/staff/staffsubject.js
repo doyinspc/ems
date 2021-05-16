@@ -74,6 +74,7 @@ export default function(state = initialState, action){
             };
         case STAFFSUBJECT_REGISTER_SUCCESS:
             localStorage.setItem('staffsubject', JSON.stringify([...state.staffsubjects, action.payload]));
+            callSuccess()
             return {
                 ...state,
                 staffsubjects: [...state.staffsubjects, action.payload],
@@ -82,6 +83,7 @@ export default function(state = initialState, action){
         case STAFFSUBJECT_ACTIVATE_SUCCESS:
             let ac = changeState(state.staffsubjects, action.payload);
             localStorage.setItem('staffsubject', JSON.stringify(ac));
+            callSuccess()
             return{
                 ...state,
                 msg:'DONE!!!',
@@ -100,7 +102,7 @@ export default function(state = initialState, action){
             let newState = [...state.staffsubjects];
             newState[findInd] = action.payload;
             localStorage.setItem('staffsubject', JSON.stringify(newState));
-            callSuccess()
+            callSuccess('Ok')
             return {
                 ...state,
                 ...action.payload,
