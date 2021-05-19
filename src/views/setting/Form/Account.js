@@ -98,7 +98,7 @@ const Account = (props) => {
                   name="namez"
                   value={namez}
                   onChange={(e)=>setNamez(e.target.value)}
-                  placeholder="West Africa Examination Council" 
+                  placeholder="First Bank" 
                 />
               <CFormText className="help-block">Please enter account name</CFormText>
             </CFormGroup>
@@ -110,7 +110,7 @@ const Account = (props) => {
                   name="abbrv"
                   value={abbrv}
                   onChange={(e)=>setAbbrv(e.target.value)}
-                  placeholder="WAEC" 
+                  placeholder="000000000" 
                 />
               <CFormText className="help-block">Please enter account number</CFormText>
             </CFormGroup>

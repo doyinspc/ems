@@ -86,6 +86,7 @@ const Setting = (props) => {
   }else{
    return <Redirect to="/settings" />
   }
+  
 
   return (
       <>
@@ -286,7 +287,7 @@ const Setting = (props) => {
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
-        {(parseInt(sid) === 10 || parseInt(sid) === 11 || parseInt(sid) === 12) && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
+        {parseInt(sid) === 10 || parseInt(pid) === 0 && parseInt(qid) === 0 ? 
         confirm(sid, perm, <Account sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 11 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
         confirm(sid, perm, <Expense sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}

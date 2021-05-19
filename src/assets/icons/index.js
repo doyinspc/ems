@@ -144,6 +144,11 @@ import {
   cilSignLanguage,
   cilMoodVeryBad,
   cilImage,
+  cilPlus,
+  cilChevronDoubleDown,
+  cilChevronDoubleUp,
+  cilTextSize,
+  cilFilter,
   cilContact,
   cilUserPlus
 } from '@coreui/icons'
@@ -261,7 +266,12 @@ export const icons = Object.assign({}, {
   cilMoodVeryBad,
   cilImage,
   cilContact,
-  cilUserPlus
+  cilUserPlus,
+  cilPlus,
+  cilChevronDoubleDown,
+  cilChevronDoubleUp,
+  cilTextSize,
+  cilFilter
   
 }, {
   cifUs,

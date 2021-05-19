@@ -17,21 +17,21 @@ import {
     CRow
   } from '@coreui/react'
   import CIcon from '@coreui/icons-react'
-import {updateExpensetransaction, registerExpensetransaction} from './../../actions/setting/expensetransaction';
+import {updateMaintenancetransaction, registerMaintenancetransaction} from './../../actions/setting/maintenancetransaction';
 
   
-import { API_PATH_SETTING, axiosConfig, callError, callSuccess, validateDate, expensestate } from '../../actions/common';
+import { API_PATH_SETTING, axiosConfig, callError, callSuccess, validateDate, maintenancestate } from '../../actions/common';
 
 
 
 const Form = (props) => {
 
     const [id, setid] = useState(null);
-    const [expenseid, setexpenseid] = useState(0);
-    const [expensename, setexpensename] = useState('');
-    const [expenseunitid, setexpenseunitid] = useState(0);
-    const [expenseunitid_error, setexpenseunitid_error] = useState(true);
-    const [expenseunitname, setexpenseunitname] = useState('');
+    const [maintenanceid, setmaintenanceid] = useState(0);
+    const [maintenancename, setmaintenancename] = useState('');
+    const [maintenanceunitid, setmaintenanceunitid] = useState(0);
+    const [maintenanceunitid_error, setmaintenanceunitid_error] = useState(true);
+    const [maintenanceunitname, setmaintenanceunitname] = useState('');
     const [account, setaccount] = useState(0);
     const [accountname, setaccountname] = useState('');
     const [account_error, setaccount_error] = useState(true);
@@ -53,10 +53,10 @@ const Form = (props) => {
         {
             let ac = parseFloat(data.amount) < 0 ? parseFloat(data.amount) * -1 : parseFloat(data.amount) ;
             setid(data.id);
-            setexpenseid(data.cid);
-            setexpensename(data.cname);
-            setexpenseunitid(data.expenseid);
-            setexpenseunitname(data.expensename);
+            setmaintenanceid(data.cid);
+            setmaintenancename(data.cname);
+            setmaintenanceunitid(data.maintenanceid);
+            setmaintenanceunitname(data.maintenancename);
             setaccount(data.accountid);
             setaccountname(data.accountname);
             setamount(ac);
@@ -67,10 +67,10 @@ const Form = (props) => {
         }else
         {
             setid(null);
-            setexpenseid('');
-            setexpensename('');
-            setexpenseunitid(0);
-            setexpenseunitname('');
+            setmaintenanceid('');
+            setmaintenancename('');
+            setmaintenanceunitid(0);
+            setmaintenanceunitname('');
             setaccount(0);
             setamount(0);
             setstates(0);
@@ -83,8 +83,8 @@ const Form = (props) => {
     const onsubmit = () =>{
         
         let err = [];
-        if(parseInt(expenseunitid) > 0){setexpenseunitid_error(true)}
-        else{ setexpenseunitid_error(false); err.push('Select an item');}
+        if(parseInt(maintenanceunitid) > 0){setmaintenanceunitid_error(true)}
+        else{ setmaintenanceunitid_error(false); err.push('Select an item');}
 
         if(account > 0){setaccount_error(true)}
         else{ setaccount_error(false); err.push('invalid account');}
@@ -102,23 +102,23 @@ const Form = (props) => {
         if(err.length == 0){
             let fd = new FormData();
 
-            fd.append('expenseid', expenseunitid);
+            fd.append('maintenanceid', maintenanceunitid);
             fd.append('accountid', account);
             fd.append('amount', amount);
             fd.append('states', states);
             fd.append('description', description);
             fd.append('daterecorded', daterecorded);
             fd.append('staffid', props.user.id);
-            fd.append('table', 'expensetransactions');
+            fd.append('table', 'maintenancetransactions');
 
             if(id !== null && parseInt(id) > 0){
                 fd.append('id', id);
                 fd.append('cat', 'update');
-                props.updateExpensetransaction(fd);
+                props.updateMaintenancetransaction(fd);
             }else{
                 fd.append('cat', 'insert');
                 fd.append('schoolid', props.school.id);
-                props.registerExpensetransaction(fd);
+                props.registerMaintenancetransaction(fd);
             }
             reset();
             
@@ -130,10 +130,10 @@ const Form = (props) => {
 
     const reset = () =>{
             setid(null);
-            setexpenseid('');
-            setexpensename('');
-            setexpenseunitid(0);
-            setexpenseunitname('');
+            setmaintenanceid('');
+            setmaintenancename('');
+            setmaintenanceunitid(0);
+            setmaintenanceunitname('');
             setaccount(0);
             setamount(0);
             setstates(0);
@@ -145,18 +145,18 @@ const Form = (props) => {
     let accountarr = account_arr !== null ? account_arr.filter(rw=>rw !== null).map(rw=>{
         return <option value={rw.id}>{rw.name}</option>;
     }):'';
-    let expense_arr = props.expense ? props.expense : null;
-    let expensearr = expense_arr !== null ? expense_arr.filter(rw=>rw !== null).map(rw=>{
+    let maintenance_arr = props.maintenance ? props.maintenance : null;
+    let maintenancearr = maintenance_arr !== null ? maintenance_arr.filter(rw=>rw !== null).map(rw=>{
         return <option value={rw.id}>{rw.name}</option>;
     }):'';
  
-    let expenseunit_arr = props.expenseunit ? props.expenseunit : null;
-    let expenseunitarr = expenseunit_arr !== null ? expenseunit_arr.filter(rw=>rw !== null && rw.expenseid == expenseid).map(rw=>{
+    let maintenanceunit_arr = props.maintenanceunit ? props.maintenanceunit : null;
+    let maintenanceunitarr = maintenanceunit_arr !== null ? maintenanceunit_arr.filter(rw=>rw !== null && rw.maintenanceid == maintenanceid).map(rw=>{
         return <option value={rw.id}>{rw.name}</option>;
     }):'';
 
-    let expensestate_arr = expensestate ;
-    let expensestatearr = expensestate_arr !== null ? expensestate_arr.filter(rw=>rw !== null).map(rw=>{
+    let maintenancestate_arr = maintenancestate ;
+    let maintenancestatearr = maintenancestate_arr !== null ? maintenancestate_arr.filter(rw=>rw !== null).map(rw=>{
         return <option value={rw.id}>{rw.name}</option>;
     }):'';
 
@@ -166,46 +166,37 @@ const Form = (props) => {
             <CCol className='justify-content-center' style={{marginLeft:'auto', marginRight:'auto'}} xs="12" sm="6">
             <CCard xs="12" className={parseInt(id) > 1 ? "bg-info" : "bg-dark"}>
                 <CCardHeader>
-                <h4>Expenses <small>{parseInt(id) > 1 ? "Edit Mode" : "Add new"}</small></h4>
+                <h4>Maintenances <small>{parseInt(id) > 1 ? "Edit Mode" : "Add new"}</small></h4>
                 </CCardHeader>
                 <CCardBody>
                 <CFormGroup row className="my-0 mb-1">
-                        <CCol xs="4"><CLabel htmlFor="expenseid">Category</CLabel></CCol>
+                        <CCol xs="4"><CLabel htmlFor="maintenanceid">Category</CLabel></CCol>
                         <CCol xs="8">
                             <CSelect 
                             custom 
                             size="sm" 
-                            name="expenseid" 
-                            id="expenseid" 
-                            onChange={(e)=>setexpenseid(e.target.value)}>
-                            {parseInt(id) > 0 ? <option value={expenseid}>{expensename}</option>:<option >Please select</option>}
+                            name="maintenanceid" 
+                            id="maintenanceid" 
+                            onChange={(e)=>setmaintenanceid(e.target.value)}>
+                            {parseInt(id) > 0 ? <option value={maintenanceid}>{maintenancename}</option>:<option >Please select</option>}
                             
-                            {expensearr}
+                            {maintenancearr}
                             </CSelect>
                         </CCol>
                 </CFormGroup>
                 <CFormGroup row className="my-0 mb-1">
                         <CCol xs="4"><CLabel htmlFor="vat">Name  </CLabel></CCol>
                         <CCol xs="8">
-                            <CSelect invalid = {expenseunitid_error ? false : true}  custom size="sm" name="selectSm1" id="SelectLm1" onChange={(e)=>setexpenseunitid(e.target.value)}>
-                            {id && parseInt(id) > 0 ? <option value={expenseunitid}>{expenseunitname}</option>:<option >Please select</option>}
-                            {expenseunitarr}
+                            <CSelect invalid = {maintenanceunitid_error ? false : true}  custom size="sm" name="selectSm1" id="SelectLm1" onChange={(e)=>setmaintenanceunitid(e.target.value)}>
+                            {id && parseInt(id) > 0 ? <option value={maintenanceunitid}>{maintenanceunitname}</option>:<option >Please select</option>}
+                            {maintenanceunitarr}
                             </CSelect>
-                        <CInvalidFeedback>Select the expense</CInvalidFeedback>
+                        <CInvalidFeedback>Select the maintenance</CInvalidFeedback>
                         </CCol>
                 </CFormGroup>
+                
                 <CFormGroup row className="my-0 mb-1">
-                        <CCol xs="4"><CLabel htmlFor="vat">Account </CLabel></CCol>
-                        <CCol xs="8">
-                            <CSelect invalid = {account_error ? false : true}  custom size="sm" name="selectSm1" id="SelectLm1" onChange={(e)=>setaccount(e.target.value)}>
-                            {parseInt(id) > 0 ? <option value={account}>{accountname}</option>:<option >Please select</option>}
-                            {accountarr}
-                            </CSelect>
-                        <CInvalidFeedback>Select an account</CInvalidFeedback>
-                        </CCol>
-                </CFormGroup>
-                <CFormGroup row className="my-0 mb-1">
-                        <CCol xs="4"><CLabel htmlFor="vat">Transaction </CLabel></CCol>
+                        <CCol xs="4"><CLabel htmlFor="vat">Piority </CLabel></CCol>
                         <CCol xs="8">
                             <CSelect 
                             invalid ={states_error ? false : true} 
@@ -214,13 +205,13 @@ const Form = (props) => {
                             name="selectSm1" 
                             id="SelectLm1" onChange={(e)=>setstates(e.target.value)}>
                             {parseInt(id) > 0 ? <option value={states}>{parseInt(states) == 1 ? 'Debit': 'Credit'}</option>:<option >Please select</option>}
-                            {expensestatearr}
+                            {maintenancestatearr}
                             </CSelect>
                             <CInvalidFeedback>Select a status</CInvalidFeedback>
                         </CCol>
                     </CFormGroup>             
                 <CFormGroup row className="my-0 mb-1">
-                        <CCol xs="4"><CLabel htmlFor="daterecorded">Date</CLabel></CCol>
+                        <CCol xs="4"><CLabel htmlFor="daterecorded">Date Recorded</CLabel></CCol>
                         <CCol xs="8">
                             <CInput 
                             id="daterecorded" 
@@ -234,22 +225,6 @@ const Form = (props) => {
                             <CInvalidFeedback>input a date</CInvalidFeedback>
                         </CCol>
                 </CFormGroup>
-                <CFormGroup row className="my-0 mb-1">
-                        <CCol xs="4"><CLabel htmlFor="amount">Amount</CLabel></CCol>
-                        <CCol xs="8">
-                            <CInput 
-                                id="amount" 
-                                invalid ={amount_error ? false : true} 
-                                defaultValue={amount}
-                                value={amount}
-                                type="number" 
-                                size="sm" 
-                                placeholder="amount" 
-                                required
-                                onChange={(e)=>setamount(e.target.value)} />
-                            <CInvalidFeedback>Input a total amount</CInvalidFeedback>
-                        </CCol>
-                </CFormGroup>            
                 <CFormGroup row className="my-0 mb-1">
                         <CCol xs="4"><CLabel htmlFor="daterecorded">Description</CLabel></CCol>
                         <CCol xs="8">
@@ -277,13 +252,13 @@ const mapStateToProps = (state) => ({
     user: state.userReducer.user,
     school: state.userReducer.activeschool,
     account:state.accountReducer.accounts,
-    expense:state.expenseReducer.expenses,
-    expenseunit:state.expenseunitReducer.expenseunits
+    maintenance:state.maintenanceReducer.maintenances,
+    maintenanceunit:state.maintenanceunitReducer.maintenanceunits
 })
 
 const mapDispatchToProps = {
-    updateExpensetransaction,
-    registerExpensetransaction
+    updateMaintenancetransaction,
+    registerMaintenancetransaction
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form)

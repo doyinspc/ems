@@ -75,7 +75,7 @@ const Expenseunit = (props) => {
         <CCardHeader id='traffic' className="card-title mb-0">
           <CRow>
             <CCol sm="6">
-            <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Expenseunit</small></h4>
+            <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Expenses</small></h4>
             </CCol>
             <CCol sm="6" className="d-md-block">
               <CButton  
@@ -91,18 +91,29 @@ const Expenseunit = (props) => {
         <CCardBody>
           <CForm action="" method="post">
             <CFormGroup>
-              <CLabel htmlFor="nf-name">Expenseunit</CLabel>
+              <CLabel htmlFor="nf-name">Item</CLabel>
               <CInput 
                   type="text" 
                   id="nf-name" 
                   name="namez"
                   value={namez}
                   onChange={(e)=>setNamez(e.target.value)}
-                  placeholder="Purchase Books" 
+                  placeholder="JSS2A" 
                 />
               <CFormText className="help-block">Please enter expenseunit name</CFormText>
             </CFormGroup>
-            
+            <CFormGroup>
+              <CLabel htmlFor="nf-abbrv">Abbrv. </CLabel>
+              <CInput 
+                  type="text" 
+                  id="nf-abbrv" 
+                  name="abbrv"
+                  value={abbrv}
+                  onChange={(e)=>setAbbrv(e.target.value)}
+                  placeholder="2A" 
+                />
+              <CFormText className="help-block">Please enter expenseunit abbrv (max 6 characters)</CFormText>
+            </CFormGroup>
           </CForm>
         </CCardBody>
         <CCardFooter>

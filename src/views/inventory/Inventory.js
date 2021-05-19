@@ -126,13 +126,15 @@ data.forEach(el => {
     }
     if(arr.hasOwnProperty(el.inventoryid)){
         if(arr[el.inventoryid].hasOwnProperty(el.states)){
-          arr[el.inventoryid][el.states] = arr[el.inventoryid][el.states] + parseFloat(el.quantity);
+          arr[el.inventoryid][el.states].push(parseFloat(el.quantity));
         }else{
-          arr[el.inventoryid][el.states] = parseFloat(el.quantity);
+          arr[el.inventoryid][el.states] = []
+          arr[el.inventoryid][el.states].push(parseFloat(el.quantity));
         }
     }else{
        arr[el.inventoryid] = {};
-       arr[el.inventoryid][el.states] = parseFloat(el.quantity);
+       arr[el.inventoryid][el.states] = []
+       arr[el.inventoryid][el.states].push(parseFloat(el.quantity));
     }
     if(nrr.hasOwnProperty(el.cid)){
       if(nrr[el.cid].hasOwnProperty(el.states)){

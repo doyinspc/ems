@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import {getExpenseunits, updateExpenseunit, deleteExpenseunit} from './../../../actions/setting/expenseunit';
+import {getExpenseunits, getExpenseunit, deleteExpenseunit} from './../../../actions/setting/expenseunit';
 import {
   CCard,
   CCardBody,
@@ -22,42 +22,26 @@ const Expenseunit = (props) => {
     setCollapse(!collapse)
   }
 
-  //GET EXPENSEUNITS PER SCHOOL
   useEffect(() => {
-   
-    if(props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0)
-    {
-      
-     let params = {
-      data:JSON.stringify(
-      {
-          'expenseid':props.pid
-      }),
-      cat:'selected',
-      table:'expenseunits',
-      narration:'get expenseunits'
-      }
-      props.getExpenseunits(params)
+    let params = {
+        data:JSON.stringify(
+        {
+            'expenseid':props.pid
+        }),
+        cat:'select',
+        table:'expenseunits',
+        narration:'get expenseunits'
+  
     }
+    props.getExpenseunits(params)
     
-  }, [props.user.activeschool])
+  }, [props.pid])
 
   
   const onEdit = (dt) =>{
+      setId(dt.id);
       setDts(dt);
-      setCollapse(true);
-  }
-  const onActivate = (rw, num) =>{
-   
-    let nu = parseInt(num) === 0 ? 1 : 0;
-    let fd = new FormData();
-    fd.append('id', rw);
-    fd.append('is_active', nu);
-    fd.append('cat', 'update');
-    fd.append('table', 'expenseunits');
-    fd.append('narration', `activate ande disable expenseunit ${nu}`);
-    props.updateExpenseunit(fd);
-
+      setCollapse(true)
   }
   const onDelete = (rw, dt) =>{
     
@@ -67,9 +51,13 @@ const Expenseunit = (props) => {
     setId(null);
     setDts({});
   }
-  const onClose = () =>{
+  const onClose = (rw, dt) =>{
     setCollapse(false)
   }
+
+  //GET EXPENSE NAME
+  let ses = props.expenses.filter(rw=>parseInt(rw.id) === parseInt(props.pid));
+  let sess = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].name : 'None'
  
   let data = props.expenseunits.expenseunits && Array.isArray(props.expenseunits.expenseunits) ? props.expenseunits.expenseunits.filter(rw =>rw !== null || rw !== undefined) : []
   
@@ -78,18 +66,18 @@ const Expenseunit = (props) => {
       <CCol >
         <CCard>
           <Header 
+              pid={props.pid}
               icon={props.para.icon}
-              title={props.para.name} 
+              title={sess} 
               school={props.school} 
               toggle={toggle}
               />
          <CCardBody className='table-responsive'>
             <ExpenseunitTable  
+                pid={props.pid}
                 data={data}
-                title={props.para.name} 
-                submenu={props.para.submenu}
                 editer={true}
-                onActivate={(rw, num)=>onActivate(rw, num)}
+                submenu={props.para.submenu}
                 onEdit={(rw)=>onEdit(rw)}
                 onDelete={(rw)=>onDelete(rw)}
             />
@@ -98,7 +86,9 @@ const Expenseunit = (props) => {
         </CCol>
         <CCollapse show={collapse}>
             <ExpenseunitForm 
+                pid={props.pid}
                 id={id}
+                school={props.school}
                 data={dts}
                 onReset={onReset}
                 onClose={onClose}
@@ -109,10 +99,9 @@ const Expenseunit = (props) => {
 }
 const mapStateToProps = (state) =>({
   expenseunits : state.expenseunitReducer,
-  user:state.userReducer
+  expenses : state.expenseReducer.expenses,
 })
 export default connect(mapStateToProps, {
   getExpenseunits,
-  updateExpenseunit,
   deleteExpenseunit
 })(Expenseunit)

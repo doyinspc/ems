@@ -38,6 +38,32 @@ export const nairaformat = (item)=>{
   let f = new Intl.NumberFormat(undefined,{style:'currency', currency:'NGR'})
   return f.format(item)
 }
+export const numberformat = (item)=>{
+  if(item > 0){
+  let f = nairaformat(item);
+  return f.replace("NGR", "")
+  }
+}
+export const maintenancestate = [
+  {
+      id:1,
+      name:'High',
+      description:'Send the items to the store',
+      color:'Red'
+  },
+  {
+      id:2,
+      name:'Normal',
+      description:'Consumables',
+      color:'Yellow'
+  },
+  {
+      id:3,
+      name:'Low',
+      description:'move from store to a unit, department. ',
+      color:'blue'
+  }
+]
 export const inventorystate = [
   {
       id:1,
@@ -93,6 +119,35 @@ export const inventorytypez = [
       name:'Appreciable',
       extra:'Percentage per annum (%)'
   },
+  
+]
+export const expensestate = [
+  {
+      id:1,
+      name:'Debit',
+      description:'Send the items to the store',
+      color:'red'
+  },
+  {
+      id:2,
+      name:'Credit',
+      description:'Consumables',
+      color:'green'
+  }
+]
+export const expensetypez = [
+  {
+    id:1,
+    name:'Debit',
+    description:'Send the items to the store',
+    color:'red'
+},
+{
+    id:2,
+    name:'Credit',
+    description:'Consumables',
+    color:'green'
+}
   
 ]
 export const ordinal_suffix_of = (i)=> {
@@ -252,7 +307,7 @@ export const statussobj = [
     {'value':3, 'label':'High'},
     {'value':4, 'label':'Emergency'}
   ];
-  export const leavestd =[
+export const leavestd =[
     {
         "id":1,
         "name":'Default',
@@ -347,7 +402,6 @@ export const leaves =[
 
 
 ]
-
 export const controls = {
     0: {
       name:'Staff',
@@ -823,8 +877,6 @@ export const access = {
       }
   },
 }
-
-
 export const states = [
   {
     "state": "Adamawa",

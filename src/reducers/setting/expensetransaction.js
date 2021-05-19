@@ -63,10 +63,10 @@ export default function(state = initialState, action){
                 MSG:"DONE!!!"
             };
         case EXPENSETRANSACTION_REGISTER_SUCCESS:
-            localStorage.setItem('expensetransaction', JSON.stringify([...state.expensetransactions, action.payload]));
+            localStorage.setItem('expensetransaction', JSON.stringify([ action.payload, ...state.expensetransactions]));
             return {
                 ...state,
-                expensetransactions: [...state.expensetransactions, action.payload],
+                expensetransactions: [action.payload, ...state.expensetransactions],
                 msg:action.msg
             }; 
         case EXPENSETRANSACTION_ACTIVATE_SUCCESS:

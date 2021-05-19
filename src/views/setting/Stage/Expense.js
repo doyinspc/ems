@@ -31,10 +31,9 @@ const Expense = (props) => {
      let params = {
       data:JSON.stringify(
       {
-         // 'schoolid':props.user.activeschool.id,
-          'is_delete':0
+          'schoolid':props.user.activeschool.id
       }),
-      cat:'selected',
+      cat:'select',
       table:'expenses',
       narration:'get expenses'
       }
@@ -86,8 +85,7 @@ const Expense = (props) => {
               />
          <CCardBody className='table-responsive'>
             <ExpenseTable  
-               sid={props.sid}
-               pid={props.pid}
+                sid={props.sid}
                 data={data}
                 title={props.para.name} 
                 submenu={props.para.submenu}
@@ -102,6 +100,7 @@ const Expense = (props) => {
         <CCollapse show={collapse}>
             <ExpenseForm 
                 id={id}
+                sid={props.sid}
                 data={dts}
                 onReset={onReset}
                 onClose={onClose}

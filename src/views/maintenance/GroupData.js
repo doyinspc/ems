@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { expensestate, numberformat } from '../../actions/common';
+import { numberformat } from '../../actions/common';
 
-const SummaryData = (props) => {
-
+const GroupData = (props) => {
     const summer = (arr) =>{
         if(arr !== undefined && Array.isArray(arr) && arr.length > 0){
             let val = arr.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
@@ -33,7 +32,6 @@ const SummaryData = (props) => {
             return 0
         }
     }
-
     let data = props.data;
     let items = props.items;
     let d1 = [];
@@ -47,7 +45,7 @@ const SummaryData = (props) => {
                 <tr>
                     <td className='text-center' width="10px">SN</td>
                     <td className='text-center'>ITEM</td>
-                    <td className='text-center'>EXPENSES</td>
+                    <td className='text-center'>MAINTENANCES</td>
                     <td className='text-center'>INFLOW</td>
                     <td className='text-center'>DEBIT</td>
                     <td className='text-center'>CREDIT</td>
@@ -104,4 +102,4 @@ const mapDispatchToProps = {
     
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SummaryData)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupData)

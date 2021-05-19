@@ -130,7 +130,6 @@ const Classfee = (props) => {
   })
   const handleClass = (event) =>{
     setClaszid(event)
-
   }
  
    return (
