@@ -47,12 +47,12 @@ export const getMaintenancetransaction = id => (dispatch, getState) => {
     });  
 };
 //MAINTENANCETRANSACTION DELETE
-export const deleteMaintenancetransaction = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteMaintenancetransaction = (params, id) => (dispatch, getState) =>{
+    axios.post(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: MAINTENANCETRANSACTION_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {

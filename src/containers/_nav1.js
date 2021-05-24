@@ -61,44 +61,55 @@ export default [
   }
   ,
   {
-    _tag: 'CSidebarNavItem',
-    name: 'Fees',
-    to: '/fees',
-    icon: 'cil-money',
-    badge: {
-      color: 'info',
-      text: '',
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Inventory',
-    to: '/inventorys',
-    icon: 'cil-line-weight',
-    badge: {
-      color: 'info',
-      text: '',
-    }
-  },
-  {
-    _tag: 'CSidebarNavItem',
-    name: 'Maintenance',
-    to: '/maintenances',
-    icon: 'cil-paint',
-    badge: {
-      color: 'info',
-      text: '',
-    }
-  },{
-    _tag: 'CSidebarNavItem',
-    name: 'Expense',
-    to: '/expenses',
-    icon: 'cil-paint',
-    badge: {
-      color: 'info',
-      text: '',
-    }
-  }, {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Adminstrative',
+    route: '/',
+    icon: 'cil-puzzle',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Fees',
+        to: '/fees',
+        icon: 'cil-money',
+        badge: {
+          color: 'info',
+          text: '',
+        }
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Inventory',
+        to: '/inventorys',
+        icon: 'cil-line-weight',
+        badge: {
+          color: 'info',
+          text: '',
+        }
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Maintenance',
+        to: '/maintenances',
+        icon: 'cil-paint',
+        badge: {
+          color: 'info',
+          text: '',
+        }
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Expense',
+        to: '/expenses',
+        icon: 'cil-paint',
+        badge: {
+          color: 'info',
+          text: '',
+        }}
+  
+  
+    ]
+  }
+  , {
     _tag: 'CSidebarNavItem',
     name: 'Tutorials',
     to: '/tutorial',

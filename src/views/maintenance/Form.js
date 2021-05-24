@@ -33,8 +33,6 @@ const Form = (props) => {
     const [maintenanceunitid_error, setmaintenanceunitid_error] = useState(true);
     const [maintenanceunitname, setmaintenanceunitname] = useState('');
     const [account, setaccount] = useState(0);
-    const [accountname, setaccountname] = useState('');
-    const [account_error, setaccount_error] = useState(true);
     const [states, setstates] = useState(0);
     const [states_error, setstates_error] = useState(true);
     const [amount, setamount] = useState(null);
@@ -57,9 +55,6 @@ const Form = (props) => {
             setmaintenancename(data.cname);
             setmaintenanceunitid(data.maintenanceid);
             setmaintenanceunitname(data.maintenancename);
-            setaccount(data.accountid);
-            setaccountname(data.accountname);
-            setamount(ac);
             setstates(data.states);
             setdescription(data.description);
             setdaterecorded(data.daterecorded);
@@ -71,8 +66,6 @@ const Form = (props) => {
             setmaintenancename('');
             setmaintenanceunitid(0);
             setmaintenanceunitname('');
-            setaccount(0);
-            setamount(0);
             setstates(0);
             setdescription('');
             setdaterecorded('');
@@ -86,11 +79,6 @@ const Form = (props) => {
         if(parseInt(maintenanceunitid) > 0){setmaintenanceunitid_error(true)}
         else{ setmaintenanceunitid_error(false); err.push('Select an item');}
 
-        if(account > 0){setaccount_error(true)}
-        else{ setaccount_error(false); err.push('invalid account');}
-
-        if(amount){setamount_error(true)}
-        else{ setamount_error(false); err.push('invalid amount');}
 
         if(states > 0){setstates_error(true) }
         else{ setstates_error(false); err.push('invalid states');}
@@ -103,8 +91,6 @@ const Form = (props) => {
             let fd = new FormData();
 
             fd.append('maintenanceid', maintenanceunitid);
-            fd.append('accountid', account);
-            fd.append('amount', amount);
             fd.append('states', states);
             fd.append('description', description);
             fd.append('daterecorded', daterecorded);
@@ -130,12 +116,10 @@ const Form = (props) => {
 
     const reset = () =>{
             setid(null);
-            setmaintenanceid('');
-            setmaintenancename('');
-            setmaintenanceunitid(0);
-            setmaintenanceunitname('');
-            setaccount(0);
-            setamount(0);
+            //setmaintenanceid('');
+            //setmaintenancename('');
+            //setmaintenanceunitid(0);
+            //setmaintenanceunitname('');
             setstates(0);
             setdescription('');
             setdaterecorded('');
@@ -193,8 +177,7 @@ const Form = (props) => {
                             </CSelect>
                         <CInvalidFeedback>Select the maintenance</CInvalidFeedback>
                         </CCol>
-                </CFormGroup>
-                
+                </CFormGroup>            
                 <CFormGroup row className="my-0 mb-1">
                         <CCol xs="4"><CLabel htmlFor="vat">Piority </CLabel></CCol>
                         <CCol xs="8">
@@ -207,7 +190,7 @@ const Form = (props) => {
                             {parseInt(id) > 0 ? <option value={states}>{parseInt(states) == 1 ? 'Debit': 'Credit'}</option>:<option >Please select</option>}
                             {maintenancestatearr}
                             </CSelect>
-                            <CInvalidFeedback>Select a status</CInvalidFeedback>
+                            <CInvalidFeedback>Select a piority</CInvalidFeedback>
                         </CCol>
                     </CFormGroup>             
                 <CFormGroup row className="my-0 mb-1">

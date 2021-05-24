@@ -191,7 +191,7 @@ const Expense = (props) => {
       setcollapse(true);
       setdats(row);
     }
-    
+
     const onDelete =(id)=>{
       Swal("Are you sure you want to delete you will not be able to restore the data.")
      .then((value) => {
@@ -205,7 +205,7 @@ const Expense = (props) => {
          Swal(`Not deleted`);
        }
      });
- }
+    }
 
 
 
@@ -422,7 +422,7 @@ let parent = groups ? groups : {};
     <CCol xs="12" md="12" className="mb-4">
         <CCard>
           <CCardHeader>
-          <span className="h4">Expenses Log</span>{" "}<small>{`${moment(startdate).format("Do MMM YYYY") != 'invalid' ? moment(startdate).format("Do MMM YYYY"):''} ${moment(enddate).format("Do MMM YYYY") != 'invalid date' ? moment(enddate).format("Do MMM YYYY") :''}`}</small>
+          <span className="h4">Expenses Log</span>{" "}<small>{`${moment(startdate).format("Do MMM YYYY") != 'Invalid date' ? moment(startdate).format("Do MMM YYYY"):''} ${moment(enddate).format("Do MMM YYYY") != 'Invalid date' ? moment(enddate).format("Do MMM YYYY") :''}`}</small>
          
          <span className="pull-right">
            <CButtonGroup>
@@ -550,6 +550,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     getExpensetransaction,
     getExpensetransactions,
+    deleteExpensetransaction,
     getExpenses,
     getExpense,
     getExpenseunits,

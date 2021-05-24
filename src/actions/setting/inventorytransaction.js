@@ -48,7 +48,7 @@ export const getInventorytransaction = id => (dispatch, getState) => {
 };
 //INVENTORYTRANSACTION DELETE
 export const deleteInventorytransaction = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+    axios.post(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: INVENTORYTRANSACTION_DELETE_SUCCESS,

@@ -39,6 +39,7 @@ const FullData = (props) => {
                     <tr>
                         <td className='text-center'>SN</td>
                         <td className='text-center' title="Transaction ID">TID</td>
+                        <td className='text-center' style={{width:'100px'}} width="10px">ACCOUNT</td>
                         <td className='text-center' style={{width:'100px'}} width="10px">RECORDED</td>
                         <td className='text-center'>CATEGORY</td>
                         <td className='text-center'>ITEM</td>
@@ -67,13 +68,14 @@ const FullData = (props) => {
                                             
                                         </td>
                                         <td>{moment(prop.daterecorded).format("Do MMM YYYY")}</td>
+                                        <td>{prop.accountname}</td>
                                         <td>{prop.cname}</td>
                                         <td>{prop.expensename}</td>
                                         {configAmount(prop)}
                                         <td>{prop.description}</td>
                                         <td className='text-center d-print-none'>
                                             <i className="fa fa-edit mr-2" onClick={()=>props.onEdit(prop)}></i>
-                                            <i className="fa fa-remove" onClick={()=>props.onDelete(prop)}></i>
+                                            <i className="fa fa-remove" onClick={()=>props.onDelete(prop.id)}></i>
                                         </td>
                                    </tr>
                         })
@@ -85,6 +87,7 @@ const FullData = (props) => {
                         <td className='text-center'>SN</td>
                         <td className='text-center' title="Transaction ID">TID</td>
                         <td className='text-center' style={{width:'100px'}} width="10px">RECORDED</td>
+                        <td className='text-center' style={{width:'100px'}} width="10px">ACCOUNT</td>
                         <td className='text-center'></td>
                         <td className='text-center'></td>
                         <td className='text-center'>{summer(debit_arr)}</td>

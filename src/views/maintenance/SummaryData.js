@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { maintenancestate, numberformat } from '../../actions/common';
+import { maintenancestate, maintenancestateObj, maintenancestateType,  numberformat } from '../../actions/common';
 
 const SummaryData = (props) => {
 
@@ -47,10 +47,18 @@ const SummaryData = (props) => {
                 <tr>
                     <td className='text-center' width="10px">SN</td>
                     <td className='text-center'>ITEM</td>
-                    <td className='text-center'>MAINTENANCES</td>
-                    <td className='text-center'>INFLOW</td>
-                    <td className='text-center'>DEBIT</td>
-                    <td className='text-center'>CREDIT</td>
+                    {
+                        maintenancestateObj.map(rw=>{
+                            <td className='text-center'>{maintenancestateObj[rw]}</td>
+                        })
+                    }
+                    {
+                        maintenancestateType.map(rw=>{
+                            <td className='text-center'>{maintenancestateType[rw]}</td>
+                        })
+                    }
+                    
+                    <td className='text-center'>TOTAL</td>
                     
                 </tr>
             </thead>
@@ -60,20 +68,13 @@ const SummaryData = (props) => {
                         let dt = data[prop];
                         let dbs =  summer(dt[1]);
                         let crs = summer(dt[2]);
-                        let dbs_diff =  differ(dbs, crs, 1);
-                        let crs_diff =  differ(dbs, crs, 2);
                         d1.push(dbs);
                         d2.push(crs);
-                        d3.push(dbs_diff);
-                        d4.push(crs_diff);
-
                         return <tr key={prop}>
                                     <td className='text-center'>{indx + 1}</td>
                                     <td>{items[prop]}</td>
                                     <td className='text-right' >{formater(dbs)}</td>
                                     <td className='text-right' >{formater(crs)}</td>
-                                    <td className='text-right' >{formater(dbs_diff)}</td>
-                                    <td className='text-right' >{formater(crs_diff)}</td>
                                </tr>
                     })
                 }

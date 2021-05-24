@@ -47,12 +47,12 @@ export const getExpensetransaction = id => (dispatch, getState) => {
     });  
 };
 //EXPENSETRANSACTION DELETE
-export const deleteExpensetransaction = params => (dispatch, getState) =>{
-    axios.POST(path, {params}, axiosConfig)
+export const deleteExpensetransaction = (params, id) => (dispatch, getState) =>{
+    axios.post(path, {params}, axiosConfig1)
         .then(res => {
             dispatch({
                 type: EXPENSETRANSACTION_DELETE_SUCCESS,
-                payload: params.id
+                payload: id
             })
         })
         .catch(err => {

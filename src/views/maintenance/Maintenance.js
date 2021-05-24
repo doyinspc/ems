@@ -25,11 +25,12 @@ import {
     CInput,
     CLabel,
     CTooltip,
-    CButtonGroup
+    CButtonGroup,
+    CSelect
   } from '@coreui/react'
   import CIcon from '@coreui/icons-react'
   import Select from 'react-select'
-import {getMaintenancetransaction, getMaintenancetransactions, deleteMaintenancetransaction} from './../../actions/setting/maintenancetransaction';
+import {getMaintenancetransaction, getMaintenancetransactions, deleteMaintenancetransaction, updateMaintenancetransaction} from './../../actions/setting/maintenancetransaction';
 import {getMaintenanceunit, getMaintenanceunits} from './../../actions/setting/maintenanceunit'
 import {getMaintenance, getMaintenances} from './../../actions/setting/maintenance'
 import {getAccounts} from './../../actions/setting/account'
@@ -40,22 +41,26 @@ import SummaryData from './SummaryData'
 import GroupData from './GroupData'
 import ChartData from './ChartData'
 import Form from './Form'
-import { isDate } from 'date-fns'
 
 const Maintenance = (props) => {
 
     const [startdate, setstartdate] = useState(null);
     const [enddate, setenddate] = useState(null);
     const [dats, setdats] = useState({})
-    const [collapse, setcollapse] = useState(false)
+    const [daterecorded, setdaterecorded] = useState(null);
+    const [date_completed, setdate_completed] = useState(new Date())
+    const [is_completed, setis_completed] = useState(0)
+    const [collapse, setcollapse] = useState(false)    
     const [small, setsmall] = useState(false);
-    const [small1, setsmall1] = useState(false)
+    const [small1, setsmall1] = useState(false);
+    const [small2, setsmall2] = useState(false)
     const [data, setdata] = useState([])
     const [fdata, setfdata] = useState([])
     const [categoryid, setcategoryid] = useState([])
     const [subcategoryid, setsubcategoryid] = useState([])
     const [accid, setaccid] = useState([])
     const [fontz, setfontz] = useState(11)
+    const [uid, setuid] = useState(null)
 
     useEffect(() => {
       let params = {
@@ -94,26 +99,13 @@ const Maintenance = (props) => {
     }, [])
 
     useEffect(() => {
-        //if date range is not selected use the current month
-        // let stdate = isDate(startdate) ? new Date(startdate) :  null;
-        // let endate = isDate(enddate) ? new Date(enddate) :  null;
-
+        
         //use current month
         let dt = new Date();
 	      let started  = new Date(dt.getFullYear(), dt.getMonth(), 1);
         let ended = new Date(dt.getFullYear(), dt.getMonth() + 1, 0);
 
-        // //pick the ideal dates to use
-        // if(stdate !== null && endate !== null && endate > stdate)
-        // {
-        //     started = stdate;
-        //     ended = endate;
-        //     setstartdate(started)
-        //     setenddate(ended)
-        // }
         
-        //setstartdate(started)
-        //setenddate(ended)
         let params = {
           data:JSON.stringify(
           {
@@ -172,7 +164,6 @@ const Maintenance = (props) => {
     }
     const lunchReset = () =>{
 
-  
           let d = [...fdata]
           setcategoryid([])
           setsubcategoryid([])
@@ -190,6 +181,33 @@ const Maintenance = (props) => {
       setcollapse(true);
       setdats(row);
     }
+    
+    const onState =(row)=>{
+      setsmall2(true);
+      setuid(row.id);
+      setdaterecorded(row.daterecorded);
+    }
+
+    const saveData = () =>{
+  
+          let fd = new FormData();
+          let rs = 0;
+          if(is_completed == 1){
+              rs = Math.abs(new Date(date_completed).getTime() - new Date(daterecorded).getTime());
+          }
+          fd.append('is_completed', is_completed);
+          fd.append('date_completed', date_completed);
+          fd.append('resolutiontime', rs);
+          fd.append('userid', props.user.id);
+          fd.append('table', 'maintenancetransactions');
+
+          if(uid !== null && parseInt(uid) > 0){
+              fd.append('id', uid);
+              fd.append('cat', 'update');
+              props.updateMaintenancetransaction(fd);
+          }
+          
+  }
     
     const onDelete =(id)=>{
       Swal("Are you sure you want to delete you will not be able to restore the data.")
@@ -210,67 +228,75 @@ const Maintenance = (props) => {
 
 
 let arr = {};
+let arr1 = {};
 let nrr = {};
 let qrr = {};
 let groupitems = {};
 let groups = {};
 let groupa = {};
+let groupb = {};
 let prices = {};
 
 data.filter(rw=>rw !== undefined && rw !== null).forEach(el => {
-    if(prices.hasOwnProperty(el.maintenanceid)){
-        if(
-            Array.isArray(prices[el.maintenanceid]) && 
-            new Date(prices[el.maintenanceid][0]) <= new Date(el.daterecorded) && 
-            parseFloat(el.price) > 0
-          ){ prices[el.maintenanceid] = [el.daterecorded, el.prices]; }
-    }else{
-        prices[el.maintenanceid] = [el.daterecorded, el.prices];
-    }
+   //parent
     if(!groups.hasOwnProperty(el.cid)){
         groups[el.cid] = el.cname;
     }
+    //children
     if(!groupitems.hasOwnProperty(el.maintenanceid)){
         groupitems[el.maintenanceid] = el.maintenancename;
     }
-    if(!groupa.hasOwnProperty(el.accountid)){
-      groupa[el.accountid] = el.accountname;
-    }
+
     if(arr.hasOwnProperty(el.maintenanceid)){
         if(arr[el.maintenanceid].hasOwnProperty(el.states)){
-          arr[el.maintenanceid][el.states].push(parseFloat(el.amount));
+          arr[el.maintenanceid][el.states].push(parseInt(el.date_completed));
         }else{
           arr[el.maintenanceid][el.states] = []
-          arr[el.maintenanceid][el.states].push(parseFloat(el.amount));
+          arr[el.maintenanceid][el.states].push(parseInt(el.date_completed));
         }
     }else{
        arr[el.maintenanceid] = {};
        arr[el.maintenanceid][el.states] = []
        arr[el.maintenanceid][el.states].push(parseFloat(el.amount));
     }
+
+    if(arr1.hasOwnProperty(el.maintenanceid)){
+      if(arr1[el.maintenanceid].hasOwnProperty(el.date_completed)){
+        arr1[el.maintenanceid][el.date_completed].push(parseInt(el.states));
+      }else{
+        arr1[el.maintenanceid][el.date_completed] = []
+        arr1[el.maintenanceid][el.date_completed].push(parseInt(el.states));
+      }
+    }else{
+      arr1[el.maintenanceid] = {};
+      arr1[el.maintenanceid][el.date_completed] = []
+      arr1[el.maintenanceid][el.date_completed].push(parseInt(el.states));
+    }
+
     if(nrr.hasOwnProperty(el.cid)){
       if(nrr[el.cid].hasOwnProperty(el.states)){
-        nrr[el.cid][el.states].push(parseFloat(el.amount));
+        nrr[el.cid][el.states].push(parseInt(el.date_completed));
       }else{
         nrr[el.cid][el.states] = []
-        nrr[el.cid][el.states].push(parseFloat(el.amount));
+        nrr[el.cid][el.states].push(parseInt(el.date_completed));
       }
     }else{
-     nrr[el.cid] = {};
-     nrr[el.cid][el.states] = []
-     nrr[el.cid][el.states].push(parseFloat(el.amount));
+        nrr[el.cid] = {};
+        nrr[el.cid][el.states] = []
+        nrr[el.cid][el.states].push(parseInt(el.date_completed));
     } 
-    if(qrr.hasOwnProperty(el.accountid)){
-      if(qrr[el.accountid].hasOwnProperty(el.states)){
-        qrr[el.accountid][el.states].push(parseFloat(el.amount));
+
+    if(qrr.hasOwnProperty(el.is_completed)){
+      if(qrr[el.is_completed].hasOwnProperty(el.states)){
+        qrr[el.is_completed][el.states].push(parseInt(el.maintenanceid));
       }else{
-        qrr[el.accountid][el.states] = []
-        qrr[el.accountid][el.states].push(parseFloat(el.amount));
+        qrr[el.is_completed][el.states] = []
+        qrr[el.is_completed][el.states].push(parseInt(el.maintenanceid));
       }
     }else{
-     qrr[el.accountid] = {};
-     qrr[el.accountid][el.states] = []
-     qrr[el.accountid][el.states].push(parseFloat(el.amount));
+        qrr[el.is_completed] = {};
+        qrr[el.is_completed][el.states] = []
+        qrr[el.is_completed][el.states].push(parseInt(el.maintenanceid));
     }     
 });
 
@@ -313,7 +339,51 @@ let parent = groups ? groups : {};
 
     return (
         <div>
-          <CModal 
+           <CModal 
+              show={small2} 
+              onClose={() => setsmall2(!small2)}
+              size="sm"
+            >
+              <CModalHeader closeButton>
+                <CModalTitle>Maintenance Status</CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <CFormGroup row className="my-0 mb-1">
+                        <CCol xs="4"><CLabel htmlFor="date_completed"> Date Completed</CLabel></CCol>
+                        <CCol xs="8">
+                            <CInput 
+                            id="date_completed" 
+                            type="date" 
+                            size="sm"  
+                            value={date_completed}
+                            defaultValue={date_completed}
+                            onChange={(e)=>setdate_completed(e.target.value)}
+                            />
+                        </CCol>
+                </CFormGroup>
+                <CFormGroup row className="my-0 mb-1">
+                        <CCol xs="4"><CLabel htmlFor="vat">State </CLabel></CCol>
+                        <CCol xs="8">
+                            <CSelect 
+                              custom 
+                              size="sm" 
+                              name="selectSm1" 
+                              id="SelectLm1" 
+                              onChange={(e)=>setis_completed(e.target.value)}>
+                            <option value="0" >Pending</option>
+                            <option value="1">Completed</option>
+                            <option value="2">Canceled</option>
+                            </CSelect>
+                        </CCol>
+                </CFormGroup>
+              </CModalBody>
+              <CModalFooter>
+                <CButton color="primary" onClick={saveData}>Submit</CButton>{' '}
+                <CButton color="secondary" onClick={() => setsmall2(!small2)}>Cancel</CButton>
+              </CModalFooter>
+            </CModal>
+          
+           <CModal 
               show={small} 
               onClose={() => setsmall(!small)}
               size="sm"
@@ -355,7 +425,7 @@ let parent = groups ? groups : {};
               </CModalFooter>
             </CModal>
             
-            <CModal 
+           <CModal 
               show={small1} 
               onClose={() => setsmall1(!small1)}
               size="lg"
@@ -406,9 +476,7 @@ let parent = groups ? groups : {};
                 <CButton color="dark" onClick={lunchReset}>Reset</CButton>{' '}
                 <CButton color="secondary" onClick={() => setsmall1(!small1)}>Close</CButton>
               </CModalFooter>
-            </CModal>
-          
-            
+            </CModal>      
             <Header 
               activeterm={props.user.activeterm}
               activeschool={props.user.activeschool}
@@ -421,7 +489,7 @@ let parent = groups ? groups : {};
     <CCol xs="12" md="12" className="mb-4">
         <CCard>
           <CCardHeader>
-          <span className="h4">Maintenance Log</span>{" "}<small>{`${moment(startdate).format("Do MMM YYYY") != 'invalid' ? moment(startdate).format("Do MMM YYYY"):''} ${moment(enddate).format("Do MMM YYYY") != 'invalid date' ? moment(enddate).format("Do MMM YYYY") :''}`}</small>
+          <span className="h4">Maintenance Log</span>{" "}<small>{`${moment(startdate).format("Do MMM YYYY") != 'Invalid date' ? moment(startdate).format("Do MMM YYYY"):''} ${moment(enddate).format("Do MMM YYYY") != 'Invalid date' ? moment(enddate).format("Do MMM YYYY") :''}`}</small>
          
          <span className="pull-right">
            <CButtonGroup>
@@ -497,6 +565,7 @@ let parent = groups ? groups : {};
                     data={data}
                     onEdit={(e)=>onEdit(e)}
                     onDelete={(e)=>onDelete(e)}
+                    loadState={(e)=>onState(e)}
                     fontz={fontz}
                   />
                 </CTabPane>
@@ -539,6 +608,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
     getMaintenancetransaction,
     getMaintenancetransactions,
+    deleteMaintenancetransaction,
+    updateMaintenancetransaction,
     getMaintenances,
     getMaintenance,
     getMaintenanceunits,

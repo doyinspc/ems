@@ -64,6 +64,16 @@ export const maintenancestate = [
       color:'blue'
   }
 ]
+export const maintenancestateObj = [
+  {'1':'High'},
+  {'2':'Normal'},
+  {'3':'low'}
+]
+export const maintenancestateType = [
+  {1:'Pending'},
+  {2:'Completed'},
+  {3:'Canceled'}
+]
 export const inventorystate = [
   {
       id:1,

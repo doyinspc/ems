@@ -22,8 +22,12 @@ return (
           <CCardHeader>
             <CRow>
               <CCol xs={10}>
-              <h4 id="traffic" className="card-title mb-0">{props.activeterm != undefined &&  props.activeterm.hasOwnProperty('name') && props.activeterm.name ? props.activeterm.name : <span> Welcome<small><i> (No active term)</i></small></span> }</h4>
-              <div className="small text-muted"><strong>{props.activeschool != undefined && props.activeschool.hasOwnProperty('name') && props.activeschool.name ? props.activeschool.name: <i>Please select a school or consult the admin</i>}</strong></div>
+              <h5 id="traffic" className="card-title mb-0">
+              {props.activeschool != undefined && props.activeschool.hasOwnProperty('name') && props.activeschool.name ? props.activeschool.name: <i>Please select a school or consult the admin</i>}
+                </h5>
+              <div className="small text-muted"><strong style={{fontSize:'15px', color:'teal'}}>
+              {props.activeterm != undefined &&  props.activeterm.hasOwnProperty('name') && props.activeterm.name ? props.activeterm.name : <span> Welcome<small><i> (No active term)</i></small></span> }
+                </strong></div>
               
               </CCol>
               <CCol className="d-md-block btn-group">
