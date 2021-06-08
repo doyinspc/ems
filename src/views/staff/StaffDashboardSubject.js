@@ -90,7 +90,7 @@ const Dashboard = (props) => {
       setPage(5);
       setCollapser(false)
   }
- 
+
 return (
     <>
     <CRow>
@@ -100,15 +100,15 @@ return (
       <CRow>
         { 
           Array.isArray(props.staffsubject.staffsubjects) ? props.staffsubject.staffsubjects.filter(rw=>rw !== null & rw !== undefined).map((prp, ind)=>{
-            let numz = prp.num !== null && prp.num !== undefined ? prp.num.split(","):[];  
-            let numz1 = numz.filter(rw=>rw !== null || rw == '').filter(rw=>parseInt(rw.split(":")[1]) == parseInt(prp.itemid1) && parseInt(rw.split(":")[3]) == parseInt(prp.itemid)).length
+            let numz = prp.num !== null && prp.num !== undefined ? prp.num:0;  
+            //let numz1 = numz.filter(rw=>rw !== null || rw == '').filter(rw=>parseInt(rw.split(":")[1]) == parseInt(prp.itemid1) && parseInt(rw.split(":")[3]) == parseInt(prp.itemid)).length
             let cl = parseInt(prp.is_active) === 0 ? "gradient-info" : "gradient-danger";
             let cl1 = parseInt(prp.is_active) === 0 ? "cil-settings" : "fa fa-lock";
             let cl2 = parseInt(prp.is_active) === 0 ? "" : "disabled";
             return <CCol sm="6" lg="4"  key={ind}>
               <CWidgetDropdown
                 color={cl}
-                header={numz1 + ' Students'}
+                header={numz + ' Students'}
                 text={parseInt(prp.staffid) == 1 ? `${prp.itemname1} ${prp.itemnameops} `: `${prp.itemname1} ${prp.itemname} `}
                 footerSlot={
                   <ChartLineSimple

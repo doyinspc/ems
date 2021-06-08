@@ -58,8 +58,19 @@ const Department = React.lazy(() => import('./views/setting/Department'));
 const Subject = React.lazy(() => import('./views/setting/Subject'));
 const Theme = React.lazy(() => import('./views/setting/Theme'));
 const Fees = React.lazy(() => import('./views/fee/Fee'));
+const FeeHome = React.lazy(() => import('./views/fee/FeeHome'));
+const InventoryHome = React.lazy(() => import('./views/inventory/InventoryHome'));
 const Inventorys = React.lazy(() => import('./views/inventory/Inventory'));
-const Expenses = React.lazy(() => import('./views/expense/Expense'));
+const ExpenseHome = React.lazy(() => import('./views/expense/ExpenseHome'));
+const ExpensesCapital = React.lazy(() => import('./views/expense/ExpensesCapital'));
+const ExpensesOverhead = React.lazy(() => import('./views/expense/ExpensesOverhead'));
+const ExpensesBankTransfer = React.lazy(() => import('./views/expense/ExpensesBankTransfer'));
+const ExpensesImpressTransfer = React.lazy(() => import('./views/expense/ExpensesImpressTransfer'));
+const ExpensesIncome = React.lazy(() => import('./views/expense/ExpensesIncome'));
+const ExpensesReport = React.lazy(() => import('./views/expense/ExpensesReport'));
+const ExpensesSetting = React.lazy(() => import('./views/expense/ExpensesSetting'));
+const ExpensesUser = React.lazy(() => import('./views/expense/ExpensesUser'));
+const MaintenanceHome = React.lazy(() => import('./views/maintenance/MaintenanceHome'));
 const Maintenances = React.lazy(() => import('./views/maintenance/Maintenance'));
 const Question = React.lazy(() => import('./views/setting/Theme'));
 const Clasz = React.lazy(() => import('./views/setting/Clasz'));
@@ -93,9 +104,19 @@ const routes = [
   { path: '/department/:subject/:theme/:question', name: 'Question Bank', component: Question, exact: true },
   { path: '/catype', name: 'CA Type', component: Catype, exact: true },
   { path: '/fees', name: 'Fee Payments', component: Fees, exact: true },
+  { path: '/fee_home', name: 'Fee Page', component: FeeHome, exact: true },
   { path: '/inventorys', name: 'Inventories', component: Inventorys, exact: true },
-  { path: '/expenses', name: 'Expenses', component: Expenses, exact: true },
+  { path: '/inventory_home', name: 'Inventory Page', component: InventoryHome, exact: true },
+  { path: '/expenses_capital', name: 'Capital Expenses', component: ExpensesCapital, exact: true },
+  { path: '/expenses_overhead', name: 'Overhead Expenses', component: ExpensesOverhead, exact: true },
+  { path: '/expenses_impress_transfer', name: 'Impress', component: ExpensesImpressTransfer, exact: true },
+  { path: '/expenses_bank_transfer', name: 'Bank Transfers', component: ExpensesBankTransfer, exact: true },
+  { path: '/expenses_income', name: 'Other Sources of Income', component: ExpensesIncome, exact: true },
+  { path: '/expenses_setting', name: 'Expenses Setting', component: ExpensesSetting, exact: true },
+  { path: '/expenses_user', name: 'Users', component: ExpensesUser, exact: true },
+  { path: '/expense_home', name: 'Expense Page', component: ExpenseHome, exact: true },
   { path: '/maintenances', name: 'Maintenances', component: Maintenances, exact: true },
+  { path: '/maintenance_home', name: 'Maintenance Page', component: MaintenanceHome, exact: true },
   { path: '/staffs', name: 'Staffs', component: Staffs, exact: true },
   { path: '/staffs/:staff', name: 'Staff Profile', component: Staff, exact: true },
   { path: '/myclass', name: 'My Classes', component: StaffSubject, exact: true },

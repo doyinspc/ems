@@ -74,7 +74,7 @@ const Header = (props) => {
     <CContainer>
         <CRow>
         <CCol>
-            <h4>{subject.itemname1}{" "}{subject.itemname} ({`${len} Students`})</h4>
+            <h4>{subject.itemname1}{" "}{parseInt(subject.staffid) == 1 ? subject.itemnameops : subject.itemname} ({`${len} Students`})</h4>
             </CCol>
             <CCol xs={12} sm={4} className="d-md-block btn-group">
             <CButtonGroup className='pull-right'>

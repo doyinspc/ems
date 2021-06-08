@@ -27,6 +27,7 @@ import {
 import { nairaformat } from '../../actions/common';
 import CIcon from '@coreui/icons-react';
 import Swal from'sweetalert'
+import FeesCard from './FeesCard';
 
 const Studentclasss = (props) => {
    let clasz = props.clasz;
@@ -51,7 +52,6 @@ const Studentclasss = (props) => {
       data:JSON.stringify(
       {
           'sessionid':sessions,
-          'termid':terms,
           'ids':data1
       }),
       cat:'studentfeess',
@@ -115,7 +115,8 @@ const Studentclasss = (props) => {
       let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw != null || rw != undefined) : []
       setdata(data)
    }, [props.data])
-  const handleSubmitStudent = (id) =>{
+ 
+   const handleSubmitStudent = (id) =>{
     let fd = new FormData();
     fd.append('parentid', staffid);
     fd.append('id', id);
@@ -235,252 +236,28 @@ let acarray = props.accounts && props.accounts !== undefined && Array.isArray( p
 return <option key={ind} value={rw.id}>{rw.name}</option>
 }): ''
   let std = props.studentfees && Array.isArray(props.studentfees) ? props.studentfees.filter(rw =>rw != null || rw != undefined) : []
-  
+
   let acct = Array.isArray(data) && data.length > 0 ? data.map((row, ind)=>{
-    let subs= [];
-    let adds = [];
-    return <tr key={ind}>
-    <td className="text-center">
-     {ind + 1}
-     <div className="c-avatar">
-        <img 
-        src={process.env.REACT_APP_SERVER_URL+ row.photo} 
-        className="c-avatar-img" 
-        alt={row.admission_no} 
-        onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
-        />
-        <span className={`c-avatar-status ${row.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
-      </div>
-    </td>
-    <td>
-    <div><strong>{`${row.surname} ${row.firstname} ${row.middlename}`}</strong></div>
-            <div className="small text-muted">
-            <span>{row.schoolabbrv}{row.admission_no}</span>
-        </div>
-    </td>
-    <td>
-      { 
-        std.filter(rw=>parseInt(rw.studentid) === parseInt(row.id) && parseInt(rw.grp) === 1).map((p, i)=>{
-        subs.push(parseFloat(p.amount))
-        return <div key={i} className="small text-muted">
-                  {props.classteacher ?  new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) ? <span  style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
-                  <span >{p.feename}</span>: <strong >{nairaformat(p.amount)}</strong>
-              </div>
-      })
-      }
-    </td>
-    <td>
-    {parseInt(row.parentid) === 0 ? "": <b><i>{'Recover from source'}<br/>{row.parentname}</i></b>}
-    { 
-      std.filter(rw=>parseInt(rw.studentid) === parseInt(row.id) && parseInt(rw.grp) === 0).map((p, i)=>{
-        adds.push(parseFloat(p.amount))
-        return <div key={i} className="small text-muted">
-         {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) && parseInt(row.parentid) === 0 ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
-                  <span>{moment().format(p.datepaid, 'DD MM YYYY')}</span> : <i>{p.teller}</i>: <strong>{nairaformat(p.amount)}</strong> 
-              </div>
-      })
-    }
-    </td>
-    <td>
-      {setDiff(subs, adds)}
-    </td>
-    {props.classteacher ? 
-    <td className="text-center">
-          <CButtonGroup>          
-          <CDropdown className="m-0">
-              <CDropdownToggle color="secondary" size='sm' block>
-                Set Fees
-              </CDropdownToggle>
-              <CDropdownMenu className='bg-info'>
-                <CForm className="px-4 py-3" >
-                 
-                  <CFormGroup>
-                    <CLabel htmlFor="amount">Amount</CLabel>
-                    <CInput 
-                      className="form-control" 
-                      style={{color:'blue', fontWeight:'bolder'}}
-                      id="amount" 
-                      type="text"
-                      value={amount}
-                      autoComplete="amount"
-                      onChange={(e)=>setAmount(e.target.value)}
-                      />
-                  </CFormGroup>
-                  
-                  <CFormGroup>
-                    <CLabel htmlFor="feeid">Select Fee</CLabel>
-                    <CSelect 
-                      className="form-control" 
-                      id="feeid" 
-                      type="date"
-                      value={feeid}
-                      autoComplete="feeid"
-                      onChange={(e)=>setFeeid(e.target.value)}
-                      >
-                        <option></option>
-                        {fearray}
-                      </CSelect>
-                  </CFormGroup>
-                                    
-                  <CFormGroup className="mt-2">
-                    <CButton 
-                    className='mb-2'
-                    size='sm'
-                    block
-                    color="primary" 
-                    type="button"
-                    onClick={()=>handleSubmitFeeOnly(row.id, props.termid, props.sessionid)}
-                    >Set Fee</CButton>
-                    <CButton 
-                    block
-                      size='sm' 
-                      color="secondary" 
-                      onClick={()=>handleSubmitFee(row.id, props.termid, props.sessionid)}
-                      >Use Default Fee</CButton>
-                  </CFormGroup>
-                </CForm>
-              </CDropdownMenu>
-          </CDropdown>
-          {parseInt(row.parentid) === 0 ?
-          <CDropdown className="m-0">
-              <CDropdownToggle color="info" size='sm'>
-                Pay Fees
-              </CDropdownToggle>
-              <CDropdownMenu className='bg-info'>
-                <CForm className="px-4 py-3" >
-                  <CFormGroup>
-                    <CLabel htmlFor="datepaid">Date Paid</CLabel>
-                    <CInput 
-                      className="form-control" 
-                      id="datepaid" 
-                      type="date"
-                      value={datepaid}
-                      autoComplete="email"
-                      onChange={(e)=>setDatepaid(e.target.value)}
-                      />
-                  </CFormGroup>
-                  <CFormGroup>
-                    <CLabel htmlFor="amount">Amount</CLabel>
-                    <CInput 
-                      className="form-control" 
-                      style={{color:'blue', fontWeight:'bolder'}}
-                      id="amount" 
-                      type="text"
-                      value={amount}
-                      autoComplete="amount"
-                      onChange={(e)=>setAmount(e.target.value)}
-                      />
-                  </CFormGroup>
-                  <CFormGroup>
-                    <CLabel htmlFor="accountid">Account</CLabel>
-                    <CSelect 
-                      className="form-control" 
-                      id="accountid" 
-                      type="date"
-                      value={accountid}
-                      autoComplete="accountid"
-                      onChange={(e)=>setAccountid(e.target.value)}
-                      >
-                        <option></option>
-                        {acarray}
-                      </CSelect>
-                  </CFormGroup>
-                  <CFormGroup>
-                    <CLabel htmlFor="teller">Teller</CLabel>
-                    <CInput 
-                      className="form-control" 
-                      id="teller" 
-                      type="text"
-                      value={teller}
-                      autoComplete="teller"
-                      onChange={(e)=>setTeller(e.target.value)}
-                      />
-                      </CFormGroup>
-                  <CFormGroup>
-                    <CLabel htmlFor="feeid">fee</CLabel>
-                    <CSelect 
-                      className="form-control" 
-                      id="feeid" 
-                      type="date"
-                      value={feeid}
-                      autoComplete="feeid"
-                      onChange={(e)=>setFeeid(e.target.value)}
-                      >
-                        <option></option>
-                        {fearray}
-                      </CSelect>
-                  </CFormGroup>
-                  
-                  
-                  <CFormGroup className="mt-2">
-                    <CButton 
-                    color="primary" 
-                    type="button"
-                    onClick={()=>handleSubmit(row.id, props.termid, props.sessionid)}
-                    >Pay</CButton>
-                  </CFormGroup>
-                </CForm>
-              </CDropdownMenu>
-          </CDropdown>:''} </CButtonGroup>
-          
-          <CDropdown className="m-0">
-              <CDropdownToggle color="dark" size='sm' block>
-                Deduct from Source
-              </CDropdownToggle>
-              <CDropdownMenu className='bg-dark'>
-                <CForm className="px-4 py-3" >
-                 
-                  
-                  
-                  <CFormGroup>
-                    <CLabel htmlFor="staffid">Select Staff Name & School</CLabel>
-                    <CSelect 
-                      className="form-control" 
-                      id="staffid" 
-                      type="date"
-                      value={staffid}
-                      autoComplete="staffid"
-                      onChange={(e)=>setstaffid(e.target.value)}
-                      >
-                        <option></option>
-                        {staffarray}
-                      </CSelect>
-                  </CFormGroup>
-                  
-              
-                  <CFormGroup className="mt-2">
-                    <CButton 
-                    className='mb-2'
-                    size='sm'
-                    block
-                    color="primary" 
-                    type="button"
-                    onClick={()=>handleSubmitStudent(row.id)}
-                    >Deduct From Source</CButton>
-                    
-                  </CFormGroup>
-                </CForm>
-              </CDropdownMenu>
-          </CDropdown>
-    </td>
-    :''}
-  </tr>
+    
+    return <FeesCard
+              key={ind}
+              studentname = {`${row.surname} ${row.firstname} ${row.middlename}`}
+              row={row}
+              std={std}
+              staffarray={staffarray}
+              acarray={acarray}
+              fearray={fearray}
+              termid={props.termid}
+              sessionid={props.sessionid}
+              classteacher={props.classteacher}
+            /> 
 })
               :'';
   return (
    <>
    
    <table className="table  table-outline mb-0 ">
-                <thead className="thead-light">
-                  <tr>
-                    <th className="text-center">Student ID</th>
-                    <th>Studentclass</th>
-                    <th className="text-center">FEES</th>
-                    <th className="text-center">PAYMENTS</th>
-                    <th className="text-center">BALANCE</th>
-                    {props.classteacher ? <th className="text-center">Pay</th>:''}
-                  </tr>
-                </thead>
+                
                 <tbody>
                   {acct}
                 </tbody>

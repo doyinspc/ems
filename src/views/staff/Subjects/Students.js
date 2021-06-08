@@ -18,7 +18,7 @@ const Studentclasss = (props) => {
   let data = props.staffstudents.staffstudents && Array.isArray(props.staffstudents.staffstudents) ? props.staffstudents.staffstudents.filter(rw =>rw !== null || rw !== undefined) : []
   let scoresall = props.studentscores.studentscores && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores.filter(rw =>rw !== null || rw !== undefined) : []
   let idx = data.map((pp, ii)=>pp.clientid);
-  let ids = idx.join(',')
+  let ids = idx.join(',');
   let clientid = props.clientid;
   let termid = props.termid;
   let sessionid = props.sessionid;
@@ -46,7 +46,8 @@ const Studentclasss = (props) => {
             'sessionid':sessionid,
             'itemid1':clientid,
             'contact':claszid,
-            'grp':groupid
+            'grp':groupid,
+            'classgroup':subject.staffid
         }),
         cat:'staffclass',
         table:'accessstudentsubject',
@@ -114,14 +115,16 @@ const Studentclasss = (props) => {
       props.registerStaffstudent(fd)
       
   }
-const getAllStudents = () =>{
+  const getAllStudents = () =>{
   /**
     * classunitid
     * termid
     * subjectid
     */
    let fd = new FormData();
+
    fd.append('claszid', claszid);
+   fd.append('claszgroup', subject.staffid);
    fd.append('termid', termid);
    fd.append('subjectid', subjectid);
    fd.append('sessionid', sessionid);
@@ -130,8 +133,9 @@ const getAllStudents = () =>{
    
    fd.append('table', 'accessstudentclass');
    fd.append('cat', 'insertsubject');
-   props.registerStaffstudent(fd)
-}
+   props.registerStaffstudent(fd);
+   
+  }
 const onRemove =(id)=>{
      Swal("Are you sure you want to delete you will not be able to restore the data.")
     .then((value) => {

@@ -71,7 +71,7 @@ const Staffsubject = (props) => {
 
   
   //GET TERM NAME
-  let ses = props.sessions.filter(rw=>parseInt(rw.id) === parseInt(props.pid));
+  let ses = Array.isArray(props.sessions) ? props.sessions.filter(rw=>parseInt(rw.id) === parseInt(props.pid)):[];
   let sess = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].name : 'None'
 
   let tem = props.terms.filter(rw=>parseInt(rw.id) === parseInt(props.qid));

@@ -45,26 +45,26 @@ const Staffsubject = (props) => {
   data.filter(rw =>rw !== null || rw !== undefined).forEach(prp => {
     if(prp.clientid in allStaff)
     {
-        if(prp.itemid in allStaff[prp.clientid])
+        if(prp.staffid+"_"+prp.itemid in allStaff[prp.clientid])
         {
-            if(prp.itemid1 in allStaff[prp.clientid][prp.itemid])
+            if(prp.itemid1 in allStaff[prp.clientid][prp.staffid+"_"+prp.itemid])
             {
-                allStaff[prp.clientid][prp.itemid][prp.itemid1].push(prp.contact)
+                allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1].push(prp.contact)
             }else
             {
-                allStaff[prp.clientid][prp.itemid][prp.itemid1] = [prp.contact]
+                allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp.contact]
             }
         }else
         {
-            allStaff[prp.clientid][prp.itemid] = {}
-            allStaff[prp.clientid][prp.itemid][prp.itemid1] = [prp.contact]
+            allStaff[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+            allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp.contact]
         }
         
     }else
     {
         allStaff[prp.clientid] = {}
-        allStaff[prp.clientid][prp.itemid] = {}
-        allStaff[prp.clientid][prp.itemid][prp.itemid1] =  [prp.contact]
+        allStaff[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+        allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] =  [prp.contact]
     }
 
   });
@@ -72,26 +72,26 @@ const Staffsubject = (props) => {
   data.filter(rw =>rw !== null || rw !== undefined).forEach(prp => {
     if(prp.clientid in allStaffz)
     {
-        if(prp.itemid in allStaffz[prp.clientid])
+        if(prp.staffid+"_"+prp.itemid in allStaffz[prp.clientid])
         {
-            if(prp.itemid1 in allStaffz[prp.clientid][prp.itemid])
+            if(prp.itemid1 in allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid])
             {
-                allStaffz[prp.clientid][prp.itemid][prp.itemid1].push(prp)
+                allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1].push(prp)
             }else
             {
-                allStaffz[prp.clientid][prp.itemid][prp.itemid1] = [prp]
+                allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp]
             }
         }else
         {
-            allStaffz[prp.clientid][prp.itemid] = {}
-            allStaffz[prp.clientid][prp.itemid][prp.itemid1] = [prp]
+            allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+            allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp]
         }
         
     }else
     {
         allStaffz[prp.clientid] = {}
-        allStaffz[prp.clientid][prp.itemid] = {}
-        allStaffz[prp.clientid][prp.itemid][prp.itemid1] =  [prp]
+        allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+        allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] =  [prp]
     }
 
   });
@@ -103,24 +103,33 @@ const Staffsubject = (props) => {
     return allSubject[prp.itemid1] = prp.itemabbrv1;
   });
   data.forEach(prp => {
-    return allClass[prp.itemid] = prp.itemname;
+    if(parseInt(prp.staffid) == 1){
+    return allClass[prp.staffid+"_"+prp.itemid] = prp.itemnameops;
+    }else{
+      return allClass[prp.staffid+"_"+prp.itemid] = prp.itemname;
+    }
   });
+  
   let col_arr = {}
   let tablhead = Object.keys(allClass).filter(rw=>rw != null).map((row, ind)=>{
     col_arr[row] = [];
     return <th key={ind} className='text-center'>{allClass[row]}</th>
     })
+    
+
 
   let tabl = Object.keys(allStaffName).filter(rw=>rw != null).map((row, ind)=>{
       let row_arr = []
       return <tr key={ind}>
                 <td className='text-left'>{allStaffName[row]}</td>
                     {Object.keys(allClass).filter(rw=>rw != null).map((row1, ind1)=>{
-                        let rz = row in allStaff && row1 in allStaff[row] ? allStaff[row][row1] : [] ;
-                        let arz = Object.keys(rz).map((r, i)=>{
-                            col_arr[row1].push(rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0));
-                            row_arr.push(rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0));
-                            return <span key={i} onClick={()=>popz(allStaffz[row][row1][r][0])}>{`${allSubject[r]} (${rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0)})`}eer</span>
+                          let rz = row in allStaff && row1 in allStaff[row] ? allStaff[row][row1] : [] ;
+                          let arz = Object.keys(rz).map((r, i)=>{
+                          let sm = rz[r].reduce((a, b)=>parseInt(a) + parseInt(b), 0)
+                          let sm1 = parseInt(sm) > 0 ? sm : 0;
+                          col_arr[row1].push(sm1);
+                          row_arr.push(sm1);
+                            return <span key={i} onClick={()=>popz(allStaffz[row][row1][r][0])}>{`${allSubject[r]}-${sm1}`}</span>
                         })
                         return <th key={ind1} className='text-center'>{arz}</th>
                     })}
@@ -132,8 +141,8 @@ const Staffsubject = (props) => {
     return <th key={ind} className='text-center'>{foo}</th>
     })
   return (
-      <div className="table-responsive">
-          <table className="table table-hover table-outline mb-0  d-sm-table">
+      <div className="table-responsive" border="1px solid #000" style={{fontSize:'9px'}}>
+          <table className="mb-0 d-sm-table" >
               <thead>
                   <td>STAFF</td>{tablhead}<th>TOTAL</th>
               </thead>

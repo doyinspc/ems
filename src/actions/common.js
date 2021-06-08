@@ -792,10 +792,49 @@ export const controls = {
       data:[
         {
           id:1,
-          name:'STAFF',
-          icon:'/icons/staff.png',
-          links:'/calendar'
-        }
+          name:'Capital Expenses',
+          icon:'/icons/expenses/capital.png',
+          links:'/expenses_capital'
+        }, 
+        {
+          id:2,
+          name:'Overheads',
+          icon:'/icons/expenses/overhead.png',
+          links:'/expenses_overhead'
+        },
+        {
+          id:3,
+          name:'Bank Transfers',
+          icon:'/icons/expenses/bank.png',
+          links:'/expenses_bank_transfer'
+        },
+        {
+          id:4,
+          name:'Cash Transfers',
+          icon:'/icons/expenses/impress.png',
+          links:'/expenses_impress_transfer'
+        }, 
+        {
+          id:5,
+          name:'Other Sources of Income',
+          icon:'/icons/expenses/income.png',
+          links:'/expenses_income'
+        },{
+          id:6,
+          name:'Account Reports',
+          icon:'/icons/expenses/report.png',
+          links:'/expenses_report'
+        },{
+          id:7,
+          name:'Settings',
+          icon:'/icons/expenses/setting.png',
+          links:'/expenses_setting'
+        },{
+          id:8,
+          name:'Access',
+          icon:'/icons/expenses/lock.png',
+          links:'/expenses_access'
+        },
       ]
     },
     5:{

@@ -64,7 +64,7 @@ const Staffsubject = (props) => {
   }
   const onActivate = (rw, num) =>{
    
-    let nu = parseInt(num) === 0 ? 1 : 0;
+    let nu = parseInt(num) === 1 ? 0 : 1;
     let fd = new FormData();
     fd.append('id', rw);
     fd.append('is_active', nu);
