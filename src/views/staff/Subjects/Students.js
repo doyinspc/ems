@@ -136,6 +136,7 @@ const Studentclasss = (props) => {
    props.registerStaffstudent(fd);
    
   }
+  
 const onRemove =(id)=>{
      Swal("Are you sure you want to delete you will not be able to restore the data.")
     .then((value) => {
@@ -268,7 +269,6 @@ const serScoreValues = (e, ca, namz, sco) =>{
 const saveScoreValues = (e, student, ca, namz, sco) =>{
   saveScore(student, ca , e.target.value);
 }
-
 
 let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
     return <tr key={ind}

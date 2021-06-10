@@ -22,6 +22,7 @@ import cbtexam from "./setting/cbtexam";
 import unit from "./setting/unit";
 import notice from "./setting/notice";
 import account from "./setting/account";
+import assessment from "./setting/assessment";
 import fee from "./setting/fee";
 import level from "./setting/level";
 import timetable from "./setting/timetable";
@@ -88,6 +89,7 @@ export default combineReducers({
     unitReducer: unit,
     noticeReducer: notice,
     accountReducer: account,
+    assessmentReducer: assessment,
     feeReducer: fee,
     timetableReducer: timetable,
     levelReducer: level,

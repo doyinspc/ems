@@ -16,6 +16,7 @@ const MainLayout = React.lazy(() => import('./containers/MainLayout'));
 
 // Pages
 const Login = React.lazy(() => import('./views/pages/login/Login'));
+const Logout = React.lazy(() => import('./views/pages/login/Logout'));
 const Register = React.lazy(() => import('./views/pages/register/Register'));
 const AttendanceStudent = React.lazy(() => import('./views/student/Attendance'));
 const AttendanceStaff = React.lazy(() => import('./views/staff/Attendance'));
@@ -37,6 +38,7 @@ class App extends Component {
           <React.Suspense fallback={loading}>
             <Switch>
               <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />
+              <Route exact path="/logout" name="Logout Page" render={props => <Logout {...props}/>} />
               <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />
               <Route exact path="/results/:clasz/:term" name="result" render={props => <Results {...props}/>} />
               <Route exact path="/scheme/:clasz/:term/:id" name="Scheme Of Work" render={props => <Scheme {...props}/>} />

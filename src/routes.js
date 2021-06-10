@@ -42,6 +42,9 @@ const User = React.lazy(() => import('./views/users/User'));
 const Main = React.lazy(() => import('./views/dashboard/Main'));
 const MainDashboard = React.lazy(() => import('./views/setting/Dashboard'));
 const Settings = React.lazy(() => import('./views/setting/Dashboard'));
+const Assessment = React.lazy(() => import('./views/setting/Assessment/Assessment'));
+const LessonPlan = React.lazy(() => import('./views/setting/LessonPlan/LessonPlan'));
+const SchemeOfWork = React.lazy(() => import('./views/setting/SchemeOfWork/SchemeOfWork'));
 const Setting = React.lazy(() => import('./views/setting/Setting'));
 const School = React.lazy(() => import('./views/setting/School'));
 const Session = React.lazy(() => import('./views/setting/Session'));
@@ -149,6 +152,9 @@ const routes = [
   { path: '/maindashboard', name: 'ClassDashboard', component: MainDashboard , exact: true},
   { path: '/settings', name: 'Settings Dashboard', component: Settings },
   { path: '/setting/:sid/:pid/:qid/:did/:kid/:rid', name: 'Setting', component: Setting },
+  { path: '/assessment', name: 'Assessment', component: Assessment },
+  { path: '/lessonplan', name: 'Lesson Plans', component: LessonPlan },
+  { path: '/schemeofwork', name: 'Scheme of Work', component: SchemeOfWork },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },
   { path: '/theme/typography', name: 'Typography', component: Typography },
