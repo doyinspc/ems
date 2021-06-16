@@ -577,7 +577,7 @@ const Dashboards= (props) => {
               
               <CButtonGroup className="float-right mr-3">
                 {
-                  props.reports.map(value => (
+                  Array.isArray(props.reports) ? props.reports.map(value => (
                     <CButton
                       color="outline-dark"
                       key={value.id}
@@ -587,7 +587,7 @@ const Dashboards= (props) => {
                     >
                       {value.title}
                     </CButton>
-                  ))
+                  )):''
                 }
               </CButtonGroup>
             </CCol>

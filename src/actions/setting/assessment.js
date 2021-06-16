@@ -2,9 +2,11 @@ import axios from 'axios';
 import {
     ASSESSMENT_GET_ONE,
     ASSESSMENT_GET_MULTIPLE,
+    ASSESSMENT_GET_DETAIL,
     ASSESSMENT_REGISTER_SUCCESS,
     ASSESSMENT_REGISTER_FAIL,
     ASSESSMENT_LOADING,
+    ASSESSMENT_DETAIL_LOADING,
     ASSESSMENT_LOADING_ERROR,
     ASSESSMENT_UPDATE_SUCCESS,
     ASSESSMENT_UPDATE_FAIL,
@@ -27,6 +29,26 @@ export const getAssessments = params => (dispatch, getState) => {
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
                     type: ASSESSMENT_GET_MULTIPLE,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : ASSESSMENT_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+export const getAssessmentDetails = params => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.token = MAIN_TOKEN;
+    params.table = TABLE_NAME;
+
+    dispatch({type : ASSESSMENT_DETAIL_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: ASSESSMENT_GET_DETAIL,
                     payload: res.data
                 })
             })

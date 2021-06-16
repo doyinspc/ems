@@ -104,14 +104,7 @@ const Expense = (props) => {
 	      let started  = new Date(dt.getFullYear(), dt.getMonth(), 1);
         let ended = new Date(dt.getFullYear(), dt.getMonth() + 1, 0);
 
-        // //pick the ideal dates to use
-        // if(stdate !== null && endate !== null && endate > stdate)
-        // {
-        //     started = stdate;
-        //     ended = endate;
-        //     setstartdate(started)
-        //     setenddate(ended)
-        // }
+       
         
         //setstartdate(started)
         //setenddate(ended)

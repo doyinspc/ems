@@ -42,7 +42,7 @@ const FeesCard = (props) => {
         fd.append('id', id);
         fd.append('cat', 'updatestudentclasss');
         fd.append('table', 'accessstudentclass');
-        fd.append('sessionid', props.sessions);
+        fd.append('sessionid', props.sessionid);
         props.updateStudentclass(fd)
     
     }
@@ -118,13 +118,13 @@ const FeesCard = (props) => {
           if(value == true && parseInt(id) > 0){
             let fd = new FormData();
             fd.append('id', id)
-            fd.append('sessionid', props.sessions)
+            fd.append('sessionid', props.sessionid)
             fd.append('cat', 'deletefee')
             fd.append('table', 'fees')
             fd.append('narration', 'delete students fees slready recorded')
             props.deleteStudentfee(fd, id);
           }else{
-            Swal(`Not deleted`);
+            Swal(`Not deleted`); 
           }
         })
       
@@ -201,7 +201,7 @@ const FeesCard = (props) => {
                             <td className="p-0">{p.termname}</td>
                             <td className="p-0"><span >{p.feename}</span></td>
                             <td className="p-0 text-right" ><strong>{nairaformat(p.amount)}</strong> 
-                            {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) && parseInt(row.parentid) === 0 ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
+                            {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) && parseInt(row.parentid) === 0 ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-dark"/>{' '}</span>:'':''}
                             </td>
                             </tr>
                         })
@@ -240,7 +240,7 @@ const FeesCard = (props) => {
                         <td className="p-0"><span>{moment().format(p.datepaid, 'DD MM YYYY')}</span></td>
                         <td className="p-0"><i>{p.teller}</i></td>
                         <td className="p-0 text-right"><strong>{nairaformat(p.amount)}</strong> 
-                        {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) && parseInt(row.parentid) === 0 ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-danger"/>{' '}</span>:'':''}
+                        {props.classteacher ? new Date() < new Date(new Date(p.date_created).setHours(new Date(p.date_created).getHours() + 4000)) && parseInt(row.parentid) === 0 ?  <span style={{cursor:'pointer'}}><CIcon name="cil-trash" onClick={()=>onDelete(p.id)} className="text-dark"/>{' '}</span>:'':''}
                         </td>
                         </tr>
                 

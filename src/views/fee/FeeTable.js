@@ -161,34 +161,34 @@ const Studentfee = (props) => {
   }
 
  
-      let stores = {};
-      let tabl = data.filter(rw=>rw != null && rw.grp == 0).map((row, ind)=>{
-      let feez = studs_money_sum.hasOwnProperty(row.studentid) && parseFloat(studs_money_sum[row.studentid]) > 0 ? studs_money_sum[row.studentid] : 0;
-      studs_money_sum[row.studentid] = feez;
-      let fz = 1
-      return <tr key={ind} style={{padding:'2px'}} title={row.staffname}>
-                <td style={{padding:'2px'}}  className='text-center'>{ind + 1}</td>
-                <td style={{padding:'2px'}}  className='text-center'>{row.classname}</td>
-                <td style={{padding:'2px'}}>{moment(row.datepaid).format('Do MM YYYY')}</td>
-                <td style={{padding:'2px'}}>{row.teller}</td>
-                <td style={{padding:'2px'}}>{row.studentname}</td>
-                <td style={{padding:'2px'}} className={`text-right ${fz === 0 ? 'text-info' :''}` }>{Number(feez).toFixed(2)}</td>
-                <td style={{padding:'2px'}} className='text-right'>{row.amount}</td>
-                <td style={{padding:'2px'}} className='text-right'>
-                  {
-                   balvalues(row.studentid, feez, row.amount)
-                  }
-                </td>
-               <td style={{padding:'2px'}} className='text-center'> 
-                    {props.editer === true ?
-                     <>
-                    <a style={{cursor:'pointer'}} onClick={()=>props.onEdit(row)}><i className='fa fa-edit ml-2 px-2'></i></a>
-                    <a style={{cursor:'pointer'}} onClick={()=>props.onDelete(row)}><i className='fa fa-remove ml-2 px-2 text-danger'></i></a>
-                    </>:""}
-                </td>
-              </tr>
-  })
-    
+    let stores = {};
+    let tabl = data.filter(rw=>rw != null && rw.grp == 0).map((row, ind)=>{
+    let feez = studs_money_sum.hasOwnProperty(row.studentid) && parseFloat(studs_money_sum[row.studentid]) > 0 ? studs_money_sum[row.studentid] : 0;
+    studs_money_sum[row.studentid] = feez;
+    let fz = 1
+    return <tr key={ind} style={{padding:'2px'}} title={row.staffname}>
+              <td style={{padding:'2px'}}  className='text-center'>{ind + 1}</td>
+              <td style={{padding:'2px'}}  className='text-center'>{row.classname}</td>
+              <td style={{padding:'2px'}}>{moment(row.datepaid).format('Do MM YYYY')}</td>
+              <td style={{padding:'2px'}}>{row.teller}</td>
+              <td style={{padding:'2px'}}>{row.studentname}</td>
+              <td style={{padding:'2px'}} className={`text-right ${fz === 0 ? 'text-info' :''}` }>{Number(feez).toFixed(2)}</td>
+              <td style={{padding:'2px'}} className='text-right'>{row.amount}</td>
+              <td style={{padding:'2px'}} className='text-right'>
+                {
+                  balvalues(row.studentid, feez, row.amount)
+                }
+              </td>
+              <td style={{padding:'2px'}} className='text-center'> 
+                  {props.editer === true ?
+                    <>
+                  <a style={{cursor:'pointer'}} onClick={()=>props.onEdit(row)}><i className='fa fa-edit ml-2 px-2'></i></a>
+                  <a style={{cursor:'pointer'}} onClick={()=>props.onDelete(row)}><i className='fa fa-remove ml-2 px-2 text-danger'></i></a>
+                  </>:""}
+              </td>
+            </tr>
+})
+  
     let duc1 = [];
     let duc2 = [];
     let duc3 = [];
@@ -220,36 +220,36 @@ const Studentfee = (props) => {
             </tr>
         });
 
-        let ruc1 = [];
-        let ruc2 = [];
-        let ruc3 = [];
-        let ruc4 = [];
-        let tabl2 = sumarx.filter(rw=>rw != null).map((roow, ind)=>{
-          let row = roow;
-          let dif = row[1] - row[0];
-          ruc1.push(row[1]);
-          ruc2.push(row[0]);
-          let fz= dif > 0 ? 0 : 1;
-          dif > 0 ? ruc3.push(dif) : ruc4.push(dif * -1);
-          return <tr key={ind} style={{padding:'2px'}} title={row[2]}>
-                  <td style={{padding:'2px'}}  className='text-center'>{ind + 1}</td>
-                  <td style={{padding:'2px'}} >{row[2]}</td>
-                  <td style={{padding:'2px'}} className='text-right'>{row[1]}</td>
-                  <td style={{padding:'2px'}} className='text-right'>{row[0]}</td>
-                  { fz === 1 ?
-                      <>
-                      <td style={{padding:'2px'}} className='text-right'>{parseFloat(dif) === 0 ? '-' : Number(dif  * -1).toFixed(2)}</td>
-                      <td style={{padding:'2px'}} className='text-center'>-</td>
-                      </>
-                      :
-                      <>
-                      <td style={{padding:'2px'}} className='text-center'>-</td>
-                      <td style={{padding:'2px'}} className='text-right'>{Number(dif).toFixed(2)}</td>
-                      </>
-                  }
-                  
-                </tr>
-            })
+    let ruc1 = [];
+    let ruc2 = [];
+    let ruc3 = [];
+    let ruc4 = [];
+    let tabl2 = sumarx.filter(rw=>rw != null).map((roow, ind)=>{
+      let row = roow;
+      let dif = row[1] - row[0];
+      ruc1.push(row[1]);
+      ruc2.push(row[0]);
+      let fz= dif > 0 ? 0 : 1;
+      dif > 0 ? ruc3.push(dif) : ruc4.push(dif * -1);
+      return <tr key={ind} style={{padding:'2px'}} title={row[2]}>
+              <td style={{padding:'2px'}}  className='text-center'>{ind + 1}</td>
+              <td style={{padding:'2px'}} >{row[2]}</td>
+              <td style={{padding:'2px'}} className='text-right'>{row[1]}</td>
+              <td style={{padding:'2px'}} className='text-right'>{row[0]}</td>
+              { fz === 1 ?
+                  <>
+                  <td style={{padding:'2px'}} className='text-right'>{parseFloat(dif) === 0 ? '-' : Number(dif  * -1).toFixed(2)}</td>
+                  <td style={{padding:'2px'}} className='text-center'>-</td>
+                  </>
+                  :
+                  <>
+                  <td style={{padding:'2px'}} className='text-center'>-</td>
+                  <td style={{padding:'2px'}} className='text-right'>{Number(dif).toFixed(2)}</td>
+                  </>
+              }
+              
+            </tr>
+        })
 
   return (
       <>
@@ -279,8 +279,7 @@ const Studentfee = (props) => {
                 </tfoot>
               </table>
 
-
-        <table className="table table-hover table-dark table-outline mb-0  d-sm-table">
+      <table className="table table-hover table-dark table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>
                     <th className="text-center" title="Transaction ID">TID</th>
@@ -308,7 +307,7 @@ const Studentfee = (props) => {
                 </tfoot>
               </table>
 
-          <table className="table table-hover table-dark table-outline mb-0  d-sm-table">
+      <table className="table table-hover table-dark table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>
                     <th className="text-center" title="Transaction ID">TID</th>
@@ -327,8 +326,7 @@ const Studentfee = (props) => {
                  </tbody>
               </table>
 
-
-        </>
+      </>
          
   )
 }

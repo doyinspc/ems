@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import Select from 'react-select'
-import {getAssessment, getAssessments, getAssessmentDetails} from './../../../actions/setting/assessment'
+import {getTheme, getThemes } from './../../../actions/setting/theme'
 import { CButton, CCard, CCardBody, CCardHeader, CCol, CContainer, CHeader, CInput, CLink, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CTabs, CTooltip } from '@coreui/react'
-import { getCas } from './../../../actions/setting/ca'
+import { getSubjects } from './../../../actions/setting/subject'
 import CIcon from '@coreui/icons-react'
-import MainChart from './MainChart'
 import List from './List'
-import ClassList from './ClassList'
-import ClassUnitList from './ClassUnitList'
-import ClassScore from './ClassScore'
-
-const Assessment = (props) => {
+const Theme = (props) => {
 
     const [data, setdata] = useState({})
     const [fdata, setfdata] = useState({})
@@ -23,41 +17,31 @@ const Assessment = (props) => {
     const [titles, settitles] = useState('')
     
     useEffect(() => {
-        let data = props.assessment !== undefined && props.assessment.assessments !== undefined && Array.isArray(props.assessment.assessments) ? props.assessment.assessments.filter(rw=>rw !== null) : [];
+        let data = props.theme !== undefined && props.theme.themes !== undefined && Array.isArray(props.theme.themes) ? props.theme.themes.filter(rw=>rw !== null) : [];
         setdata(data);
         setfdata(data)
-      }, [props.assessment.assessments ])
+      }, [props.theme.themes ])
 
     useEffect(() => {
         
         let params1 = {
           data:JSON.stringify(
           {
-            'termid':props.user.activeterm.termid,
-            'schoolid':props.user.activeterm.sessionid
+            'typeid':1//props.user.user.typeid
           }),
-          cat:'dropdownca',
-          table:'dropdownca',
-          narration:'get ca'
+          cat:'selected',
+          table:'subjects',
+          narration:'get subject'
     
         }
-        props.getCas(params1)
+        props.getSubjects(params1)
       
     }, [])
     
     const handleCategoryid = (event) =>{
         setcategoryid(event)
     }
-    const cumavg = (arr , arr1) =>{
-        if(Array.isArray(arr) && arr.length > 0 && Array.isArray(arr1) && arr1.length > 0)
-        {
-            let le = arr1.reduce((a, b)=>a + b, 0);
-            let su = arr.reduce((a, b)=>a + b, 0);
-            let avg = su/le;
-            
-            return Number(avg).toFixed(2);
-        }
-    }
+   
     const avgs = (arr) =>{
         if(Array.isArray(arr) && arr.length > 0 )
         {
@@ -71,7 +55,7 @@ const Assessment = (props) => {
     let p1 = [];
     if(Array.isArray(props.cas)){ props.cas.forEach(element => {
         let arr = {}
-        arr['value'] = element.id+"::::"+element.sid+"::::"+element.score+"::::"+element.maxscore+"::::"+element.caabbrv+"::::"+element.name
+        arr['value'] = element.id
         arr['label'] = element.name
         p1.push(arr)
     });}
@@ -101,11 +85,11 @@ const Assessment = (props) => {
                     'termid':props.user.activeterm.termid,
                     'itemid1':casz.join(',')
                 }),
-                cat:'assessment',
-                table:'assessment',
-                narration:'assessment'
+                cat:'theme',
+                table:'theme',
+                narration:'theme'
             }
-            props.getAssessments(params);
+            props.getThemes(params);
         }
 
     }
@@ -267,16 +251,14 @@ const Assessment = (props) => {
                     'itemid':subjectid,
                     'clientid':clientid
                 }),
-                cat:'assessmentdetails',
-                table:'assessmentdetails',
-                narration:'assessment'
+                cat:'themedetails',
+                table:'themedetails',
+                narration:'theme'
             }
-            props.getAssessmentDetails(params);
+            props.getThemeDetails(params);
         }
     }
 
-    
-  
     return (
         < >
         <CCard className="d-none d-print-block">
@@ -338,8 +320,7 @@ const Assessment = (props) => {
                     </CRow>
                 </CContainer>
             </CCardHeader>
-            <CTabs>
-             
+           <CTabs>
               <CNav className="d-print-none" variant="tabs">
                 <CNavItem>
                   <CNavLink>
@@ -367,7 +348,7 @@ const Assessment = (props) => {
                   </CNavLink>
                 </CNavItem>
               </CNav>
-              {!props.assessment.isLoading ?
+              {props.theme.isLoading ?
               <CTabContent fade={false}>
                   <CTabPane>
                       <List
@@ -378,45 +359,6 @@ const Assessment = (props) => {
                       />
                   </CTabPane>
                 <CTabPane>
-                <ClassUnitList
-                        dt_body={dt_body}
-                        dt_head={dt_head}
-                        dt_foot={dt_foot}
-                        dt_total={dt_total}
-                        converts={converts}
-                        defaultconverts={defaultconverts} 
-                    />
-                </CTabPane>
-                <CTabPane>
-                    <ClassList
-                        ct_body={ct_body}
-                        ct_head={ct_head}
-                        ct_foot={ct_foot}
-                        ct_total={ct_total}
-                        converts={converts}
-                        defaultconverts={defaultconverts}     
-                    />   
-                </CTabPane>
-                <CTabPane>
-                    <MainChart
-                        dt_col={dt_col}
-                        ct_col={ct_col}
-                        ct_arr ={ct_arr}
-                        dt_arr ={dt_arr}
-                        subject={dt_subject}
-                        claszunit={dt_class}
-                        clasz={dt_cla}
-                        converts={converts}
-                        defaultconverts={defaultconverts} 
-                    />
-                </CTabPane>
-                <CTabPane>
-                    <ClassScore
-                        subject={dt_subject}
-                        claszunit={dt_class}
-                        clasz={dt_cla}
-                        data={props.assessment.assessmentdetails}
-                    />
                 </CTabPane>
                 </CTabContent>:
                     <>
@@ -433,16 +375,15 @@ const Assessment = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    assessment :state.assessmentReducer,
-    cas:state.caReducer.cas,
+    theme :state.themeReducer,
+    cas:state.subjectReducer.subjects,
     user:state.userReducer
 })
 
 const mapDispatchToProps = {
-    getAssessments,
-    getAssessment,
-    getAssessmentDetails,
-    getCas
+    getThemes,
+    getTheme,
+    getSubjects
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Assessment)
+export default connect(mapStateToProps, mapDispatchToProps)(Theme)

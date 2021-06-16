@@ -4,6 +4,7 @@ import {
     ASSESSMENT_REGISTER_SUCCESS,
     ASSESSMENT_REGISTER_FAIL,
     ASSESSMENT_LOADING,
+    ASSESSMENT_DETAIL_LOADING,
     ASSESSMENT_LOADING_ERROR,
     ASSESSMENT_ACTIVATE_FAIL,
     ASSESSMENT_ACTIVATE_SUCCESS,
@@ -11,18 +12,21 @@ import {
     ASSESSMENT_UPDATE_FAIL,
     ASSESSMENT_DELETE_SUCCESS,
     ASSESSMENT_DELETE_FAIL,
-    ASSESSMENT_EDIT
+    ASSESSMENT_EDIT,
+    ASSESSMENT_GET_DETAIL
 } from "./../../types/setting/assessment";
 
 let assessmentStore = JSON.parse(localStorage.getItem('assessment'))
 
 const initialState = {
     isLoading: false,
+    isLoadingDetails: false,
     assessments: assessmentStore ? assessmentStore : [],
     assessment:{},
     msg: null,
     isEdit:-1,
     ref:null,
+    assessmentdetails:[]
 }
 
 const changeState = (aluu, actid) =>
@@ -47,11 +51,24 @@ export default function(state = initialState, action){
                 ...state,
                 isLoading : true
             };
+        case ASSESSMENT_DETAIL_LOADING:
+            return {
+                ...state,
+                isLoadingDetails : true
+            };
         case ASSESSMENT_GET_MULTIPLE:
             localStorage.setItem('assessment', JSON.stringify(action.payload));
             return {
                 ...state,
                 assessments : action.payload,
+                isLoading : false,
+                msg:'DONE!!!'
+            };
+        case ASSESSMENT_GET_DETAIL:
+            return {
+                ...state,
+                assessmentdetails : action.payload,
+                isLoadingDetails : false,
                 msg:'DONE!!!'
             };
         case ASSESSMENT_GET_ONE:
