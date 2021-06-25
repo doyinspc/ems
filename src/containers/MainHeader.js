@@ -48,7 +48,7 @@ const TheHeader = (props) => {
   
   
   return (
-    <CHeader withSubheader>
+    <CHeader withSubheader className="d-print-none">
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"

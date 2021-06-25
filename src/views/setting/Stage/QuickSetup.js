@@ -102,7 +102,62 @@ const loads4 = ()=>{
         props.insertClassfee(fd);
     }
 }
+const loads5 = ()=>{
+    let ses = props.terms.filter(rw=>parseInt(rw.id) === parseInt(otermid));
+    let osessionid = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].sessionid : 0;
+  
+    if(parseInt(props.pid) > 0 && parseInt(osessionid) > 0 && parseInt(props.qid) > 0 && parseInt(otermid) > 0 )
+    {
+        let fd = new FormData();
 
+        fd.append('sessionid', props.pid);
+        fd.append('osessionid', osessionid);
+        fd.append('termid', props.qid);
+        fd.append('otermid', otermid);
+        fd.append('typeid', 1);
+        fd.append('cat', 'duplicateassessment');
+        fd.append('table', 'tabs' );
+        props.insertClassfee(fd);
+    }
+}
+const loads6 = ()=>{
+    let ses = props.terms.filter(rw=>parseInt(rw.id) === parseInt(otermid));
+    let osessionid = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].sessionid : 0;
+  
+    if(parseInt(props.pid) > 0 && parseInt(osessionid) > 0 && parseInt(props.qid) > 0 && parseInt(otermid) > 0 )
+    {
+        let fd = new FormData();
+
+        fd.append('sessionid', props.pid);
+        fd.append('osessionid', osessionid);
+        fd.append('termid', props.qid);
+        fd.append('otermid', otermid);
+        fd.append('typeid', 2);
+        fd.append('cat', 'duplicateassessment');
+        fd.append('table', 'tabs' );
+
+        props.insertClassfee(fd);
+    }
+}
+const loads7 = ()=>{
+    let ses = props.terms.filter(rw=>parseInt(rw.id) === parseInt(otermid));
+    let osessionid = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].sessionid : 0;
+  
+    if(parseInt(props.pid) > 0 && parseInt(osessionid) > 0 && parseInt(props.qid) > 0 && parseInt(otermid) > 0 )
+    {
+        let fd = new FormData();
+
+        fd.append('sessionid', props.pid);
+        fd.append('osessionid', osessionid);
+        fd.append('termid', props.qid);
+        fd.append('otermid', otermid);
+        fd.append('typeid', 3);
+        fd.append('cat', 'duplicateassessment');
+        fd.append('table', 'tabs' );
+
+        props.insertClassfee(fd);
+    }
+}
 
   
   //GET TERM NAME
@@ -282,7 +337,7 @@ const loads4 = ()=>{
                             </CContainer>
                          </td>
                          <td>
-                             <CButton className='m-0' size='sm' color='secondary' onClick={loads1} block >Load</CButton></td>
+                             <CButton className='m-0' size='sm' color='secondary' onClick={loads5} block >Load</CButton></td>
                      </tr>
                      <tr>
                          <td></td>
@@ -311,7 +366,7 @@ const loads4 = ()=>{
                             </CContainer>
                          </td>
                          <td>
-                             <CButton className='m-0' size='sm' color='secondary' onClick={loads1} block >Load</CButton></td>
+                             <CButton className='m-0' size='sm' color='secondary' onClick={loads6} block >Load</CButton></td>
                       </tr>
                      <tr>
                          <td></td>
@@ -340,7 +395,7 @@ const loads4 = ()=>{
                             </CContainer>
                          </td>
                          <td>
-                             <CButton className='m-0' size='sm' color='secondary' onClick={loads1} block >Load</CButton></td>
+                             <CButton className='m-0' size='sm' color='secondary' onClick={loads7} block >Load</CButton></td>
                      </tr>
                  </tbody>
              </table>

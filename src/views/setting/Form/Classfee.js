@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {registerClassfee, updateClassfee, deleteClassfee} from './../../../actions/setting/classfee';
 import {getFees} from './../../../actions/setting/fee';
 import {getClaszs} from './../../../actions/setting/clasz';
-import { useHistory, useLocation } from 'react-router-dom'
 import Select from 'react-select'
 import {
   CBadge,
@@ -23,7 +22,6 @@ import {
   CSelect
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {setElement} from './../../../actions/common'
 
 
 
@@ -177,7 +175,7 @@ const Classfee = (props) => {
                       options={clarray}
                       onChange={handleClass}
                     />
-                  
+                   
                   <CFormText className="help-block">Select the class or classes</CFormText>
                 </CFormGroup>
                 <CFormGroup>

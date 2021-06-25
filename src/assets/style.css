@@ -1,0 +1,295 @@
+.feedback-overlay-black {
+    background-color: #000;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 400px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+		.s_title{
+			min-width: 150px !important;
+			padding:3px;
+			text-transform:uppercase;
+			
+		}
+		.t_title{
+			min-width:220px !important;
+			max-width:220px !important;
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			font-weight:bold;
+			padding:4px;
+			text-transform:uppercase;
+			text-wrap:unrestricted !important;	
+		}
+
+		.mrow{
+			margin:0px;
+			padding:0px;
+		}
+  			@page { 
+  				size: A4 
+  			}
+  			@font-face {
+				font-family: Raleway-Light;
+				src: url(fonts/Raleway/Raleway-Light.woff2);
+				font-weight: bold;
+				
+			}
+			@font-face {
+				font-family: Raleway-ExtraBold;
+				src: url(fonts/Raleway/Raleway-ExtraBold.woff2);
+				font-weight: bold;
+				
+			}
+			@font-face {
+				font-family: JosefinSlab-Bold;
+				src: url(fonts/Josefin_Slab/JosefinSlab-Bold.woff2);
+				
+			}
+			@font-face {
+				font-family: Farsan-Regular;
+				src: url(fonts/Farsan/Farsan-Regular.woff2);
+			}
+			@font-face {
+				font-family: Cantarell-Oblique;
+				src: url(fonts/Cantarell/Cantarell-Oblique.woff2);
+			}
+			@font-face {
+				font-family: Cantarell-Regular;
+				src: url(fonts/Cantarell/Cantarell-Regular.woff2);
+			}
+			@font-face {
+				font-family: PoiretOne-Regular;
+				src: url(fonts/Poiret_One/PoiretOne-Regular.woff2);
+			}
+			@font-face {
+				font-family: IstokWeb-Italic;
+				src: url(fonts/Istok_Web/IstokWeb-Italic.woff2);
+			}
+			@font-face {
+				font-family: Righteous;
+				src: url(fonts/righteous/Righteous-Regular.woff2);
+			}
+		table{
+			font-size:12px;
+			padding:0px !important; 
+			margin:1px !important;
+		}
+		th{
+		font-family:'Raleway-ExtraBold';
+		text-align:center;
+		background-color:#333 !important ;
+		color:#FFF;
+		}
+		td{
+		font-family:'Raleway-ExtraBold';
+		color:#000;
+		margin:0px !important;
+		padding:0px !important;
+		}
+		.table_title{
+			font-weight:bold;
+			width:100px;
+			text-transform:uppercase;
+			margin:0px;
+			padding: 0px !important;
+		}
+		.table_comment{
+			font-family:'Farsan-Regular', sans-serif;
+			font-size:14px;
+			padding:0px !important;
+		}
+	  .slim{
+		margin:0px !important;
+		padding:0px !important;
+		}
+		#dataAdd{
+			height:80px;
+		}
+		h3{
+			font-family:'Righteous', sans-serif;
+			line-height:13px;
+		}
+		h4{
+			font-family:'Cantarell-Regular', sans-serif;
+			font-size:14px;
+		}
+		h2{
+			font-family:'Cantarell-Regular', sans-serif;
+			
+		}
+		#commentAdd{
+			font-family:'Farsan-Regular', sans-serif;
+			font-size:12px;
+			padding:8px;
+		}
+		.button:hover {
+		  background: #06D85F;
+		}
+			.boxd {
+				
+				z-index:50;
+				position:fixed;
+				width: 10%;
+				margin: 0 auto;
+			}
+			#msize {
+				
+				z-index:50;
+				background-color:#FFF;
+				position:fixed;
+			width: 30%;
+			padding: 20px;
+			background: #fff;
+			border-radius: 5px;
+			transition: all 5s ease-in-out;
+			}
+			.overlayd {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: rgba(0, 0, 0, 0.7);
+			transition: opacity 500ms;
+			visibility: hidden;
+			opacity: 0;
+			}
+			.overlayd:target {
+			visibility: visible;
+			opacity: 1;
+			}
+
+
+			.btn-circle {
+			width: 30px;
+			height: 30px;
+			text-align: center;
+			padding: 6px 0;
+			font-size: 12px;
+			line-height: 1.428571429;
+			border-radius: 15px;
+			}
+			.btn-circle.btn-lg {
+			width: 50px;
+			height: 50px;
+			padding: 10px 16px;
+			font-size: 18px;
+			line-height: 1.33;
+			border-radius: 25px;
+			}
+			.btn-circle.btn-xl {
+			width: 70px;
+			height: 70px;
+			padding: 10px 16px;
+			font-size: 24px;
+			line-height: 1.33;
+			border-radius: 35px;
+			}
+			.sheet{ 
+				background-image:url(img/logo1.png)  !important ; 
+				background-repeat: no-repeat !important; 
+				background-position: center !important;
+				background-size:contain !important; 
+				z-index:1000;
+				background-attachment:  local;
+				background-origin: content-box !important;	
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				-webkit-animation: myfirst 5s ; /* Chrome, Safari, Opera */
+				animation: myfirst 5s ;  
+			}
+			.custom-heart {
+					font-size: 2.5em;
+					color: red;
+				}
+
+			.tools {
+			display: none;
+			float: right;
+			color: #dd4b39;
+			}
+
+			.tools > .glyphicon{
+			margin-right: 5px;
+			cursor: pointer;
+			}
+
+
+			/* The side navigation menu */
+			.sidenav {
+				color:white;
+				height: 100%; /* 100% Full-height */
+				width: 0; /* 0 width - change this with JavaScript */
+				position: fixed; /* Stay in place */
+				z-index: 150; /* Stay on top */
+				top: 0;
+				left: 0;
+				background-color: #111; /* Black*/
+				overflow-x: hidden; /* Disable horizontal scroll */
+				padding-top: 60px; /* Place content 60px from the top */
+				transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+			}
+
+			/* The navigation menu links */
+			.sidenav a {
+				padding: 8px 8px 8px 8px;
+				text-decoration: none;
+				font-size: 14px;
+				color: white;
+				display: block;
+				transition: 0.3s
+			}
+
+			/* When you mouse over the navigation links, change their color */
+			.sidenav a:hover, .offcanvas a:focus{
+				color: #ffffff;
+			}
+
+			/* Position and style the close button (top right corner) */
+			.sidenav .closebtn {
+				position: absolute;
+				top: 0;
+				
+				font-size: 25px;
+				margin-left: 5px;
+			}
+
+			/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+			#content {
+				transition: margin-left .5s;
+				padding: 20px;
+			}
+
+			/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+			@media screen and (max-height: 450px) {
+				.sidenav {padding-top: 15px;}
+				.sidenav a {font-size: 18px;}
+			}
+
+
+
+
+
+
+			@media print
+			{  
+				* {-webkit-print-color-adjust:exact !important;color-adjust:exact !important;}  
+				.no-print, .no-print *
+				{
+					display: none !important;
+				}
+			}
+			@media screen and (max-width: 700px){
+			.box{
+				width: 70%;
+			}
+			.popup{
+				width: 70%;
+			}
+			}
+  

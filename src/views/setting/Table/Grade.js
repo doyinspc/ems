@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import {getGrades, getGrade, registerGrade, updateGrade, deleteGrade} from './../../../actions/setting/grade';
 import { useHistory} from 'react-router-dom'
+import { element } from 'prop-types';
 
 
 
@@ -14,6 +15,10 @@ const Grade = (props) => {
                 <td className='text-center'>{ind + 1}</td>
                 <td>{row.name}</td>
                 <td className='text-center'>{row.abbrv}</td>
+                <td className='text-center'>{
+                      row.claszid !== null && row.claszid !== undefined && row.claszid.length > 0 ?
+                      JSON.parse(row.claszid).map(el=>el.label+" "):''
+                }</td>
                 { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
                 <td className='text-center'>
                     {
@@ -39,6 +44,7 @@ const Grade = (props) => {
                     <th className="text-center">SN.</th>
                     <th><i className='fa fa-list'></i> Grade</th>
                     <th className="text-center"> <i className='fa fa-text'></i> Abbrv</th>
+                    <th><i className='fa fa-list'></i> Classes Applicable</th>
                     { props.editer === true  || (props.submenu !== undefined && props.submenu.length > 0) ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>

@@ -61,6 +61,7 @@ import office from "./setting/office";
 import report from "./setting/report";
 import designation from "./setting/designation";
 import job from "./setting/job";
+import lessonplan from "./setting/lessonplan";
 import week from "./setting/week";
 import penmanager from "./setting/penmanager";
 import page from "./setting/page";
@@ -128,6 +129,7 @@ export default combineReducers({
     penmanagerReducer: penmanager,
     designationReducer: designation,
     jobReducer: job,
+    lessonplanReducer: lessonplan,
     commentReducer: comment,
     coursematerialReducer: coursematerial,
     weekReducer: week,

@@ -226,7 +226,6 @@ const StudentReportList = (props) => {
      let student_classparent_subject_position_array = props.studentscores && Array.isArray(props.studentscores[4]) ? props.studentscores[4] : [];
      let student_classparent_subject_position_store = {}
      let student_classparent_subject_position_stores = []
-     
      student_classparent_subject_position_array.forEach(ele=>{
          
          if(Object.keys(student_classparent_subject_position_store).includes(ele.studentid))
@@ -477,6 +476,7 @@ const StudentReportList = (props) => {
         let theadm = Object.keys(ca_array).map((prop, ind)=>{
                     return <th key={ind} colSpan={caunit_array[prop].length + 1}>{ca_array[prop]}</th>
         })
+        
         let theadm1 = Object.keys(ca_array).map((prop, ind)=>{
             return <>{Object.keys(caunit_array[prop]).map((pro, inds)=>{
                 return <th key={inds}>{caunit_array[prop][pro].name}<br/>{caunit_array[prop][pro].score}</th>

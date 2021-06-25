@@ -105,7 +105,7 @@ export default [
         },{
           _tag: 'CSidebarNavItem',
           name: 'Scheme of Work',
-          to: '/myclass',
+          to: '/schemeofwork',
           icon: 'cil-notes',
           badge: {
             color: 'info',
@@ -113,8 +113,17 @@ export default [
           }
         },{
           _tag: 'CSidebarNavItem',
+          name: 'Report Card',
+          to: '/results',
+          icon: 'cil-book',
+          badge: {
+            color: 'info',
+            text: '',
+          }
+        },{
+          _tag: 'CSidebarNavItem',
           name: 'Lesson Plan',
-          to: '/myclass',
+          to: '/lessonplan',
           icon: 'cil-book',
           badge: {
             color: 'info',

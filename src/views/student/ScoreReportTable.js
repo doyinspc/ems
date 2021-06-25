@@ -89,7 +89,6 @@ const StudentReportList = (props) => {
         let res = sums > 0 && tots > 0 ? (sums/tots) * 100 : 0;
         return Number(res).toFixed(1)
     }
-
     const openEditing = () =>{
     }
     const clearRecord = (data) =>{
@@ -114,33 +113,6 @@ const StudentReportList = (props) => {
         props.insertStudentca(fd);
       
     }
-
-    const onActivate = (id) =>{
-   
-      let fd = new FormData();
-      fd.append('id', id);
-      fd.append('is_active', 0);
-      fd.append('cat', 'updates');
-      fd.append('sessionid', sessionid);
-      fd.append('table', 'accessstaffclass');
-      fd.append('narration', `activate or disable class ${id}`);
-      props.updateStaffsubject(fd);
-  
-    }
-
-    const onDeactivate = (id) =>{
-   
-      let fd = new FormData();
-      fd.append('id', id);
-      fd.append('is_active', 1);
-      fd.append('cat', 'updates');
-      fd.append('sessionid', sessionid);
-      fd.append('table', 'accessstaffclass');
-      fd.append('narration', `activate or disable class ${id}`);
-      props.updateStaffsubject(fd);
-  
-    }
-
     /**
      * sort position by student
      * sort maxscore
@@ -255,6 +227,7 @@ const StudentReportList = (props) => {
                 totrow.push(shmax)
               }
             })
+            console.log(prop);
             keepca[row.id][prop] = computes(sumrow, totrow, prop)
         })
         }

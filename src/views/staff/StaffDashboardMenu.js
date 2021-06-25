@@ -41,20 +41,21 @@ const Dashboard = (props) => {
   let dt1 ='';
   let dt2 ='';
   let dt3 ='';
-  if(dt.length > 0)
+
+  if(Array.isArray(dt) && dt.length > 0)
   {
-     dt0 = dt[0].map((prop, ind)=>{
-    return <option key={ind}  value={prop.termid}>{prop.name}</option>;
-    });
-    dt1 = dt[1].map((prop, ind)=>{
-    return <option key={ind}  value={prop.id}>{prop.name}</option>;
-    });
-    dt2 = dt[2].map((prop, ind)=>{
-    return <option key={ind}  value={prop.id}>{prop.name}</option>;
-    });
-    dt3 = dt[0].map((prop, ind)=>{
-    return <option key={ind} value={JSON.stringify(prop)}>{prop.name}</option>;
-    });
+      dt0 = dt[0].map((prop, ind)=>{
+        return <option key={ind}  value={prop.termid}>{prop.name}</option>;
+      });
+      dt1 = dt[1].map((prop, ind)=>{
+        return <option key={ind}  value={prop.id}>{prop.name}</option>;
+      });
+      dt2 = dt[2].map((prop, ind)=>{
+        return <option key={ind}  value={prop.id}>{prop.name}</option>;
+      });
+      dt3 = dt[0].map((prop, ind)=>{
+        return <option key={ind} value={JSON.stringify(prop)}>{prop.name}</option>;
+      });
 }
 
 let sch  = Array.isArray(props.schools) ? props.schools.map((prop, ind)=>{

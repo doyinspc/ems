@@ -32,16 +32,15 @@ const TheHeaderDropdown = (props) => {
     >
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
-
           <CImg
             src={process.env.REACT_APP_SERVER_URL+ props.user.user.photo} 
             className="c-avatar-img"
             alt={props.username}
-            onError={(e)=>{e.target.onerror=null; e.target.src='icons/profile_4.png'} }
+            onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL+'/icons/profile_4.png'} }
           />
         </div>
       </CDropdownToggle>
-      <CDropdownMenu className="pt-0" placement="bottom-end">
+      <CDropdownMenu className="pt-0" placement="bottom-end"> 
         <CDropdownItem
           header
           tag="div"

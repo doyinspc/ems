@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerGrade, updateGrade, deleteGrade} from './../../../actions/setting/grade';
-import { useHistory, useLocation } from 'react-router-dom'
+import Select from 'react-select'
+import {getClaszs} from './../../../actions/setting/clasz';
 import {
   CBadge,
   CButton,
@@ -23,6 +24,7 @@ import CIcon from '@coreui/icons-react'
 const Grade = (props) => {
   const [collapse, setCollapse] = useState(false)
   const [id, setId] = useState(null)
+  const [claszid, setClaszid] = useState([])
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
 
@@ -32,21 +34,43 @@ const Grade = (props) => {
     {
       let dt = props.data;
       setId(dt.id);
+      let ar = dt.claszid !== undefined && dt.claszid.length > 0 ? JSON.parse(dt.claszid) : []
       setNamez(dt.name);
       setAbbrv(dt.abbrv);
+      setClaszid(ar);
     }else{
       setId(null);
+      setClaszid([]);
       setNamez('');
       setAbbrv('');
     }
     
   }, [props.data])
+  
+  useEffect(() => {
+    if(props.activeschool !== undefined && parseInt(props.activeschool.id) > 0){
+        let params1 = {
+          data:JSON.stringify(
+          {
+              'typeid': props.activeschool.typeid,
+              'is_active':0
+          }),
+          cat:'select',
+          table:'clasz',
+          narration:'get clasz'
+          }
+          props.getClaszs(params1)
+
+    }
+  }, [props.activeschool]) 
 
   const handleSubmit = () =>{
+    
     if(namez.length > 0){
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
+      fd.append('claszid', JSON.stringify(claszid));
       fd.append('table', 'grades');
       
       if(id && parseInt(id) > 0)
@@ -68,6 +92,19 @@ const Grade = (props) => {
       setAbbrv('');
     }
   }
+
+  const handleClass = (event) =>{
+    setClaszid(event)
+  }
+
+  let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? props.claszs.claszs : [];
+  let clarray = [];
+  claszarray.forEach(rw =>{
+    let ar = {}
+      ar['label'] = rw.abbrv;
+      ar['value'] = rw.id;
+      clarray.push(ar)
+  })
  
    return (
     <CCol xl={12}  id="#formz">
@@ -90,6 +127,18 @@ const Grade = (props) => {
         </CCardHeader>
         <CCardBody>
           <CForm action="" method="post">
+            <CFormGroup>
+                  <CLabel htmlFor="nf-claszid">Class </CLabel>
+                  <Select
+                      closeMenuOnSelect={false}
+                      value={claszid}
+                      isMulti
+                      options={clarray}
+                      onChange={handleClass}
+                    />
+                  
+                  <CFormText className="help-block">Select the class or classes</CFormText>
+            </CFormGroup>
             <CFormGroup>
               <CLabel htmlFor="nf-name">Grade</CLabel>
               <CInput 
@@ -126,10 +175,12 @@ const Grade = (props) => {
 }
 const mapStateToProps = (state) =>({
   grades : state.gradeReducer,
-  user:state.userReducer
+  user:state.userReducer,
+  claszs : state.claszReducer
 })
 export default connect(mapStateToProps, {
   registerGrade,
   updateGrade,
-  deleteGrade
+  deleteGrade,
+  getClaszs
 })(Grade)

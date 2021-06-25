@@ -45,6 +45,7 @@ const Settings = React.lazy(() => import('./views/setting/Dashboard'));
 const Assessment = React.lazy(() => import('./views/setting/Assessment/Assessment'));
 const LessonPlan = React.lazy(() => import('./views/setting/LessonPlan/LessonPlan'));
 const SchemeOfWork = React.lazy(() => import('./views/setting/SchemeOfWork/SchemeOfWork'));
+const TermReport = React.lazy(() => import('./views/setting/TermReport/TermReport'));
 const Setting = React.lazy(() => import('./views/setting/Setting'));
 const School = React.lazy(() => import('./views/setting/School'));
 const Session = React.lazy(() => import('./views/setting/Session'));
@@ -155,6 +156,7 @@ const routes = [
   { path: '/assessment', name: 'Assessment', component: Assessment },
   { path: '/lessonplan', name: 'Lesson Plans', component: LessonPlan },
   { path: '/schemeofwork', name: 'Scheme of Work', component: SchemeOfWork },
+  { path: '/results', name: 'Report Card', component: TermReport },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },
   { path: '/theme/typography', name: 'Typography', component: Typography },

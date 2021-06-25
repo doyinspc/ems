@@ -53,7 +53,6 @@ const StudentReportList = (props) => {
     let allcaid = props.allcaid;
     let beh_array = props.beh_array;
 
-    
     let total_subjects = 0;
     let total_scores = [];
     
@@ -492,7 +491,7 @@ const StudentReportList = (props) => {
                             </tbody>
                         </table>
                         </CCol>
-                        <CCol xs={2} className="m-0 pr-0" >
+                        <CCol xs={2} className="m-0 pr-0" > 
                             
                             <CRow className="m-0 p-0">
                                 <CCol className="m-0" style={{fontSize:'24px'}}><h5 style={{fontFamily:'Lobster', fontSize:'20px'}}>BEHAVIOR & PSYCHOMOTOR</h5></CCol>

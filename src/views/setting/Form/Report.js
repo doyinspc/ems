@@ -12,7 +12,7 @@ import {
   CBadge,
   CButton,
   CCard,
-  CCardBody,
+  CCardBody, 
   CCardHeader,
   CCol,
   CRow,
@@ -46,7 +46,7 @@ const Report = (props) => {
   const [clasz, setclasz] = useState([])
   const [ca, setca] = useState([])
   const [composite, setcomposite] = useState({})
-  const [grade, setgrade] = useState(0)
+  const [grade, setgrade] = useState([])
   const [termid, settermid] = useState(0)
   const [sessionid, setsessionid] = useState(0)
   const [setting, setsetting] = useState([])
@@ -62,7 +62,9 @@ const Report = (props) => {
       setId(dt.id);
       settitle(dt.title);
       setabbrv(dt.abbrv);
-      setgrade([dt.grade]);
+      let gra = dt.grade.length > 0 ? dt.grade.split(","):[];
+      
+      setgrade(gra);
       settermid(dt.termid);
       setsessionid(dt.sessionid);
       let ccl = dt.clasz.length > 0 ? JSON.parse(dt.clasz):[];
@@ -79,7 +81,7 @@ const Report = (props) => {
       setId(null);
       settitle('');
       setabbrv('');
-      setgrade(0);
+      setgrade([]);
       settermid(0);
       setsessionid(0);
       setclasz({});
@@ -135,7 +137,7 @@ const Report = (props) => {
         props.getGrades(params3)
     }
     
-  }, [props.user.activeschool])
+  }, [props.user.activeschool.id, props.user.activeschool.typeid])
 
   useEffect(() => {
     let params1 = {
@@ -149,19 +151,23 @@ const Report = (props) => {
 
   }
   props.getTerms(params1)
+  }, [sessionid, props.user.activeschool.id])
+
+  useEffect(() => {
     let params = {
       data:JSON.stringify(
       {
         'sessionid':sessionid,
+        'termid':termid,
         'schoolid':props.user.activeschool.id
       }),
-      cat:'dropdowncas',
+      cat:'dropdowncas1',
       table:'dropdowncas',
       narration:'get cas'
 
     }
     props.getCas(params)
-  }, [sessionid, props.user.activeschool.id])
+  }, [termid, props.user.activeschool.id])
  
   const handleSubmit = () =>{
     if(title.length > 0)
@@ -249,7 +255,10 @@ const Report = (props) => {
   const handleSubmitGrade = () =>{
     let fd = new FormData();
     if(Array.isArray(grade) && grade.length > 0){
-    fd.append('grade', grade[0]);
+    let gr = grade.join(",").toString();
+    
+   
+    fd.append('grade', gr);
     fd.append('table', 'reports');
     
     if(id && parseInt(id) > 0)
@@ -300,14 +309,19 @@ const loadSelect = (e, d) =>{
  }
 
  const loadgrade = (e, d) =>{
-  let sel = [];
+  let sel = [...grade];
   
     if(e)
     {
-      sel.push(d)
-      setgrade(sel)
+      if(sel.includes(d)){
+
+      }else{
+        sel.push(d)
+        setgrade(sel)
+      }
+      
     }else{
-      let f = []
+      let f = sel.filter(ele =>parseInt(ele) !== parseInt(d))
       setgrade(f)
     }
  }
@@ -330,7 +344,7 @@ let caarray = props.cas.cas && Array.isArray(props.cas.cas) && props.cas.cas.len
     variant={'3d'} 
     color={'info'} 
     checked={rw.id !== undefined ? Array.isArray(ca) && ca.includes(rw.id.toString()) ? true : false:false}
-    onChange={(e)=>loadca(e.target.checked, rw.id)}/><span className="pb-auto">{rw.name}</span></CCol></>
+    onChange={(e)=>loadca(e.target.checked, rw.id)}/><span className="pb-auto">{rw.termname}{" "}{rw.caabbrv}{" "}{rw.name}</span></CCol></>
 })
 
 let setting_array = settingz.filter(rw=>rw !== null).map((rw, ind) =>{
@@ -349,7 +363,7 @@ let gradearray = props.grades.grades && Array.isArray(props.grades.grades) ? pro
       variant={'3d'} 
       color={'dark'} 
       checked={Array.isArray(grade) && grade.includes(rw.id.toString()) ? true : false}
-      onChange={(e)=>loadgrade(e.target.checked, rw.id)}/><span className="pb-auto">{rw.name}</span></CCol></>
+      onChange={(e)=>loadgrade(e.target.checked, rw.id.toString())}/><span className="pb-auto">{rw.name}</span></CCol></>
 })
 
 let subjectarray = props.subjects.subjects && Array.isArray(props.subjects.subjects) ? props.subjects.subjects : [];
@@ -407,10 +421,12 @@ let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? pro
                       id="nf-sessionid" 
                       name="sessionid"
                       defaultValue={sessionid}
+                      name="sessionid"
+                      value={sessionid}
                       onChange={(e)=>setsessionid(e.target.value)}
                        
                     >
-                      {id && parseInt(id) > 0 ? <option value={data.sessionid}>{data.sessionname}nn</option>:<option></option>}
+                    
                       {session_array}
                   </CSelect>
                   <CFormText className="help-block">Select the session</CFormText>
@@ -422,10 +438,10 @@ let claszarray = props.claszs.claszs && Array.isArray(props.claszs.claszs) ? pro
                       id="nf-termid" 
                       name="termid"
                       defaultValue={termid}
+                      value={termid}
                       onChange={(e)=>settermid(e.target.value)}
                        
                     >
-                      {id && parseInt(id) > 0 ? <option value={data.termid}>{data.termname}</option>:<option></option>}
                       {term_array}
                   </CSelect>
                   <CFormText className="help-block">Select the Term</CFormText>
