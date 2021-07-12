@@ -58,14 +58,17 @@ export default function(state = initialState, action){
             };
         case TERM_GET_MULTIPLE:
             localStorage.setItem('term', JSON.stringify(action.payload));
+            let ases = action.payload.filter(row=>row.is_active == 1)[0] || {};
             return {
                 ...state,
                 terms : action.payload,
+                term : ases,
+                isLoading : false,
                 msg:'DONE!!!'
             };
         case TERM_GET_ONE:
             let all = [...state.terms];
-            let ses = all.filter(row=>row.cid == action.payload)[0];
+            let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
                 term : ses,

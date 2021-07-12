@@ -1,8 +1,11 @@
+import { callSuccess } from "../../actions/common";
 import {
     CLASSFEE_GET_MULTIPLE,
     CLASSFEE_GET_ONE,
     CLASSFEE_REGISTER_SUCCESS,
     CLASSFEE_REGISTER_FAIL,
+    LOG_SUCCESS,
+    LOG_FAIL,
     CLASSFEE_LOADING,
     CLASSFEE_LOADING_ERROR,
     CLASSFEE_ACTIVATE_FAIL,
@@ -55,6 +58,12 @@ export default function(state = initialState, action){
                 ...state,
                 classfees : action.payload,
                 msg:'DONE!!!'
+            };
+        case LOG_SUCCESS:
+            callSuccess(JSON.stringify(action.payload))
+            return {
+                ...state,
+                isLoading:false,
             };
         case CLASSFEE_GET_ONE:
             let all = [...state.classfees];

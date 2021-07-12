@@ -54,6 +54,7 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 classstaffs : action.payload,
+                isLoading : false,
                 msg:'DONE!!!'
             };
         case CLASSSTAFF_GET_ONE:

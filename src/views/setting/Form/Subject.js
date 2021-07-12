@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import {registerSubject, updateSubject, deleteSubject} from './../../../actions/setting/subject';
 import {getDepartments} from './../../../actions/setting/department';
 import {getUnits} from './../../../actions/setting/unit';
-import { useHistory, useLocation } from 'react-router-dom'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -21,7 +19,7 @@ import {
   CSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { setElement } from '../../../actions/common';
+import { valdateNumber, valdateString } from '../../../actions/common';
 
 
 const Subject = (props) => {
@@ -31,11 +29,10 @@ const Subject = (props) => {
   const [typeid, setTypeid] = useState(null)
   const [departmentid, setDepartmentid] = useState(null)
   const [unitid, setUnitid] = useState(null)
-  const [departmentname, setDepartmentname] = useState(null)
-  const [unitname, setUnitname] = useState(null)
+  const [validate, setvalidate] = useState({})
+
   //GET DEPARTMENTS PER SCHOOL
   useEffect(() => {
-
      let params = {
       data:JSON.stringify(
       {
@@ -72,22 +69,27 @@ const Subject = (props) => {
       setAbbrv(dt.abbrv);
       setDepartmentid(dt.departmentid);
       setUnitid(dt.unitid);
-      setDepartmentname(dt.departmentname);
-      setUnitname(dt.unitname);
-      setElement('nf-department', dt.departmentid)
-      setElement('nf-unit', dt.unitid)
-      setElement('typeid', dt.typeid)
     }else{
       setId(null);
       setNamez('');
       setAbbrv('');
       setDepartmentid(null);
+      setUnitid(null);
     }
     
   }, [props.data])
 
   const handleSubmit = () =>{
-    if(namez.length > 0){
+    let arr = []
+    let val = {...validate}
+    if(valdateString(namez) === false){arr.push(1); val.namez = true}else{val.namez = false}
+    if(valdateString(abbrv) === false){arr.push(1); val.abbrv = true}else{val.abbrv = false}
+    if(valdateNumber(typeid) === false){arr.push(1); val.typeid = true}else{val.typeid = false}
+    if(valdateNumber(unitid) === false){arr.push(1); val.unitid = true}else{val.unitid = false}
+    if(valdateNumber(departmentid) === false){arr.push(1); val.departmentid = true}else{val.departmentid = false}
+    setvalidate(val)
+    if(arr.length === 0)
+    {
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
@@ -111,6 +113,11 @@ const Subject = (props) => {
         props.registerSubject(fd)
       }
       setId(null);
+      setNamez('');
+      setAbbrv('');
+      setDepartmentid(null);
+      setUnitid(null);
+      setvalidate({})
       
     }
   }
@@ -152,8 +159,9 @@ const Subject = (props) => {
               <CInput 
                   type="text" 
                   id="nf-name" 
-                  name="namez"
                   value={namez}
+                  defaultValue={namez}
+                  invalid={validate.namez || false}
                   onChange={(e)=>setNamez(e.target.value)}
                   placeholder="Mathematics" 
                 />
@@ -166,6 +174,8 @@ const Subject = (props) => {
                   id="nf-abbrv" 
                   name="abbrv"
                   value={abbrv}
+                  defaultValue={abbrv}
+                  invalid={validate.abbrv || false}
                   onChange={(e)=>setAbbrv(e.target.value)}
                   placeholder="MATHS" 
                 />
@@ -177,9 +187,11 @@ const Subject = (props) => {
                   id="nf-department" 
                   name="department"
                   value={departmentid}
+                  defaultValue={departmentid}
+                  invalid={validate.departmentid || false}
                   onChange={(e)=>setDepartmentid(e.target.value)}
                 >
-                  {id && parseInt(id) > 0 ?<option value={departmentid}>{departmentname})</option>: <option></option>}
+                  <option></option>
                  {sub}
               </CSelect>
               <CFormText className="help-block">Please select department</CFormText>
@@ -190,10 +202,12 @@ const Subject = (props) => {
                   id="nf-unit" 
                   name="unit"
                   value={unitid}
+                  defaultValue={unitid}
+                  invalid={validate.unitid || false}
                   onChange={(e)=>setUnitid(e.target.value)}
                 >
-                {id && parseInt(id) > 0 ?<option value={unitid}>{unitname}</option>: <option></option>}
-                 {uni}
+                  <option></option>
+               {uni}
               </CSelect>
               <CFormText className="help-block">Please select unit</CFormText>
             </CFormGroup>
@@ -202,14 +216,16 @@ const Subject = (props) => {
                   <CSelect
                       id="typeid" 
                       name="typeid"
+                      value={typeid}
+                      defaultValue={typeid}
+                      invalid={validate.typeid || false}
                       onChange={(e)=>setTypeid(e.target.value)}
-                      placeholder="" 
                     >
                       <option></option>
                       <option value="1">Secondary</option>
                       <option value="2">Primary</option>
                   </CSelect>
-                  <CFormText className="help-block">Select Signatory</CFormText>
+                  <CFormText className="help-block">Select Category</CFormText>
                 </CFormGroup>
           </CForm>
         </CCardBody>

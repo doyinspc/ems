@@ -66,6 +66,7 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 studentscores : action.payload,
+                isLoading : false,
                 msg:'DONE!!!'
             };
         case STUDENTSCORE_GET_MULTIPLE_CA:

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import {getClassfees, getClassfee, deleteClassfee, updateClassfee, insertClassfee} from './../../../actions/setting/classfee';
+import {getClassfees, getClassfee, deleteClassfee, updateClassfee, logDuplicate } from './../../../actions/setting/classfee';
 import {
   CCard,
   CCardBody,
@@ -16,6 +16,7 @@ import {
   CContainer,
 } from '@coreui/react'
 import Header from './Header';
+import Loader from '../Loader';
 
 
 const Classfee = (props) => {
@@ -42,7 +43,7 @@ const Classfee = (props) => {
             fd.append('cat', 'duplicateclassstudent');
             fd.append('table', 'tabs' );
 
-            props.insertClassfee(fd);
+            props.logDuplicate(fd);
         }
   }
 
@@ -61,7 +62,7 @@ const Classfee = (props) => {
         fd.append('cat', 'duplicateclassstaff');
         fd.append('table', 'tabs' );
 
-        props.insertClassfee(fd);
+        props.logDuplicate(fd);
     }
 }
 
@@ -80,7 +81,7 @@ const loads3 = ()=>{
         fd.append('cat', 'duplicateclassstudentsubject');
         fd.append('table', 'tabs' );
 
-        props.insertClassfee(fd);
+        props.logDuplicate(fd);
     }
 }
 
@@ -99,7 +100,7 @@ const loads4 = ()=>{
         fd.append('cat', 'duplicateclassstaffsubject');
         fd.append('table', 'tabs' );
 
-        props.insertClassfee(fd);
+        props.logDuplicate(fd);
     }
 }
 const loads5 = ()=>{
@@ -117,7 +118,7 @@ const loads5 = ()=>{
         fd.append('typeid', 1);
         fd.append('cat', 'duplicateassessment');
         fd.append('table', 'tabs' );
-        props.insertClassfee(fd);
+        props.logDuplicate(fd);
     }
 }
 const loads6 = ()=>{
@@ -136,7 +137,7 @@ const loads6 = ()=>{
         fd.append('cat', 'duplicateassessment');
         fd.append('table', 'tabs' );
 
-        props.insertClassfee(fd);
+        props.logDuplicate(fd);
     }
 }
 const loads7 = ()=>{
@@ -155,7 +156,7 @@ const loads7 = ()=>{
         fd.append('cat', 'duplicateassessment');
         fd.append('table', 'tabs' );
 
-        props.insertClassfee(fd);
+        props.logDuplicate(fd);
     }
 }
 
@@ -180,6 +181,7 @@ const loads7 = ()=>{
   
    return (
     <CRow>
+        {props.classfees.isLoading === true ? <Loader /> :''}
       <CCol >
         <CCard>
           <Header 
@@ -398,9 +400,7 @@ const loads7 = ()=>{
                              <CButton className='m-0' size='sm' color='secondary' onClick={loads7} block >Load</CButton></td>
                      </tr>
                  </tbody>
-             </table>
-
-            
+             </table>   
           </CCardBody>
         </CCard>
         </CCol>
@@ -418,5 +418,5 @@ export default connect(mapStateToProps, {
   getClassfees,
   deleteClassfee,
   updateClassfee,
-  insertClassfee
+  logDuplicate
 })(Classfee)

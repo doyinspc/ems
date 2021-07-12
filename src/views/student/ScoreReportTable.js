@@ -185,6 +185,7 @@ const StudentReportList = (props) => {
             {
               let sh = arr[row.id][caunit_array[prop][pro].id];
               let shmax = caunit_array[prop][pro].score;
+              //console.log(arr[row.id][caunit_array[prop][pro].id]+"_"+caunit_array[prop][pro].score)
               sumrow.push(sh)
               totrow.push(shmax)
               subs.push(sh)
@@ -227,7 +228,6 @@ const StudentReportList = (props) => {
                 totrow.push(shmax)
               }
             })
-            console.log(prop);
             keepca[row.id][prop] = computes(sumrow, totrow, prop)
         })
         }
@@ -251,7 +251,8 @@ const StudentReportList = (props) => {
                 <table width="100%" border="solid 3px teal " style={{borderColor:'teal'}}>
                     <thead className="text-center">
                         <tr>
-                            <th rowSpan={2}>SN</th><th rowSpan={2}>FULLNAME</th>{theadm}
+                            <th rowSpan={2}>SN</th><th rowSpan={2}>FULLNAME</th>
+                            {theadm}
                             <th rowSpan={2}>TOTAL<br/> (100%)</th>
                             <th rowSpan={2}>RANK<br/> ARM</th>
                             <th rowSpan={2}>RANK<br/> CLASS</th>

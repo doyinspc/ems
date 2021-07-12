@@ -89,97 +89,97 @@ const Header = (props) => {
                 >
                     Get All
                 </CButton>
-            </CButtonGroup>
-              <CButtonGroup className='pull-right'>
-              
-              <CDropdown color="secondary" >
-              <CDropdownToggle caret color="secondary">
-                  <i className='fa fa-list'></i> <span className='hidden-phone'> CAS</span>
-                </CDropdownToggle>
-                <CDropdownMenu className="pt-0" placement="bottom-end">
-                  {
-                      Object.keys(ca_array).map((prp, ind)=>{
-                        return <><CDropdownItem
-                          header
-                          tag="div"
-                          color="light"
-                          className="text-center"
-                          >
-                          <strong key={ind}>{ca_array[prp]}</strong>
-                        </CDropdownItem>
-                        { Object.keys(caunit_array[prp]).map((prps, inds)=>{
-                        return <CDropdownItem key={inds}  onClick={(prev)=>props.setShowca(caunit_array[prp][prps].id, caunit_array[prp][prps].name, caunit_array[prp][prps].score)}>
-                                <CIcon 
-                                    name="cil-book" 
-                                    className="mfe-2" 
-                                /> 
-                                {`${caunit_array[prp][prps].name} (${caunit_array[prp][prps].score})`}
+                </CButtonGroup>
+                  <CButtonGroup className='pull-right'>
+                  
+                  <CDropdown color="secondary" >
+                  <CDropdownToggle caret color="secondary">
+                      <i className='fa fa-list'></i> <span className='hidden-phone'> CAS</span>
+                    </CDropdownToggle>
+                    <CDropdownMenu className="pt-0" placement="bottom-end">
+                      {
+                          Object.keys(ca_array).map((prp, ind)=>{
+                            return <><CDropdownItem
+                              header
+                              tag="div"
+                              color="light"
+                              className="text-center"
+                              >
+                              <strong key={ind}>{ca_array[prp]}</strong>
                             </CDropdownItem>
-                        })}
-                        </>
-                      })
-                  }
-                </CDropdownMenu>     
-              </CDropdown>
-              <CDropdown color="secondary" >
-              <CDropdownToggle caret color="secondary">
-                  <i className='fa fa-list'></i> <span className='hidden-phone'> Behavior</span>
-                </CDropdownToggle>
-                <CDropdownMenu className="pt-0" placement="bottom-end">
-                  {
-                      Object.keys(ca1_array).map((prp, ind)=>{
-                        return <><CDropdownItem
-                          header
-                          tag="div"
-                          color="light"
-                          className="text-center"
-                          >
-                          <strong key={ind}>{ca1_array[prp]}</strong>
-                        </CDropdownItem>
-                        { Object.keys(caunit_array[prp]).map((prps, inds)=>{
-                        return <CDropdownItem key={inds}  onClick={(prev)=>props.setShowbh(caunit_array[prp][prps].id, caunit_array[prp][prps].name, caunit_array[prp][prps].score)}>
-                                <CIcon 
-                                    name="cil-book" 
-                                    className="mfe-2" 
-                                /> 
-                                {`${caunit_array[prp][prps].name} `}
+                            { Object.keys(caunit_array[prp]).map((prps, inds)=>{
+                            return <CDropdownItem key={inds}  onClick={(prev)=>props.setShowca(caunit_array[prp][prps].id, caunit_array[prp][prps].name, caunit_array[prp][prps].score)}>
+                                    <CIcon 
+                                        name="cil-book" 
+                                        className="mfe-2" 
+                                    /> 
+                                    {`${caunit_array[prp][prps].name} (${caunit_array[prp][prps].score})`}
+                                </CDropdownItem>
+                            })}
+                            </>
+                          })
+                      }
+                    </CDropdownMenu>     
+                  </CDropdown>
+                  <CDropdown color="secondary" >
+                  <CDropdownToggle caret color="secondary">
+                      <i className='fa fa-list'></i> <span className='hidden-phone'> Behavior</span>
+                    </CDropdownToggle>
+                    <CDropdownMenu className="pt-0" placement="bottom-end">
+                      {
+                          Object.keys(ca1_array).map((prp, ind)=>{
+                            return <><CDropdownItem
+                              header
+                              tag="div"
+                              color="light"
+                              className="text-center"
+                              >
+                              <strong key={ind}>{ca1_array[prp]}</strong>
                             </CDropdownItem>
-                        })}
-                        </>
-                      })
-                  }
-                </CDropdownMenu>     
-              </CDropdown>
-              <CDropdown color="secondary" >
-              <CDropdownToggle caret color="secondary">
-                  <i className='fa fa-list'></i> <span className='hidden-phone'> Skills</span>
-                </CDropdownToggle>
-                <CDropdownMenu className="pt-0" placement="bottom-end">
-                  {
-                      Object.keys(ca2_array).map((prp, ind)=>{
-                        return <><CDropdownItem
-                          header
-                          tag="div"
-                          color="light"
-                          className="text-center"
-                          >
-                          <strong key={ind}>{ca2_array[prp]}</strong>
-                        </CDropdownItem>
-                        { Object.keys(caunit_array[prp]).map((prps, inds)=>{
-                        return <CDropdownItem key={inds}  onClick={(prev)=>props.setShowsk(caunit_array[prp][prps].id, caunit_array[prp][prps].name, caunit_array[prp][prps].score)}>
-                                <CIcon 
-                                    name="cil-book" 
-                                    className="mfe-2" 
-                                /> 
-                                {`${caunit_array[prp][prps].name} `}
+                            { Object.keys(caunit_array[prp]).map((prps, inds)=>{
+                            return <CDropdownItem key={inds}  onClick={(prev)=>props.setShowbh(caunit_array[prp][prps].id, caunit_array[prp][prps].name, caunit_array[prp][prps].score)}>
+                                    <CIcon 
+                                        name="cil-book" 
+                                        className="mfe-2" 
+                                    /> 
+                                    {`${caunit_array[prp][prps].name} `}
+                                </CDropdownItem>
+                            })}
+                            </>
+                          })
+                      }
+                    </CDropdownMenu>     
+                  </CDropdown>
+                  <CDropdown color="secondary" >
+                  <CDropdownToggle caret color="secondary">
+                      <i className='fa fa-list'></i> <span className='hidden-phone'> Skills</span>
+                    </CDropdownToggle>
+                    <CDropdownMenu className="pt-0" placement="bottom-end">
+                      {
+                          Object.keys(ca2_array).map((prp, ind)=>{
+                            return <><CDropdownItem
+                              header
+                              tag="div"
+                              color="light"
+                              className="text-center"
+                              >
+                              <strong key={ind}>{ca2_array[prp]}</strong>
                             </CDropdownItem>
-                        })}
-                        </>
-                      })
-                  }
-                </CDropdownMenu>     
-              </CDropdown>
-                
+                            { Object.keys(caunit_array[prp]).map((prps, inds)=>{
+                            return <CDropdownItem key={inds}  onClick={(prev)=>props.setShowsk(caunit_array[prp][prps].id, caunit_array[prp][prps].name, caunit_array[prp][prps].score)}>
+                                    <CIcon 
+                                        name="cil-book" 
+                                        className="mfe-2" 
+                                    /> 
+                                    {`${caunit_array[prp][prps].name} `}
+                                </CDropdownItem>
+                            })}
+                            </>
+                          })
+                      }
+                    </CDropdownMenu>     
+                  </CDropdown>
+                    
                 </CButtonGroup>  
             </CCol>
         </CRow>

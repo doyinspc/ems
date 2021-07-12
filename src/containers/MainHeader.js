@@ -30,7 +30,7 @@ const TheHeader = (props) => {
   let user = JSON.parse(localStorage.getItem('userx12345'))
   let username = ''
   if(user !== null){
-  username = user.surname+" "+user.firstname+" "+user.middlename
+    username = user.surname+" "+user.firstname+" "+user.middlename
   }
   if(props.user.isAuthenticated !== true)
   {

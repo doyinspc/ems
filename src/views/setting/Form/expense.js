@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerExpense, updateExpense, deleteExpense} from './../../../actions/setting/expense';
-import { useHistory, useLocation } from 'react-router-dom'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -18,13 +16,15 @@ import {
   CFormText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { valdateDate, valdateNumber, valdateString } from '../../../actions/common';
 
 
 const Expense = (props) => {
-  const [collapse, setCollapse] = useState(false)
   const [id, setId] = useState(null)
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
+  const [code, setcode] = useState('')
+  const [validate, setvalidate] = useState({})
 
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
@@ -34,19 +34,30 @@ const Expense = (props) => {
       setId(dt.id);
       setNamez(dt.name);
       setAbbrv(dt.abbrv);
+      setcode(dt.code);
     }else{
       setId(null);
       setNamez('');
       setAbbrv('');
+      setcode('');
     }
     
   }, [props.data])
 
   const handleSubmit = () =>{
-    if(namez.length > 0){
+    let arr = []
+      let val = {...validate}
+      if(valdateString(namez) === false){arr.push(1); val.namez = true}else{val.namez = false}
+      if(valdateString(abbrv) === false){arr.push(1); val.abbrv = true}else{val.abbrv = false}
+      if(valdateString(code) === false){arr.push(1); val.code = true}else{val.code = false}
+      setvalidate(val)
+      if(arr.length == 0)
+      {
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
+      fd.append('code', code);
+      fd.append('parent_id', props.parent);
       fd.append('table', 'expenses');
       
       if(id && parseInt(id) > 0)
@@ -113,6 +124,18 @@ const Expense = (props) => {
                   placeholder="OPEXP" 
                 />
               <CFormText className="help-block">Please enter expense abbrv (max 6 characters)</CFormText>
+            </CFormGroup>
+            <CFormGroup>
+              <CLabel htmlFor="nf-code">Expense Code </CLabel>
+              <CInput 
+                  type="text" 
+                  id="nf-code" 
+                  name="code"
+                  value={code}
+                  onChange={(e)=>setcode(e.target.value)}
+                  placeholder="0000" 
+                />
+              <CFormText className="help-block">Please enter expense code</CFormText>
             </CFormGroup>
           </CForm>
         </CCardBody>

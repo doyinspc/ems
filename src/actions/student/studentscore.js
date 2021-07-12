@@ -28,7 +28,7 @@ export const getStudentscores = params => (dispatch, getState) => {
     //SET PAGE LOADING
     params.token = MAIN_TOKEN;
 
-    dispatch({type : STUDENTSCORE_LOADING});
+        dispatch({type : STUDENTSCORE_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({

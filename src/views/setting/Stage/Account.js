@@ -31,7 +31,8 @@ const Account = (props) => {
      let params = {
       data:JSON.stringify(
       {
-          'schoolid':props.user.activeschool.id
+          'schoolid':props.user.activeschool.id,
+          'is_delete': 0
       }),
       cat:'selected',
       table:'accounts',
@@ -59,8 +60,14 @@ const Account = (props) => {
     props.updateAccount(fd);
 
   }
-  const onDelete = (rw, dt) =>{
-    
+  const onDelete = (rw) =>{
+      let fd = new FormData();
+      fd.append('id', rw);
+      fd.append('is_delete', 1);
+      fd.append('cat', 'update');
+      fd.append('table', 'accounts');
+      fd.append('narration', `activate ande disable account ${rw}`);
+      props.updateAccount(fd);
   }
   
   const onReset = () =>{

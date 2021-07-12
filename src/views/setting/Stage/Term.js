@@ -28,10 +28,9 @@ const Term = (props) => {
         {
             'sessionid':props.pid
         }),
-        cat:'select',
+        cat:'selected',
         table:'terms',
         narration:'get terms'
-  
     }
     props.getTerms(params)
     
@@ -48,16 +47,17 @@ const Term = (props) => {
   }
   const onActivate = (rw, num, sch) =>{
   
-    let nu = parseInt(num) === 0 ? 1 : 0;
-    let fd = new FormData();
-    fd.append('id', rw);
-    fd.append('schoolid', sch);
-    fd.append('sessionid', props.pid);
-    fd.append('is_active', nu);
-    fd.append('cat', 'updateterm');
-    fd.append('table', 'terms');
-    fd.append('narration', `activate 0r deactivate term ${nu}`);
-    props.setActiveTerm(fd);
+        let nu = parseInt(num) === 0 ? 1 : 0;
+        let fd = new FormData();
+        fd.append('id', rw);
+        fd.append('schoolid', sch);
+        fd.append('sessionid', props.pid);
+        fd.append('is_active', nu);
+        fd.append('cat', 'updateterm');
+        fd.append('table', 'terms');
+        fd.append('narration', `activate or deactivate term ${nu}`);
+
+        props.setActiveTerm(fd);
 
   }
 

@@ -44,6 +44,32 @@ export const numberformat = (item)=>{
   return f.replace("NGR", "")
   }
 }
+//validation
+export const valdateString = (str) =>{
+  if(str !== undefined && str !== null && str.length > 0)
+  {
+    return true
+  }else{
+    return false
+  }
+  
+}
+export const valdateNumber = (str) =>{
+  if(str !== undefined && str !== null && str.length > 0)
+  {
+    return true
+  }else{
+    return false
+  }
+}
+export const valdateDate = (str) =>{
+  return true
+}
+export const departmentstate = {
+  1:'Academics',
+  2:'Adminstration',
+  3:'Management',
+}
 export const maintenancestate = [
   {
       id:1,

@@ -1,29 +1,17 @@
-import React, { useState, useEffect }  from 'react'
+import React from 'react'
 import { connect } from "react-redux";
-import { useHistory} from 'react-router-dom'
 import {
     CRow,
-    CCol,
-    CTabPane,
-    CButton
+    CCol
   } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { Button, Col } from 'reactstrap'
 import { insertStudentca , deleteStudentca , getStudentscorecas} from './../../actions/student/studentscore'
 import { updateStaffsubject} from './../../actions/staff/staffsubject';
 import { ordinal_suffix_of } from '../../actions/common';
 
 const StudentReportList = (props) => {
     
-    let reportid = props.reportid;
-    let sessionid = props.sessionid;
-    let students = props.students;
-    let claszname = props.claszname;
-    let claszparentname = props.claszparentname;
-    let classteacher = props.classteacher;
     let allsubjects = props.subjectname;
     let theadm = props.theadm;
-   
     let scores = props.student_ca_score_array
 
    

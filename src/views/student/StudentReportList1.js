@@ -20,9 +20,6 @@ import {
     CCardFooter,
     CLink
   } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-
-import ScoreReportTable from './ScoreReportTable';
 import StudentReportTable from './StudentReportTable';
 import {getReports} from './../../actions/setting/report';
 import {getCas} from './../../actions/setting/ca';

@@ -25,6 +25,7 @@ const Studentclasss = (props) => {
   let subjectid = props.subjectid;
   let claszid = props.claszid;
   let subject = props.subject;
+  let stuid = props.stuid;
   let groupid = 3;
    
  const [studentdata, setStudentdata] = useState({})
@@ -95,12 +96,13 @@ const Studentclasss = (props) => {
   }, [termid, sessionid, subjectid, ids, claszid])
 
   const placeStudent = (students) =>{
-   setStudentdata(students);
+    setStudentdata(students);
   }
   const loadStudent = () =>{
 
       let fd = new FormData();
       fd.append('itemid', subjectid);
+      fd.append('claszgroup', subject.staffid);
       fd.append('itemid1', clientid);
       fd.append('contact', claszid);
       fd.append('clientid', studentdata.id);
@@ -111,7 +113,7 @@ const Studentclasss = (props) => {
       //INSERT
       fd.append('grp', groupid);
       fd.append('termid', termid);
-      fd.append('cat', 'inserts');
+      fd.append('cat', 'insert_single_subjects');
       props.registerStaffstudent(fd)
       
   }
@@ -271,8 +273,7 @@ const saveScoreValues = (e, student, ca, namz, sco) =>{
 }
 
 let tabl = data.filter(rw=>rw !== null && rw !== undefined).map((row, ind)=>{
-    return <tr key={ind}
-    >
+    return <tr key={ind}>
     <td className="text-center" width='60px'>
       <div className="c-avatar">
         <img 

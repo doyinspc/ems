@@ -83,6 +83,7 @@ export default function(state = initialState, action){
                 ...state,
                 isLoading : true
             };
+
         case USER_LOGIN:
             
             localStorage.setItem('token', action.token)
@@ -97,9 +98,11 @@ export default function(state = initialState, action){
             
             if(Array.isArray(schs) && schs.length > 0)
             {
+                console.log('And am just going to do this')
                 myregsch = action.payload.schoolid && parseInt(action.payload.schoolid) > 0 ? [...schs, action.payload.schoolid] : schs;
             }else
             {
+                console.log('she did not handle it well')
                 myregsch.push(action.payload.schoolid);
             }
             

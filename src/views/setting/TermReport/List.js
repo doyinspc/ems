@@ -45,10 +45,12 @@ const List = (props) => {
             return Number(avg).toFixed(2);
         }
     }
+    if(dt_ca !== undefined && Array.isArray(Object.keys(dt_ca))){
     dt_head = Object.keys(dt_ca).map((prp, ind)=>{
         let d = dt_ca !== undefined && dt_ca.hasOwnProperty(prp) && dt_ca[prp] !== null ? dt_ca[prp].split(":::") : ';';
         return<th key={ind} className="text-center" width="60px">{d[1]}</th>
     });
+    }
     
     dt_body = Array.isArray(Object.keys(dt_student)) && Object.keys(dt_student).length > 0 ? 
     Object.keys(dt_student).map((prp1, ind1)=>{

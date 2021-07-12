@@ -5,7 +5,6 @@ import {getClaszs} from './../../../actions/setting/clasz';
 import CKEditor from 'ckeditor4-react';
 import { useHistory, useLocation } from 'react-router-dom'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -18,11 +17,7 @@ import {
   CInput,
   CCardFooter,
   CFormText,
-  CTextarea,
   CSelect,
-  CInputGroupAppend,
-  CInputGroupPrepend,
-  CInputGroup,
   CAlert
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -36,7 +31,6 @@ const termarray =[
 ];
 const Theme = (props) => {
   const subjectid = props.pid
-  const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
   const [id, setId] = useState(null)
   const [moduleid, setModuleid ]= useState('')
   const [namez, setNamez] = useState('')

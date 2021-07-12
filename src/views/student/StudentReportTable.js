@@ -1,25 +1,13 @@
-import React, { useState, useEffect }  from 'react'
-import { useHistory} from 'react-router-dom'
+import React from 'react'
 import {
     CRow,
     CCol,
-    CCardHeader,
-    CNav,
-    CNavLink,
-    CNavItem,
-    CTabContent,
-    CTabPane,
-    CCard,
-    CCardBody,
-    CTabs,
-    CButton,
-    CWidgetIcon,
-    CCardFooter,
-    CLink
+    CTabPane
   } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
 const StudentReportList = (props) => {
+  
     let studentid = props.studentid;
     let rows = props.studentname;
     let claszname = props.claszname;
@@ -88,7 +76,7 @@ const StudentReportList = (props) => {
         avg_array_classparent[el] = ra.average;
       }
     });
-
+    
     let rank_array_class ={}
     let total_array_class = {}
     let avg_array_class = {}
@@ -165,11 +153,11 @@ const StudentReportList = (props) => {
     <CCol xs={3}>
     <div className="c-avata">
         <img 
-        src={process.env.REACT_APP_SERVER_URL+ rows.photo} 
-        className="c-" 
-        style={{width:'120px'}}
-        alt={rows.admission_no} 
-        onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
+          src={process.env.REACT_APP_SERVER_URL+ rows.photo} 
+          className="c-" 
+          style={{width:'120px'}}
+          alt={rows.admission_no} 
+          onError={(e)=>{e.target.onerror=null; e.target.src=process.env.PUBLIC_URL + '/avatars/1.png'} }
         />
         <span className={`c-avatar-status ${rows.gender === 'Male' ? 'bg-success' : 'bg-danger'}`}></span>
       </div>

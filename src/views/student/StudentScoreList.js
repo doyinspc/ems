@@ -15,15 +15,9 @@ import {
     CCard,
     CCardBody,
     CTabs,
-    CButton,
-    CWidgetIcon,
-    CCardFooter,
-    CLink
+    CButton
   } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-
 import ScoreReportTable from './ScoreReportTable1';
-import StudentReportTable from './StudentReportTable';
 import {getReports} from './../../actions/setting/report';
 import {getCas} from './../../actions/setting/ca';
 import {getStudentscores} from './../../actions/student/studentscore';
@@ -41,8 +35,6 @@ const StudentReportList = (props) => {
     let claszname = props.claszname;
     let claszparent = props.claszparent;
     let claszparentname = props.claszparentname;
-    let activeterm = props.activeterm;
-    let staffid = props.user.mid;
     
 
     //STORE DATA IN STATES

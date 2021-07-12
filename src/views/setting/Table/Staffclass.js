@@ -2,12 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux';
 import {getClassstaffs, getClassstaff, registerClassstaff, updateClassstaff, deleteClassstaff} from '../../../actions/setting/classstaff';
 import { useHistory} from 'react-router-dom'
+import Loader from '../Loader';
 
 
 
 const Classstaff = (props) => {
-  const history = useHistory()
- 
   let data = props.data && Array.isArray(props.data) ? props.data.filter(rw =>rw !== null || rw !== undefined) : []
   let tabl = data.filter(rw=>rw != null).map((row, ind)=>{
       return <tr key={ind}>
@@ -27,7 +26,8 @@ const Classstaff = (props) => {
               </tr>
   })
   return (
-
+    <>
+    {!props.classstaffs.isLoading ? 
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>
@@ -40,8 +40,10 @@ const Classstaff = (props) => {
                 <tbody>
                   {tabl}
                  </tbody>
-              </table>
-         
+              </table>:
+              <Loader/>
+    }
+    </>    
   )
 }
 const mapStateToProps = (state) =>({

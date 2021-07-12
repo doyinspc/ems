@@ -5,7 +5,6 @@ import Swal from 'sweetalert'
 const Staffsubject = (props) => {
 
   let popz = (dt) =>{
-    console.log(dt)
     Swal("Please select what you want to do ?", {
       buttons: {
         cancel: "Delete!",
@@ -43,71 +42,80 @@ const Staffsubject = (props) => {
   let allClass = {};
   
   data.filter(rw =>rw !== null || rw !== undefined).forEach(prp => {
-    if(prp.clientid in allStaff)
-    {
-        if(prp.staffid+"_"+prp.itemid in allStaff[prp.clientid])
-        {
-            if(prp.itemid1 in allStaff[prp.clientid][prp.staffid+"_"+prp.itemid])
-            {
-                allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1].push(prp.contact)
-            }else
-            {
-                allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp.contact]
-            }
-        }else
-        {
-            allStaff[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
-            allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp.contact]
-        }
-        
-    }else
-    {
-        allStaff[prp.clientid] = {}
-        allStaff[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
-        allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] =  [prp.contact]
+    if(prp !== null){
+      if(prp.clientid in allStaff)
+      {
+          if(prp.staffid+"_"+prp.itemid in allStaff[prp.clientid])
+          {
+              if(prp.itemid1 in allStaff[prp.clientid][prp.staffid+"_"+prp.itemid])
+              {
+                  allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1].push(prp.contact)
+              }else
+              {
+                  allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp.contact]
+              }
+          }else
+          {
+              allStaff[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+              allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp.contact]
+          }
+          
+      }else
+      {
+          allStaff[prp.clientid] = {}
+          allStaff[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+          allStaff[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] =  [prp.contact]
+      }
     }
-
   });
 
   data.filter(rw =>rw !== null || rw !== undefined).forEach(prp => {
-    if(prp.clientid in allStaffz)
-    {
-        if(prp.staffid+"_"+prp.itemid in allStaffz[prp.clientid])
-        {
-            if(prp.itemid1 in allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid])
-            {
-                allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1].push(prp)
-            }else
-            {
-                allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp]
-            }
-        }else
-        {
-            allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
-            allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp]
-        }
-        
-    }else
-    {
-        allStaffz[prp.clientid] = {}
-        allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
-        allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] =  [prp]
+    if(prp !== null){
+      if(prp.clientid in allStaffz)
+      {
+          if(prp.staffid+"_"+prp.itemid in allStaffz[prp.clientid])
+          {
+              if(prp.itemid1 in allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid])
+              {
+                  allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1].push(prp)
+              }else
+              {
+                  allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp]
+              }
+          }else
+          {
+              allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+              allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] = [prp]
+          }
+          
+      }else
+      {
+          allStaffz[prp.clientid] = {}
+          allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid] = {}
+          allStaffz[prp.clientid][prp.staffid+"_"+prp.itemid][prp.itemid1] =  [prp]
+      }
     }
 
   });
   
   data.forEach(prp => {
-    return allStaffName[prp.clientid] = prp.clientname;
+    if(prp !== null){
+      return allStaffName[prp.clientid] = prp.clientname;
+    }
   });
   data.forEach(prp => {
-    return allSubject[prp.itemid1] = prp.itemabbrv1;
+    if(prp !== null){
+      return allSubject[prp.itemid1] = prp.itemabbrv1;
+    }
   });
   data.forEach(prp => {
+    if(prp !== null){
     if(parseInt(prp.staffid) == 1){
     return allClass[prp.staffid+"_"+prp.itemid] = prp.itemnameops;
     }else{
       return allClass[prp.staffid+"_"+prp.itemid] = prp.itemname;
     }
+  }
   });
   
   let col_arr = {}

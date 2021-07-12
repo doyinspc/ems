@@ -11,6 +11,7 @@ import {
 import CaForm from'./../Form/Ca'
 import CaTable from'./../Table/Ca'
 import Header from './Header';
+import { Redirect } from 'react-router-dom';
 
 
 const Ca = (props) => {
@@ -29,10 +30,10 @@ const Ca = (props) => {
             'termid':props.qid,
             'typeid':props.did
         }),
-        cat:'select',
+        cat:'selected',
         table:'cas',
         narration:'get cas'
-  
+
     }
     props.getCas(params)
     
@@ -50,6 +51,7 @@ const Ca = (props) => {
     props.updateCa(fd);
 
   }
+
   const onEdit = (dt) =>{
       setId(dt.id);
       setDts(dt);
@@ -82,6 +84,7 @@ const Ca = (props) => {
   
    return (
     <CRow>
+      {sess === 'None' ? <Redirect to={`/setting/${props.pid}/0/0/0/0/0/0`} /> :''}
       <CCol >
         <CCard>
           <Header 

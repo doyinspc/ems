@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerDepartment, updateDepartment, deleteDepartment} from './../../../actions/setting/department';
-import { useHistory, useLocation } from 'react-router-dom'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -16,15 +14,18 @@ import {
   CInput,
   CCardFooter,
   CFormText,
+  CSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { departmentstate, valdateNumber, valdateString } from '../../../actions/common';
 
 
 const Department = (props) => {
-  const [collapse, setCollapse] = useState(false)
   const [id, setId] = useState(null)
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
+  const [grp, setGrp] = useState(0)
+  const [validate, setvalidate] = useState({})
 
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
@@ -34,18 +35,27 @@ const Department = (props) => {
       setId(dt.id);
       setNamez(dt.name);
       setAbbrv(dt.abbrv);
+      setGrp(dt.grp);
     }else{
       setId(null);
       setNamez('');
       setAbbrv('');
+      setGrp(0);
     }
-    
   }, [props.data])
 
   const handleSubmit = () =>{
-    if(namez.length > 0){
+    let arr = []
+    let val = {...validate}
+    if(valdateString(namez) === false){arr.push(1); val.namez = true}else{val.namez = false}
+    if(valdateString(abbrv) === false){arr.push(1); val.abbrv = true}else{val.abbrv = false}
+    if(valdateNumber(grp) === false){arr.push(1); val.grp = true}else{val.grp = false}
+    setvalidate(val)
+   if(arr.length === 0)
+    {
       let fd = new FormData();
       fd.append('name', namez);
+      fd.append('grp', grp);
       fd.append('abbrv', abbrv);
       fd.append('table', 'departments');
       
@@ -66,6 +76,8 @@ const Department = (props) => {
       setId(null);
       setNamez('');
       setAbbrv('');
+      setGrp(0);
+      setvalidate({})
     }
   }
  
@@ -97,6 +109,8 @@ const Department = (props) => {
                   id="nf-name" 
                   name="namez"
                   value={namez}
+                  defaultValue={namez}
+                  invalid={validate.namez || false}
                   onChange={(e)=>setNamez(e.target.value)}
                   placeholder="Science" 
                 />
@@ -109,10 +123,32 @@ const Department = (props) => {
                   id="nf-abbrv" 
                   name="abbrv"
                   value={abbrv}
+                  defaultValue={abbrv}
+                  invalid={validate.abbrv || false}
                   onChange={(e)=>setAbbrv(e.target.value)}
                   placeholder="SCI" 
                 />
               <CFormText className="help-block">Please enter department abbrv (max 6 characters)</CFormText>
+            </CFormGroup>
+            <CFormGroup>
+                <CLabel htmlFor="nf-grp">Category </CLabel>
+                <CSelect
+                    type="text" 
+                    id="nf-grp" 
+                    name="grp"
+                    value={grp}
+                    defaultValue={grp}
+                    invalid={validate.grp || false}
+                    onChange={(e)=>setGrp(e.target.value)}
+                  >
+                    <option></option>
+                    {
+                      Object.keys(departmentstate).map((prp, ind)=>(
+                        <option value={prp} key={ind}>{departmentstate[prp]}</option>
+                      ))
+                    }
+                </CSelect>
+                <CFormText className="help-block">Select Category</CFormText>
             </CFormGroup>
           </CForm>
         </CCardBody>

@@ -38,7 +38,7 @@ useEffect(() => {
   //load dropdowns
   let did = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('id') && parseInt(props.user.activeschool.id) > 0 ? props.user.activeschool.id :'null'
   let tid = props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('typeid') && parseInt(props.user.activeschool.typeid) > 0 ? props.user.activeschool.typeid :'null'
-  
+  console.log(props.user.activeschool, props.user.activeterm)
   let params = {
     data:JSON.stringify(
     {

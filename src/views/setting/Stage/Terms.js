@@ -5,7 +5,6 @@ import {
   CCardBody,
   CCol,
   CRow,
-  CCollapse,
   CContainer,
 } from '@coreui/react'
 import { Link } from 'react-router-dom';
@@ -14,13 +13,13 @@ import Header from './Header';
 
 const Term = (props) => {
 
- //GET SESSION NAME
- let ses = props.sessions.filter(rw=>parseInt(rw.id) === parseInt(props.pid));
- let sess = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].name : 'None'
+  //GET SESSION NAME
+  let ses = props.sessions.filter(rw=>parseInt(rw.id) === parseInt(props.pid));
+  let sess = ses && Array.isArray(ses) && ses.length > 0 ? ses[0].name : 'None'
 
- //GET SESSION NAME
- let tem = props.terms.filter(rw=>parseInt(rw.id) === parseInt(props.qid));
- let tems = tem && Array.isArray(tem) && tem.length > 0 ? tem[0].name : 'None'
+  //GET SESSION NAME
+  let tem = props.terms.filter(rw=>parseInt(rw.id) === parseInt(props.qid));
+  let tems = tem && Array.isArray(tem) && tem.length > 0 ? tem[0].name : 'None'
 
   let dat = props.para.submenu && Array.isArray(props.para.submenu) ? props.para.submenu : [];
   let dat1 = dat && Array.isArray(dat) ? dat.filter(rw=>parseInt(rw.id) === 1) : [];
@@ -29,11 +28,11 @@ const Term = (props) => {
    return (
        <>
        <CCard>
-       <Header 
-              icon={dat1[0].icon}
-              title={`${sess} ${tems} ${dat1[0].name}`} 
-              school={props.school} 
-              />
+          <Header 
+                  icon={dat1[0].icon}
+                  title={`${sess} ${tems} ${dat1[0].name}`} 
+                  school={props.school} 
+                  />
        </CCard>
        <CRow>
            {
@@ -58,8 +57,7 @@ const Term = (props) => {
                     </CRow>
                     <CCol>
                        <small style={{fontFamily:'Quicksand'}}>{prop.description}</small>
-                    </CCol>
-                   
+                    </CCol> 
                     </CContainer>
                   </CCardBody>
                 </CCard>

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerCa, updateCa, deleteCa} from './../../../actions/setting/ca';
-import { useHistory, useLocation } from 'react-router-dom'
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -18,16 +16,18 @@ import {
   CFormText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { valdateNumber, valdateDate, valdateString } from '../../../actions/common';
 
 
 const Ca = (props) => {
-  const [collapse, setCollapse] = useState(false)
+
   const [id, setId] = useState(null)
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
   const [maxscore, setMaxscore] = useState()
   const [starts, setStarts] = useState()
   const [ends, setEnds] = useState()
+  const [validate, setvalidate] = useState({})
 
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
@@ -52,7 +52,16 @@ const Ca = (props) => {
   }, [props.data])
 
   const handleSubmit = () =>{
-    if(namez.length > 0){
+    let arr = []
+      let val = {...validate}
+      if(valdateString(namez) === false){arr.push(1); val.namez = true}else{val.namez = false}
+      if(valdateString(abbrv) === false){arr.push(1); val.abbrv = true}else{val.abbrv = false}
+      if(valdateNumber(maxscore) === false){arr.push(1); val.maxscore = true}else{val.maxscore = false}
+      if(valdateDate(starts) === false || (new Date(ends).getTime() < new Date(starts).getTime())){arr.push(1); val.starts = true}else{val.starts = false}
+      if(valdateDate(ends) === false || (new Date(ends).getTime() < new Date(starts).getTime())){arr.push(1); val.ends = true}else{val.ends = false}
+      setvalidate(val)
+      if(arr.length == 0)
+      {
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
@@ -83,7 +92,7 @@ const Ca = (props) => {
   }
  
    return (
-    <CCol xl={12}  id="#formz">
+    <CCol xl={12}  style={{maxWidth:'400px'}} id="#formz">
         <CCard>
             <CCardHeader id='traffic' className="card-title mb-0">
               <CRow>
@@ -110,6 +119,8 @@ const Ca = (props) => {
                       id="nf-namez" 
                       name="namez"
                       defaultValue={namez}
+                      value={namez}
+                      invalid={validate.namez || false}
                       onChange={(e)=>setNamez(e.target.value)}
                       placeholder="First Continious Assessment" 
                     />
@@ -121,7 +132,9 @@ const Ca = (props) => {
                       type="text" 
                       id="nf-abbrv" 
                       name="abbrv"
+                      value={abbrv}
                       defaultValue={abbrv}
+                      invalid={validate.abbrv || false}
                       onChange={(e)=>setAbbrv(e.target.value)}
                       placeholder="CA1" 
                     />
@@ -133,37 +146,42 @@ const Ca = (props) => {
                       type="text" 
                       id="nf-maxscore" 
                       name="maxscore"
+                      value={maxscore}
                       defaultValue={maxscore}
+                      invalid={validate.maxscore || false}
                       onChange={(e)=>setMaxscore(e.target.value)}
                       placeholder="20" 
                     />
                   <CFormText className="help-block">set the maximum score students can attain on this assessment</CFormText>
                 </CFormGroup>
                 <CFormGroup>
-              <CLabel htmlFor="nf-starts">Commence Entry </CLabel>
-              <CInput 
-                  type="date" 
-                  id="nf-starts" 
-                  name="starts"
-                  value={starts}
-                  onChange={(e)=>setStarts(e.target.value)}
-                  placeholder="date" 
-                />
-              <CFormText className="help-block">Please select when to start compiling result</CFormText>
+                  <CLabel htmlFor="nf-starts">Commence Entry </CLabel>
+                  <CInput 
+                      type="date" 
+                      id="nf-starts" 
+                      name="starts"
+                      value={starts}
+                      defaultValue={starts}
+                      invalid={validate.starts || false}
+                      onChange={(e)=>setStarts(e.target.value)}
+                    />
+                  <CFormText className="help-block">Please select when to start compiling result</CFormText>
             </CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="nf-ends">Close Entry </CLabel>
-              <CInput 
-                  type="date" 
-                  id="nf-ends" 
-                  name="ends"
-                  value={ends}
-                  onChange={(e)=>setEnds(e.target.value)}
-                  placeholder="date" 
-                />
-              <CFormText className="help-block">Please select when to stop entering result</CFormText>
-            </CFormGroup>
-                </CForm>
+                <CFormGroup>
+                  <CLabel htmlFor="nf-ends">Close Entry </CLabel>
+                  <CInput 
+                      type="date" 
+                      id="nf-ends" 
+                      name="ends"
+                      value={ends}
+                      defaultValue={ends}
+                      invalid={validate.ends || false}
+                      onChange={(e)=>setEnds(e.target.value)}
+                      placeholder="date" 
+                    />
+                  <CFormText className="help-block">Please select when to stop entering result</CFormText>
+                </CFormGroup>
+              </CForm>
             </CCardBody>
             <CCardFooter>
               <CButton type="submit" onClick={handleSubmit} size="sm" color="primary"><CIcon name="cil-scrubber" /> Submit</CButton>{' '}

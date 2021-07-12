@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerAccount, updateAccount, deleteAccount} from './../../../actions/setting/account';
-import { useHistory, useLocation } from 'react-router-dom'
+
 import {
   CBadge,
   CButton,
@@ -18,13 +18,14 @@ import {
   CFormText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { valdateString } from '../../../actions/common';
 
 
 const Account = (props) => {
-  const [collapse, setCollapse] = useState(false)
   const [id, setId] = useState(null)
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
+  const [validate, setvalidate] = useState({})
 
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
@@ -40,10 +41,17 @@ const Account = (props) => {
       setAbbrv('');
     }
     
-  }, [props.data])
+  }, [props.data]) 
 
   const handleSubmit = () =>{
-    if(namez.length > 0){
+
+    let arr = []
+    let val = {...validate}
+    if(valdateString(namez) === false){arr.push(1); val.namez = true}
+    if(valdateString(abbrv) === false){arr.push(1); val.abbrv = true}
+    setvalidate(val)
+    if(arr.length == 0)
+    {
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
@@ -63,14 +71,16 @@ const Account = (props) => {
         fd.append('cat', 'insert');
         props.registerAccount(fd)
       }
+      
       setId(null);
       setNamez('');
       setAbbrv('');
+      setvalidate({})
     }
   }
  
    return (
-    <CCol xl={12}  id="#formz">
+    <CCol xl={12}  style={{maxWidth:'400px'}} id="#formz">
     <CCard>
         <CCardHeader id='traffic' className="card-title mb-0">
           <CRow>
@@ -89,7 +99,7 @@ const Account = (props) => {
           
         </CCardHeader>
         <CCardBody>
-          <CForm action="" method="post">
+          <CForm action="" method="post" id='form'>
             <CFormGroup>
               <CLabel htmlFor="nf-name">Account</CLabel>
               <CInput 
@@ -97,6 +107,8 @@ const Account = (props) => {
                   id="nf-name" 
                   name="namez"
                   value={namez}
+                  defaultValue={namez}
+                  invalid={validate.namez || false}
                   onChange={(e)=>setNamez(e.target.value)}
                   placeholder="First Bank" 
                 />
@@ -109,6 +121,8 @@ const Account = (props) => {
                   id="nf-abbrv" 
                   name="abbrv"
                   value={abbrv}
+                  defaultValue={abbrv}
+                  invalid={validate.abbrv || false}
                   onChange={(e)=>setAbbrv(e.target.value)}
                   placeholder="000000000" 
                 />

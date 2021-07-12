@@ -30,6 +30,13 @@ const Result = React.lazy(() => import('./views/student/Result'));
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'));
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'));
 
+const AdmissionPage = React.lazy(() => import('./views/admission/AdmissionPage'));
+const AdmissionLogin = React.lazy(() => import('./views/admission/AdmissionLogin'));
+const GuardianPage = React.lazy(() => import('./views/admission/GuardianPage'));
+const GuardianForm = React.lazy(() => import('./views/admission/GuardianForm'));
+const CandidatePage = React.lazy(() => import('./views/admission/CandidatePage'));
+const CandidateForm = React.lazy(() => import('./views/admission/CandidateForm'));
+
 class App extends Component {
 
   render() {
@@ -37,6 +44,13 @@ class App extends Component {
       <HashRouter basename="">
           <React.Suspense fallback={loading}>
             <Switch>
+              <Route exact path="/admission_page" name="Admission Page" render={props => <AdmissionPage {...props}/>} />
+              <Route exact path="/admission_login" name="Admission Login" render={props => <AdmissionLogin {...props}/>} />
+              <Route exact path="/guardian_form" name="Guardian Form" render={props => <GuardianForm {...props}/>} />
+              <Route exact path="/guardian_page" name="Guardian Page" render={props => <GuardianPage {...props}/>} />
+              <Route exact path="/candidate_form" name="Candidate Form" render={props => <CandidateForm {...props}/>} />
+              <Route exact path="/candidate_page" name="candidate Page" render={props => <CandidatePage {...props}/>} />
+   
               <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />
               <Route exact path="/logout" name="Logout Page" render={props => <Logout {...props}/>} />
               <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />

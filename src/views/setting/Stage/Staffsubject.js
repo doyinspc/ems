@@ -68,9 +68,9 @@ const Staffsubject = (props) => {
     let fd = new FormData();
     fd.append('id', rw);
     fd.append('is_active', nu);
-    fd.append('cat', 'updates');
+    fd.append('cat', 'inserts');
     fd.append('sessionid', props.pid);
-    fd.append('table', 'accessstaffclass');
+    fd.append('table', 'accessstaffsubject');
     fd.append('narration', `activate ande disable class ${nu}`);
     props.updateStaffsubject(fd);
 

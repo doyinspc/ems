@@ -20,7 +20,6 @@ import {
 
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { setElement } from './../../../actions/common';
 const termarray ={
     1:'First term',
     2:'Second term',

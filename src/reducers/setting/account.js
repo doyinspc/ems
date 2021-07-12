@@ -52,6 +52,7 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 accounts : action.payload,
+                isLoading : false,
                 msg:'DONE!!!'
             };
         case ACCOUNT_GET_ONE:

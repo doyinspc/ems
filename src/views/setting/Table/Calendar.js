@@ -7,9 +7,11 @@ import {
   CDropdown,
   CDropdownItem,
   CDropdownToggle,
-  CDropdownMenu
+  CDropdownMenu,
+  CButton
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import Loader from '../Loader';
 
 
 const Session = (props) => {
@@ -22,7 +24,15 @@ const Session = (props) => {
                 <td>{row.name}</td>
                 <td className='text-center'>{moment(row.started).format('MMM D, YYYY')}</td>
                 <td className='text-center'>{moment(row.ended).format('MMM D, YYYY')}</td>
-                
+                <td className='text-center'>
+                {
+                      props.submenu.map((prp, ind)=>{
+                        let addr = prp.links+row.id+'/0/0/0/0';
+                       return <CButton color="dark" size="sm" key={ind} onClick={(item) => history.push(addr)}>
+                         <i className="fa fa-calendar-o"></i> {prp.name}</CButton>
+                      })
+                    }
+                </td>
               { props.editer === true  || props.submenu.length > 0 ? 
               <td className='text-center'>
                 <CDropdown className="m-0 btn-group ">
@@ -30,12 +40,7 @@ const Session = (props) => {
                   <i className='fa fa-gear'></i> Action
                   </CDropdownToggle>
                   <CDropdownMenu>
-                    {
-                      props.submenu.map((prp, ind)=>{
-                        let addr = prp.links+row.id+'/0/0/0/0';
-                       return <CDropdownItem key={ind} onClick={(item) => history.push(addr)}>{prp.name}</CDropdownItem>
-                      })
-                    }
+                   
                      {props.editer === true ?
                      <>
                       <CDropdownItem onClick={()=>props.onEdit(row)} >Edit</CDropdownItem>
@@ -48,7 +53,7 @@ const Session = (props) => {
               </tr>
   })
   return (
-
+    <>{!props.sessions.isLoading ?
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-lighst" style={{backgroundColor:'navy', color:'white'}}>
                   <tr>
@@ -56,13 +61,15 @@ const Session = (props) => {
                     <th><i className='fa fa-list'></i> Session</th>
                     <th className="text-center"> <i className='fa fa-calendar'></i> Start</th>
                     <th className="text-center"><i className='fa fa-calendar'></i> End</th>
+                    <th className="text-center"><i className='fa fa-calendar'></i> Term</th>
                     { props.editer === true  ||  props.submenu.length > 0 ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>
                 <tbody>
                   {tabl}
                  </tbody>
-              </table>
+              </table>:<Loader />}
+    </>
          
   )
 }

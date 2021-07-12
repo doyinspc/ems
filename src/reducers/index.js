@@ -46,6 +46,7 @@ import staffprofessional from "./staff/staffprofessional";
 import stafflessonplan from "./staff/stafflessonplan";
 import student from "./student/student";
 import studentclass from "./student/studentclass";
+import studentcomment from "./student/studentcomment";
 import studentfee from "./student/studentfee";
 import studentscore from "./student/studentscore";
 import studentsubject from "./student/studentsubject";
@@ -57,6 +58,8 @@ import theme from "./setting/theme";
 import term from "./setting/term";
 import school from "./setting/school";
 import admission from "./setting/admission";
+import admissionform from "./setting/admission";
+import guardian from "./setting/guardian";
 import office from "./setting/office";
 import report from "./setting/report";
 import designation from "./setting/designation";
@@ -115,6 +118,7 @@ export default combineReducers({
     staffprofessionalReducer: staffprofessional,
     studentReducer: student,
     studentclassReducer:studentclass,
+    studentcommentReducer:studentcomment,
     studentfeeReducer:studentfee,
     studentscoreReducer:studentscore,
     studentsubjectReducer:studentsubject,
@@ -124,6 +128,8 @@ export default combineReducers({
     themeReducer: theme,
     schoolReducer: school,
     admissionReducer: admission,
+    admissionformReducer: admissionform,
+    guardianReducer: guardian,
     officeReducer: office,
     reportReducer: report,
     penmanagerReducer: penmanager,

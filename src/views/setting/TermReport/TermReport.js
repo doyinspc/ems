@@ -4,9 +4,12 @@ import Select from 'react-select'
 import {getLessonplan, getLessonplans } from './../../../actions/setting/lessonplan'
 import { CButton, CButtonGroup, CCard, CCardBody, CCardHeader, CCol, CContainer, CHeader, CInput, CLink, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CTabs, CTooltip } from '@coreui/react'
 import { getSubjects } from './../../../actions/setting/subject'
+import { getStudentcomments } from './../../../actions/student/studentcomment'
 import CIcon from '@coreui/icons-react'
 import List from './List'
 import Report from './Report'
+import Rank from './Rank'
+import Fee from './Fee'
 
 
 import {getReports} from './../../../actions/setting/report';
@@ -26,6 +29,7 @@ const Lessonplan = (props) => {
     const [reportarray, setreportarray] = useState({})
     const [subjectarray, setsubjectarray] = useState(0)
     const [fontz, setfontz] = useState(14)
+    const [removesubject, setremovesubject] = useState(null)
 
     const sessionid = props.user.activeterm.sessionid
     const termid = props.user.activeterm.termid    
@@ -43,19 +47,6 @@ const Lessonplan = (props) => {
               narration:'get reports'
             }
           props.getReports(params);
-
-          
-           let params1 = {
-                data:JSON.stringify(
-                {
-                'termid':termid,
-                'schoolid':sessionid
-                }),
-                cat:'dropdownca',
-                table:'dropdownca',
-                narration:'get ca'        
-            }
-            props.getCas(params1)
     }, [sessionid])
 
     let dtx = props.dropdowns && Array.isArray(props.dropdowns) && props.dropdowns.length > 0  && props.dropdowns.hasOwnProperty('1') ? props.dropdowns[1] : null;
@@ -82,8 +73,8 @@ const Lessonplan = (props) => {
     const summ = (sumz)=>{
         if(sumz !== undefined)
         {
-        let sums = sumz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
-        return parseFloat(sums)
+            let sums = sumz.reduce((a, b)=>parseFloat(a) + parseFloat(b), 0);
+            return parseFloat(sums)
         }
     }
     const handleClassArray = (event) =>{
@@ -95,6 +86,44 @@ const Lessonplan = (props) => {
     const handleSubjectArray = (event) =>{
         setsubjectarray(event)
     }
+    // const removeSubject = (subjectid, studentids) =>{
+    //     settitles(title)
+    //     let repid = reportarray.hasOwnProperty('value') ? reportarray.value :''
+    //     if(parseInt(repid) > 0 && parseInt(subjectid) > 0){
+    //     //GET ALL REPORT FOR THE STUDENTS
+    //     let reportarrays = props.reports && Array.isArray(props.reports) ? props.reports : [];
+    //     let casss = reportarrays.filter(rw=>rw !== null && parseInt(rw.id) === parseInt(repid));
+    //     let cass = Array.isArray(casss) && casss.length > 0 ? casss[0].ca : '';
+    //     let cas = cass.length > 0 ? cass : '';
+    //     let terms = Array.isArray(casss) && casss.length > 0 ? casss[0].termid : '';
+    //     let sessions = Array.isArray(casss) && casss.length > 0 ? casss[0].sessionid : '';
+    //     let grd = Array.isArray(casss) && casss.length > 0 ? casss[0].grade : '';
+    //     let claszstring = classids.join(",")
+        
+        
+    //         let params = {
+    //         data:JSON.stringify(
+    //         {
+    //               'sessionid':sessions,
+    //               'reportid':repid,
+    //               'subjectid':subjectid,
+    //               'subjectid':studentids,
+    //               'termid':terms,
+    //               'ids':'',
+    //               'clasz':claszstring,
+    //               'claszparent':'',
+    //               'cas' : cas,
+    //               'gradeid' : grd
+
+    //           }),
+    //           cat:'removereportmain',
+    //           table:'studentscore',
+    //           narration:'get reports'
+    //         }
+    //         props.getStudentscores(params);
+    //     }
+    // }
+
     const loadData = () =>{
         let classids = [];
         let title = [];
@@ -104,6 +133,7 @@ const Lessonplan = (props) => {
             title.push(title_str);
             classids.push(item[0]);
         });
+    
         
         settitles(title)
         let repid = reportarray.hasOwnProperty('value') ? reportarray.value :''
@@ -143,9 +173,9 @@ const Lessonplan = (props) => {
                 data:JSON.stringify(
                 {
                     'cas' : cas,
-                    'schoolid' : 1
+                    'schoolid' : props.user.activeschool.id
                 }),
-                cat:'dropdownca1',
+                cat:'dropdownca2',
                 table:'dropdownca',
                 narration:'get cas'
             }
@@ -161,6 +191,20 @@ const Lessonplan = (props) => {
                 narration:'get cas'
             }
             props.getGradeunits(params2);
+
+            let params3 = {
+                data:JSON.stringify(
+                {
+                    'sessionid':sessions,
+                    'reportid':repid,
+                    'termid':terms,
+                    'clasz':claszstring
+                }),
+                cat:'selectreportmaincomment',
+                table:'studentscomments',
+                narration:'studentcomments'
+            }
+            props.getStudentcomments(params3);
         }
     }
     const avgs = (sumz)=>{
@@ -174,8 +218,8 @@ const Lessonplan = (props) => {
     var dt = props.studentscores.studentscores !== undefined && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores[0] : {};
     var ct = props.studentscores.studentscores !== undefined && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores[1] : {};
     var gt = props.studentscores.studentscores !== undefined && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores[2] : {};
-    var ft = props.studentscores.studentscores !== undefined && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores[3] : [];
-    var pt = props.studentscores.studentscores !== undefined && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores[4] : [];
+    var ft = props.studentscores.studentscores !== undefined && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores[4] : [];
+    var pt = props.studentscores.studentscores !== undefined && Array.isArray(props.studentscores.studentscores) ? props.studentscores.studentscores[3] : [];
  
     let dt_arr = {};
     let ct_arr = {};
@@ -230,12 +274,11 @@ const Lessonplan = (props) => {
             
         });
 
-       
         Object.keys(dt_arr_sum).forEach(ele => {
             if(Object.keys(student_totals).includes(ele))
             {
                 Object.keys(dt_arr_sum[ele]).forEach(ele1=>{
-                    student_totals[ele].push(summ(dt_arr_sum[ele][ele1]))
+                    //student_totals[ele].push(summ(dt_arr_sum[ele][ele1]))
                     if(subject_totals.hasOwnProperty(ele1))
                     {
                         subject_totals[ele1].push(summ(dt_arr_sum[ele][ele1]))
@@ -257,7 +300,7 @@ const Lessonplan = (props) => {
             }else{
                 student_totals[ele] = []
                 Object.keys(dt_arr_sum[ele]).forEach(ele1=>{
-                    student_totals[ele].push(summ(dt_arr_sum[ele][ele1]))
+                    
                     if(subject_totals.hasOwnProperty(ele1))
                     {
                         subject_totals[ele1].push(summ(dt_arr_sum[ele][ele1]))
@@ -271,6 +314,7 @@ const Lessonplan = (props) => {
                     }
                     else
                     {
+                        student_totals[ele].push(summ(dt_arr_sum[ele][ele1]))
                         subject_totals[ele1] = []
                         subject_totals[ele1].push(summ(dt_arr_sum[ele][ele1]))
                         subject_stud_totals[ele1] = {}
@@ -430,7 +474,9 @@ const Lessonplan = (props) => {
     Object.keys(student_totals).forEach(rw=>{
             let arr = {}
             arr.studentid = rw
-            arr.score = summ(student_totals[rw])
+            arr.sum = summ(student_totals[rw])
+            arr.score = avgs(student_totals[rw])
+            arr.count = student_totals[rw].length
             converted_object_student.push(arr)
     })
 
@@ -442,7 +488,7 @@ const Lessonplan = (props) => {
                 : arr[i-1].rank;
     });
    
-    //
+   
     let sub_totals = {}
     let vals = Object.values(students_grand_total)
     sub_totals['sum'] = summ(vals)
@@ -481,6 +527,8 @@ const Lessonplan = (props) => {
                 narration:'lessonplan'
             }
             props.getLessonplanDetails(params);
+
+            
         }
     }
 
@@ -589,9 +637,19 @@ const Lessonplan = (props) => {
                   <CNavLink>
                     Report
                   </CNavLink>
+                </CNavItem> 
+                <CNavItem>
+                  <CNavLink>
+                    Rank
+                  </CNavLink>
+                </CNavItem>
+                <CNavItem>
+                  <CNavLink>
+                    Fee
+                  </CNavLink>
                 </CNavItem>    
               </CNav>
-              {props.studentscores.isLoading ?
+              {!props.studentscores.isLoading ?
               <CTabContent fade={false}>
                   <CTabPane>
                       <List
@@ -627,9 +685,23 @@ const Lessonplan = (props) => {
                          ct_ca={ct_ca}
                          search={search}
                          reportname={reportarray.hasOwnProperty('label') ? reportarray.label :''}
+                         reportid={reportarray.hasOwnProperty('value') ? reportarray.value :''}
                          lunchModal={(e, f)=>lunchModal(e, f)}
                       />
                 </CTabPane>
+                <CTabPane>
+                      <Rank
+                         dt_student={dt_student}
+                         rankstudents={converted_object_student}
+                      />
+                  </CTabPane>
+                  <CTabPane>
+                      <Fee
+                         dt_student={dt_student}
+                         fee={students_fee}
+                         paid={students_paid}
+                      />
+                  </CTabPane>
                 </CTabContent>:
                     <>
                         <CCard>
@@ -647,6 +719,7 @@ const Lessonplan = (props) => {
 const mapStateToProps = (state) => ({
     reports : state.reportReducer.reports,
     studentscores : state.studentscoreReducer,
+    studentcomments : state.studentcommentReducer,
     cas:state.caReducer.cas,
     gradeunits:state.gradeunitReducer,
     clasz:state.claszunitReducer.claszunits,
@@ -662,7 +735,8 @@ const mapDispatchToProps = {
     getGradeunits,
     getLessonplans,
     getLessonplan,
-    getSubjects
+    getSubjects,
+    getStudentcomments
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lessonplan)

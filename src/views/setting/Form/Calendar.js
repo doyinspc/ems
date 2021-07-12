@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import {registerSession, updateSession, deleteSession} from './../../../actions/setting/session';
-import { useHistory, useLocation } from 'react-router-dom'
+import moment from 'moment';
 import {
-  CBadge,
   CButton,
   CCard,
   CCardBody,
@@ -18,24 +17,17 @@ import {
   CFormText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { valdateString, valdateDate } from '../../../actions/common';
 
 
 const Session = (props) => {
-    const history = useHistory()
-    const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
     const [collapse, setCollapse] = useState(false)
     const [id, setId] = useState('')
-    const [dts, setDts] = useState('')
     const [namez, setNamez] = useState('')
-    const [starts, setStarts] = useState()
+    const [starts, setStarts] = useState(moment(new Date()).format("YY-MM-DD"))
     const [ends, setEnds] = useState()
+    const [validate, setvalidate] = useState({})
   
-    const toggle = (e) => {
-      setCollapse(!collapse)
-      e.preventDefault()
-    }
-  //GET SESSIONS PER SCHOOL
-   
   
     //CHANGE STATE AS EDIT OR ADD
     useEffect(() => {
@@ -59,14 +51,20 @@ const Session = (props) => {
     const onClose = () =>setCollapse(false);
   
     const handleSubmit = () =>{
-      if(namez.length > 0){
+      let arr = []
+      let val = {...validate}
+      if(valdateString(namez) === false){arr.push(1); val.namez = true}
+      if(valdateDate(starts) === false){arr.push(1); val.starts = true}
+      if(valdateDate(ends) === false){arr.push(1); val.ends = true}
+      setvalidate(val)
+      if(arr.length == 0)
+      {
         let fd = new FormData();
         fd.append('name', namez);
         fd.append('started', starts);
         fd.append('ended', ends);
         fd.append('table', 'sessions');
         
-  
         if(id && parseInt(id) > 0)
         {
           //UPDATE 
@@ -82,11 +80,12 @@ const Session = (props) => {
           props.registerSession(fd)
         }
         onReset()
+        setvalidate({})
       }
     }
  
    return (
-    <CCol xl={12}  id="#formz">
+    <CCol xl={12} style={{maxWidth:'400px'}}  id="#formz">
     <CCard>
         <CCardHeader id='traffic' className="card-title mb-0">
           <CRow>
@@ -95,9 +94,10 @@ const Session = (props) => {
             </CCol>
             <CCol sm="6" className="d-md-block">
               <CButton  
-                  color="danger" 
+                  color="danger"
                   onClick={onClose}
-                  className="float-right">
+                  className="float-right"
+              >
                 <i className='fa fa-remove'></i>
               </CButton>
             </CCol>
@@ -112,7 +112,9 @@ const Session = (props) => {
                   type="text" 
                   id="nf-name" 
                   name="name"
+                  value={namez}
                   defaultValue={namez}
+                  invalid={validate.namez || false}
                   onChange={(e)=>setNamez(e.target.value)}
                   placeholder="2020_2021" 
                 />
@@ -125,6 +127,7 @@ const Session = (props) => {
                   id="nf-starts" 
                   name="starts"
                   defaultValue={starts}
+                  invalid={validate.starts || false}
                   onChange={(e)=>setStarts(e.target.value)}
                   placeholder="date" 
                 />
@@ -137,6 +140,7 @@ const Session = (props) => {
                   id="nf-ends" 
                   name="ends"
                   defaultValue={ends}
+                  invalid={validate.ends || false}
                   onChange={(e)=>setEnds(e.target.value)}
                   placeholder="date" 
                 />

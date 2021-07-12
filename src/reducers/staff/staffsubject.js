@@ -57,6 +57,7 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 staffsubjects : action.payload,
+                isLoading : true,
                 msg:'DONE!!!'
             };
         case STAFFSUBJECT_GET_SUMMARY:
@@ -66,7 +67,7 @@ export default function(state = initialState, action){
             };
         case STAFFSUBJECT_GET_ONE:
             let all = [...state.staffsubjects];
-            let ses = all.filter(row=>row.cid == action.payload)[0];
+            let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
                 staffsubject : ses,
@@ -81,16 +82,18 @@ export default function(state = initialState, action){
                 msg:action.msg
             }; 
         case STAFFSUBJECT_ACTIVATE_SUCCESS:
-            let ac = changeState(state.staffsubjects, action.payload);
-            localStorage.setItem('staffsubject', JSON.stringify(ac));
-            callSuccess()
+            let newStatei = [...state.staffsubjects];
+            const findIndi = newStatei.findIndex(cat => cat.id == action.payload.id);
+            newStatei[findIndi] = action.payload;
+            localStorage.setItem('staffsubject', JSON.stringify(newStatei));
+            callSuccess('Ok')
             return{
                 ...state,
                 msg:'DONE!!!',
-                staffsubjects: ac
+                staffsubjects: newStatei
             }
         case STAFFSUBJECT_DELETE_SUCCESS:
-            let rem = state.staffsubjects.filter(cat =>parseInt(cat.id) != parseInt(action.payload));
+            let rem = state.staffsubjects.filter(cat =>parseInt(cat.id) !== parseInt(action.payload));
             localStorage.setItem('staffsubject', JSON.stringify(rem));
             callSuccess()
             return{
@@ -98,8 +101,8 @@ export default function(state = initialState, action){
                 staffsubjects: rem
             }
         case STAFFSUBJECT_UPDATE_SUCCESS:
-            const findInd = state.staffsubjects.findIndex(cat => cat.id == action.payload.id);
             let newState = [...state.staffsubjects];
+            const findInd = state.staffsubjects.findIndex(cat => cat.id == action.payload.id);
             newState[findInd] = action.payload;
             localStorage.setItem('staffsubject', JSON.stringify(newState));
             callSuccess('Ok')

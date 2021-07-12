@@ -56,6 +56,7 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 schools : action.payload,
+                isLoading : false,
                 msg:'DONE!!!'
             };
         case SCHOOL_GET_ONE:

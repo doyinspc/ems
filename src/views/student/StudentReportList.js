@@ -4,26 +4,17 @@ import { useHistory} from 'react-router-dom'
 import {
     CRow,
     CCol,
-    CCardHeader,
     CFormGroup,
     CSelect,
     CNav,
     CNavLink,
     CNavItem,
     CTabContent,
-    CTabPane,
-    CCard,
-    CCardBody,
     CTabs,
     CButton,
-    CWidgetIcon,
-    CCardFooter,
-    CLink
   } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 
 import ScoreReportTable from './ScoreReportTable';
-import StudentReportTable from './StudentReportTable';
 import {getReports} from './../../actions/setting/report';
 import {getCas} from './../../actions/setting/ca';
 import {getGradeunits} from './../../actions/setting/gradeunit';
@@ -72,8 +63,8 @@ const StudentReportList = (props) => {
            let params1 = {
                 data:JSON.stringify(
                 {
-                'termid':termid,
-                'schoolid':sessionid
+                    'termid':termid,
+                    'sschoolid':props.user.activeschool.id
                 }),
                 cat:'dropdownca',
                 table:'dropdownca',
@@ -81,10 +72,8 @@ const StudentReportList = (props) => {
         
             }
             props.getCas(params1)
-            
 
-
-    }, [sessionid])
+    }, [termid, sessionid])
 
     useEffect(() => {
         //GET ALL REPORT FOR THE STUDENTS
@@ -113,12 +102,12 @@ const StudentReportList = (props) => {
             }
           props.getStudentscores(params);
         }
-
+        
          let params1 = {
             data:JSON.stringify(
             {
                   'cas' : cas,
-                  'schoolid' : 1
+                  'schoolid' : props.user.activeschool.id
             }),
               cat:'dropdownca1',
               table:'dropdownca',
@@ -136,16 +125,14 @@ const StudentReportList = (props) => {
               table:'gradeunits',
               narration:'get cas'
             }
-          props.getGradeunits(params2);
-
-        
-        
+          props.getGradeunits(params2);    
     }, [repid, studentids, claszparent, clasz])
  
     let studentscorearray = props.studentscores && Array.isArray(props.studentscores[0]) ? props.studentscores[0] : [];
     let arr = {};
     let srr = {};
     let allsubjects = {};
+    let full_ca = {}
     studentscorearray.forEach(ele => {
         //by subjects
         if(parseInt(ele.subjectid) > -1){
@@ -196,12 +183,14 @@ const StudentReportList = (props) => {
         }
         allsubjects[ele.subjectid] = ele.subjectname 
         }
+
+        full_ca[ele.caid] = ele.caid
     });
  
      //ARRANGE
-     let studentparentaveragearray = props.studentscores && Array.isArray(props.studentscores[1]) ? props.studentscores[1] : [];
-     let classparent_subject_average = {}
-     studentparentaveragearray.forEach(ele=>{
+    let studentparentaveragearray = props.studentscores && Array.isArray(props.studentscores[1]) ? props.studentscores[1] : [];
+    let classparent_subject_average = {}
+    studentparentaveragearray.forEach(ele=>{
          let frr = {};
          frr['pop'] = ele.students;
          frr['average'] = ele.avgr;
@@ -209,10 +198,10 @@ const StudentReportList = (props) => {
          frr['score'] = ele.score;
          classparent_subject_average[ele.subjectid] = frr;
      })
-     //ARRANGE
-     let studentclassaveragearray = props.studentscores && Array.isArray(props.studentscores[2]) ? props.studentscores[2] : [];
-     let class_subject_average = {}
-     studentclassaveragearray.forEach(ele=>{
+    //ARRANGE
+    let studentclassaveragearray = props.studentscores && Array.isArray(props.studentscores[2]) ? props.studentscores[2] : [];
+    let class_subject_average = {}
+    studentclassaveragearray.forEach(ele=>{
          let frr = {};
          frr['pop'] = ele.students;
          frr['average'] = ele.avgr;
@@ -221,8 +210,7 @@ const StudentReportList = (props) => {
          class_subject_average[ele.subjectid] = frr;
      })
  
-     //ARRANGE SUBJECT CLASS PARENT POSITION
-
+    //ARRANGE SUBJECT CLASS PARENT POSITION
      let student_classparent_subject_position_array = props.studentscores && Array.isArray(props.studentscores[4]) ? props.studentscores[4] : [];
      let student_classparent_subject_position_store = {}
      let student_classparent_subject_position_stores = []
@@ -426,7 +414,7 @@ const StudentReportList = (props) => {
         let ca1_array = {};
         let ca2_array = {};
         let caunit_array = {};
-        cas.forEach(ele => {
+        cas.filter(rw=>Object.keys(full_ca).includes(rw.id)).forEach(ele => {
           if(parseInt(ele.typeid) === 1){
             if(Object.keys(ca_array).includes(ele.sid))
             {
@@ -471,8 +459,7 @@ const StudentReportList = (props) => {
                caunit_array[ele.sid].push(arr);
             }
         });
-
-
+        console.log(cas, ca_array)
         let theadm = Object.keys(ca_array).map((prop, ind)=>{
                     return <th key={ind} colSpan={caunit_array[prop].length + 1}>{ca_array[prop]}</th>
         })
@@ -493,7 +480,7 @@ const StudentReportList = (props) => {
             </CNavItem>
         })
 
-        let SUBS = Object.keys(allsubjects).map((sub, idx)=>{
+        let SUBS = Object.keys(allsubjects).filter(rw=>allsubjects[rw] !== null && allsubjects[rw] !== undefined && allsubjects[rw].length > 0).map((sub, idx)=>{
            return <ScoreReportTable 
                 key={idx}
                 students={studentids}
@@ -501,7 +488,7 @@ const StudentReportList = (props) => {
                 sessionid={sessionid}
                 classteacher={classteacher}
                 claszname={claszname}
-                claszparent={claszparent}
+                claszparent={claszparent} 
                 claszparentname={claszparentname}
                 subjectid={sub}
                 subjectname={allsubjects[sub]}
@@ -521,9 +508,7 @@ const StudentReportList = (props) => {
                 student_ca_score_store={student_ca_score_store}
            />
        })
-
-
-  
+ 
  return (
    <>
    
@@ -546,12 +531,7 @@ const StudentReportList = (props) => {
             </CFormGroup>
             </CCol>       
         <CCol xs={12} md={4}>
-            <CCol xs={12}>
-                <CButton 
-                    color="info" 
-                    block
-                >Submit </CButton>
-            </CCol>
+           
             </CCol>
         <CCol xs={12} md={4}>
             <CButton 
@@ -576,9 +556,11 @@ const StudentReportList = (props) => {
             })}
                 color="success" 
                 block
-                >Report Card </CButton>
+                >Old Report Card </CButton>
         </CCol>
   </CRow>
+  { !props.isLoading ? 
+    <CRow>
         <CTabs activeTab={active} onActiveTabChange={idx => setActive(idx)}>
         <CNav variant="tabs" className="d-print-none">
             {SUBStopic}
@@ -587,7 +569,12 @@ const StudentReportList = (props) => {
             {SUBS} 
         </CTabContent>
         </CTabs>
-        
+    </CRow>   
+    :<CRow>
+        <CCol className="text-center">
+            <h4>Loading..</h4>
+        </CCol>
+    </CRow>}  
    </>
   )
 }
@@ -595,8 +582,9 @@ const mapStateToProps = (state) =>({
     user:state.userReducer,
     reports : state.reportReducer.reports,
     studentscores : state.studentscoreReducer.studentscores,
-    cas:state.caReducer.cas,
-    gradeunits:state.gradeunitReducer
+    isLoading : state.studentscoreReducer.isLoading,
+    cas : state.caReducer.cas,
+    gradeunits : state.gradeunitReducer
   })
   export default connect(mapStateToProps, {
     getReports,

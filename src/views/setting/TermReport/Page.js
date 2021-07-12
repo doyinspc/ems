@@ -7,7 +7,7 @@ import { CButton, CButtonGroup, CCard, CCardBody, CCol, CContainer, CRow } from 
 
 const Page = (props) => {
 
-    const [bgc, setbgc] = useState(['teal', 'white'])
+    const [bgc, setbgc] = useState(['#fff', '#000'])
     const [fontz, setfontz] = useState(14)
     
     useEffect(() => {
@@ -84,9 +84,17 @@ const Page = (props) => {
     let student_paid = props.student_paid
     let student_balance = props.student_fee - props.student_paid
 
+    let isFee = parseFloat(student_balance) > 1 ? true : false;
+    let finalFee = parseFloat(student_balance) > 1 ? student_balance : student_balance * -1;
+
     let classid = sts[7];
     let class_grades = all_grades !== undefined && all_grades.hasOwnProperty(classid) ? all_grades[classid]: []
-   
+    let fname = sts[0].split(" ")
+    let middlename = fname[1]
+    let name1 = sts[2] !== undefined && sts[2].toLowerCase() == 'male' ? 'his' : 'her'
+    let name2 = sts[2] !== undefined && sts[2].toLowerCase() == 'male' ? "he" : 'she'
+    let name3 = sts[2] !== undefined && sts[2].toLowerCase() == 'male' ? 'him': 'her'
+    
     let keyz = []
     class_grades.forEach(rw=>{
         let nt = rw.gradeabbrv+" = "+rw.gradename+" ("+rw.minscore+"  ~ "+rw.maxscore+") ";
@@ -238,15 +246,16 @@ const Page = (props) => {
     
     return (
         <>
-<CContainer className={sheet} style={{background:'#fff'}}>
-    <CRow className="page mt-10" className="A4" style={{
+<div className="container" id="maincont1" style={{margin:'auto', padding:'auto'}} >
+<div className="printpage" style={{marginLeft:'auto', marginRight:'auto'}}>
+    <div className="A4" style={{
                             overflow:'hidden',
                             position: 'relative',
                             backgroundColor:'#fff'
-                            
                         }}>
     <CCol>
-    <CRow >
+        <span className="d-none d-print-block">
+        <CRow >
         <CCol xs={2} className="m-0">
                 <img 
                 className="img img-responsive" 
@@ -300,44 +309,45 @@ const Page = (props) => {
                     />
         </CCol>
     </CRow>
-    <CRow>
+        <CRow>
         <CCol xs={12} style={{background:'#333', color:'white', textAlign:'center', padding:'0px'}}>
             <h4>{reportname}</h4>
         </CCol>
     </CRow>
-    <CRow>
-        <CCol xs={12} style={{background:'#FFF', color:'#aa6c39', textAlign:'center', padding:'0px'}}>
+        <CRow>
+        <CCol xs={12} style={{background:'#FFF', color:'#000', textAlign:'center', padding:'0px'}}>
             <h4>{props.user !== undefined && props.user.activeschool !== undefined && props.user.activeschool.hasOwnProperty('name') ? props.user.activeschool.name :'No School'}</h4>
         </CCol>
     </CRow>
-<CRow>
-    <CCol xs={10} className={dataAdd}>
-        <CRow xs={12}>
-            <CCol xs={3} className={s_title}>Fullname</CCol>
-            <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold', fontSize:fontz+"px"}}>{sts[0]}</CCol>
-        </CRow>
-        <CRow xs={12}>
-            <CCol xs={3} className={s_title}>Matriculation Number</CCol>
-                    <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{props.user.activeschool.abbrv}{sts[3]}/{sts[1]}</CCol>
-        </CRow>
-        <CRow xs={12}>
-            <CCol xs={3} className={s_title}>Gender</CCol>
-            <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{sts[2] == "" ? "None":sts[2] }</CCol>
-        </CRow>
-        <CRow xs={12}>
-            <CCol xs={3} className={s_title}>Class</CCol>
-            <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{sts[5]}</CCol>
-        </CRow>
-        <CRow xs={12}>
-            <CCol xs={3} className={s_title}>Dated</CCol>
-            <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{new Date().toDateString()}</CCol>
-        </CRow>
-        <CRow xs={12}>
+        </span>
+        <CRow>
+            <CCol xs={10} className={dataAdd}>
+            <CRow xs={12}>
+                <CCol xs={3} className={s_title}>Fullname</CCol>
+                <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold', fontSize:fontz+"px"}}>{sts[0]}</CCol>
+            </CRow>
+            <CRow xs={12}>
+                <CCol xs={3} className={s_title}>Matriculation Number</CCol>
+                        <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{props.user.activeschool.abbrv}{sts[3]}/{sts[1]}</CCol>
+            </CRow>
+            <CRow xs={12}>
+                <CCol xs={3} className={s_title}>Gender</CCol>
+                <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{sts[2] == "" ? "None":sts[2] }</CCol>
+            </CRow>
+            <CRow xs={12}>
+                <CCol xs={3} className={s_title}>Class</CCol>
+                <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{sts[5]}</CCol>
+            </CRow>
+            <CRow xs={12}>
+                <CCol xs={3} className={s_title}>Dated</CCol>
+                <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{new Date().toDateString()}</CCol>
+            </CRow>
+            <CRow xs={12}>
             <CCol xs={3} className={s_title}>Position in Class</CCol>
             <CCol xs={9} className={t_title} style={{textTransform:'capitalize', fontWeight:'bold'}}>{`${ordinal_suffix_of(rank_student)} of ${class_analysis.pop}`}</CCol>
         </CRow>
-    </CCol>
-    <CCol xs={2} className="pull-left">
+            </CCol>
+        <CCol xs={2} className="pull-left">
         <img 
             width="120px" 
             height="120px" 
@@ -348,12 +358,12 @@ const Page = (props) => {
             
             />
     </CCol>
-</CRow>
-<CRow xs={12} >  	
-    <CCol xs={12} className='m-0 p-0'>
-        <table key={studentid} className="table" width="100%" border={`solid 3px ${bgc[0]}`} style={{border:`solid 2px ${bgc[0]}`}}>
+        </CRow>
+        <CRow xs={12} >  	
+        <CCol xs={12} className='m-0 p-0'>
+        <table key={studentid} className="tabl" width="100%" border="3px solid #000">
             <thead>
-                <tr className="text-center justify-items-center align-items-center" style={{backgroundColor:bgc[0], color:bgc[1]}} >
+                <tr className="text-center justify-items-center align-items-center" style={{backgroundColor:bgc[0], color:bgc[1], fontSize:props.fontz+"px"}} >
                     <th rowSpan={1} className="text-center m-0 p-0">SN</th>
                     <th rowSpan={1} className="text-center m-0 p-0">SUBJECT</th>
                     {props.theadm}
@@ -369,7 +379,7 @@ const Page = (props) => {
             {acct}
             </tbody>
             <tfoot>
-                <tr className="text-center" style={{backgroundColor:bgc[0], color:bgc[1]}}>
+                <tr className="text-center" style={{backgroundColor:bgc[0], color:bgc[1], fontSize:props.fontz+"px"}}>
                     <th className="text-center m-0 p-0">SN</th>
                     <th className="text-center m-0 p-0">SUBJECT</th>
                     {tfootm}
@@ -384,18 +394,18 @@ const Page = (props) => {
         </table>
     </CCol>
 </CRow>
-<CRow xs={12} >  	
-    <CCol xs={12} className='m-0 p-0'>
+        <CRow xs={12} className=' text-center'>  	
+    <CCol xs={12} className=' text-center'>
         <table key={studentid+'A'} className="table m-0 p-0" width="100%"  >
             <tr className='m-0 p-0'>
-                <td className='m-0 p-0' style={{fontWeight:'bold', fontSize:'11px'}}>
+                <td className='m-0 p-0 text-center' style={{fontWeight:'bold', fontSize:'11px'}}>
                     KEYS :  {keyz.join(", ")}
                 </td>
             </tr>
         </table>
     </CCol>
 </CRow>
-<CRow xs={12}>
+        <CRow xs={12}>
     <CCol xs={12}>
         <table className="m-0"  border="solid #000 2px" style={{fontWeight:'bold', fontStyle:'italic'}} width="100%">
             <tr>
@@ -406,12 +416,12 @@ const Page = (props) => {
             <tr>
                     <td>Total Fee @ {new Date().toDateString()}</td><td>{numberformat(student_fee)}</td>
                 <td>Total Payments @ {new Date().toDateString()}</td><td>{numberformat(student_paid)}</td>
-                <td>Fee Balance @ {new Date().toDateString()}</td><td>{numberformat(student_balance)}</td>
+                <td>{isFee == false ? 'Fee Balance':'Debt'} @ {new Date().toDateString()}</td><td>{numberformat(finalFee)}</td>
             </tr>
         </table>
     </CCol>
 </CRow>
-<CRow xs={12}>
+        <CRow xs={12}>
    <CCard xs={12}>
        <CCardBody xs={12}>
        <CRow xs={12} >
@@ -419,7 +429,7 @@ const Page = (props) => {
                <CContainer className='d-flex flex-wrap'>
                 {
                     Object.keys(bas).map(ele=>{
-                    return <CRow  xs='12'  style={{width:'250px',padding:'-3px' }} className="m-0 p-0 d-flex flex-nowrap">
+                    return <CRow  xs='12'  style={{width:'250px',padding:'-3px', fontSize:'24px' }} className="m-0 p-0 d-flex flex-nowrap">
                                 <CCol xs={6} className="m-0 p-0 align-self-center" style={{fontSize:'13px', width:'100px'}}>
                                     {bas[ele][0]}
                                 </CCol>
@@ -444,64 +454,77 @@ const Page = (props) => {
        </CCardBody>
     </CCard>
 </CRow>
-<CRow xs={12}>
-    <CCol xs={12} className="m-0 p-5">
+        <CRow xs={12}>
+        <CCol xs={12} className="m-0 p-1">
         <div className="row panel panel-default">
           <div className="panel-heading">
           </div>
-          <div className="panel-body" style={{fontFamily:'Bubblegum sans'}}>
+          <div className="panel-body" style={{fontFamily:'Bubblegum sans', fontSize:fontz+'.px'}}>
               <CCol style={{display:'block'}} xs={12}>
                  {gradingcomment(avg(s_sum), class_grades)}
               </CCol>
               {
-                  props.comment.comments
-                  .filter(rw=>rw.studentid == studentid && rw.reportid == reportid )
+                  Array.isArray(props.studentcomments.studentcomments) ?
+                  props.studentcomments.studentcomments
+                  .filter(rw=>rw !== undefined && rw !== null && parseInt(rw.studentid) == parseInt(studentid) && parseInt(rw.reportid) == parseInt(reportid) )
                   .map(rw=>{
-                      return <CCol style={{display:'block'}} xs={12}>
+                      let gc = rw.grpcomment.split(":::")
+                      return <>
+                      {gc.map((pr, ins)=>{
+                        let text = pr
+                        text = text.replace('{{NAME}}', middlename)
+                        text = text.replace('{{GENDER}}', name1)
+                        text = text.replace('{{GENDER2}}', name2)
+                        text = text.replace('{{GENDER3}}', name3)
+                      return <CCol key={ins} style={{display:'block'}} xs={12}>
                                 <span><b>{rw.staffname}</b></span>
                                 <span>
-                                    {rw.comment}
-                                    <span className="pull-left"><i className="fa fa-remove"></i></span>
+                                    {text}
+                                    <span className="pull-right"><i className="fa fa-remove"></i></span>
                                 </span>
                              </CCol>
-                  })
+                        })}
+                        </>
+                  }):''
               }
           </div>
           <CButtonGroup>
             <CButton 
                 className="d-print-none" 
                 color="dark" 
-                onClick={()=>props.loadComment(studentid)}
+                onClick={()=>props.selectComment(studentid, sts)}
                 ><i className="fa fa-pencil"></i> Pick Comment </CButton>
             <CButton 
                 className="d-print-none" 
                 color="dark"
-                onClick={()=>props.makeComment(studentid)}
+                onClick={()=>props.makeComment(studentid, sts)}
                 ><i className="fa fa-comment"></i> Make a Comment </CButton>
           </CButtonGroup>
         </div>
     </CCol>
 </CRow>
-<CRow xs={12}>
-    <CCol xs={12}>
-    <br/>
-    <br/>
-    <br/>
-    <b>__________________________</b><br/>
-    <strong>{props.user.activeschool.signed}</strong><br/>
-            for : School Management
-    </CCol>
-</CRow>
-</CCol>
+        <CRow xs={12}>
+        <CCol xs={12}>
+        <br/>
+        <br/>
+        <br/>
+        <b>__________________________</b><br/>
+        <strong>{props.user.activeschool.signed}</strong><br/>
+                for : School Management{studentid}{"--"}{reportid}
+        </CCol>
     </CRow>
-</CContainer>
+    </CCol>
+    </div>
+</div>
+</div>
         </>
     )
 }
 
 const mapStateToProps = (state) => ({
     user :state.userReducer,
-    comment:state.commentReducer
+    comment:state.commentReducer,
+    studentcomments : state.studentcommentReducer
 })
 
 const mapDispatchToProps = {

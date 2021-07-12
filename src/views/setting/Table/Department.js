@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux';
 import {getDepartments, getDepartment, registerDepartment, updateDepartment, deleteDepartment} from './../../../actions/setting/department';
 import { useHistory} from 'react-router-dom'
-
+import { departmentstate } from '../../../actions/common';
+import Loader from './../Loader'
 
 
 const Department = (props) => {
@@ -13,15 +14,23 @@ const Department = (props) => {
                 <td className='text-center'>{ind + 1}</td>
                 <td>{row.name}</td>
                 <td className='text-center'>{row.abbrv}</td>
-                { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
+                <td className='text-center'>{departmentstate[row.grp] || '--'}</td>
                 <td className='text-center'>
-                    {
+                {
                   Array.isArray(props.submenu) && props.submenu.length > 0 ? 
                   props.submenu.map((prp, ind)=>{
-                            return <a style={{cursor:'pointer'}} key={ind} title={prp.tag} onClick={(item) => history.push(`/setting/${props.sid}/${row.id}/0/0/0/0`)}><i className='fa fa-list ml-2 px-2'></i></a>
+                            return <a 
+                              style={{cursor:'pointer'}} 
+                              key={ind} 
+                              className="btn btn-sm btn-secondary"
+                              title={prp.tag} 
+                              onClick={(item) => history.push(`/setting/${props.sid}/${row.id}/0/0/0/0`)}><i className='fa fa-list'></i>{" "} Units</a>
                         }):''
                      }
-                        
+                </td>
+                { props.editer === true  || (Array.isArray(props.submenu) && props.submenu.length > 0) ? 
+                <td className='text-center'>
+                      
                     {props.editer === true ?
                      <>
                     <a style={{cursor:'pointer'}} onClick={()=>props.onActivate(row.id, row.is_active)}><i className={`fa ${parseInt(row.is_active) == 1 ? 'fa-thumbs-down text-danger' : 'fa-thumbs-up text-success'} ml-2 px-2`}></i></a>
@@ -32,21 +41,24 @@ const Department = (props) => {
               </tr>
   })
   return (
-
+    <>
+      {!props.departments.isloading ? 
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>
                     <th className="text-center">SN.</th>
                     <th><i className='fa fa-list'></i> Department</th>
                     <th className="text-center"> <i className='fa fa-text'></i> Abbrv</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> Group</th>
+                    <th className="text-center"> <i className='fa fa-text'></i> Units</th>
                     { props.editer === true  || (props.submenu !== undefined && props.submenu.length > 0) ? <th className="text-center"><i className='fa fa-gear'></i> Action</th>:''}
                   </tr>
                 </thead>
                 <tbody>
                   {tabl}
                  </tbody>
-              </table>
-         
+              </table>: <Loader />}
+   </>      
   )
 }
 const mapStateToProps = (state) =>({

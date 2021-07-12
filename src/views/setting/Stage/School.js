@@ -67,6 +67,14 @@ const School = (props) => {
               toggle={toggle}
               />
          <CCardBody className='table-responsive'>
+         <CCollapse show={collapse}>
+            <SchoolForm 
+                id={id}
+                data={dts}
+                onReset={onReset}
+                onClose={onClose}
+            />
+        </CCollapse>
             <SchoolTable  
                 data={data}
                 editer={props.edits}
@@ -76,14 +84,8 @@ const School = (props) => {
           </CCardBody>
         </CCard>
         </CCol>
-        <CCollapse show={collapse}>
-            <SchoolForm 
-                id={id}
-                data={dts}
-                onReset={onReset}
-                onClose={onClose}
-            />
-        </CCollapse>
+        
+
     </CRow>
   )
 }

@@ -1,3 +1,4 @@
+import { callReg, callSuccess } from "../../actions/common";
 import {
     SESSION_GET_MULTIPLE,
     SESSION_GET_ONE,
@@ -54,11 +55,12 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 sessions : action.payload,
+                isLoading : false,
                 msg:'DONE!!!'
             };
         case SESSION_GET_ONE:
             let all = [...state.sessions];
-            let ses = all.filter(row=>row.cid == action.payload)[0];
+            let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
                 session : ses,
@@ -66,6 +68,7 @@ export default function(state = initialState, action){
             };
         case SESSION_REGISTER_SUCCESS:
             localStorage.setItem('session', JSON.stringify([...state.sessions, action.payload]));
+            callSuccess()
             return {
                 ...state,
                 sessions: [...state.sessions, action.payload],
@@ -92,6 +95,7 @@ export default function(state = initialState, action){
             let newState = [...state.sessions];
             newState[findInd] = action.payload;
             localStorage.setItem('session', JSON.stringify(newState));
+            callSuccess()
             return {
                 ...state,
                 ...action.payload,

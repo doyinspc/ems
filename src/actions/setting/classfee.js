@@ -8,6 +8,8 @@ import {
     CLASSFEE_LOADING_ERROR,
     CLASSFEE_UPDATE_SUCCESS,
     CLASSFEE_UPDATE_FAIL,
+    LOG_SUCCESS,
+    LOG_FAIL,
     CLASSFEE_DELETE_SUCCESS,
     CLASSFEE_DELETE_FAIL
 } from "../../types/setting/classfee";
@@ -91,6 +93,23 @@ export const insertClassfee = data => dispatch => {
         .catch(err => {
             dispatch({
                 type : CLASSFEE_REGISTER_FAIL,
+                payload: err
+            })
+        })
+};
+//CLASSFEE REGISTER
+export const logDuplicate = data => dispatch => {
+    dispatch({type : CLASSFEE_LOADING});
+    axios.post(path, data, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: LOG_SUCCESS,
+                payload: res.data.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : LOG_FAIL,
                 payload: err
             })
         })

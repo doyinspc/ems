@@ -95,7 +95,7 @@ const Setting = (props) => {
         {parseInt(sid) === 2 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
         confirm(sid, perm, <Student edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 3 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ?
-        confirm(sid, perm, <Calendar edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
+        confirm(sid, perm, <Calendar edits={mainedt} school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 3 && parseInt(pid) > 0 &&  parseInt(qid) === 0 ?
         confirm(sid, perm,
            <Term
@@ -287,7 +287,7 @@ const Setting = (props) => {
               school={props.user.activeschool} 
               para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} 
             />):''}
-        {parseInt(sid) === 10 || parseInt(pid) === 0 && parseInt(qid) === 0 ? 
+        {parseInt(sid) === 10 && parseInt(pid) === 0 && parseInt(qid) === 0 ? 
         confirm(sid, perm, <Account sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}
         {parseInt(sid) === 11 && parseInt(pid) === 0 &&  parseInt(qid) === 0 ? 
         confirm(sid, perm, <Expense sid={sid} edits={mainedt}school={props.user.activeschool} para={cats.filter(rw=>parseInt(rw.id) === parseInt(sid))[0]} />):''}

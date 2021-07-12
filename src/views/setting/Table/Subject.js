@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import {getSubjects, getSubject, registerSubject, updateSubject, deleteSubject} from './../../../actions/setting/subject';
 import { useHistory} from 'react-router-dom'
-
+import Loader from './../Loader'
 
 
 const Subject = (props) => {
@@ -35,7 +35,8 @@ const Subject = (props) => {
               </tr>
   })
   return (
-
+    <>
+    {props.subjects.isLoading ?
           <table className="table table-hover table-outline mb-0  d-sm-table">
                 <thead className="thead-light" >
                   <tr>
@@ -51,8 +52,8 @@ const Subject = (props) => {
                 <tbody>
                   {tabl}
                  </tbody>
-              </table>
-         
+              </table>:<Loader />}
+   </>      
   )
 }
 const mapStateToProps = (state) =>({

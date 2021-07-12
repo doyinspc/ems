@@ -18,13 +18,15 @@ import {
   CFormText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { valdateString } from '../../../actions/common';
 
 
 const Unit = (props) => {
-  const [collapse, setCollapse] = useState(false)
+
   const [id, setId] = useState(null)
   const [namez, setNamez] = useState('')
   const [abbrv, setAbbrv] = useState('')
+  const [validate, setvalidate] = useState({})
 
   //CHANGE STATE AS EDIT OR ADD
   useEffect(() => {
@@ -43,7 +45,14 @@ const Unit = (props) => {
   }, [props.data])
 
   const handleSubmit = () =>{
-    if(namez.length > 0){
+     let arr = []
+    let val = {...validate}
+    if(valdateString(namez) === false){arr.push(1); val.namez = true}else{val.namez = false}
+    if(valdateString(abbrv) === false){arr.push(1); val.abbrv = true}else{val.abbrv = false}
+    
+    setvalidate(val)
+   if(arr.length === 0)
+    {
       let fd = new FormData();
       fd.append('name', namez);
       fd.append('abbrv', abbrv);
@@ -66,6 +75,7 @@ const Unit = (props) => {
       setId(null);
       setNamez('');
       setAbbrv('');
+      setvalidate({})
     }
   }
  
@@ -75,7 +85,7 @@ const Unit = (props) => {
         <CCardHeader id='traffic' className="card-title mb-0">
           <CRow>
             <CCol sm="6">
-            <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Unit</small></h4>
+            <h4>{ id && parseInt(id) > 0 ? 'Edit' : 'Add'} <small> Units</small></h4>
             </CCol>
             <CCol sm="6" className="d-md-block">
               <CButton  
@@ -97,8 +107,10 @@ const Unit = (props) => {
                   id="nf-name" 
                   name="namez"
                   value={namez}
+                  defaultValue={namez}
+                  invalid={validate.namez || false}
                   onChange={(e)=>setNamez(e.target.value)}
-                  placeholder="JSS2A" 
+                  placeholder="Life Science" 
                 />
               <CFormText className="help-block">Please enter unit name</CFormText>
             </CFormGroup>
@@ -109,8 +121,10 @@ const Unit = (props) => {
                   id="nf-abbrv" 
                   name="abbrv"
                   value={abbrv}
+                  defaultValue={abbrv}
+                  invalid={validate.abbrv || false}
                   onChange={(e)=>setAbbrv(e.target.value)}
-                  placeholder="2A" 
+                  placeholder="LIFE" 
                 />
               <CFormText className="help-block">Please enter unit abbrv (max 6 characters)</CFormText>
             </CFormGroup>
