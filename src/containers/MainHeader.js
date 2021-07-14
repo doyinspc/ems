@@ -27,7 +27,7 @@ const TheHeader = (props) => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector(state => state.page.sidebarShow)
   
-  let user = JSON.parse(localStorage.getItem('userx12345'))
+  let user = JSON.parse(sessionStorage.getItem('userx12345'))
   let username = ''
   if(user !== null){
     username = user.surname+" "+user.firstname+" "+user.middlename
@@ -75,7 +75,6 @@ const TheHeader = (props) => {
           user={user !== undefined ? user : null}
         />
       </CHeaderNav>
-
       <CSubheader className="px-3 justify-content-between d-print-none">
         <CBreadcrumbRouter 
           className="border-0 c-subheader-nav m-0 px-0 px-md-3" 

@@ -32,14 +32,14 @@ import {callSuccess, callError, callReg} from './../actions/common'
 
 
  
-let userx = localStorage.getItem('userx12345') !== 'undefined' ? JSON.parse(localStorage.getItem('userx12345')) : null;
-let auth = localStorage.getItem('auth') !== 'undefined' ? JSON.parse(localStorage.getItem('auth')) : false;
-let dropdownsStore = JSON.parse(localStorage.getItem('dropdowns'))
-let activetermStore = JSON.parse(localStorage.getItem('activeterm'))
-let activeschoolStore = JSON.parse(localStorage.getItem('activeschool'))
-let mySchoolStore = JSON.parse(localStorage.getItem('myschool'))
-let myDataStore = JSON.parse(localStorage.getItem('mydata'))
-let myTermStore = JSON.parse(localStorage.getItem('myterm'))
+let userx = sessionStorage.getItem('userx12345') !== 'undefined' ? JSON.parse(sessionStorage.getItem('userx12345')) : null;
+let auth = sessionStorage.getItem('auth') !== 'undefined' ? JSON.parse(sessionStorage.getItem('auth')) : false;
+let dropdownsStore = JSON.parse(sessionStorage.getItem('dropdowns'))
+let activetermStore = JSON.parse(sessionStorage.getItem('activeterm'))
+let activeschoolStore = JSON.parse(sessionStorage.getItem('activeschool'))
+let mySchoolStore = JSON.parse(sessionStorage.getItem('myschool'))
+let myDataStore = JSON.parse(sessionStorage.getItem('mydata'))
+let myTermStore = JSON.parse(sessionStorage.getItem('myterm'))
 let user = null
 let myregschx = null
 let mscx = ''
@@ -52,9 +52,9 @@ if(userx !== null)
     mscx = parseInt(user.is_admin) === 1 ? [1 ,2, 3, 4, 5, 6, 7, 8, 9, 10]: myregschx;
 }        
 
-//localStorage.clear()
+//sessionStorage.clear()
 const initialState = {
-    token: localStorage.getItem('token'),
+    token: sessionStorage.getItem('token'),
     user: user  && user !== undefined && parseInt(user.id) > 0 ? userx: null,
     mid: user  && user !== undefined && parseInt(user.id) > 0 ? user.id: null,
     username: user  && user !== undefined && parseInt(user.id) > 0 ? user.surname+" "+user.firstname+" "+user.middlename: null,
@@ -86,11 +86,11 @@ export default function(state = initialState, action){
 
         case USER_LOGIN:
             
-            localStorage.setItem('token', action.token)
-            localStorage.setItem('auth', JSON.stringify(1));
-            if(localStorage.getItem('userx12345') === null)
+            sessionStorage.setItem('token', action.token)
+            sessionStorage.setItem('auth', JSON.stringify(1));
+            if(sessionStorage.getItem('userx12345') === null)
             {
-                localStorage.setItem('userx12345', JSON.stringify(action.payload));
+                sessionStorage.setItem('userx12345', JSON.stringify(action.payload));
             }
             let acc = action.payload.access !== '' ? JSON.parse(action.payload.access):{};
             let schs = Object.keys(acc);
@@ -113,7 +113,7 @@ export default function(state = initialState, action){
                 isLoading: false,
                 isAuthenticated: true,
                 mid:action.payload.id,
-                user: JSON.parse(localStorage.getItem('userx12345')) ,
+                user: JSON.parse(sessionStorage.getItem('userx12345')) ,
                 username: fname,
                 myschools: msc,
                 ref:23,
@@ -133,7 +133,7 @@ export default function(state = initialState, action){
             };
        
          case USER_UPDATE_SUCCESS:
-            localStorage.setItem('userx12345', JSON.stringify(action.payload));
+            sessionStorage.setItem('userx12345', JSON.stringify(action.payload));
             callSuccess()
             return {
                 ...state,
@@ -141,70 +141,70 @@ export default function(state = initialState, action){
                 user : action.payload
             }; 
          case USER_GET_DROPDOWNS:
-            localStorage.setItem('dropdowns', JSON.stringify(action.payload));
+            sessionStorage.setItem('dropdowns', JSON.stringify(action.payload));
             let tm = action.payload[3] && action.payload[3].length > 0 ? action.payload[3][0]:{}
-            localStorage.setItem('activeterm', JSON.stringify(tm));
+            sessionStorage.setItem('activeterm', JSON.stringify(tm));
             return {
                 ...state,
                 dropdowns : action.payload,
                 activeterm : tm
             };
           case USER_GET_DROPDOWNS_ERROR:
-            localStorage.setItem('dropdowns', JSON.stringify([]));
+            sessionStorage.setItem('dropdowns', JSON.stringify([]));
             return {
                 ...state,
                 dropdowns : []
             };
           case USER_GET_DATA:
-            localStorage.setItem('mydata', JSON.stringify(action.payload));
+            sessionStorage.setItem('mydata', JSON.stringify(action.payload));
             return {
                 ...state,
                 myData : action.payload
             };
           case USER_GET_DATA_ERROR:
-            localStorage.setItem('mydata', JSON.stringify([]));
+            sessionStorage.setItem('mydata', JSON.stringify([]));
             return {
                 ...state,
                 myData : []
             };
           case USER_GET_SCHOOL:
-            localStorage.setItem('myschool', JSON.stringify(action.payload));
+            sessionStorage.setItem('myschool', JSON.stringify(action.payload));
             return {
                 ...state,
                 mySchoolData : action.payload
             };
           case USER_GET_SCHOOL_ERROR:
-            localStorage.setItem('myschool', JSON.stringify([]));
+            sessionStorage.setItem('myschool', JSON.stringify([]));
             return {
                 ...state,
                 mySchoolData : []
             };
           case USER_GET_TERM:
-            localStorage.setItem('activeterm', JSON.stringify(action.payload));
+            sessionStorage.setItem('activeterm', JSON.stringify(action.payload));
             return {
                 ...state,
                 myTermData : action.payload
             };
           case USER_GET_TERM_ERROR:
-            localStorage.setItem('activeterm', JSON.stringify([]));
+            sessionStorage.setItem('activeterm', JSON.stringify([]));
             return {
                 ...state,
                 myTermData : []
             };
           case USER_SET_TERM:
-            localStorage.setItem('activeterm', JSON.stringify(action.payload));
+            sessionStorage.setItem('activeterm', JSON.stringify(action.payload));
             return {
                 ...state,
-                activeterm : JSON.parse(localStorage.getItem('activeterm'))
+                activeterm : JSON.parse(sessionStorage.getItem('activeterm'))
             };
           case USER_SET_SCHOOL:
             if(action.payload && Array.isArray(Object.keys(action.payload)))
             {
-                localStorage.setItem('activeschool', JSON.stringify(action.payload));
+                sessionStorage.setItem('activeschool', JSON.stringify(action.payload));
             }
             return {
                 ...state,
-                activeschool : JSON.parse(localStorage.getItem('activeschool'))
+                activeschool : JSON.parse(sessionStorage.getItem('activeschool'))
             };
         case USER_LOGIN_ERROR:
             callError('Wrong Username or Password. You have limited number of trials after which this account would be blocked')
@@ -221,16 +221,16 @@ export default function(state = initialState, action){
             case USER_LOGOUT_SUCCESS:
         case USER_LOGOUT_FAIL:
            
-            localStorage.removeItem('token')
-            localStorage.removeItem('auth')
-            localStorage.removeItem('user')
-            localStorage.removeItem('dropdowns')
-            localStorage.removeItem('activeterm')
-            localStorage.removeItem('activeschool')
-            localStorage.removeItem('myterm')
-            localStorage.removeItem('myschool')
-            localStorage.removeItem('mydata')
-            localStorage.clear()
+            sessionStorage.removeItem('token')
+            sessionStorage.removeItem('auth')
+            sessionStorage.removeItem('user')
+            sessionStorage.removeItem('dropdowns')
+            sessionStorage.removeItem('activeterm')
+            sessionStorage.removeItem('activeschool')
+            sessionStorage.removeItem('myterm')
+            sessionStorage.removeItem('myschool')
+            sessionStorage.removeItem('mydata')
+            sessionStorage.clear()
             
             
             return{

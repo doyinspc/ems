@@ -29,6 +29,7 @@ const Admissions = React.lazy(() => import('./views/student/Admissionsx.jsx'));
 const Result = React.lazy(() => import('./views/student/Result'));
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'));
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'));
+const DashLayout = React.lazy(() => import('./views/dashboard/Index'));
 
 const AdmissionPage = React.lazy(() => import('./views/admission/AdmissionPage'));
 const AdmissionLogin = React.lazy(() => import('./views/admission/AdmissionLogin'));
@@ -66,6 +67,7 @@ class App extends Component {
               <Route exact path="/result/:student/:result" name="Report" render={props => <Result {...props}/>} />
               <Route exact path="/404" name="Page 404" render={props => <Page404 {...props}/>} />
               <Route exact path="/500" name="Page 500" render={props => <Page500 {...props}/>} />
+              <Route exact path="/prime" name="Dash Board" render={props => <DashLayout {...props}/>} />
               <Route exact path="/mainpage" name="MainPage" render={props => <TheLayout {...props}/>} />
               <Route path="/" name="Home" render={props => <MainLayout {...props}/>} />
             </Switch>

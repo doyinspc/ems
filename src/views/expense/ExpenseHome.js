@@ -24,18 +24,17 @@ const Term = (props) => {
       cat:'selected',
       table:'expenses',
       narration:'expense'
-    }
-    props.getExpenses(params);
-    
+      }
+      props.getExpenses(params);
     }, [])
 
-    loadExpense = (id) =>{
+  const loadExpense = (id) =>{
       setactiveid(id)
       props.getExpense(id)
-    }
+  }
 
-   let data = controls[4].data;
-   let expenses = props.expenses.expenses.filter(rw=>parseInt(rw.parent_id) === 0)
+  let data = controls[4].data;
+  let expenses = props.expenses.expenses.filter(rw=>parseInt(rw.parent_id) === 0)
    
    return (
        <>
@@ -109,7 +108,7 @@ const Term = (props) => {
            }
         </CRow>
         </>
-  )
+   )
 }
 const mapStateToProps = (state) =>({
   terms : state.termReducer.terms,

@@ -97,7 +97,7 @@ const Page = (props) => {
     
     let keyz = []
     class_grades.forEach(rw=>{
-        let nt = rw.gradeabbrv+" = "+rw.gradename+" ("+rw.minscore+"  ~ "+rw.maxscore+") ";
+        let nt = rw.gradeabbrv+" = "+rw.gradename+" ("+Math.ceil(rw.minscore)+"  ~ "+Math.ceil(rw.maxscore - 1)+") ";
         keyz.push(nt);
     })
     const s_title = {
@@ -355,7 +355,6 @@ const Page = (props) => {
             className="img img-responsive" 
             style={{maxWidth:'120px'}} 
             onError={(e)=>{e.target.onerror=null; e.target.src= process.env.PUBLIC_URL +'/icons/profile_4.png'} }
-            
             />
     </CCol>
         </CRow>
@@ -509,8 +508,8 @@ const Page = (props) => {
         <br/>
         <br/>
         <b>__________________________</b><br/>
-        <strong>{props.user.activeschool.signed}</strong><br/>
-                for : School Management{studentid}{"--"}{reportid}
+        <strong>{props.user.activeschool.signed} ({props.user.activeschool.phone1})</strong><br/>
+                for : School Management
         </CCol>
     </CRow>
     </CCol>
